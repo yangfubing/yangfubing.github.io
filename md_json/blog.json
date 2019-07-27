@@ -331,6 +331,11 @@
       "meta": {}
     },
     {
+      "filename": "data_split.md",
+      "link": "\\en-us\\blog\\sql\\data_split.html",
+      "meta": {}
+    },
+    {
       "filename": "mysql_index.md",
       "link": "\\en-us\\blog\\sql\\mysql_index.html",
       "meta": {}
@@ -770,6 +775,11 @@
     {
       "filename": "syntax_rule.md",
       "link": "\\zh-cn\\blog\\python\\syntax_rule.html",
+      "meta": {}
+    },
+    {
+      "filename": "data_split.md",
+      "link": "\\zh-cn\\blog\\sql\\data_split.html",
       "meta": {}
     },
     {

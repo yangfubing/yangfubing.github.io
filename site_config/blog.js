@@ -105,7 +105,7 @@ export default {
         author: 'BurningMyself',
         dateStr: 'May 12nd，2019',
         desc: 'Database Split',
-        link: '/zh-cn/blog/sql/sata_split.html',
+        link: '/zh-cn/blog/sql/data_split.html',
       },       
     ],
   },
