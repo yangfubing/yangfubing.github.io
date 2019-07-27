@@ -1,0 +1,35 @@
+pages:
+ # key is the dirname of pages in src/pages
+ home:
+  # 首页配置
+  zh-cn:
+   title: 'BurningMyself'
+   keywords: 'BurningMyself'
+   description: '页面内容简介'
+  # home config
+  en-us:
+   title: 'BurningMyself'
+   keywords: 'BurningMyself,BurningMyself'
+   description: 'BurningMyself'
+ community:
+  # 社区页配置
+  zh-cn:
+   title: 'BurningMyself'
+   keywords: 'BurningMyself'
+   description: 'BurningMyself'
+  # community page config
+  en-us:
+   title: 'BurningMyself'
+   keywords: 'BurningMyself'
+   description: 'BurningMyself'
+ blog:
+  # 博客列表页配置
+  zh-cn:
+   title: 'BurningMyself'
+   keywords: 'BurningMyself'
+   description: 'BurningMyself'
+  en-us:
+   # blog list page config
+   title: 'BurningMyself'
+   keywords: 'BurningMyself'
+   description: 'BurningMyself'

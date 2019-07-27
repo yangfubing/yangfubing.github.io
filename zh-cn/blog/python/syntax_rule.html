@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="keywords" content="syntax_rule" />
+	<meta name="description" content="syntax_rule" />
+	<!-- 网页标签标题 -->
+	<title>syntax_rule</title>
+	<link rel="shortcut icon" href="/img/docsite.ico"/>
+	<link rel="stylesheet" href="/build/blogDetail.css" />
+</head>
+<body>
+	<div id="root"><div class="blog-detail-page" data-reactroot=""><header class="header-container header-container-normal"><div class="header-body"><a href="/zh-cn/index.html"><img class="logo" src="/img/dubbo_colorful.png"/></a><div class="search search-normal"><span class="icon-search"></span></div><span class="language-switch language-switch-normal">En</span><div class="header-menu"><img class="header-menu-toggle" src="/img/system/menu_gray.png"/><ul><li class="menu-item menu-item-normal"><a href="/zh-cn/index.html" target="_self">首页</a></li><li class="menu-item menu-item-normal"><a href="/zh-cn/docs/introduction.html" target="_self">文档</a></li><li class="menu-item menu-item-normal menu-item-normal-active"><a href="/zh-cn/blog/index.html" target="_self">博客</a></li><li class="menu-item menu-item-normal"><a href="/zh-cn/community/index.html" target="_self">社区</a></li></ul></div></div></header><section class="blog-content markdown-body"><h1>Python 语法技巧</h1>
+<p>Python 开发中有哪些高级技巧？这是知乎上一个问题，我总结了一些常见的技巧在这里，可能谈不上多高级，但掌握这些至少可以让你的代码看起来 Pythonic 一点。如果你还在按照类C语言的那套风格来写的话，在 code review 恐怕会要被吐槽了。</p>
+<h2>列表推导式</h2>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>chars = [ c <span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> <span class="hljs-string">'python'</span> ]
+<span class="hljs-meta">&gt;&gt;&gt; </span>chars
+[<span class="hljs-string">'p'</span>, <span class="hljs-string">'y'</span>, <span class="hljs-string">'t'</span>, <span class="hljs-string">'h'</span>, <span class="hljs-string">'o'</span>, <span class="hljs-string">'n'</span>]
+</code></pre>
+<h2>字典推导式</h2>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>dict1 = {<span class="hljs-string">'a'</span>: <span class="hljs-number">1</span>, <span class="hljs-string">'b'</span>: <span class="hljs-number">2</span>, <span class="hljs-string">'c'</span>: <span class="hljs-number">3</span>, <span class="hljs-string">'d'</span>: <span class="hljs-number">4</span>, <span class="hljs-string">'e'</span>: <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>double_dict1 = {k:v*<span class="hljs-number">2</span> <span class="hljs-keyword">for</span> (k,v) <span class="hljs-keyword">in</span> dict1.items()}
+<span class="hljs-meta">&gt;&gt;&gt; </span>double_dict1
+{<span class="hljs-string">'a'</span>: <span class="hljs-number">2</span>, <span class="hljs-string">'b'</span>: <span class="hljs-number">4</span>, <span class="hljs-string">'c'</span>: <span class="hljs-number">6</span>, <span class="hljs-string">'d'</span>: <span class="hljs-number">8</span>, <span class="hljs-string">'e'</span>: <span class="hljs-number">10</span>}
+</code></pre>
+<h2>集合推导式</h2>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>set1 = {<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>double_set = {i*<span class="hljs-number">2</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> set1}
+<span class="hljs-meta">&gt;&gt;&gt; </span>double_set
+{<span class="hljs-number">8</span>, <span class="hljs-number">2</span>, <span class="hljs-number">4</span>, <span class="hljs-number">6</span>}
+</code></pre>
+<h2>合并字典</h2>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>x = {<span class="hljs-string">'a'</span>:<span class="hljs-number">1</span>,<span class="hljs-string">'b'</span>:<span class="hljs-number">2</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>y = {<span class="hljs-string">'c'</span>:<span class="hljs-number">3</span>, <span class="hljs-string">'d'</span>:<span class="hljs-number">4</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>z = {**x, **y}
+<span class="hljs-meta">&gt;&gt;&gt; </span>z
+{<span class="hljs-string">'a'</span>: <span class="hljs-number">1</span>, <span class="hljs-string">'b'</span>: <span class="hljs-number">2</span>, <span class="hljs-string">'c'</span>: <span class="hljs-number">3</span>, <span class="hljs-string">'d'</span>: <span class="hljs-number">4</span>}
+</code></pre>
+<h2>复制列表</h2>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>nums = [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>nums[::]
+[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>copy_nums = nums[::]
+<span class="hljs-meta">&gt;&gt;&gt; </span>copy_nums
+[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]
+</code></pre>
+<h2>反转列表</h2>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>reverse_nums = nums[::<span class="hljs-number">-1</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>reverse_nums
+[<span class="hljs-number">3</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>]
+</code></pre>
+<p>PACKING / UNPACKING</p>
+<h2>变量交换</h2>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>a,b = <span class="hljs-number">1</span>, <span class="hljs-number">2</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>a ,b = b,a
+<span class="hljs-meta">&gt;&gt;&gt; </span>a
+<span class="hljs-number">2</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>b
+<span class="hljs-number">1</span>
+</code></pre>
+<h2>高级拆包</h2>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>a, *b = <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>a
+<span class="hljs-number">1</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>b
+[<span class="hljs-number">2</span>, <span class="hljs-number">3</span>]
+</code></pre>
+<p>或者</p>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>a, *b, c = <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>a
+<span class="hljs-number">1</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>b
+[<span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>c
+<span class="hljs-number">5</span>
+</code></pre>
+<h2>函数返回多个值（其实是自动packing成元组）然后unpacking赋值给4个变量</h2>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f</span><span class="hljs-params">()</span>:</span>
+<span class="hljs-meta">... </span>    <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>
+...
+<span class="hljs-meta">&gt;&gt;&gt; </span>a, b, c, d = f()
+<span class="hljs-meta">&gt;&gt;&gt; </span>a
+<span class="hljs-number">1</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>d
+<span class="hljs-number">4</span>
+</code></pre>
+<h2>列表合并成字符串</h2>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-string">" "</span>.join([<span class="hljs-string">"I"</span>, <span class="hljs-string">"Love"</span>, <span class="hljs-string">"Python"</span>])
+<span class="hljs-string">'I Love Python'</span>
+</code></pre>
+<h2>链式比较</h2>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">if</span> a &gt; <span class="hljs-number">2</span> <span class="hljs-keyword">and</span> a &lt; <span class="hljs-number">5</span>:
+<span class="hljs-meta">... </span>    <span class="hljs-keyword">pass</span>
+...
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">if</span> <span class="hljs-number">2</span>&lt;a&lt;<span class="hljs-number">5</span>:
+<span class="hljs-meta">... </span>    <span class="hljs-keyword">pass</span>
+</code></pre>
+<h2>yield from</h2>
+<pre><code class="language-python"><span class="hljs-comment"># 没有使用 field from</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">dup</span><span class="hljs-params">(n)</span>:</span>
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(n):
+        <span class="hljs-keyword">yield</span> i
+        <span class="hljs-keyword">yield</span> i
+
+<span class="hljs-comment"># 使用yield from</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">dup</span><span class="hljs-params">(n)</span>:</span>
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(n):
+    <span class="hljs-keyword">yield</span> <span class="hljs-keyword">from</span> [i, i]
+
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> dup(<span class="hljs-number">3</span>):
+    print(i)
+
+&gt;&gt;&gt;
+<span class="hljs-number">0</span>
+<span class="hljs-number">0</span>
+<span class="hljs-number">1</span>
+<span class="hljs-number">1</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">2</span>
+</code></pre>
+<h2>in 代替 or</h2>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">if</span> x == <span class="hljs-number">1</span> <span class="hljs-keyword">or</span> x == <span class="hljs-number">2</span> <span class="hljs-keyword">or</span> x == <span class="hljs-number">3</span>:
+<span class="hljs-meta">... </span>    <span class="hljs-keyword">pass</span>
+...
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">if</span> x <span class="hljs-keyword">in</span> (<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>):
+<span class="hljs-meta">... </span>    <span class="hljs-keyword">pass</span>
+</code></pre>
+<h2>字典代替多个if else</h2>
+<pre><code class="language-python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fun</span><span class="hljs-params">(x)</span>:</span>
+    <span class="hljs-keyword">if</span> x == <span class="hljs-string">'a'</span>:
+        <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>
+    <span class="hljs-keyword">elif</span> x == <span class="hljs-string">'b'</span>:
+        <span class="hljs-keyword">return</span> <span class="hljs-number">2</span>
+    <span class="hljs-keyword">else</span>:
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span>
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fun</span><span class="hljs-params">(x)</span>:</span>
+    <span class="hljs-keyword">return</span> {<span class="hljs-string">"a"</span>: <span class="hljs-number">1</span>, <span class="hljs-string">"b"</span>: <span class="hljs-number">2</span>}.get(x)
+</code></pre>
+<h2>有下标索引的枚举</h2>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">for</span> i, e <span class="hljs-keyword">in</span> enumerate([<span class="hljs-string">"a"</span>,<span class="hljs-string">"b"</span>,<span class="hljs-string">"c"</span>]):
+<span class="hljs-meta">... </span>    print(i, e)
+...
+<span class="hljs-number">0</span> a
+<span class="hljs-number">1</span> b
+<span class="hljs-number">2</span> c
+</code></pre>
+<h2>生成器</h2>
+<p>注意区分列表推导式，生成器效率更高</p>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>g = (i**<span class="hljs-number">2</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">5</span>))
+<span class="hljs-meta">&gt;&gt;&gt; </span>g
+&lt;generator object &lt;genexpr&gt; at <span class="hljs-number">0x10881e518</span>&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> g:
+<span class="hljs-meta">... </span>    print(i)
+...
+<span class="hljs-number">0</span>
+<span class="hljs-number">1</span>
+<span class="hljs-number">4</span>
+<span class="hljs-number">9</span>
+<span class="hljs-number">16</span>
+</code></pre>
+<h2>默认字典 defaultdict</h2>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>d = dict()
+<span class="hljs-meta">&gt;&gt;&gt; </span>d[<span class="hljs-string">'nums'</span>]
+KeyError: <span class="hljs-string">'nums'</span>
+&gt;&gt;&gt;
+
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">from</span> collections <span class="hljs-keyword">import</span> defaultdict
+<span class="hljs-meta">&gt;&gt;&gt; </span>d = defaultdict(list)
+<span class="hljs-meta">&gt;&gt;&gt; </span>d[<span class="hljs-string">"nums"</span>]
+[]
+</code></pre>
+<h2>字符串格式化</h2>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>lang = <span class="hljs-string">'python'</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-string">f'<span class="hljs-subst">{lang}</span> is most popular language in the world'</span>
+<span class="hljs-string">'python is most popular language in the world'</span>
+</code></pre>
+<h2>列表中出现次数最多的元素</h2>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>nums = [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">3</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>max(set(nums), key=nums.count)
+<span class="hljs-number">3</span>
+
+或者
+<span class="hljs-keyword">from</span> collections <span class="hljs-keyword">import</span> Counter
+<span class="hljs-meta">&gt;&gt;&gt; </span>Counter(nums).most_common()[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>]
+<span class="hljs-number">3</span>
+</code></pre>
+<h2>读写文件</h2>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> open(<span class="hljs-string">"test.txt"</span>, <span class="hljs-string">"w"</span>) <span class="hljs-keyword">as</span> f:
+<span class="hljs-meta">... </span>    f.writelines(<span class="hljs-string">"hello"</span>)
+</code></pre>
+<h2>判断对象类型，可指定多个类型</h2>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>isinstance(a, (int, str))
+<span class="hljs-literal">True</span>
+</code></pre>
+<h2>类似的还有字符串的 startswith，endswith</h2>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-string">"http://foofish.net"</span>.startswith((<span class="hljs-string">'http'</span>,<span class="hljs-string">'https'</span>))
+<span class="hljs-literal">True</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-string">"https://foofish.net"</span>.startswith((<span class="hljs-string">'http'</span>,<span class="hljs-string">'https'</span>))
+<span class="hljs-literal">True</span>
+</code></pre>
+<h2><strong>str</strong> 与 <strong>repr</strong> 区别</h2>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>str(datetime.now())
+<span class="hljs-string">'2018-11-20 00:31:54.839605'</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>repr(datetime.now())
+<span class="hljs-string">'datetime.datetime(2018, 11, 20, 0, 32, 0, 579521)'</span>
+</code></pre>
+<p>前者对人友好，可读性更强，后者对计算机友好，支持 obj == eval(repr(obj))</p>
+<h2>使用装饰器</h2>
+<pre><code class="language-python">def makebold(f):
+return lambda: "&lt;b&gt;" + f() + "&lt;/b&gt;"
+
+def makeitalic(f):
+return lambda: "&lt;i&gt;" + f() + "&lt;/i&gt;"
+
+@makebold
+@makeitalic
+def say():
+return "Hello"
+
+&gt;&gt;&gt; say()
+&lt;b&gt;&lt;i&gt;Hello&lt;/i&gt;&lt;/b&gt;
+</code></pre>
+<h2>不使用装饰器，可读性非常差</h2>
+<pre><code class="language-python">def say():
+return "Hello"
+&gt;&gt;&gt; makebold(makeitalic(say))()
+&lt;b&gt;&lt;i&gt;Hello&lt;/i&gt;&lt;/b&gt;
+</code></pre>
+</section><footer class="footer-container"><div class="footer-body"><img src="/img/dubbo_gray.png"/><div class="cols-container"><div class="col col-12"><h3>免责声明</h3><p>免责声明的具体内容</p></div><div class="col col-6"><dl><dt>文档</dt><dd><a href="/zh-cn/docs/introduction.html" target="_self">概览</a></dd><dd><a href="/zh-cn/docs/introduction.html" target="_self">快速开始</a></dd><dd><a href="/zh-cn/docs/dir/introduction.html" target="_self">开发者指南</a></dd></dl></div><div class="col col-6"><dl><dt>资源</dt><dd><a href="/zh-cn/blog/index.html" target="_self">博客</a></dd><dd><a href="/zh-cn/community/index.html" target="_self">社区</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2018 BurningMyself</span></div></div></footer></div></div>
+	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
+	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
+	<script>
+		window.rootPath = '';
+  </script>
+	<script src="/build/blogDetail.js"></script>
+</body>
+</html>

@@ -1,0 +1,2163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="keywords" content="ali_js_style" />
+	<meta name="description" content="ali_js_style" />
+	<!-- 网页标签标题 -->
+	<title>ali_js_style</title>
+	<link rel="shortcut icon" href="/img/docsite.ico"/>
+	<link rel="stylesheet" href="/build/blogDetail.css" />
+</head>
+<body>
+	<div id="root"><div class="blog-detail-page" data-reactroot=""><header class="header-container header-container-normal"><div class="header-body"><a href="/en-us/index.html"><img class="logo" src="/img/dubbo_colorful.png"/></a><div class="search search-normal"><span class="icon-search"></span></div><span class="language-switch language-switch-normal">中</span><div class="header-menu"><img class="header-menu-toggle" src="/img/system/menu_gray.png"/><ul><li class="menu-item menu-item-normal"><a href="/en-us/index.html" target="_self">HOME</a></li><li class="menu-item menu-item-normal"><a href="/en-us/docs/introduction.html" target="_self">DOCS</a></li><li class="menu-item menu-item-normal menu-item-normal-active"><a href="/en-us/blog/index.html" target="_self">BLOG</a></li><li class="menu-item menu-item-normal"><a href="/en-us/community/index.html" target="_self">COMMUNITY</a></li></ul></div></div></header><section class="blog-content markdown-body"><h1>Airbnb JavaScript Style Guide() {</h1>
+<p><strong>用更合理的方式写 JavaScript</strong></p>
+<p><a href="https://www.npmjs.com/package/eslint-config-airbnb"><img src="https://img.shields.io/npm/dm/eslint-config-airbnb.svg" alt="Downloads"></a>
+<a href="https://www.npmjs.com/package/eslint-config-airbnb-base"><img src="https://img.shields.io/npm/dm/eslint-config-airbnb-base.svg" alt="Downloads"></a>
+<a href="https://gitter.im/airbnb/javascript?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Gitter"></a></p>
+<p>ES5 的编码规范请查看<a href="https://github.com/sivan/javascript-style-guide/blob/master/es5/README.md">版本一</a>，<a href="https://github.com/adamlu/javascript-style-guide">版本二</a>。</p>
+<p>翻译自 <a href="https://github.com/airbnb/javascript">Airbnb JavaScript Style Guide</a> 。</p>
+<p><a name="table-of-contents"></a></p>
+<h2>目录</h2>
+<ol>
+<li><a href="#types">类型</a></li>
+<li><a href="#references">引用</a></li>
+<li><a href="#objects">对象</a></li>
+<li><a href="#arrays">数组</a></li>
+<li><a href="#destructuring">解构</a></li>
+<li><a href="#strings">字符串</a></li>
+<li><a href="#functions">函数</a></li>
+<li><a href="#arrow-functions">箭头函数</a></li>
+<li><a href="#constructors">构造函数</a></li>
+<li><a href="#modules">模块</a></li>
+<li><a href="#iterators-and-generators">迭代器和生成器</a></li>
+<li><a href="#properties">属性</a></li>
+<li><a href="#variables">变量</a></li>
+<li><a href="#hoisting">提升</a></li>
+<li><a href="#comparison-operators--equality">比较运算符和等号</a></li>
+<li><a href="#blocks">代码块</a></li>
+<li><a href="#comments">注释</a></li>
+<li><a href="#whitespace">空白</a></li>
+<li><a href="#commas">逗号</a></li>
+<li><a href="#semicolons">分号</a></li>
+<li><a href="#type-casting--coercion">类型转换</a></li>
+<li><a href="#naming-conventions">命名规则</a></li>
+<li><a href="#accessors">存取器</a></li>
+<li><a href="#events">事件</a></li>
+<li><a href="#jquery">jQuery</a></li>
+<li><a href="#ecmascript-5-compatibility">ECMAScript 5 兼容性</a></li>
+<li><a href="#ecmascript-6-styles">ECMAScript 6 编码规范</a></li>
+<li><a href="#testing">测试</a></li>
+<li><a href="#performance">性能</a></li>
+<li><a href="#resources">相关资源</a></li>
+<li><a href="#in-the-wild">使用情况</a></li>
+<li><a href="#translation">其他翻译</a></li>
+<li><a href="#the-javascript-style-guide-guide">JavaScript 编码规范说明</a></li>
+<li><a href="#chat-with-us-about-javascript">讨论 JavaScript</a></li>
+<li><a href="#contributors">贡献者</a></li>
+<li><a href="#license">许可协议</a></li>
+</ol>
+<p><a name="types"></a></p>
+<h2>类型</h2>
+<ul>
+<li>
+<p><a href="#1.1">1.1</a> <a name='1.1'></a> <strong>基本类型</strong>: 直接存取基本类型。</p>
+<ul>
+<li><code>字符串</code></li>
+<li><code>数值</code></li>
+<li><code>布尔类型</code></li>
+<li><code>null</code></li>
+<li><code>undefined</code></li>
+</ul>
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> foo = <span class="hljs-number">1</span>;
+<span class="hljs-keyword">let</span> bar = foo;
+
+bar = <span class="hljs-number">9</span>;
+
+<span class="hljs-built_in">console</span>.log(foo, bar); <span class="hljs-comment">// =&gt; 1, 9</span>
+</code></pre>
+</li>
+<li>
+<p><a href="#1.2">1.2</a> <a name='1.2'></a> <strong>复杂类型</strong>: 通过引用的方式存取复杂类型。</p>
+<ul>
+<li><code>对象</code></li>
+<li><code>数组</code></li>
+<li><code>函数</code></li>
+</ul>
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> foo = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>];
+<span class="hljs-keyword">const</span> bar = foo;
+
+bar[<span class="hljs-number">0</span>] = <span class="hljs-number">9</span>;
+
+<span class="hljs-built_in">console</span>.log(foo[<span class="hljs-number">0</span>], bar[<span class="hljs-number">0</span>]); <span class="hljs-comment">// =&gt; 9, 9</span>
+</code></pre>
+</li>
+</ul>
+<p><strong><a href="#table-of-contents">⬆ 返回目录</a></strong></p>
+<p><a name="references"></a></p>
+<h2>引用</h2>
+<ul>
+<li>
+<p><a href="#2.1">2.1</a> <a name='2.1'></a> 对所有的引用使用 <code>const</code> ；不要使用 <code>var</code>。</p>
+<blockquote>
+<p>为什么？这能确保你无法对引用重新赋值，也不会导致出现 bug 或难以理解。</p>
+</blockquote>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">var</span> a = <span class="hljs-number">1</span>;
+<span class="hljs-keyword">var</span> b = <span class="hljs-number">2</span>;
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">const</span> a = <span class="hljs-number">1</span>;
+<span class="hljs-keyword">const</span> b = <span class="hljs-number">2</span>;
+</code></pre>
+</li>
+<li>
+<p><a href="#2.2">2.2</a> <a name='2.2'></a> 如果你一定需要可变动的引用，使用 <code>let</code> 代替 <code>var</code>。</p>
+<blockquote>
+<p>为什么？因为  <code>let</code> 是块级作用域，而 <code>var</code> 是函数作用域。</p>
+</blockquote>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">var</span> count = <span class="hljs-number">1</span>;
+<span class="hljs-keyword">if</span> (<span class="hljs-literal">true</span>) {
+  count += <span class="hljs-number">1</span>;
+}
+
+<span class="hljs-comment">// good, use the let.</span>
+<span class="hljs-keyword">let</span> count = <span class="hljs-number">1</span>;
+<span class="hljs-keyword">if</span> (<span class="hljs-literal">true</span>) {
+  count += <span class="hljs-number">1</span>;
+}
+</code></pre>
+</li>
+<li>
+<p><a href="#2.3">2.3</a> <a name='2.3'></a> 注意 <code>let</code> 和 <code>const</code> 都是块级作用域。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// const 和 let 只存在于它们被定义的区块内。</span>
+{
+  <span class="hljs-keyword">let</span> a = <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">const</span> b = <span class="hljs-number">1</span>;
+}
+<span class="hljs-built_in">console</span>.log(a); <span class="hljs-comment">// ReferenceError</span>
+<span class="hljs-built_in">console</span>.log(b); <span class="hljs-comment">// ReferenceError</span>
+</code></pre>
+</li>
+</ul>
+<p><strong><a href="#table-of-contents">⬆ 返回目录</a></strong></p>
+<p><a name="objects"></a></p>
+<h2>对象</h2>
+<ul>
+<li>
+<p><a href="#3.1">3.1</a> <a name='3.1'></a> 使用字面值创建对象。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">const</span> item = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Object</span>();
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">const</span> item = {};
+</code></pre>
+</li>
+<li>
+<p><a href="#3.2">3.2</a> <a name='3.2'></a> 如果你的代码在浏览器环境下执行，别使用 <a href="http://es5.github.io/#x7.6.1">保留字</a> 作为键值。这样的话在 IE8 不会运行。 <a href="https://github.com/airbnb/javascript/issues/61">更多信息</a>。 但在 ES6 模块和服务器端中使用没有问题。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">const</span> superman = {
+  <span class="hljs-attr">default</span>: { <span class="hljs-attr">clark</span>: <span class="hljs-string">'kent'</span> },
+  <span class="hljs-attr">private</span>: <span class="hljs-literal">true</span>,
+};
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">const</span> superman = {
+  <span class="hljs-attr">defaults</span>: { <span class="hljs-attr">clark</span>: <span class="hljs-string">'kent'</span> },
+  <span class="hljs-attr">hidden</span>: <span class="hljs-literal">true</span>,
+};
+</code></pre>
+</li>
+<li>
+<p><a href="#3.3">3.3</a> <a name='3.3'></a> 使用同义词替换需要使用的保留字。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">const</span> superman = {
+  <span class="hljs-attr">class</span>: <span class="hljs-string">'alien'</span>,
+};
+
+<span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">const</span> superman = {
+  <span class="hljs-attr">klass</span>: <span class="hljs-string">'alien'</span>,
+};
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">const</span> superman = {
+  <span class="hljs-attr">type</span>: <span class="hljs-string">'alien'</span>,
+};
+</code></pre>
+</li>
+</ul>
+<p><a name="es6-computed-properties"></a></p>
+<ul>
+<li>
+<p><a href="#3.4">3.4</a> <a name='3.4'></a> 创建有动态属性名的对象时，使用可被计算的属性名称。</p>
+<blockquote>
+<p>为什么？因为这样可以让你在一个地方定义所有的对象属性。</p>
+</blockquote>
+<pre><code class="language-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getKey</span>(<span class="hljs-params">k</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-string">`a key named <span class="hljs-subst">${k}</span>`</span>;
+}
+
+<span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">const</span> obj = {
+  <span class="hljs-attr">id</span>: <span class="hljs-number">5</span>,
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'San Francisco'</span>,
+};
+obj[getKey(<span class="hljs-string">'enabled'</span>)] = <span class="hljs-literal">true</span>;
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">const</span> obj = {
+  <span class="hljs-attr">id</span>: <span class="hljs-number">5</span>,
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'San Francisco'</span>,
+  [getKey(<span class="hljs-string">'enabled'</span>)]: <span class="hljs-literal">true</span>,
+};
+</code></pre>
+</li>
+</ul>
+<p><a name="es6-object-shorthand"></a></p>
+<ul>
+<li>
+<p><a href="#3.5">3.5</a> <a name='3.5'></a> 使用对象方法的简写。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">const</span> atom = {
+  <span class="hljs-attr">value</span>: <span class="hljs-number">1</span>,
+
+  <span class="hljs-attr">addValue</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">value</span>) </span>{
+    <span class="hljs-keyword">return</span> atom.value + value;
+  },
+};
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">const</span> atom = {
+  <span class="hljs-attr">value</span>: <span class="hljs-number">1</span>,
+
+  addValue(value) {
+    <span class="hljs-keyword">return</span> atom.value + value;
+  },
+};
+</code></pre>
+</li>
+</ul>
+<p><a name="es6-object-concise"></a></p>
+<ul>
+<li>
+<p><a href="#3.6">3.6</a> <a name='3.6'></a> 使用对象属性值的简写。</p>
+<blockquote>
+<p>为什么？因为这样更短更有描述性。</p>
+</blockquote>
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> lukeSkywalker = <span class="hljs-string">'Luke Skywalker'</span>;
+
+<span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">const</span> obj = {
+  <span class="hljs-attr">lukeSkywalker</span>: lukeSkywalker,
+};
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">const</span> obj = {
+  lukeSkywalker,
+};
+</code></pre>
+</li>
+<li>
+<p><a href="#3.7">3.7</a> <a name='3.7'></a> 在对象属性声明前把简写的属性分组。</p>
+<blockquote>
+<p>为什么？因为这样能清楚地看出哪些属性使用了简写。</p>
+</blockquote>
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> anakinSkywalker = <span class="hljs-string">'Anakin Skywalker'</span>;
+<span class="hljs-keyword">const</span> lukeSkywalker = <span class="hljs-string">'Luke Skywalker'</span>;
+
+<span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">const</span> obj = {
+  <span class="hljs-attr">episodeOne</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-attr">twoJedisWalkIntoACantina</span>: <span class="hljs-number">2</span>,
+  lukeSkywalker,
+  <span class="hljs-attr">episodeThree</span>: <span class="hljs-number">3</span>,
+  <span class="hljs-attr">mayTheFourth</span>: <span class="hljs-number">4</span>,
+  anakinSkywalker,
+};
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">const</span> obj = {
+  lukeSkywalker,
+  anakinSkywalker,
+  <span class="hljs-attr">episodeOne</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-attr">twoJedisWalkIntoACantina</span>: <span class="hljs-number">2</span>,
+  <span class="hljs-attr">episodeThree</span>: <span class="hljs-number">3</span>,
+  <span class="hljs-attr">mayTheFourth</span>: <span class="hljs-number">4</span>,
+};
+</code></pre>
+</li>
+</ul>
+<p><strong><a href="#table-of-contents">⬆ 返回目录</a></strong></p>
+<p><a name="arrays"></a></p>
+<h2>数组</h2>
+<ul>
+<li>
+<p><a href="#4.1">4.1</a> <a name='4.1'></a> 使用字面值创建数组。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">const</span> items = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>();
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">const</span> items = [];
+</code></pre>
+</li>
+<li>
+<p><a href="#4.2">4.2</a> <a name='4.2'></a> 向数组添加元素时使用 Arrary#push 替代直接赋值。</p>
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> someStack = [];
+
+
+<span class="hljs-comment">// bad</span>
+someStack[someStack.length] = <span class="hljs-string">'abracadabra'</span>;
+
+<span class="hljs-comment">// good</span>
+someStack.push(<span class="hljs-string">'abracadabra'</span>);
+</code></pre>
+</li>
+</ul>
+<p><a name="es6-array-spreads"></a></p>
+<ul>
+<li>
+<p><a href="#4.3">4.3</a> <a name='4.3'></a> 使用拓展运算符 <code>...</code> 复制数组。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">const</span> len = items.length;
+<span class="hljs-keyword">const</span> itemsCopy = [];
+<span class="hljs-keyword">let</span> i;
+
+<span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; len; i++) {
+  itemsCopy[i] = items[i];
+}
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">const</span> itemsCopy = [...items];
+</code></pre>
+</li>
+<li>
+<p><a href="#4.4">4.4</a> <a name='4.4'></a> 使用 Array#from 把一个类数组对象转换成数组。</p>
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> foo = <span class="hljs-built_in">document</span>.querySelectorAll(<span class="hljs-string">'.foo'</span>);
+<span class="hljs-keyword">const</span> nodes = <span class="hljs-built_in">Array</span>.from(foo);
+</code></pre>
+</li>
+</ul>
+<p><strong><a href="#table-of-contents">⬆ 返回目录</a></strong></p>
+<p><a name="destructuring"></a></p>
+<h2>解构</h2>
+<ul>
+<li>
+<p><a href="#5.1">5.1</a> <a name='5.1'></a> 使用解构存取和使用多属性对象。</p>
+<blockquote>
+<p>为什么？因为解构能减少临时引用属性。</p>
+</blockquote>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getFullName</span>(<span class="hljs-params">user</span>) </span>{
+  <span class="hljs-keyword">const</span> firstName = user.firstName;
+  <span class="hljs-keyword">const</span> lastName = user.lastName;
+
+  <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${firstName}</span> <span class="hljs-subst">${lastName}</span>`</span>;
+}
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getFullName</span>(<span class="hljs-params">obj</span>) </span>{
+  <span class="hljs-keyword">const</span> { firstName, lastName } = obj;
+  <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${firstName}</span> <span class="hljs-subst">${lastName}</span>`</span>;
+}
+
+<span class="hljs-comment">// best</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getFullName</span>(<span class="hljs-params">{ firstName, lastName }</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${firstName}</span> <span class="hljs-subst">${lastName}</span>`</span>;
+}
+</code></pre>
+</li>
+<li>
+<p><a href="#5.2">5.2</a> <a name='5.2'></a> 对数组使用解构赋值。</p>
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> arr = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>];
+
+<span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">const</span> first = arr[<span class="hljs-number">0</span>];
+<span class="hljs-keyword">const</span> second = arr[<span class="hljs-number">1</span>];
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">const</span> [first, second] = arr;
+</code></pre>
+</li>
+<li>
+<p><a href="#5.3">5.3</a> <a name='5.3'></a> 需要回传多个值时，使用对象解构，而不是数组解构。</p>
+<blockquote>
+<p>为什么？增加属性或者改变排序不会改变调用时的位置。</p>
+</blockquote>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">processInput</span>(<span class="hljs-params">input</span>) </span>{
+  <span class="hljs-comment">// then a miracle occurs</span>
+  <span class="hljs-keyword">return</span> [left, right, top, bottom];
+}
+
+<span class="hljs-comment">// 调用时需要考虑回调数据的顺序。</span>
+<span class="hljs-keyword">const</span> [left, __, top] = processInput(input);
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">processInput</span>(<span class="hljs-params">input</span>) </span>{
+  <span class="hljs-comment">// then a miracle occurs</span>
+  <span class="hljs-keyword">return</span> { left, right, top, bottom };
+}
+
+<span class="hljs-comment">// 调用时只选择需要的数据</span>
+<span class="hljs-keyword">const</span> { left, right } = processInput(input);
+</code></pre>
+</li>
+</ul>
+<p><strong><a href="#table-of-contents">⬆ 返回目录</a></strong></p>
+<p><a name="strings"></a></p>
+<h2>Strings</h2>
+<ul>
+<li>
+<p><a href="#6.1">6.1</a> <a name='6.1'></a> 字符串使用单引号 <code>''</code> 。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">const</span> name = <span class="hljs-string">"Capt. Janeway"</span>;
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">const</span> name = <span class="hljs-string">'Capt. Janeway'</span>;
+</code></pre>
+</li>
+<li>
+<p><a href="#6.2">6.2</a> <a name='6.2'></a> 字符串超过 80 个字节应该使用字符串连接号换行。</p>
+</li>
+<li>
+<p><a href="#6.3">6.3</a> <a name='6.3'></a> 注：过度使用字串连接符号可能会对性能造成影响。<a href="http://jsperf.com/ya-string-concat">jsPerf</a> 和 <a href="https://github.com/airbnb/javascript/issues/40">讨论</a>.</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">const</span> errorMessage = <span class="hljs-string">'This is a super long error that was thrown because of Batman. When you stop to think about how Batman had anything to do with this, you would get nowhere fast.'</span>;
+
+<span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">const</span> errorMessage = <span class="hljs-string">'This is a super long error that was thrown because \
+of Batman. When you stop to think about how Batman had anything to do \
+with this, you would get nowhere \
+fast.'</span>;
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">const</span> errorMessage = <span class="hljs-string">'This is a super long error that was thrown because '</span> +
+  <span class="hljs-string">'of Batman. When you stop to think about how Batman had anything to do '</span> +
+  <span class="hljs-string">'with this, you would get nowhere fast.'</span>;
+</code></pre>
+</li>
+</ul>
+<p><a name="es6-template-literals"></a></p>
+<ul>
+<li>
+<p><a href="#6.4">6.4</a> <a name='6.4'></a> 程序化生成字符串时，使用模板字符串代替字符串连接。</p>
+<blockquote>
+<p>为什么？模板字符串更为简洁，更具可读性。</p>
+</blockquote>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi</span>(<span class="hljs-params">name</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-string">'How are you, '</span> + name + <span class="hljs-string">'?'</span>;
+}
+
+<span class="hljs-comment">// bad</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi</span>(<span class="hljs-params">name</span>) </span>{
+  <span class="hljs-keyword">return</span> [<span class="hljs-string">'How are you, '</span>, name, <span class="hljs-string">'?'</span>].join();
+}
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi</span>(<span class="hljs-params">name</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-string">`How are you, <span class="hljs-subst">${name}</span>?`</span>;
+}
+</code></pre>
+</li>
+</ul>
+<p><strong><a href="#table-of-contents">⬆ 返回目录</a></strong></p>
+<p><a name="functions"></a></p>
+<h2>函数</h2>
+<ul>
+<li>
+<p><a href="#7.1">7.1</a> <a name='7.1'></a> 使用函数声明代替函数表达式。</p>
+<blockquote>
+<p>为什么？因为函数声明是可命名的，所以他们在调用栈中更容易被识别。此外，函数声明会把整个函数提升（hoisted），而函数表达式只会把函数的引用变量名提升。这条规则使得<a href="#arrow-functions">箭头函数</a>可以取代函数表达式。</p>
+</blockquote>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">const</span> foo = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+};
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params"></span>) </span>{
+}
+</code></pre>
+</li>
+<li>
+<p><a href="#7.2">7.2</a> <a name='7.2'></a> 函数表达式:</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// 立即调用的函数表达式 (IIFE)</span>
+(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Welcome to the Internet. Please follow me.'</span>);
+})();
+</code></pre>
+</li>
+<li>
+<p><a href="#7.3">7.3</a> <a name='7.3'></a> 永远不要在一个非函数代码块（<code>if</code>、<code>while</code> 等）中声明一个函数，把那个函数赋给一个变量。浏览器允许你这么做，但它们的解析表现不一致。</p>
+</li>
+<li>
+<p><a href="#7.4">7.4</a> <a name='7.4'></a> <strong>注意:</strong> ECMA-262 把 <code>block</code> 定义为一组语句。函数声明不是语句。<a href="http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf#page=97">阅读 ECMA-262 关于这个问题的说明</a>。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">if</span> (currentUser) {
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">test</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Nope.'</span>);
+  }
+}
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">let</span> test;
+<span class="hljs-keyword">if</span> (currentUser) {
+  test = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Yup.'</span>);
+  };
+}
+</code></pre>
+</li>
+<li>
+<p><a href="#7.5">7.5</a> <a name='7.5'></a> 永远不要把参数命名为 <code>arguments</code>。这将取代原来函数作用域内的 <code>arguments</code> 对象。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">nope</span>(<span class="hljs-params">name, options, arguments</span>) </span>{
+  <span class="hljs-comment">// ...stuff...</span>
+}
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">yup</span>(<span class="hljs-params">name, options, args</span>) </span>{
+  <span class="hljs-comment">// ...stuff...</span>
+}
+</code></pre>
+</li>
+</ul>
+<p><a name="es6-rest"></a></p>
+<ul>
+<li>
+<p><a href="#7.6">7.6</a> <a name='7.6'></a> 不要使用 <code>arguments</code>。可以选择 rest 语法 <code>...</code> 替代。</p>
+<blockquote>
+<p>为什么？使用 <code>...</code> 能明确你要传入的参数。另外 rest 参数是一个真正的数组，而 <code>arguments</code> 是一个类数组。</p>
+</blockquote>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">concatenateAll</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">const</span> args = <span class="hljs-built_in">Array</span>.prototype.slice.call(<span class="hljs-built_in">arguments</span>);
+  <span class="hljs-keyword">return</span> args.join(<span class="hljs-string">''</span>);
+}
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">concatenateAll</span>(<span class="hljs-params">...args</span>) </span>{
+  <span class="hljs-keyword">return</span> args.join(<span class="hljs-string">''</span>);
+}
+</code></pre>
+</li>
+</ul>
+<p><a name="es6-default-parameters"></a></p>
+<ul>
+<li>
+<p><a href="#7.7">7.7</a> <a name='7.7'></a> 直接给函数的参数指定默认值，不要使用一个变化的函数参数。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// really bad</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handleThings</span>(<span class="hljs-params">opts</span>) </span>{
+  <span class="hljs-comment">// 不！我们不应该改变函数参数。</span>
+  <span class="hljs-comment">// 更加糟糕: 如果参数 opts 是 false 的话，它就会被设定为一个对象。</span>
+  <span class="hljs-comment">// 但这样的写法会造成一些 Bugs。</span>
+  <span class="hljs-comment">//（译注：例如当 opts 被赋值为空字符串，opts 仍然会被下一行代码设定为一个空对象。）</span>
+  opts = opts || {};
+  <span class="hljs-comment">// ...</span>
+}
+
+<span class="hljs-comment">// still bad</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handleThings</span>(<span class="hljs-params">opts</span>) </span>{
+  <span class="hljs-keyword">if</span> (opts === <span class="hljs-keyword">void</span> <span class="hljs-number">0</span>) {
+    opts = {};
+  }
+  <span class="hljs-comment">// ...</span>
+}
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handleThings</span>(<span class="hljs-params">opts = {}</span>) </span>{
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre>
+</li>
+<li>
+<p><a href="#7.8">7.8</a> <a name='7.8'></a> 直接给函数参数赋值时需要避免副作用。</p>
+</li>
+</ul>
+<blockquote>
+<p>为什么？因为这样的写法让人感到很困惑。</p>
+</blockquote>
+<pre><code class="language-javascript"><span class="hljs-keyword">var</span> b = <span class="hljs-number">1</span>;
+<span class="hljs-comment">// bad</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">count</span>(<span class="hljs-params">a = b++</span>) </span>{
+  <span class="hljs-built_in">console</span>.log(a);
+}
+count();  <span class="hljs-comment">// 1</span>
+count();  <span class="hljs-comment">// 2</span>
+count(<span class="hljs-number">3</span>); <span class="hljs-comment">// 3</span>
+count();  <span class="hljs-comment">// 3</span>
+</code></pre>
+<p><strong><a href="#table-of-contents">⬆ 返回目录</a></strong></p>
+<p><a name="arrow-functions"></a></p>
+<h2>箭头函数</h2>
+<ul>
+<li>
+<p><a href="#8.1">8.1</a> <a name='8.1'></a> 当你必须使用函数表达式（或传递一个匿名函数）时，使用箭头函数符号。</p>
+<blockquote>
+<p>为什么？因为箭头函数创造了新的一个 <code>this</code> 执行环境（译注：参考 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions">Arrow functions - JavaScript | MDN</a> 和 <a href="http://toddmotto.com/es6-arrow-functions-syntaxes-and-lexical-scoping/">ES6 arrow functions, syntax and lexical scoping</a>），通常情况下都能满足你的需求，而且这样的写法更为简洁。</p>
+</blockquote>
+<blockquote>
+<p>为什么不？如果你有一个相当复杂的函数，你或许可以把逻辑部分转移到一个函数声明上。</p>
+</blockquote>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>].map(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">x</span>) </span>{
+  <span class="hljs-keyword">const</span> y = x + <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">return</span> x * y;
+});
+
+<span class="hljs-comment">// good</span>
+[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>].map(<span class="hljs-function">(<span class="hljs-params">x</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> y = x + <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">return</span> x * y;
+});
+</code></pre>
+</li>
+<li>
+<p><a href="#8.2">8.2</a> <a name='8.2'></a> 如果一个函数适合用一行写出并且只有一个参数，那就把花括号、圆括号和 <code>return</code> 都省略掉。如果不是，那就不要省略。</p>
+<blockquote>
+<p>为什么？语法糖。在链式调用中可读性很高。</p>
+</blockquote>
+<blockquote>
+<p>为什么不？当你打算回传一个对象的时候。</p>
+</blockquote>
+<pre><code class="language-javascript"><span class="hljs-comment">// good</span>
+[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>].map(<span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> x * x);
+
+<span class="hljs-comment">// good</span>
+[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>].reduce(<span class="hljs-function">(<span class="hljs-params">total, n</span>) =&gt;</span> {
+  <span class="hljs-keyword">return</span> total + n;
+}, <span class="hljs-number">0</span>);
+</code></pre>
+</li>
+</ul>
+<p><strong><a href="#table-of-contents">⬆ 返回目录</a></strong></p>
+<p><a name="constructors"></a></p>
+<h2>构造器</h2>
+<ul>
+<li>
+<p><a href="#9.1">9.1</a> <a name='9.1'></a> 总是使用 <code>class</code>。避免直接操作 <code>prototype</code> 。</p>
+<blockquote>
+<p>为什么? 因为 <code>class</code> 语法更为简洁更易读。</p>
+</blockquote>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Queue</span>(<span class="hljs-params">contents = []</span>) </span>{
+  <span class="hljs-keyword">this</span>._queue = [...contents];
+}
+Queue.prototype.pop = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">const</span> value = <span class="hljs-keyword">this</span>._queue[<span class="hljs-number">0</span>];
+  <span class="hljs-keyword">this</span>._queue.splice(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>);
+  <span class="hljs-keyword">return</span> value;
+}
+
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Queue</span> </span>{
+  <span class="hljs-keyword">constructor</span>(contents = []) {
+    <span class="hljs-keyword">this</span>._queue = [...contents];
+  }
+  pop() {
+    <span class="hljs-keyword">const</span> value = <span class="hljs-keyword">this</span>._queue[<span class="hljs-number">0</span>];
+    <span class="hljs-keyword">this</span>._queue.splice(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>);
+    <span class="hljs-keyword">return</span> value;
+  }
+}
+</code></pre>
+</li>
+<li>
+<p><a href="#9.2">9.2</a> <a name='9.2'></a> 使用 <code>extends</code> 继承。</p>
+<blockquote>
+<p>为什么？因为 <code>extends</code> 是一个内建的原型继承方法并且不会破坏 <code>instanceof</code>。</p>
+</blockquote>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">const</span> inherits = <span class="hljs-built_in">require</span>(<span class="hljs-string">'inherits'</span>);
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">PeekableQueue</span>(<span class="hljs-params">contents</span>) </span>{
+  Queue.apply(<span class="hljs-keyword">this</span>, contents);
+}
+inherits(PeekableQueue, Queue);
+PeekableQueue.prototype.peek = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._queue[<span class="hljs-number">0</span>];
+}
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PeekableQueue</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Queue</span> </span>{
+  peek() {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._queue[<span class="hljs-number">0</span>];
+  }
+}
+</code></pre>
+</li>
+<li>
+<p><a href="#9.3">9.3</a> <a name='9.3'></a> 方法可以返回 <code>this</code> 来帮助链式调用。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+Jedi.prototype.jump = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">this</span>.jumping = <span class="hljs-literal">true</span>;
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+};
+
+Jedi.prototype.setHeight = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">height</span>) </span>{
+  <span class="hljs-keyword">this</span>.height = height;
+};
+
+<span class="hljs-keyword">const</span> luke = <span class="hljs-keyword">new</span> Jedi();
+luke.jump(); <span class="hljs-comment">// =&gt; true</span>
+luke.setHeight(<span class="hljs-number">20</span>); <span class="hljs-comment">// =&gt; undefined</span>
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Jedi</span> </span>{
+  jump() {
+    <span class="hljs-keyword">this</span>.jumping = <span class="hljs-literal">true</span>;
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+  }
+
+  setHeight(height) {
+    <span class="hljs-keyword">this</span>.height = height;
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+  }
+}
+
+<span class="hljs-keyword">const</span> luke = <span class="hljs-keyword">new</span> Jedi();
+
+luke.jump()
+  .setHeight(<span class="hljs-number">20</span>);
+</code></pre>
+</li>
+<li>
+<p><a href="#9.4">9.4</a> <a name='9.4'></a> 可以写一个自定义的 <code>toString()</code> 方法，但要确保它能正常运行并且不会引起副作用。</p>
+<pre><code class="language-javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Jedi</span> </span>{
+  <span class="hljs-keyword">constructor</span>(options = {}) {
+    <span class="hljs-keyword">this</span>.name = options.name || <span class="hljs-string">'no name'</span>;
+  }
+
+  getName() {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.name;
+  }
+
+  toString() {
+    <span class="hljs-keyword">return</span> <span class="hljs-string">`Jedi - <span class="hljs-subst">${<span class="hljs-keyword">this</span>.getName()}</span>`</span>;
+  }
+}
+</code></pre>
+</li>
+</ul>
+<p><strong><a href="#table-of-contents">⬆ 返回目录</a></strong></p>
+<p><a name="modules"></a></p>
+<h2>模块</h2>
+<ul>
+<li>
+<p><a href="#10.1">10.1</a> <a name='10.1'></a> 总是使用模组 (<code>import</code>/<code>export</code>) 而不是其他非标准模块系统。你可以编译为你喜欢的模块系统。</p>
+<blockquote>
+<p>为什么？模块就是未来，让我们开始迈向未来吧。</p>
+</blockquote>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">const</span> AirbnbStyleGuide = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./AirbnbStyleGuide'</span>);
+<span class="hljs-built_in">module</span>.exports = AirbnbStyleGuide.es6;
+
+<span class="hljs-comment">// ok</span>
+<span class="hljs-keyword">import</span> AirbnbStyleGuide <span class="hljs-keyword">from</span> <span class="hljs-string">'./AirbnbStyleGuide'</span>;
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> AirbnbStyleGuide.es6;
+
+<span class="hljs-comment">// best</span>
+<span class="hljs-keyword">import</span> { es6 } <span class="hljs-keyword">from</span> <span class="hljs-string">'./AirbnbStyleGuide'</span>;
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> es6;
+</code></pre>
+</li>
+<li>
+<p><a href="#10.2">10.2</a> <a name='10.2'></a> 不要使用通配符 import。</p>
+<blockquote>
+<p>为什么？这样能确保你只有一个默认 export。</p>
+</blockquote>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> AirbnbStyleGuide <span class="hljs-keyword">from</span> <span class="hljs-string">'./AirbnbStyleGuide'</span>;
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">import</span> AirbnbStyleGuide <span class="hljs-keyword">from</span> <span class="hljs-string">'./AirbnbStyleGuide'</span>;
+</code></pre>
+</li>
+<li>
+<p><a href="#10.3">10.3</a> <a name='10.3'></a>不要从 import 中直接 export。</p>
+<blockquote>
+<p>为什么？虽然一行代码简洁明了，但让 import 和 export 各司其职让事情能保持一致。</p>
+</blockquote>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-comment">// filename es6.js</span>
+<span class="hljs-keyword">export</span> { es6 <span class="hljs-keyword">as</span> <span class="hljs-keyword">default</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">'./airbnbStyleGuide'</span>;
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-comment">// filename es6.js</span>
+<span class="hljs-keyword">import</span> { es6 } <span class="hljs-keyword">from</span> <span class="hljs-string">'./AirbnbStyleGuide'</span>;
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> es6;
+</code></pre>
+</li>
+</ul>
+<p><strong><a href="#table-of-contents">⬆ 返回目录</a></strong></p>
+<p><a name="iterators-and-generators"></a></p>
+<h2>Iterators and Generators</h2>
+<ul>
+<li>
+<p><a href="#11.1">11.1</a> <a name='11.1'></a> 不要使用 iterators。使用高阶函数例如 <code>map()</code> 和 <code>reduce()</code> 替代 <code>for-of</code>。</p>
+<blockquote>
+<p>为什么？这加强了我们不变的规则。处理纯函数的回调值更易读，这比它带来的副作用更重要。</p>
+</blockquote>
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> numbers = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>];
+
+<span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">let</span> sum = <span class="hljs-number">0</span>;
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> num <span class="hljs-keyword">of</span> numbers) {
+  sum += num;
+}
+
+sum === <span class="hljs-number">15</span>;
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">let</span> sum = <span class="hljs-number">0</span>;
+numbers.forEach(<span class="hljs-function">(<span class="hljs-params">num</span>) =&gt;</span> sum += num);
+sum === <span class="hljs-number">15</span>;
+
+<span class="hljs-comment">// best (use the functional force)</span>
+<span class="hljs-keyword">const</span> sum = numbers.reduce(<span class="hljs-function">(<span class="hljs-params">total, num</span>) =&gt;</span> total + num, <span class="hljs-number">0</span>);
+sum === <span class="hljs-number">15</span>;
+</code></pre>
+</li>
+<li>
+<p><a href="#11.2">11.2</a> <a name='11.2'></a> 现在还不要使用 generators。</p>
+</li>
+</ul>
+<blockquote>
+<p>为什么？因为它们现在还没法很好地编译到 ES5。 (译者注：目前(2016/03) Chrome 和 Node.js 的稳定版本都已支持 generators)</p>
+</blockquote>
+<p><strong><a href="#table-of-contents">⬆ 返回目录</a></strong></p>
+<p><a name="properties"></a></p>
+<h2>属性</h2>
+<ul>
+<li>
+<p><a href="#12.1">12.1</a> <a name='12.1'></a> 使用 <code>.</code> 来访问对象的属性。</p>
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> luke = {
+  <span class="hljs-attr">jedi</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">age</span>: <span class="hljs-number">28</span>,
+};
+
+<span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">const</span> isJedi = luke[<span class="hljs-string">'jedi'</span>];
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">const</span> isJedi = luke.jedi;
+</code></pre>
+</li>
+<li>
+<p><a href="#12.2">12.2</a> <a name='12.2'></a> 当通过变量访问属性时使用中括号 <code>[]</code>。</p>
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> luke = {
+  <span class="hljs-attr">jedi</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">age</span>: <span class="hljs-number">28</span>,
+};
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getProp</span>(<span class="hljs-params">prop</span>) </span>{
+  <span class="hljs-keyword">return</span> luke[prop];
+}
+
+<span class="hljs-keyword">const</span> isJedi = getProp(<span class="hljs-string">'jedi'</span>);
+</code></pre>
+</li>
+</ul>
+<p><strong><a href="#table-of-contents">⬆ 返回目录</a></strong></p>
+<p><a name="variables"></a></p>
+<h2>变量</h2>
+<ul>
+<li>
+<p><a href="#13.1">13.1</a> <a name='13.1'></a> 一直使用 <code>const</code> 来声明变量，如果不这样做就会产生全局变量。我们需要避免全局命名空间的污染。<a href="http://www.wikiwand.com/en/Captain_Planet">地球队长</a>已经警告过我们了。（译注：全局，global 亦有全球的意思。地球队长的责任是保卫地球环境，所以他警告我们不要造成「全球」污染。）</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+superPower = <span class="hljs-keyword">new</span> SuperPower();
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">const</span> superPower = <span class="hljs-keyword">new</span> SuperPower();
+</code></pre>
+</li>
+<li>
+<p><a href="#13.2">13.2</a> <a name='13.2'></a> 使用 <code>const</code> 声明每一个变量。</p>
+<blockquote>
+<p>为什么？增加新变量将变的更加容易，而且你永远不用再担心调换错 <code>;</code> 跟 <code>,</code>。</p>
+</blockquote>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">const</span> items = getItems(),
+    goSportsTeam = <span class="hljs-literal">true</span>,
+    dragonball = <span class="hljs-string">'z'</span>;
+
+<span class="hljs-comment">// bad</span>
+<span class="hljs-comment">// (compare to above, and try to spot the mistake)</span>
+<span class="hljs-keyword">const</span> items = getItems(),
+    goSportsTeam = <span class="hljs-literal">true</span>;
+    dragonball = <span class="hljs-string">'z'</span>;
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">const</span> items = getItems();
+<span class="hljs-keyword">const</span> goSportsTeam = <span class="hljs-literal">true</span>;
+<span class="hljs-keyword">const</span> dragonball = <span class="hljs-string">'z'</span>;
+</code></pre>
+</li>
+<li>
+<p><a href="#13.3">13.3</a> <a name='13.3'></a> 将所有的 <code>const</code> 和 <code>let</code> 分组</p>
+<blockquote>
+<p>为什么？当你需要把已赋值变量赋值给未赋值变量时非常有用。</p>
+</blockquote>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">let</span> i, len, dragonball,
+    items = getItems(),
+    goSportsTeam = <span class="hljs-literal">true</span>;
+
+<span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">let</span> i;
+<span class="hljs-keyword">const</span> items = getItems();
+<span class="hljs-keyword">let</span> dragonball;
+<span class="hljs-keyword">const</span> goSportsTeam = <span class="hljs-literal">true</span>;
+<span class="hljs-keyword">let</span> len;
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">const</span> goSportsTeam = <span class="hljs-literal">true</span>;
+<span class="hljs-keyword">const</span> items = getItems();
+<span class="hljs-keyword">let</span> dragonball;
+<span class="hljs-keyword">let</span> i;
+<span class="hljs-keyword">let</span> length;
+</code></pre>
+</li>
+<li>
+<p><a href="#13.4">13.4</a> <a name='13.4'></a> 在你需要的地方给变量赋值，但请把它们放在一个合理的位置。</p>
+<blockquote>
+<p>为什么？<code>let</code> 和 <code>const</code> 是块级作用域而不是函数作用域。</p>
+</blockquote>
+<pre><code class="language-javascript"><span class="hljs-comment">// good</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  test();
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'doing stuff..'</span>);
+
+  <span class="hljs-comment">//..other stuff..</span>
+
+  <span class="hljs-keyword">const</span> name = getName();
+
+  <span class="hljs-keyword">if</span> (name === <span class="hljs-string">'test'</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+  }
+
+  <span class="hljs-keyword">return</span> name;
+}
+
+<span class="hljs-comment">// bad - unnecessary function call</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">hasName</span>) </span>{
+  <span class="hljs-keyword">const</span> name = getName();
+
+  <span class="hljs-keyword">if</span> (!hasName) {
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+  }
+
+  <span class="hljs-keyword">this</span>.setFirstName(name);
+
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+}
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">hasName</span>) </span>{
+  <span class="hljs-keyword">if</span> (!hasName) {
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+  }
+
+  <span class="hljs-keyword">const</span> name = getName();
+  <span class="hljs-keyword">this</span>.setFirstName(name);
+
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+}
+</code></pre>
+</li>
+</ul>
+<p><strong><a href="#table-of-contents">⬆ 返回目录</a></strong></p>
+<p><a name="hoisting"></a></p>
+<h2>Hoisting</h2>
+<ul>
+<li>
+<p><a href="#14.1">14.1</a> <a name='14.1'></a> <code>var</code> 声明会被提升至该作用域的顶部，但它们赋值不会提升。<code>let</code> 和 <code>const</code> 被赋予了一种称为「<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let#Temporal_dead_zone_and_errors_with_let">暂时性死区（Temporal Dead Zones, TDZ）</a>」的概念。这对于了解为什么 <a href="http://es-discourse.com/t/why-typeof-is-no-longer-safe/15">type of 不再安全</a>相当重要。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// 我们知道这样运行不了</span>
+<span class="hljs-comment">// （假设 notDefined 不是全局变量）</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">example</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-built_in">console</span>.log(notDefined); <span class="hljs-comment">// =&gt; throws a ReferenceError</span>
+}
+
+<span class="hljs-comment">// 由于变量提升的原因，</span>
+<span class="hljs-comment">// 在引用变量后再声明变量是可以运行的。</span>
+<span class="hljs-comment">// 注：变量的赋值 `true` 不会被提升。</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">example</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-built_in">console</span>.log(declaredButNotAssigned); <span class="hljs-comment">// =&gt; undefined</span>
+  <span class="hljs-keyword">var</span> declaredButNotAssigned = <span class="hljs-literal">true</span>;
+}
+
+<span class="hljs-comment">// 编译器会把函数声明提升到作用域的顶层，</span>
+<span class="hljs-comment">// 这意味着我们的例子可以改写成这样：</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">example</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">let</span> declaredButNotAssigned;
+  <span class="hljs-built_in">console</span>.log(declaredButNotAssigned); <span class="hljs-comment">// =&gt; undefined</span>
+  declaredButNotAssigned = <span class="hljs-literal">true</span>;
+}
+
+<span class="hljs-comment">// 使用 const 和 let</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">example</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-built_in">console</span>.log(declaredButNotAssigned); <span class="hljs-comment">// =&gt; throws a ReferenceError</span>
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">typeof</span> declaredButNotAssigned); <span class="hljs-comment">// =&gt; throws a ReferenceError</span>
+  <span class="hljs-keyword">const</span> declaredButNotAssigned = <span class="hljs-literal">true</span>;
+}
+</code></pre>
+</li>
+<li>
+<p><a href="#14.2">14.2</a> <a name='14.2'></a> 匿名函数表达式的变量名会被提升，但函数内容并不会。</p>
+<pre><code class="language-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">example</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-built_in">console</span>.log(anonymous); <span class="hljs-comment">// =&gt; undefined</span>
+
+  anonymous(); <span class="hljs-comment">// =&gt; TypeError anonymous is not a function</span>
+
+  <span class="hljs-keyword">var</span> anonymous = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'anonymous function expression'</span>);
+  };
+}
+</code></pre>
+</li>
+<li>
+<p><a href="#14.3">14.3</a> <a name='14.3'></a> 命名的函数表达式的变量名会被提升，但函数名和函数函数内容并不会。</p>
+<pre><code class="language-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">example</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-built_in">console</span>.log(named); <span class="hljs-comment">// =&gt; undefined</span>
+
+  named(); <span class="hljs-comment">// =&gt; TypeError named is not a function</span>
+
+  superPower(); <span class="hljs-comment">// =&gt; ReferenceError superPower is not defined</span>
+
+  <span class="hljs-keyword">var</span> named = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">superPower</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Flying'</span>);
+  };
+}
+
+<span class="hljs-comment">// the same is true when the function name</span>
+<span class="hljs-comment">// is the same as the variable name.</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">example</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-built_in">console</span>.log(named); <span class="hljs-comment">// =&gt; undefined</span>
+
+  named(); <span class="hljs-comment">// =&gt; TypeError named is not a function</span>
+
+  <span class="hljs-keyword">var</span> named = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">named</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'named'</span>);
+  }
+}
+</code></pre>
+</li>
+<li>
+<p><a href="#14.4">14.4</a> <a name='14.4'></a> 函数声明的名称和函数体都会被提升。</p>
+<pre><code class="language-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">example</span>(<span class="hljs-params"></span>) </span>{
+  superPower(); <span class="hljs-comment">// =&gt; Flying</span>
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">superPower</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Flying'</span>);
+  }
+}
+</code></pre>
+</li>
+<li>
+<p>想了解更多信息，参考 <a href="http://www.adequatelygood.com/">Ben Cherry</a> 的 <a href="http://www.adequatelygood.com/2010/2/JavaScript-Scoping-and-Hoisting">JavaScript Scoping &amp; Hoisting</a>。</p>
+</li>
+</ul>
+<p><strong><a href="#table-of-contents">⬆ 返回目录</a></strong></p>
+<p><a name="comparison-operators--equality"></a></p>
+<h2>比较运算符和等号</h2>
+<ul>
+<li>
+<p><a href="#15.1">15.1</a> <a name='15.1'></a> 优先使用 <code>===</code> 和 <code>!==</code> 而不是 <code>==</code> 和 <code>!=</code>.</p>
+</li>
+<li>
+<p><a href="#15.2">15.2</a> <a name='15.2'></a> 条件表达式例如 <code>if</code> 语句通过抽象方法 <code>ToBoolean</code> 强制计算它们的表达式并且总是遵守下面的规则：</p>
+<ul>
+<li><strong>对象</strong> 被计算为 <strong>true</strong></li>
+<li><strong>Undefined</strong> 被计算为 <strong>false</strong></li>
+<li><strong>Null</strong> 被计算为 <strong>false</strong></li>
+<li><strong>布尔值</strong> 被计算为 <strong>布尔的值</strong></li>
+<li><strong>数字</strong> 如果是 <strong>+0、-0、或 NaN</strong> 被计算为 <strong>false</strong>, 否则为 <strong>true</strong></li>
+<li><strong>字符串</strong> 如果是空字符串 <code>''</code> 被计算为 <strong>false</strong>，否则为 <strong>true</strong></li>
+</ul>
+<pre><code class="language-javascript"><span class="hljs-keyword">if</span> ([<span class="hljs-number">0</span>]) {
+  <span class="hljs-comment">// true</span>
+  <span class="hljs-comment">// An array is an object, objects evaluate to true</span>
+}
+</code></pre>
+</li>
+<li>
+<p><a href="#15.3">15.3</a> <a name='15.3'></a> 使用简写。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">if</span> (name !== <span class="hljs-string">''</span>) {
+  <span class="hljs-comment">// ...stuff...</span>
+}
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">if</span> (name) {
+  <span class="hljs-comment">// ...stuff...</span>
+}
+
+<span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">if</span> (collection.length &gt; <span class="hljs-number">0</span>) {
+  <span class="hljs-comment">// ...stuff...</span>
+}
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">if</span> (collection.length) {
+  <span class="hljs-comment">// ...stuff...</span>
+}
+</code></pre>
+</li>
+<li>
+<p><a href="#15.4">15.4</a> <a name='15.4'></a> 想了解更多信息，参考 Angus Croll 的 <a href="http://javascriptweblog.wordpress.com/2011/02/07/truth-equality-and-javascript/#more-2108">Truth Equality and JavaScript</a>。</p>
+</li>
+</ul>
+<p><strong><a href="#table-of-contents">⬆ 返回目录</a></strong></p>
+<p><a name="blocks"></a></p>
+<h2>代码块</h2>
+<ul>
+<li>
+<p><a href="#16.1">16.1</a> <a name='16.1'></a> 使用大括号包裹所有的多行代码块。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">if</span> (test)
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">if</span> (test) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">if</span> (test) {
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+}
+
+<span class="hljs-comment">// bad</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>; }
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+}
+</code></pre>
+</li>
+<li>
+<p><a href="#16.2">16.2</a> <a name='16.2'></a> 如果通过 <code>if</code> 和 <code>else</code> 使用多行代码块，把 <code>else</code> 放在 <code>if</code> 代码块关闭括号的同一行。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">if</span> (test) {
+  thing1();
+  thing2();
+}
+<span class="hljs-keyword">else</span> {
+  thing3();
+}
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">if</span> (test) {
+  thing1();
+  thing2();
+} <span class="hljs-keyword">else</span> {
+  thing3();
+}
+</code></pre>
+</li>
+</ul>
+<p><strong><a href="#table-of-contents">⬆ 返回目录</a></strong></p>
+<p><a name="comments"></a></p>
+<h2>注释</h2>
+<ul>
+<li>
+<p><a href="#17.1">17.1</a> <a name='17.1'></a> 使用 <code>/** ... */</code> 作为多行注释。包含描述、指定所有参数和返回值的类型和值。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-comment">// make() returns a new element</span>
+<span class="hljs-comment">// based on the passed in tag name</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// @param {String} tag</span>
+<span class="hljs-comment">// @return {Element} element</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">make</span>(<span class="hljs-params">tag</span>) </span>{
+
+  <span class="hljs-comment">// ...stuff...</span>
+
+  <span class="hljs-keyword">return</span> element;
+}
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-comment">/**
+ * make() returns a new element
+ * based on the passed in tag name
+ *
+ * @param {String} tag
+ * @return {Element} element
+ */</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">make</span>(<span class="hljs-params">tag</span>) </span>{
+
+  <span class="hljs-comment">// ...stuff...</span>
+
+  <span class="hljs-keyword">return</span> element;
+}
+</code></pre>
+</li>
+<li>
+<p><a href="#17.2">17.2</a> <a name='17.2'></a> 使用 <code>//</code> 作为单行注释。在评论对象上面另起一行使用单行注释。在注释前插入空行。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">const</span> active = <span class="hljs-literal">true</span>;  <span class="hljs-comment">// is current tab</span>
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-comment">// is current tab</span>
+<span class="hljs-keyword">const</span> active = <span class="hljs-literal">true</span>;
+
+<span class="hljs-comment">// bad</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getType</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'fetching type...'</span>);
+  <span class="hljs-comment">// set the default type to 'no type'</span>
+  <span class="hljs-keyword">const</span> type = <span class="hljs-keyword">this</span>._type || <span class="hljs-string">'no type'</span>;
+
+  <span class="hljs-keyword">return</span> type;
+}
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getType</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'fetching type...'</span>);
+
+  <span class="hljs-comment">// set the default type to 'no type'</span>
+  <span class="hljs-keyword">const</span> type = <span class="hljs-keyword">this</span>._type || <span class="hljs-string">'no type'</span>;
+
+  <span class="hljs-keyword">return</span> type;
+}
+</code></pre>
+</li>
+<li>
+<p><a href="#17.3">17.3</a> <a name='17.3'></a> 给注释增加 <code>FIXME</code> 或 <code>TODO</code> 的前缀可以帮助其他开发者快速了解这是一个需要复查的问题，或是给需要实现的功能提供一个解决方式。这将有别于常见的注释，因为它们是可操作的。使用 <code>FIXME -- need to figure this out</code> 或者 <code>TODO -- need to implement</code>。</p>
+</li>
+<li>
+<p><a href="#17.4">17.4</a> <a name='17.4'></a> 使用 <code>// FIXME</code>: 标注问题。</p>
+<pre><code class="language-javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Calculator</span> </span>{
+  <span class="hljs-keyword">constructor</span>() {
+    <span class="hljs-comment">// <span class="hljs-doctag">FIXME:</span> shouldn't use a global here</span>
+    total = <span class="hljs-number">0</span>;
+  }
+}
+</code></pre>
+</li>
+<li>
+<p><a href="#17.5">17.5</a> <a name='17.5'></a> 使用 <code>// TODO</code>: 标注问题的解决方式。</p>
+<pre><code class="language-javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Calculator</span> </span>{
+  <span class="hljs-keyword">constructor</span>() {
+    <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> total should be configurable by an options param</span>
+    <span class="hljs-keyword">this</span>.total = <span class="hljs-number">0</span>;
+  }
+}
+</code></pre>
+</li>
+</ul>
+<p><strong><a href="#table-of-contents">⬆ 返回目录</a></strong></p>
+<p><a name="whitespace"></a></p>
+<h2>空白</h2>
+<ul>
+<li>
+<p><a href="#18.1">18.1</a> <a name='18.1'></a> 使用 2 个空格作为缩进。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+∙∙∙∙<span class="hljs-keyword">const</span> name;
+}
+
+<span class="hljs-comment">// bad</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+∙<span class="hljs-keyword">const</span> name;
+}
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+∙∙<span class="hljs-keyword">const</span> name;
+}
+</code></pre>
+</li>
+<li>
+<p><a href="#18.2">18.2</a> <a name='18.2'></a> 在花括号前放一个空格。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">test</span>(<span class="hljs-params"></span>)</span>{
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'test'</span>);
+}
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">test</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'test'</span>);
+}
+
+<span class="hljs-comment">// bad</span>
+dog.set(<span class="hljs-string">'attr'</span>,{
+  <span class="hljs-attr">age</span>: <span class="hljs-string">'1 year'</span>,
+  <span class="hljs-attr">breed</span>: <span class="hljs-string">'Bernese Mountain Dog'</span>,
+});
+
+<span class="hljs-comment">// good</span>
+dog.set(<span class="hljs-string">'attr'</span>, {
+  <span class="hljs-attr">age</span>: <span class="hljs-string">'1 year'</span>,
+  <span class="hljs-attr">breed</span>: <span class="hljs-string">'Bernese Mountain Dog'</span>,
+});
+</code></pre>
+</li>
+<li>
+<p><a href="#18.3">18.3</a> <a name='18.3'></a> 在控制语句（<code>if</code>、<code>while</code> 等）的小括号前放一个空格。在函数调用及声明中，不在函数的参数列表前加空格。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">if</span>(isJedi) {
+  fight ();
+}
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">if</span> (isJedi) {
+  fight();
+}
+
+<span class="hljs-comment">// bad</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fight</span> (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-built_in">console</span>.log (<span class="hljs-string">'Swooosh!'</span>);
+}
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fight</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Swooosh!'</span>);
+}
+</code></pre>
+</li>
+<li>
+<p><a href="#18.4">18.4</a> <a name='18.4'></a> 使用空格把运算符隔开。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">const</span> x=y+<span class="hljs-number">5</span>;
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">const</span> x = y + <span class="hljs-number">5</span>;
+</code></pre>
+</li>
+<li>
+<p><a href="#18.5">18.5</a> <a name='18.5'></a> 在文件末尾插入一个空行。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">global</span>) </span>{
+  <span class="hljs-comment">// ...stuff...</span>
+})(<span class="hljs-keyword">this</span>);
+</code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">global</span>) </span>{
+  <span class="hljs-comment">// ...stuff...</span>
+})(<span class="hljs-keyword">this</span>);↵
+↵
+</code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// good</span>
+(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">global</span>) </span>{
+  <span class="hljs-comment">// ...stuff...</span>
+})(<span class="hljs-keyword">this</span>);↵
+</code></pre>
+</li>
+<li>
+<p><a href="#18.5">18.5</a> <a name='18.5'></a> 在使用长方法链时进行缩进。使用前面的点 <code>.</code> 强调这是方法调用而不是新语句。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+$(<span class="hljs-string">'#items'</span>).find(<span class="hljs-string">'.selected'</span>).highlight().end().find(<span class="hljs-string">'.open'</span>).updateCount();
+
+<span class="hljs-comment">// bad</span>
+$(<span class="hljs-string">'#items'</span>).
+  find(<span class="hljs-string">'.selected'</span>).
+    highlight().
+    end().
+  find(<span class="hljs-string">'.open'</span>).
+    updateCount();
+
+<span class="hljs-comment">// good</span>
+$(<span class="hljs-string">'#items'</span>)
+  .find(<span class="hljs-string">'.selected'</span>)
+    .highlight()
+    .end()
+  .find(<span class="hljs-string">'.open'</span>)
+    .updateCount();
+
+<span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">const</span> leds = stage.selectAll(<span class="hljs-string">'.led'</span>).data(data).enter().append(<span class="hljs-string">'svg:svg'</span>).class(<span class="hljs-string">'led'</span>, <span class="hljs-literal">true</span>)
+    .attr(<span class="hljs-string">'width'</span>, (radius + margin) * <span class="hljs-number">2</span>).append(<span class="hljs-string">'svg:g'</span>)
+    .attr(<span class="hljs-string">'transform'</span>, <span class="hljs-string">'translate('</span> + (radius + margin) + <span class="hljs-string">','</span> + (radius + margin) + <span class="hljs-string">')'</span>)
+    .call(tron.led);
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">const</span> leds = stage.selectAll(<span class="hljs-string">'.led'</span>)
+    .data(data)
+  .enter().append(<span class="hljs-string">'svg:svg'</span>)
+    .classed(<span class="hljs-string">'led'</span>, <span class="hljs-literal">true</span>)
+    .attr(<span class="hljs-string">'width'</span>, (radius + margin) * <span class="hljs-number">2</span>)
+  .append(<span class="hljs-string">'svg:g'</span>)
+    .attr(<span class="hljs-string">'transform'</span>, <span class="hljs-string">'translate('</span> + (radius + margin) + <span class="hljs-string">','</span> + (radius + margin) + <span class="hljs-string">')'</span>)
+    .call(tron.led);
+</code></pre>
+</li>
+<li>
+<p><a href="#18.6">18.6</a> <a name='18.6'></a> 在块末和新语句前插入空行。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">if</span> (foo) {
+  <span class="hljs-keyword">return</span> bar;
+}
+<span class="hljs-keyword">return</span> baz;
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">if</span> (foo) {
+  <span class="hljs-keyword">return</span> bar;
+}
+
+<span class="hljs-keyword">return</span> baz;
+
+<span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">const</span> obj = {
+  foo() {
+  },
+  bar() {
+  },
+};
+<span class="hljs-keyword">return</span> obj;
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">const</span> obj = {
+  foo() {
+  },
+
+  bar() {
+  },
+};
+
+<span class="hljs-keyword">return</span> obj;
+</code></pre>
+</li>
+</ul>
+<p><strong><a href="#table-of-contents">⬆ 返回目录</a></strong></p>
+<p><a name="commas"></a></p>
+<h2>逗号</h2>
+<ul>
+<li>
+<p><a href="#19.1">19.1</a> <a name='19.1'></a> 行首逗号：<strong>不需要</strong>。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">const</span> story = [
+    once
+  , upon
+  , aTime
+];
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">const</span> story = [
+  once,
+  upon,
+  aTime,
+];
+
+<span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">const</span> hero = {
+    <span class="hljs-attr">firstName</span>: <span class="hljs-string">'Ada'</span>
+  , <span class="hljs-attr">lastName</span>: <span class="hljs-string">'Lovelace'</span>
+  , <span class="hljs-attr">birthYear</span>: <span class="hljs-number">1815</span>
+  , <span class="hljs-attr">superPower</span>: <span class="hljs-string">'computers'</span>
+};
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">const</span> hero = {
+  <span class="hljs-attr">firstName</span>: <span class="hljs-string">'Ada'</span>,
+  <span class="hljs-attr">lastName</span>: <span class="hljs-string">'Lovelace'</span>,
+  <span class="hljs-attr">birthYear</span>: <span class="hljs-number">1815</span>,
+  <span class="hljs-attr">superPower</span>: <span class="hljs-string">'computers'</span>,
+};
+</code></pre>
+</li>
+<li>
+<p><a href="#19.2">19.2</a> <a name='19.2'></a> 增加结尾的逗号: <strong>需要</strong>。</p>
+<blockquote>
+<p>为什么? 这会让 git diffs 更干净。另外，像 babel 这样的转译器会移除结尾多余的逗号，也就是说你不必担心老旧浏览器的<a href="https://github.com/sivan/javascript-style-guide/blob/master/es5/README.md">尾逗号问题</a>。</p>
+</blockquote>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad - git diff without trailing comma</span>
+<span class="hljs-keyword">const</span> hero = {
+     <span class="hljs-attr">firstName</span>: <span class="hljs-string">'Florence'</span>,
+-    lastName: <span class="hljs-string">'Nightingale'</span>
++    lastName: <span class="hljs-string">'Nightingale'</span>,
++    inventorOf: [<span class="hljs-string">'coxcomb graph'</span>, <span class="hljs-string">'modern nursing'</span>]
+}
+
+<span class="hljs-comment">// good - git diff with trailing comma</span>
+<span class="hljs-keyword">const</span> hero = {
+     <span class="hljs-attr">firstName</span>: <span class="hljs-string">'Florence'</span>,
+     <span class="hljs-attr">lastName</span>: <span class="hljs-string">'Nightingale'</span>,
++    inventorOf: [<span class="hljs-string">'coxcomb chart'</span>, <span class="hljs-string">'modern nursing'</span>],
+}
+
+<span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">const</span> hero = {
+  <span class="hljs-attr">firstName</span>: <span class="hljs-string">'Dana'</span>,
+  <span class="hljs-attr">lastName</span>: <span class="hljs-string">'Scully'</span>
+};
+
+<span class="hljs-keyword">const</span> heroes = [
+  <span class="hljs-string">'Batman'</span>,
+  <span class="hljs-string">'Superman'</span>
+];
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">const</span> hero = {
+  <span class="hljs-attr">firstName</span>: <span class="hljs-string">'Dana'</span>,
+  <span class="hljs-attr">lastName</span>: <span class="hljs-string">'Scully'</span>,
+};
+
+<span class="hljs-keyword">const</span> heroes = [
+  <span class="hljs-string">'Batman'</span>,
+  <span class="hljs-string">'Superman'</span>,
+];
+</code></pre>
+</li>
+</ul>
+<p><strong><a href="#table-of-contents">⬆ 返回目录</a></strong></p>
+<p><a name="semicolons"></a></p>
+<h2>分号</h2>
+<ul>
+<li>
+<p><a href="#20.1">20.1</a> <a name='20.1'></a> <strong>使用分号</strong></p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">const</span> name = <span class="hljs-string">'Skywalker'</span>
+  <span class="hljs-keyword">return</span> name
+})()
+
+<span class="hljs-comment">// good</span>
+(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+  <span class="hljs-keyword">const</span> name = <span class="hljs-string">'Skywalker'</span>;
+  <span class="hljs-keyword">return</span> name;
+})();
+
+<span class="hljs-comment">// good (防止函数在两个 IIFE 合并时被当成一个参数)</span>
+;<span class="hljs-function">(<span class="hljs-params">(</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> name = <span class="hljs-string">'Skywalker'</span>;
+  <span class="hljs-keyword">return</span> name;
+})();
+</code></pre>
+<p><a href="http://stackoverflow.com/a/7365214/1712802">Read more</a>.</p>
+</li>
+</ul>
+<p><strong><a href="#table-of-contents">⬆ 返回目录</a></strong></p>
+<p><a name="type-casting--coercion"></a></p>
+<h2>类型转换</h2>
+<ul>
+<li>
+<p><a href="#21.1">21.1</a> <a name='21.1'></a> 在语句开始时执行类型转换。</p>
+</li>
+<li>
+<p><a href="#21.2">21.2</a> <a name='21.2'></a> 字符串：</p>
+<pre><code class="language-javascript"><span class="hljs-comment">//  =&gt; this.reviewScore = 9;</span>
+
+<span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">const</span> totalScore = <span class="hljs-keyword">this</span>.reviewScore + <span class="hljs-string">''</span>;
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">const</span> totalScore = <span class="hljs-built_in">String</span>(<span class="hljs-keyword">this</span>.reviewScore);
+</code></pre>
+</li>
+<li>
+<p><a href="#21.3">21.3</a> <a name='21.3'></a> 对数字使用 <code>parseInt</code> 转换，并带上类型转换的基数。</p>
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> inputValue = <span class="hljs-string">'4'</span>;
+
+<span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">const</span> val = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Number</span>(inputValue);
+
+<span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">const</span> val = +inputValue;
+
+<span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">const</span> val = inputValue &gt;&gt; <span class="hljs-number">0</span>;
+
+<span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">const</span> val = <span class="hljs-built_in">parseInt</span>(inputValue);
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">const</span> val = <span class="hljs-built_in">Number</span>(inputValue);
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">const</span> val = <span class="hljs-built_in">parseInt</span>(inputValue, <span class="hljs-number">10</span>);
+</code></pre>
+</li>
+<li>
+<p><a href="#21.4">21.4</a> <a name='21.4'></a> 如果因为某些原因 parseInt 成为你所做的事的瓶颈而需要使用位操作解决<a href="http://jsperf.com/coercion-vs-casting/3">性能问题</a>时，留个注释说清楚原因和你的目的。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// good</span>
+<span class="hljs-comment">/**
+ * 使用 parseInt 导致我的程序变慢，
+ * 改成使用位操作转换数字快多了。
+ */</span>
+<span class="hljs-keyword">const</span> val = inputValue &gt;&gt; <span class="hljs-number">0</span>;
+</code></pre>
+</li>
+<li>
+<p><a href="#21.5">21.5</a> <a name='21.5'></a> <strong>注:</strong> 小心使用位操作运算符。数字会被当成 <a href="http://es5.github.io/#x4.3.19">64 位值</a>，但是位操作运算符总是返回 32 位的整数（<a href="http://es5.github.io/#x11.7">参考</a>）。位操作处理大于 32 位的整数值时还会导致意料之外的行为。<a href="https://github.com/airbnb/javascript/issues/109">关于这个问题的讨论</a>。最大的 32 位整数是 2,147,483,647：</p>
+<pre><code class="language-javascript"><span class="hljs-number">2147483647</span> &gt;&gt; <span class="hljs-number">0</span> <span class="hljs-comment">//=&gt; 2147483647</span>
+<span class="hljs-number">2147483648</span> &gt;&gt; <span class="hljs-number">0</span> <span class="hljs-comment">//=&gt; -2147483648</span>
+<span class="hljs-number">2147483649</span> &gt;&gt; <span class="hljs-number">0</span> <span class="hljs-comment">//=&gt; -2147483647</span>
+</code></pre>
+</li>
+<li>
+<p><a href="#21.6">21.6</a> <a name='21.6'></a> 布尔:</p>
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> age = <span class="hljs-number">0</span>;
+
+<span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">const</span> hasAge = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Boolean</span>(age);
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">const</span> hasAge = <span class="hljs-built_in">Boolean</span>(age);
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">const</span> hasAge = !!age;
+</code></pre>
+</li>
+</ul>
+<p><strong><a href="#table-of-contents">⬆ 返回目录</a></strong></p>
+<p><a name="naming-conventions"></a></p>
+<h2>命名规则</h2>
+<ul>
+<li>
+<p><a href="#22.1">22.1</a> <a name='22.1'></a> 避免单字母命名。命名应具备描述性。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">q</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-comment">// ...stuff...</span>
+}
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">query</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-comment">// ..stuff..</span>
+}
+</code></pre>
+</li>
+<li>
+<p><a href="#22.2">22.2</a> <a name='22.2'></a> 使用驼峰式命名对象、函数和实例。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">const</span> OBJEcttsssss = {};
+<span class="hljs-keyword">const</span> this_is_my_object = {};
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">c</span>(<span class="hljs-params"></span>) </span>{}
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">const</span> thisIsMyObject = {};
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">thisIsMyFunction</span>(<span class="hljs-params"></span>) </span>{}
+</code></pre>
+</li>
+<li>
+<p><a href="#22.3">22.3</a> <a name='22.3'></a> 使用帕斯卡式命名构造函数或类。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">user</span>(<span class="hljs-params">options</span>) </span>{
+  <span class="hljs-keyword">this</span>.name = options.name;
+}
+
+<span class="hljs-keyword">const</span> bad = <span class="hljs-keyword">new</span> user({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'nope'</span>,
+});
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> </span>{
+  <span class="hljs-keyword">constructor</span>(options) {
+    <span class="hljs-keyword">this</span>.name = options.name;
+  }
+}
+
+<span class="hljs-keyword">const</span> good = <span class="hljs-keyword">new</span> User({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'yup'</span>,
+});
+</code></pre>
+</li>
+<li>
+<p><a href="#22.4">22.4</a> <a name='22.4'></a> 不要使用下划线 <code>_</code> 结尾或开头来命名属性和方法。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">this</span>.__firstName__ = <span class="hljs-string">'Panda'</span>;
+<span class="hljs-keyword">this</span>.firstName_ = <span class="hljs-string">'Panda'</span>;
+<span class="hljs-keyword">this</span>._firstName = <span class="hljs-string">'Panda'</span>;
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">this</span>.firstName = <span class="hljs-string">'Panda'</span>;
+</code></pre>
+</li>
+<li>
+<p><a href="#22.5">22.5</a> <a name='22.5'></a> 别保存 <code>this</code> 的引用。使用箭头函数或 Function#bind。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">const</span> self = <span class="hljs-keyword">this</span>;
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">console</span>.log(self);
+  };
+}
+
+<span class="hljs-comment">// bad</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">const</span> that = <span class="hljs-keyword">this</span>;
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">console</span>.log(that);
+  };
+}
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">this</span>);
+  };
+}
+</code></pre>
+</li>
+<li>
+<p><a href="#22.6">22.6</a> <a name='22.6'></a> 如果你的文件只输出一个类，那你的文件名必须和类名完全保持一致。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// file contents</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">CheckBox</span> </span>{
+  <span class="hljs-comment">// ...</span>
+}
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> CheckBox;
+
+<span class="hljs-comment">// in some other file</span>
+<span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">import</span> CheckBox <span class="hljs-keyword">from</span> <span class="hljs-string">'./checkBox'</span>;
+
+<span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">import</span> CheckBox <span class="hljs-keyword">from</span> <span class="hljs-string">'./check_box'</span>;
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">import</span> CheckBox <span class="hljs-keyword">from</span> <span class="hljs-string">'./CheckBox'</span>;
+</code></pre>
+</li>
+<li>
+<p><a href="#22.7">22.7</a> <a name='22.7'></a> 当你导出默认的函数时使用驼峰式命名。你的文件名必须和函数名完全保持一致。</p>
+<pre><code class="language-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">makeStyleGuide</span>(<span class="hljs-params"></span>) </span>{
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> makeStyleGuide;
+</code></pre>
+</li>
+<li>
+<p><a href="#22.8">22.8</a> <a name='22.8'></a> 当你导出单例、函数库、空对象时使用帕斯卡式命名。</p>
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> AirbnbStyleGuide = {
+  <span class="hljs-attr">es6</span>: {
+  }
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> AirbnbStyleGuide;
+</code></pre>
+</li>
+</ul>
+<p><strong><a href="#table-of-contents">⬆ 返回目录</a></strong></p>
+<p><a name="accessors"></a></p>
+<h2>存取器</h2>
+<ul>
+<li>
+<p><a href="#23.1">23.1</a> <a name='23.1'></a> 属性的存取函数不是必须的。</p>
+</li>
+<li>
+<p><a href="#23.2">23.2</a> <a name='23.2'></a> 如果你需要存取函数时使用 <code>getVal()</code> 和 <code>setVal('hello')</code>。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+dragon.age();
+
+<span class="hljs-comment">// good</span>
+dragon.getAge();
+
+<span class="hljs-comment">// bad</span>
+dragon.age(<span class="hljs-number">25</span>);
+
+<span class="hljs-comment">// good</span>
+dragon.setAge(<span class="hljs-number">25</span>);
+</code></pre>
+</li>
+<li>
+<p><a href="#23.3">23.3</a> <a name='23.3'></a> 如果属性是布尔值，使用 <code>isVal()</code> 或 <code>hasVal()</code>。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">if</span> (!dragon.age()) {
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+}
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">if</span> (!dragon.hasAge()) {
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+}
+</code></pre>
+</li>
+<li>
+<p><a href="#23.4">23.4</a> <a name='23.4'></a> 创建 <code>get()</code> 和 <code>set()</code> 函数是可以的，但要保持一致。</p>
+<pre><code class="language-javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Jedi</span> </span>{
+  <span class="hljs-keyword">constructor</span>(options = {}) {
+    <span class="hljs-keyword">const</span> lightsaber = options.lightsaber || <span class="hljs-string">'blue'</span>;
+    <span class="hljs-keyword">this</span>.set(<span class="hljs-string">'lightsaber'</span>, lightsaber);
+  }
+
+  <span class="hljs-keyword">set</span>(key, val) {
+    <span class="hljs-keyword">this</span>[key] = val;
+  }
+
+  <span class="hljs-keyword">get</span>(key) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>[key];
+  }
+}
+</code></pre>
+</li>
+</ul>
+<p><strong><a href="#table-of-contents">⬆ 返回目录</a></strong></p>
+<p><a name="events"></a></p>
+<h2>事件</h2>
+<ul>
+<li>
+<p><a href="#24.1">24.1</a> <a name='24.1'></a> 当给事件附加数据时（无论是 DOM 事件还是私有事件），传入一个哈希而不是原始值。这样可以让后面的贡献者增加更多数据到事件数据而无需找出并更新事件的每一个处理器。例如，不好的写法：</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+$(<span class="hljs-keyword">this</span>).trigger(<span class="hljs-string">'listingUpdated'</span>, listing.id);
+
+...
+
+$(<span class="hljs-keyword">this</span>).on(<span class="hljs-string">'listingUpdated'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">e, listingId</span>) </span>{
+  <span class="hljs-comment">// do something with listingId</span>
+});
+</code></pre>
+<p>更好的写法：</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// good</span>
+$(<span class="hljs-keyword">this</span>).trigger(<span class="hljs-string">'listingUpdated'</span>, { <span class="hljs-attr">listingId</span> : listing.id });
+
+...
+
+$(<span class="hljs-keyword">this</span>).on(<span class="hljs-string">'listingUpdated'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">e, data</span>) </span>{
+  <span class="hljs-comment">// do something with data.listingId</span>
+});
+</code></pre>
+</li>
+</ul>
+<p><strong><a href="#table-of-contents">⬆ 返回目录</a></strong></p>
+<h2>jQuery</h2>
+<ul>
+<li>
+<p><a href="#25.1">25.1</a> <a name='25.1'></a> 使用 <code>$</code> 作为存储 jQuery 对象的变量名前缀。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-keyword">const</span> sidebar = $(<span class="hljs-string">'.sidebar'</span>);
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-keyword">const</span> $sidebar = $(<span class="hljs-string">'.sidebar'</span>);
+</code></pre>
+</li>
+<li>
+<p><a href="#25.2">25.2</a> <a name='25.2'></a> 缓存 jQuery 查询。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setSidebar</span>(<span class="hljs-params"></span>) </span>{
+  $(<span class="hljs-string">'.sidebar'</span>).hide();
+
+  <span class="hljs-comment">// ...stuff...</span>
+
+  $(<span class="hljs-string">'.sidebar'</span>).css({
+    <span class="hljs-string">'background-color'</span>: <span class="hljs-string">'pink'</span>
+  });
+}
+
+<span class="hljs-comment">// good</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setSidebar</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">const</span> $sidebar = $(<span class="hljs-string">'.sidebar'</span>);
+  $sidebar.hide();
+
+  <span class="hljs-comment">// ...stuff...</span>
+
+  $sidebar.css({
+    <span class="hljs-string">'background-color'</span>: <span class="hljs-string">'pink'</span>
+  });
+}
+</code></pre>
+</li>
+<li>
+<p><a href="#25.3">25.3</a> <a name='25.3'></a> 对 DOM 查询使用层叠 <code>$('.sidebar ul')</code> 或 父元素 &gt; 子元素 <code>$('.sidebar &gt; ul')</code>。 <a href="http://jsperf.com/jquery-find-vs-context-sel/16">jsPerf</a></p>
+</li>
+<li>
+<p><a href="#25.4">25.4</a> <a name='25.4'></a> 对有作用域的 jQuery 对象查询使用 <code>find</code>。</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// bad</span>
+$(<span class="hljs-string">'ul'</span>, <span class="hljs-string">'.sidebar'</span>).hide();
+
+<span class="hljs-comment">// bad</span>
+$(<span class="hljs-string">'.sidebar'</span>).find(<span class="hljs-string">'ul'</span>).hide();
+
+<span class="hljs-comment">// good</span>
+$(<span class="hljs-string">'.sidebar ul'</span>).hide();
+
+<span class="hljs-comment">// good</span>
+$(<span class="hljs-string">'.sidebar &gt; ul'</span>).hide();
+
+<span class="hljs-comment">// good</span>
+$sidebar.find(<span class="hljs-string">'ul'</span>).hide();
+</code></pre>
+</li>
+</ul>
+<p><strong><a href="#table-of-contents">⬆ 返回目录</a></strong></p>
+<p><a name="ecmascript-5-compatibility"></a></p>
+<h2>ECMAScript 5 兼容性</h2>
+<ul>
+<li><a href="#26.1">26.1</a> <a name='26.1'></a> 参考 <a href="https://twitter.com/kangax/">Kangax</a> 的 ES5 <a href="http://kangax.github.com/es5-compat-table/">兼容性</a>。</li>
+</ul>
+<p><strong><a href="#table-of-contents">⬆ 返回目录</a></strong></p>
+<p><a name="ecmascript-6-styles"></a></p>
+<h2>ECMAScript 6 规范</h2>
+<ul>
+<li><a href="#27.1">27.1</a> <a name='27.1'></a> 以下是链接到 ES6 各个特性的列表。</li>
+</ul>
+<ol>
+<li><a href="#arrow-functions">箭头函数</a></li>
+<li><a href="#constructors">类</a></li>
+<li><a href="#es6-object-shorthand">对象方法简写</a></li>
+<li><a href="#es6-object-concise">对象属性简写</a></li>
+<li><a href="#es6-computed-properties">对象中的可计算属性</a></li>
+<li><a href="#es6-template-literals">模板字符串</a></li>
+<li><a href="#destructuring">解构</a></li>
+<li><a href="#es6-default-parameters">默认参数</a></li>
+<li><a href="#es6-rest">Rest</a></li>
+<li><a href="#es6-array-spreads">数组 Spreads</a></li>
+<li><a href="#references">Let 及 Const</a></li>
+<li><a href="#iterators-and-generators">迭代器和生成器</a></li>
+<li><a href="#modules">模块</a></li>
+</ol>
+<p><strong><a href="#table-of-contents">⬆ 返回目录</a></strong></p>
+<p><a name="testing"></a></p>
+<h2>测试</h2>
+<ul>
+<li>
+<p><a href="#28.1">28.1</a> <a name='28.1'></a> <strong>Yup.</strong></p>
+<pre><code class="language-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+}
+</code></pre>
+</li>
+</ul>
+<p><strong><a href="#table-of-contents">⬆ 返回目录</a></strong></p>
+<p><a name="performance"></a></p>
+<h2>性能</h2>
+<ul>
+<li><a href="http://kellegous.com/j/2013/01/26/layout-performance/">On Layout &amp; Web Performance</a></li>
+<li><a href="http://jsperf.com/string-vs-array-concat/2">String vs Array Concat</a></li>
+<li><a href="http://jsperf.com/try-catch-in-loop-cost">Try/Catch Cost In a Loop</a></li>
+<li><a href="http://jsperf.com/bang-function">Bang Function</a></li>
+<li><a href="http://jsperf.com/jquery-find-vs-context-sel/13">jQuery Find vs Context, Selector</a></li>
+<li><a href="http://jsperf.com/innerhtml-vs-textcontent-for-script-text">innerHTML vs textContent for script text</a></li>
+<li><a href="http://jsperf.com/ya-string-concat">Long String Concatenation</a></li>
+<li><a href="https://www.quora.com/JavaScript-programming-language-Are-Javascript-functions-like-map-reduce-and-filter-already-optimized-for-traversing-array/answer/Quildreen-Motta">Are Javascript functions like <code>map()</code>, <code>reduce()</code>, and <code>filter()</code> optimized for traversing arrays?</a></li>
+<li>等等...</li>
+</ul>
+<p><strong><a href="#table-of-contents">⬆ 返回目录</a></strong></p>
+<p><a name="resources"></a></p>
+<h2>相关资源（英文）</h2>
+<p><strong>了解 ES6</strong></p>
+<ul>
+<li><a href="https://people.mozilla.org/~jorendorff/es6-draft.html">ECMA 2015 (ES6) 规范草案</a></li>
+<li><a href="http://exploringjs.com/">ExploringJS</a></li>
+<li><a href="https://kangax.github.io/compat-table/es6/">ES6 兼容性表</a></li>
+<li><a href="http://es6-features.org/">ES6 特性全面概况</a></li>
+</ul>
+<p><strong>看看这个</strong></p>
+<ul>
+<li><a href="http://es5.github.com/">Annotated ECMAScript 5.1</a></li>
+</ul>
+<p><strong>工具</strong></p>
+<ul>
+<li>代码风格检查器（Lint）
+<ul>
+<li><a href="http://eslint.org/">ESlint</a> - <a href="https://github.com/airbnb/javascript/blob/master/linters/.eslintrc">Airbnb Style .eslintrc</a></li>
+<li><a href="http://www.jshint.com/">JSHint</a> - <a href="https://github.com/airbnb/javascript/blob/master/linters/jshintrc">Airbnb Style .jshintrc</a></li>
+<li><a href="https://github.com/jscs-dev/node-jscs">JSCS</a> - <a href="https://github.com/jscs-dev/node-jscs/blob/master/presets/airbnb.json">Airbnb Style Preset</a></li>
+</ul>
+</li>
+</ul>
+<p><strong>其他风格指南</strong></p>
+<ul>
+<li><a href="http://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml">Google JavaScript Style Guide</a></li>
+<li><a href="http://docs.jquery.com/JQuery_Core_Style_Guidelines">jQuery Core Style Guidelines</a></li>
+<li><a href="https://github.com/rwldrn/idiomatic.js/">Principles of Writing Consistent, Idiomatic JavaScript</a></li>
+</ul>
+<p><strong>其他风格</strong></p>
+<ul>
+<li><a href="https://gist.github.com/4135065">Naming this in nested functions</a> - Christian Johansen</li>
+<li><a href="https://github.com/airbnb/javascript/issues/52">Conditional Callbacks</a> - Ross Allen</li>
+<li><a href="http://sideeffect.kr/popularconvention/#javascript">Popular JavaScript Coding Conventions on Github</a> - JeongHoon Byun</li>
+<li><a href="http://benalman.com/news/2012/05/multiple-var-statements-javascript/">Multiple var statements in JavaScript, not superfluous</a> - Ben Alman</li>
+</ul>
+<p><strong>拓展阅读</strong></p>
+<ul>
+<li><a href="http://javascriptweblog.wordpress.com/2010/10/25/understanding-javascript-closures/">Understanding JavaScript Closures</a> - Angus Croll</li>
+<li><a href="http://www.2ality.com/2013/06/basic-javascript.html">Basic JavaScript for the impatient programmer</a> - Dr. Axel Rauschmayer</li>
+<li><a href="http://youmightnotneedjquery.com/">You Might Not Need jQuery</a> - Zack Bloom &amp; Adam Schwartz</li>
+<li><a href="https://github.com/lukehoban/es6features">ES6 Features</a> - Luke Hoban</li>
+<li><a href="https://github.com/bendc/frontend-guidelines">Frontend Guidelines</a> - Benjamin De Cock</li>
+</ul>
+<p><strong>书籍</strong></p>
+<ul>
+<li><a href="http://www.amazon.com/JavaScript-Good-Parts-Douglas-Crockford/dp/0596517742">JavaScript: The Good Parts</a> - Douglas Crockford</li>
+<li><a href="http://www.amazon.com/JavaScript-Patterns-Stoyan-Stefanov/dp/0596806752">JavaScript Patterns</a> - Stoyan Stefanov</li>
+<li><a href="http://www.amazon.com/JavaScript-Design-Patterns-Recipes-Problem-Solution/dp/159059908X">Pro JavaScript Design Patterns</a>  - Ross Harmes and Dustin Diaz</li>
+<li><a href="http://www.amazon.com/High-Performance-Web-Sites-Essential/dp/0596529309">High Performance Web Sites: Essential Knowledge for Front-End Engineers</a> - Steve Souders</li>
+<li><a href="http://www.amazon.com/Maintainable-JavaScript-Nicholas-C-Zakas/dp/1449327680">Maintainable JavaScript</a> - Nicholas C. Zakas</li>
+<li><a href="http://www.amazon.com/JavaScript-Web-Applications-Alex-MacCaw/dp/144930351X">JavaScript Web Applications</a> - Alex MacCaw</li>
+<li><a href="http://www.amazon.com/Pro-JavaScript-Techniques-John-Resig/dp/1590597273">Pro JavaScript Techniques</a> - John Resig</li>
+<li><a href="http://www.amazon.com/Smashing-Node-js-JavaScript-Everywhere-Magazine/dp/1119962595">Smashing Node.js: JavaScript Everywhere</a> - Guillermo Rauch</li>
+<li><a href="http://www.amazon.com/Secrets-JavaScript-Ninja-John-Resig/dp/193398869X">Secrets of the JavaScript Ninja</a> - John Resig and Bear Bibeault</li>
+<li><a href="http://humanjavascript.com/">Human JavaScript</a> - Henrik Joreteg</li>
+<li><a href="http://superherojs.com/">Superhero.js</a> - Kim Joar Bekkelund, Mads Mobæk, &amp; Olav Bjorkoy</li>
+<li><a href="http://jsbooks.revolunet.com/">JSBooks</a> - Julien Bouquillon</li>
+<li><a href="http://manning.com/vinegar/">Third Party JavaScript</a> - Ben Vinegar and Anton Kovalyov</li>
+<li><a href="http://amzn.com/0321812182">Effective JavaScript: 68 Specific Ways to Harness the Power of JavaScript</a> - David Herman</li>
+<li><a href="http://eloquentjavascript.net/">Eloquent JavaScript</a> - Marijn Haverbeke</li>
+</ul>
+<p><strong>博客</strong></p>
+<ul>
+<li><a href="http://dailyjs.com/">DailyJS</a></li>
+<li><a href="http://javascriptweekly.com/">JavaScript Weekly</a></li>
+<li><a href="http://javascriptweblog.wordpress.com/">JavaScript, JavaScript...</a></li>
+<li><a href="http://weblog.bocoup.com/">Bocoup Weblog</a></li>
+<li><a href="http://www.adequatelygood.com/">Adequately Good</a></li>
+<li><a href="http://www.nczonline.net/">NCZOnline</a></li>
+<li><a href="http://perfectionkills.com/">Perfection Kills</a></li>
+<li><a href="http://benalman.com/">Ben Alman</a></li>
+<li><a href="http://dmitry.baranovskiy.com/">Dmitry Baranovskiy</a></li>
+<li><a href="http://dustindiaz.com/">Dustin Diaz</a></li>
+<li><a href="http://net.tutsplus.com/?s=javascript">nettuts</a></li>
+</ul>
+<p><strong>播客</strong></p>
+<ul>
+<li><a href="http://devchat.tv/js-jabber/">JavaScript Jabber</a></li>
+</ul>
+<p><strong><a href="#table-of-contents">⬆ 返回目录</a></strong></p>
+<p><a name="in-the-wild"></a></p>
+<h2>使用情况</h2>
+<p>下列组织应用这份风格指南。</p>
+<ul>
+<li><strong>3blades</strong>: <a href="https://github.com/3blades/javascript">3Blades/javascript</a></li>
+<li><strong>4Catalyzer</strong>: <a href="https://github.com/4Catalyzer/javascript">4Catalyzer/javascript</a></li>
+<li><strong>Aan Zee</strong>: <a href="https://github.com/AanZee/javascript">AanZee/javascript</a></li>
+<li><strong>Adult Swim</strong>: <a href="https://github.com/adult-swim/javascript">adult-swim/javascript</a></li>
+<li><strong>Airbnb</strong>: <a href="https://github.com/airbnb/javascript">airbnb/javascript</a></li>
+<li><strong>AltSchool</strong>: <a href="https://github.com/AltSchool/javascript">AltSchool/javascript</a></li>
+<li><strong>Apartmint</strong>: <a href="https://github.com/apartmint/javascript">apartmint/javascript</a></li>
+<li><strong>Ascribe</strong>: <a href="https://github.com/ascribe/javascript">ascribe/javascript</a></li>
+<li><strong>Avalara</strong>: <a href="https://github.com/avalara/javascript">avalara/javascript</a></li>
+<li><strong>Avant</strong>: <a href="https://github.com/avantcredit/javascript">avantcredit/javascript</a></li>
+<li><strong>Axept</strong>: <a href="https://github.com/axept/javascript">axept/javascript</a></li>
+<li><strong>BashPros</strong>: <a href="https://github.com/BashPros/javascript">BashPros/javascript</a></li>
+<li><strong>Billabong</strong>: <a href="https://github.com/billabong/javascript">billabong/javascript</a></li>
+<li><strong>Bisk</strong>: <a href="https://github.com/Bisk/javascript/">bisk/javascript</a></li>
+<li><strong>Bonhomme</strong>: <a href="https://github.com/bonhommeparis/javascript">bonhommeparis/javascript</a></li>
+<li><strong>Brainshark</strong>: <a href="https://github.com/brainshark/javascript">brainshark/javascript</a></li>
+<li><strong>CaseNine</strong>: <a href="https://github.com/CaseNine/javascript">CaseNine/javascript</a></li>
+<li><strong>Chartboost</strong>: <a href="https://github.com/ChartBoost/javascript-style-guide">ChartBoost/javascript-style-guide</a></li>
+<li><strong>ComparaOnline</strong>: <a href="https://github.com/comparaonline/javascript-style-guide">comparaonline/javascript</a></li>
+<li><strong>Compass Learning</strong>: <a href="https://github.com/compasslearning/javascript-style-guide">compasslearning/javascript-style-guide</a></li>
+<li><strong>DailyMotion</strong>: <a href="https://github.com/dailymotion/javascript">dailymotion/javascript</a></li>
+<li><strong>DoSomething</strong>: <a href="https://github.com/DoSomething/eslint-config">DoSomething/eslint-config</a></li>
+<li><strong>Digitpaint</strong> <a href="https://github.com/digitpaint/javascript">digitpaint/javascript</a></li>
+<li><strong>Ecosia</strong>: <a href="https://github.com/ecosia/javascript">ecosia/javascript</a></li>
+<li><strong>Evernote</strong>: <a href="https://github.com/evernote/javascript-style-guide">evernote/javascript-style-guide</a></li>
+<li><strong>Evolution Gaming</strong>: <a href="https://github.com/evolution-gaming/javascript">evolution-gaming/javascript</a></li>
+<li><strong>EvozonJs</strong>: <a href="https://github.com/evozonjs/javascript">evozonjs/javascript</a></li>
+<li><strong>ExactTarget</strong>: <a href="https://github.com/ExactTarget/javascript">ExactTarget/javascript</a></li>
+<li><strong>Expensify</strong> <a href="https://github.com/Expensify/Style-Guide/blob/master/javascript.md">Expensify/Style-Guide</a></li>
+<li><strong>Flexberry</strong>: <a href="https://github.com/Flexberry/javascript-style-guide">Flexberry/javascript-style-guide</a></li>
+<li><strong>Gawker Media</strong>: <a href="https://github.com/gawkermedia/javascript">gawkermedia/javascript</a></li>
+<li><strong>General Electric</strong>: <a href="https://github.com/GeneralElectric/javascript">GeneralElectric/javascript</a></li>
+<li><strong>Generation Tux</strong>: <a href="https://github.com/generationtux/styleguide">GenerationTux/javascript</a></li>
+<li><strong>GoodData</strong>: <a href="https://github.com/gooddata/gdc-js-style">gooddata/gdc-js-style</a></li>
+<li><strong>Grooveshark</strong>: <a href="https://github.com/grooveshark/javascript">grooveshark/javascript</a></li>
+<li><strong>Honey</strong>: <a href="https://github.com/honeyscience/javascript">honeyscience/javascript</a></li>
+<li><strong>How About We</strong>: <a href="https://github.com/howaboutwe/javascript-style-guide">howaboutwe/javascript</a></li>
+<li><strong>Huballin</strong>: <a href="https://github.com/huballin/javascript">huballin/javascript</a></li>
+<li><strong>HubSpot</strong>: <a href="https://github.com/HubSpot/javascript">HubSpot/javascript</a></li>
+<li><strong>Hyper</strong>: <a href="https://github.com/hyperoslo/javascript-playbook/blob/master/style.md">hyperoslo/javascript-playbook</a></li>
+<li><strong>InterCity Group</strong>: <a href="https://github.com/intercitygroup/javascript-style-guide">intercitygroup/javascript-style-guide</a></li>
+<li><strong>Jam3</strong>: <a href="https://github.com/Jam3/Javascript-Code-Conventions">Jam3/Javascript-Code-Conventions</a></li>
+<li><strong>JeopardyBot</strong>: <a href="https://github.com/kesne/jeopardy-bot/blob/master/STYLEGUIDE.md">kesne/jeopardy-bot</a></li>
+<li><strong>JSSolutions</strong>: <a href="https://github.com/JSSolutions/javascript">JSSolutions/javascript</a></li>
+<li><strong>KickorStick</strong>: <a href="https://github.com/kickorstick/javascript">kickorstick/javascript</a></li>
+<li><strong>Kinetica Solutions</strong>: <a href="https://github.com/kinetica/Javascript-style-guide">kinetica/javascript</a></li>
+<li><strong>Lonely Planet</strong>: <a href="https://github.com/lonelyplanet/javascript">lonelyplanet/javascript</a></li>
+<li><strong>M2GEN</strong>: <a href="https://github.com/M2GEN/javascript">M2GEN/javascript</a></li>
+<li><strong>Mighty Spring</strong>: <a href="https://github.com/mightyspring/javascript">mightyspring/javascript</a></li>
+<li><strong>MinnPost</strong>: <a href="https://github.com/MinnPost/javascript">MinnPost/javascript</a></li>
+<li><strong>MitocGroup</strong>: <a href="https://github.com/MitocGroup/javascript">MitocGroup/javascript</a></li>
+<li><strong>ModCloth</strong>: <a href="https://github.com/modcloth/javascript">modcloth/javascript</a></li>
+<li><strong>Money Advice Service</strong>: <a href="https://github.com/moneyadviceservice/javascript">moneyadviceservice/javascript</a></li>
+<li><strong>Muber</strong>: <a href="https://github.com/muber/javascript">muber/javascript</a></li>
+<li><strong>National Geographic</strong>: <a href="https://github.com/natgeo/javascript">natgeo/javascript</a></li>
+<li><strong>Nimbl3</strong>: <a href="https://github.com/nimbl3/javascript">nimbl3/javascript</a></li>
+<li><strong>Nulogy</strong>: <a href="https://github.com/nulogy/javascript">nulogy/javascript</a></li>
+<li><strong>Orange Hill Development</strong>: <a href="https://github.com/orangehill/javascript">orangehill/javascript</a></li>
+<li><strong>Orion Health</strong>: <a href="https://github.com/orionhealth/javascript">orionhealth/javascript</a></li>
+<li><strong>OutBoxSoft</strong>: <a href="https://github.com/OutBoxSoft/javascript">OutBoxSoft/javascript</a></li>
+<li><strong>Peerby</strong>: <a href="https://github.com/Peerby/javascript">Peerby/javascript</a></li>
+<li><strong>Razorfish</strong>: <a href="https://github.com/razorfish/javascript-style-guide">razorfish/javascript-style-guide</a></li>
+<li><strong>reddit</strong>: <a href="https://github.com/reddit/styleguide/tree/master/javascript">reddit/styleguide/javascript</a></li>
+<li><strong>React</strong>: <a href="https://facebook.github.io/react/contributing/how-to-contribute.html#style-guide">facebook.github.io/react/contributing/how-to-contribute.html#style-guide</a></li>
+<li><strong>REI</strong>: <a href="https://github.com/rei/code-style-guides/blob/master/docs/javascript.md">reidev/js-style-guide</a></li>
+<li><strong>Ripple</strong>: <a href="https://github.com/ripple/javascript-style-guide">ripple/javascript-style-guide</a></li>
+<li><strong>SeekingAlpha</strong>: <a href="https://github.com/seekingalpha/javascript-style-guide">seekingalpha/javascript-style-guide</a></li>
+<li><strong>Shutterfly</strong>: <a href="https://github.com/shutterfly/javascript">shutterfly/javascript</a></li>
+<li><strong>Sourcetoad</strong>: <a href="https://github.com/sourcetoad/javascript">sourcetoad/javascript</a></li>
+<li><strong>Springload</strong>: <a href="https://github.com/springload/javascript">springload/javascript</a></li>
+<li><strong>StratoDem Analytics</strong>: <a href="https://github.com/stratodem/javascript">stratodem/javascript</a></li>
+<li><strong>SteelKiwi Development</strong>: <a href="https://github.com/steelkiwi/javascript">steelkiwi/javascript</a></li>
+<li><strong>StudentSphere</strong>: <a href="https://github.com/studentsphere/guide-javascript">studentsphere/javascript</a></li>
+<li><strong>SwoopApp</strong>: <a href="https://github.com/swoopapp/javascript">swoopapp/javascript</a></li>
+<li><strong>SysGarage</strong>: <a href="https://github.com/sysgarage/javascript-style-guide">sysgarage/javascript-style-guide</a></li>
+<li><strong>Syzygy Warsaw</strong>: <a href="https://github.com/syzygypl/javascript">syzygypl/javascript</a></li>
+<li><strong>Target</strong>: <a href="https://github.com/target/javascript">target/javascript</a></li>
+<li><strong>TheLadders</strong>: <a href="https://github.com/TheLadders/javascript">TheLadders/javascript</a></li>
+<li><strong>The Nerdery</strong>: <a href="https://github.com/thenerdery/javascript-standards">thenerdery/javascript-standards</a></li>
+<li><strong>T4R Technology</strong>: <a href="https://github.com/T4R-Technology/javascript">T4R-Technology/javascript</a></li>
+<li><strong>VoxFeed</strong>: <a href="https://github.com/VoxFeed/javascript-style-guide">VoxFeed/javascript-style-guide</a></li>
+<li><strong>WeBox Studio</strong>: <a href="https://github.com/weboxstudio/javascript">weboxstudio/javascript</a></li>
+<li><strong>Weggo</strong>: <a href="https://github.com/Weggo/javascript">Weggo/javascript</a></li>
+<li><strong>Zillow</strong>: <a href="https://github.com/zillow/javascript">zillow/javascript</a></li>
+<li><strong>ZocDoc</strong>: <a href="https://github.com/ZocDoc/javascript">ZocDoc/javascript</a></li>
+</ul>
+<p><strong><a href="#table-of-contents">⬆ 返回目录</a></strong></p>
+<p><a name="translation"></a></p>
+<h2>翻译</h2>
+<p>这份风格指南也有其他语言的译本：</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Brazil.png" alt="br"> <strong>Brazilian Portuguese</strong>: <a href="https://github.com/armoucar/javascript-style-guide">armoucar/javascript-style-guide</a></li>
+<li><img src="https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Bulgaria.png" alt="bg"> <strong>Bulgarian</strong>: <a href="https://github.com/borislavvv/javascript">borislavvv/javascript</a></li>
+<li><img src="https://raw.githubusercontent.com/fpmweb/javascript-style-guide/master/img/catala.png" alt="ca"> <strong>Catalan</strong>: <a href="https://github.com/fpmweb/javascript-style-guide">fpmweb/javascript-style-guide</a></li>
+<li><img src="https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Taiwan.png" alt="tw"> <strong>Chinese(Traditional)</strong>: <a href="https://github.com/jigsawye/javascript">jigsawye/javascript</a></li>
+<li><img src="https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/China.png" alt="cn"> <strong>Chinese(Simplified)</strong>: <a href="https://github.com/yuche/javascript">yuche/javascript</a></li>
+<li><img src="https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/France.png" alt="fr"> <strong>French</strong>: <a href="https://github.com/nmussy/javascript-style-guide">nmussy/javascript-style-guide</a></li>
+<li><img src="https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Germany.png" alt="de"> <strong>German</strong>: <a href="https://github.com/timofurrer/javascript-style-guide">timofurrer/javascript-style-guide</a></li>
+<li><img src="https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Italy.png" alt="it"> <strong>Italian</strong>: <a href="https://github.com/sinkswim/javascript-style-guide">sinkswim/javascript-style-guide</a></li>
+<li><img src="https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Japan.png" alt="jp"> <strong>Japanese</strong>: <a href="https://github.com/mitsuruog/javacript-style-guide">mitsuruog/javacript-style-guide</a></li>
+<li><img src="https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/South-Korea.png" alt="kr"> <strong>Korean</strong>: <a href="https://github.com/tipjs/javascript-style-guide">tipjs/javascript-style-guide</a></li>
+<li><img src="https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Poland.png" alt="pl"> <strong>Polish</strong>: <a href="https://github.com/mjurczyk/javascript">mjurczyk/javascript</a></li>
+<li><img src="https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Russia.png" alt="ru"> <strong>Russian</strong>: <a href="https://github.com/uprock/javascript">uprock/javascript</a></li>
+<li><img src="https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Spain.png" alt="es"> <strong>Spanish</strong>: <a href="https://github.com/paolocarrasco/javascript-style-guide">paolocarrasco/javascript-style-guide</a></li>
+<li><img src="https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Thailand.png" alt="th"> <strong>Thai</strong>: <a href="https://github.com/lvarayut/javascript-style-guide">lvarayut/javascript-style-guide</a></li>
+</ul>
+<p><a name="the-javascript-style-guide-guide"></a></p>
+<h2>JavaScript 编码规范说明</h2>
+<ul>
+<li><a href="https://github.com/airbnb/javascript/wiki/The-JavaScript-Style-Guide-Guide">Reference</a></li>
+</ul>
+<p><a name="chat-with-us-about-javascript"></a></p>
+<h2>讨论 JavaScript</h2>
+<ul>
+<li>欢迎到 <a href="https://gitter.im/airbnb/javascript">gitter</a> 与我们聊天（英文）。</li>
+</ul>
+<h2>贡献者</h2>
+<ul>
+<li><a href="https://github.com/airbnb/javascript/graphs/contributors">查看原始项目贡献者</a></li>
+<li><a href="https://github.com/yuche/javascript/graphs/contributors">查看简中翻译贡献者</a></li>
+</ul>
+<h2>许可协议</h2>
+<p>(The MIT License)</p>
+<p>Copyright (c) 2014 Airbnb</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+<p><strong><a href="#table-of-contents">⬆ 返回目录</a></strong></p>
+<h2>修订</h2>
+<p>我们鼓励您派生本指南和更改规则以适应您的团队需求。您可以在下方列出对本风格指南的修改，以便定期更新本指南而无需处理合并冲突。</p>
+<h1>};</h1>
+</section><footer class="footer-container"><div class="footer-body"><img src="/img/dubbo_gray.png"/><div class="cols-container"><div class="col col-12"><h3>Disclaimer</h3><p>the disclaimer content</p></div><div class="col col-6"><dl><dt>Documentation</dt><dd><a href="/en-us/docs/introduction.html" target="_self">Overview</a></dd><dd><a href="/en-us/docs/introduction.html" target="_self">Quick start</a></dd><dd><a href="/en-us/docs/dir/introduction.html" target="_self">Developer guide</a></dd></dl></div><div class="col col-6"><dl><dt>Resources</dt><dd><a href="/en-us/blog/index.html" target="_self">Blog</a></dd><dd><a href="/en-us/community/index.html" target="_self">Community</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2018 BurningMyself</span></div></div></footer></div></div>
+	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
+	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
+	<script>
+		window.rootPath = '';
+  </script>
+	<script src="/build/blogDetail.js"></script>
+</body>
+</html>

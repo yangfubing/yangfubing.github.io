@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="keywords" content="load-class" />
+	<meta name="description" content="load-class" />
+	<!-- 网页标签标题 -->
+	<title>load-class</title>
+	<link rel="shortcut icon" href="/img/docsite.ico"/>
+	<link rel="stylesheet" href="/build/blogDetail.css" />
+</head>
+<body>
+	<div id="root"><div class="blog-detail-page" data-reactroot=""><header class="header-container header-container-normal"><div class="header-body"><a href="/zh-cn/index.html"><img class="logo" src="/img/dubbo_colorful.png"/></a><div class="search search-normal"><span class="icon-search"></span></div><span class="language-switch language-switch-normal">En</span><div class="header-menu"><img class="header-menu-toggle" src="/img/system/menu_gray.png"/><ul><li class="menu-item menu-item-normal"><a href="/zh-cn/index.html" target="_self">首页</a></li><li class="menu-item menu-item-normal"><a href="/zh-cn/docs/introduction.html" target="_self">文档</a></li><li class="menu-item menu-item-normal menu-item-normal-active"><a href="/zh-cn/blog/index.html" target="_self">博客</a></li><li class="menu-item menu-item-normal"><a href="/zh-cn/community/index.html" target="_self">社区</a></li></ul></div></div></header><section class="blog-content markdown-body"><h1>谈谈 Java 类加载机制</h1>
+<p>最近在学习 Tomcat 架构，其中很重要的一个模块是类加载器，因为以前学习的不够深入，所以趁这个机会好好把类加载机制搞明白。</p>
+<!-- TOC -->
+<ul>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#api-for-class-loading">API for class loading</a>
+<ul>
+<li><a href="#javalangclassloader"><code>java.lang.ClassLoader</code></a></li>
+<li><a href="#javasecuritysecureclassloader"><code>java.security.SecureClassLoader</code></a></li>
+<li><a href="#javaneturlclassloader"><code>java.net.URLClassLoader</code></a></li>
+</ul>
+</li>
+<li><a href="#tomcat-8515-class-loading-mechanism">Tomcat 8.5.15 class loading Mechanism</a></li>
+<li><a href="#reference">Reference</a></li>
+</ul>
+<!-- /TOC -->
+<hr>
+<h2>Overview</h2>
+<p><img src="./../img/Class-loader.png" alt=""></p>
+<p>类加载器主要分为两类，一类是 JDK 默认提供的，一类是用户自定义的。
+JDK 默认提供三种类加载器</p>
+<ol>
+<li><code>Bootstrap ClassLoader</code>，启动类加载器，每次执行 <code>java</code> 命令时都会使用该加载器为虚拟机加载核心类。该加载器是由 <code>native code</code> 实现，而不是 Java 代码，加载类的路径为 <code>&lt;JAVA_HOME&gt;/jre/lib</code>。特别的 <code>&lt;JAVA_HOME&gt;/jre/lib/rt.jar</code> 中包含了 <code>sun.misc.Launcher</code> 类， 而 <code>sun.misc.Launcher$ExtClassLoader</code> 和 <code>sun.misc.Launcher$AppClassLoader</code> 都是 <code>sun.misc.Launcher</code> 的内部类，所以拓展类加载器和系统类加载器都是由启动类加载器加载的。</li>
+<li><code>Extension ClassLoader</code>, 拓展类加载器，用于加载拓展库中的类。拓展库路径为 <code>&lt;JAVA_HOME&gt;/jre/lib/ext/</code>。实现类为 <code>sun.misc.Launcher$ExtClassLoader</code></li>
+<li><code>System ClassLoader</code>, 系统类加载器。用于加载 CLASSPATH 中的类。实现类为 <code>sun.misc.Launcher$AppClassLoader</code></li>
+</ol>
+<p>用户自定义的类加载器</p>
+<ol>
+<li><code>Custom ClassLoader</code>, 一般都是 <code>java.lang.ClassLoder</code> 的子类</li>
+</ol>
+<p>正统的类加载机制是基于双亲委派的，也就是当调用类加载器加载类时，首先将加载任务委派给双亲，若双亲无法加载成功时，自己才进行类加载。</p>
+<p>在实例化一个新的类加载器时，我们可以为其指定一个 <code>parent</code>，即双亲，若未显式指定，则 <code>System ClassLoader</code> 就作为默认双亲。</p>
+<p>具体的说，类加载任务是由 <code>ClassLoader</code> 的 <code>loadClass()</code> 方法来执行的，他会按照以下顺序加载类：</p>
+<ol>
+<li>通过 <code>findLoadedClass()</code> 看该类是否已经被加载。该方法为 native code 实现，若已加载则返回。</li>
+<li>若未加载则委派给双亲，<code>parent.loadClass()</code>，若成功则返回</li>
+<li>若未成功，则调用 <code>findClass()</code> 方法加载类。<code>java.lang.ClassLoader</code> 中该方法只是简单的抛出一个 <code>ClassNotFoundException</code> 所以，自定义的 ClassLoader 都需要 Override <code>findClass()</code> 方法</li>
+</ol>
+<h2>API for class loading</h2>
+<h3><code>java.lang.ClassLoader</code></h3>
+<ul>
+<li><code>ClassLoader</code> 是一个抽象类。</li>
+<li>待加载的类必须用 <code>The Java™ Language Specification</code> 定义的全类名，全类名的定义请查阅 <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-13.html#jls-13.1">The Form of a Binary</a>。</li>
+<li>给定一个全类名，类加载器应该去定位该类所在的位置。通用的策略是将全类名转换为类文件路径，然后通过类文件路径在文件系统中定位。</li>
+<li>每一个加载到内存的类都由一个 Class 对象来表示，每一个 Class 对象都有一个指向加载该类的类加载器的引用。但是数组的 Class 对象是由 Java 运行时环境创建的，通过 <code>Class.getClassLoader()</code> 方法返回的是数组元素的类加载器，若数组元素是基本类型，则返回 <code>null</code>，若类是由 <code>Bootstrap ClassLoader</code> 加载的话也是返回 <code>null</code><pre><code class="language-java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Main</span> </span>{
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{
+        <span class="hljs-comment">// Object 类在 &lt;java_home&gt;/jre/lib/rt.jar 中，</span>
+        <span class="hljs-comment">// 由 Bootstrap ClassLoader 加载，由于该类加载器是由 native code 编写</span>
+        <span class="hljs-comment">// 所以输出为 null</span>
+        Object[] objects = <span class="hljs-keyword">new</span> Object[<span class="hljs-number">5</span>];
+        System.out.println();
+        System.out.println(objects.getClass().getClassLoader());
+
+        <span class="hljs-comment">// ZipFileAttributes 类在 &lt;java_home&gt;/jre/lib/ext/zipfs.jar 中，</span>
+        <span class="hljs-comment">// 由 Extension ClassLoader 加载，</span>
+        <span class="hljs-comment">// 输出为  sun.misc.Launcher$ExtClassLoader@4b67cf4d</span>
+        ZipFileAttributes[] attributes = <span class="hljs-keyword">new</span> ZipFileAttributes[<span class="hljs-number">5</span>];
+        System.out.println();
+        System.out.println(attributes.getClass().getClassLoader());
+
+        <span class="hljs-comment">// Main 类是自定义的类，</span>
+        <span class="hljs-comment">// 默认由 System ClassLoader 加载，</span>
+        <span class="hljs-comment">// 输出为 sun.misc.Launcher$AppClassLoader@18b4aac2</span>
+        Main[] array = <span class="hljs-keyword">new</span> Main[<span class="hljs-number">5</span>];
+        array[<span class="hljs-number">0</span>] = <span class="hljs-keyword">new</span> Main();
+        System.out.println();
+        System.out.println(array.getClass().getClassLoader());
+    }
+}
+</code></pre>
+</li>
+<li><code>ClassLoader</code> 默认支持并行加载，但是其子类必须调用 <code>ClassLoader.registerAsParallelCapable()</code> 来启用并行加载</li>
+<li>一般来说,JVM 从本地文件系统加载类的行为是与平台有关的。</li>
+<li><code>defineClass()</code> 方法可以将字节流转换成一个 <code>Class</code> 对象。然后调用 <code>Class.newInstance()</code> 来创建类的实例</li>
+</ul>
+<h3><code>java.security.SecureClassLoader</code></h3>
+<p>增加了一层权限验证，因为关注点不在安全，所以暂不讨论。</p>
+<h3><code>java.net.URLClassLoader</code></h3>
+<p>该类加载器用来加载 URL 指定的 JAR 文件或目录中的类和资源，以 <code>/</code> 结尾的 URL 认为是目录，否则认为是 JAR 文件。</p>
+<pre><code class="language-java"><span class="hljs-comment">// 尝试通过 URLClassLoader 来加载桌面下的 Test 类。</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Main</span> </span>{
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{
+        <span class="hljs-keyword">try</span> {
+            URL[] urls = <span class="hljs-keyword">new</span> URL[<span class="hljs-number">1</span>];
+            URLStreamHandler streamHandler = <span class="hljs-keyword">null</span>;
+            File classPath = <span class="hljs-keyword">new</span> File(<span class="hljs-string">"/home/chen/Desktop/"</span>);
+            String repository = (<span class="hljs-keyword">new</span> URL(<span class="hljs-string">"file"</span>, <span class="hljs-keyword">null</span>,
+                    classPath.getCanonicalPath() + File.separator))
+                    .toString();
+            urls[<span class="hljs-number">0</span>] = <span class="hljs-keyword">new</span> URL(<span class="hljs-keyword">null</span>, repository, streamHandler);
+
+            ClassLoader loader = <span class="hljs-keyword">new</span> URLClassLoader(urls);
+
+            Class testClass = loader.loadClass(<span class="hljs-string">"Test"</span>);
+
+            <span class="hljs-comment">// output:  java.net.URLClassLoader@7f31245a</span>
+            System.out.println(testClass.getClassLoader());
+        } <span class="hljs-keyword">catch</span> (MalformedURLException e) {
+            e.printStackTrace();
+        } <span class="hljs-keyword">catch</span> (IOException e) {
+            e.printStackTrace();
+        } <span class="hljs-keyword">catch</span> (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+<h2>Tomcat 8.5.15 class loading Mechanism</h2>
+<p><img src="./../img/tomcat-classloader.png" alt=""></p>
+<p>Tomcat 使用正统的类加载机制(双亲委派),但部分地方做了改动。</p>
+<ul>
+<li>
+<p><code>Bootstrap classLoader</code> 和 <code>Extension classLoader</code> 的作用不变</p>
+</li>
+<li>
+<p><code>System classLoader</code> 正常情况下加载的是 <code>CLASSPATH</code> 下的类，但是 Tomcat 的启动脚本并未使用该变量，而是从以下仓库下加载类：</p>
+<ol>
+<li><code>$CATALINA_HOME/bin/bootstrap.jar</code> 包含了 Tomcat 的启动类。在该启动类中创建了 <code>Common classLoader</code>、<code>Catalina classLoader</code>、<code>shared classLoader</code>。因为 <code>$CATALINA_BASE/conf/catalina.properties</code> 中只对 <code>common.loader</code> 属性做了定义，<code>server.loader</code> 和 <code>shared.loader</code> 属性为空，所以默认情况下，这三个 classLoader 都是 <code>CommonLoader</code>。具体的代码逻辑可以查阅 <code>org.apache.catalina.startup.Bootstrap</code> 类的 <code>initClassLoaders()</code> 方法和 <code>createClassLoader()</code> 方法。</li>
+<li><code>$CATALINA_BASE/bin/tomcat-juli.jar</code> 包含了 Tomcat 日志模块所需要的实现类</li>
+<li><code>$CATALINA_HOME/bin/commons-daemon.jar</code></li>
+</ol>
+</li>
+<li>
+<p><code>Common classLoader</code> 是位于 Tomcat 应用服务器顶层的公用类加载器。由其加载的类可以由 Tomcat 自身类和所有应用程序使用。扫描路径由 <code>$CATALINA_BASE/conf/catalina.properties</code> 文件中的 <code>common.loader</code> 属性定义。默认是 <code>$CATALINA_HOME/lib</code>.</p>
+</li>
+<li>
+<p><code>catalina classLoader</code> 用于加载服务器内部可见类，这些类应用程序不能访问。</p>
+</li>
+<li>
+<p><code>shared classLoader</code> 用于加载应用程序共享类，这些类服务器不会依赖。</p>
+</li>
+<li>
+<p><code>Webapp classLoader</code> 。每个应用程序都会有一个独一无二的 <code>webapp classloader</code>，他用来加载本应用程序 <code>/WEB-INF/classes</code> 和 <code>/WEB-INF/lib</code> 下的类。</p>
+</li>
+</ul>
+<p>特别的：</p>
+<p><code>Webapp classLoader</code> 的默认行为会与正常的双亲委派模式不同：</p>
+<ol>
+<li>从 <code>Bootstrap classloader</code> 加载</li>
+<li>若没有，从 <code>/WEB-INF/classes</code> 加载</li>
+<li>若没有，从 <code>/WEB-INF/lib/*.jar</code> 加载</li>
+<li>若没有，则依次从 <code>System</code>、<code>Common</code>、<code>shared</code> 加载（该步骤使用双亲委派）</li>
+</ol>
+<p>当然了，我们也可以通过配置来使 <code>Webapp classLoader</code> 严格按照双亲委派模式加载类：</p>
+<ol>
+<li>通过在工程的 <code>META-INF/context.xml</code>（和 <code>WEB-INF/classes</code> 在同一目录下） 配置文件中添加 <code>&lt;Loader delegate=&quot;true&quot;/&gt;</code></li>
+<li>因为 <code>Webapp classLoader</code> 的实现类是 <code>org.apache.catalina.loader.WebappLoader</code>，他有一个属性叫 <code>delegate</code>， 用来控制类加载器的加载行为，默认为 <code>false</code>，我们可以使用 <code>set</code> 方法，将其设为 <code>true</code> 来启用严格双亲委派加载模式。</li>
+</ol>
+<p>严格双亲委派模式加载步骤：</p>
+<ol>
+<li>从 <code>Bootstrap classloader</code> 加载</li>
+<li>若没有，则依次从 <code>System</code>、<code>Common</code>、<code>shared</code> 加载</li>
+<li>若没有，从 <code>/WEB-INF/classes</code> 加载</li>
+<li>若没有，从 <code>/WEB-INF/lib/*.jar</code> 加载</li>
+</ol>
+<h2>Reference</h2>
+<ol>
+<li><a href="https://docs.oracle.com/javase/tutorial/ext/basics/load.html">The Java Class Loading Mechanism</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Java_Classloader">Java Classloader</a></li>
+<li><a href="https://tomcat.apache.org/tomcat-8.5-doc/class-loader-howto.html">Class Loader HOW-TO - Apache Tomcat 8</a></li>
+<li><a href="">《Tomcat 架构解析》</a></li>
+<li><a href="">《深入理解 Java 虚拟机》</a></li>
+</ol>
+</section><footer class="footer-container"><div class="footer-body"><img src="/img/dubbo_gray.png"/><div class="cols-container"><div class="col col-12"><h3>免责声明</h3><p>免责声明的具体内容</p></div><div class="col col-6"><dl><dt>文档</dt><dd><a href="/zh-cn/docs/introduction.html" target="_self">概览</a></dd><dd><a href="/zh-cn/docs/introduction.html" target="_self">快速开始</a></dd><dd><a href="/zh-cn/docs/dir/introduction.html" target="_self">开发者指南</a></dd></dl></div><div class="col col-6"><dl><dt>资源</dt><dd><a href="/zh-cn/blog/index.html" target="_self">博客</a></dd><dd><a href="/zh-cn/community/index.html" target="_self">社区</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2018 BurningMyself</span></div></div></footer></div></div>
+	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
+	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
+	<script>
+		window.rootPath = '';
+  </script>
+	<script src="/build/blogDetail.js"></script>
+</body>
+</html>

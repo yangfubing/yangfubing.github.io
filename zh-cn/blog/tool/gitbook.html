@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="keywords" content="gitbook" />
+	<meta name="description" content="gitbook" />
+	<!-- 网页标签标题 -->
+	<title>gitbook</title>
+	<link rel="shortcut icon" href="/img/docsite.ico"/>
+	<link rel="stylesheet" href="/build/blogDetail.css" />
+</head>
+<body>
+	<div id="root"><div class="blog-detail-page" data-reactroot=""><header class="header-container header-container-normal"><div class="header-body"><a href="/zh-cn/index.html"><img class="logo" src="/img/dubbo_colorful.png"/></a><div class="search search-normal"><span class="icon-search"></span></div><span class="language-switch language-switch-normal">En</span><div class="header-menu"><img class="header-menu-toggle" src="/img/system/menu_gray.png"/><ul><li class="menu-item menu-item-normal"><a href="/zh-cn/index.html" target="_self">首页</a></li><li class="menu-item menu-item-normal"><a href="/zh-cn/docs/introduction.html" target="_self">文档</a></li><li class="menu-item menu-item-normal menu-item-normal-active"><a href="/zh-cn/blog/index.html" target="_self">博客</a></li><li class="menu-item menu-item-normal"><a href="/zh-cn/community/index.html" target="_self">社区</a></li></ul></div></div></header><section class="blog-content markdown-body"><h1>GitBook 使用教程</h1>
+<p>首先先献上 我的 <a href="https://burningmyself.github.io/blog/" title="blog">blog</a> 地址，可以在我的博客导航栏处找到，下面进行相关的介绍。</p>
+<h2>背景</h2>
+<p>由于之前都把零散的知识都写在博客园上，要查找的时候不是很系统化，所以打算挪到<a href="https://www.gitbook.com/?t=2" title="GitBook">GitBook</a> 上来统一管理，而且<a href="https://www.gitbook.com/?t=2" title="GitBook">GitBook</a> 写完编译后可以生成静态页面发布到博客上，逼格满满的样子。</p>
+<h2>GitBook 简介</h2>
+<ul>
+<li><a href="https://docs.gitbook.com/" title="官网">GitBook 官网</a></li>
+<li><a href="https://docs.gitbook.com/" title="文档">GitBook 文档</a></li>
+<li><a href="https://github.com/GitbookIO/gitbook" title="GitHub">GitBook GitHub</a></li>
+</ul>
+<h2>GitBook 准备工作</h2>
+<p>上面我推荐的是 Node.js + GitBook + Typora + Git，所以你还需要安装 Typora（一个很棒的支持 macOS、Windows、Linux 的 Markdown 编辑工具）和 Git 版本管理工具。戳下面：</p>
+<ul>
+<li><a href="https://nodejs.org/en/">Node.js</a></li>
+<li><a href="https://typora.io/">Typora</a></li>
+<li><a href="https://git-scm.com/">Git</a></li>
+</ul>
+<h3>安装 Node.js</h3>
+<p>GitBook 是一个基于<a href="https://nodejs.org/en/" title="Node.js">Node.js</a> 的命令行工具，下载安装 Node.js，安装完成之后，你可以使用下面的命令来检验是否安装成功。</p>
+<pre><code class="language-node">$ node -v
+v10.5.0
+</code></pre>
+<h3>安装 GitBook</h3>
+<p>输入下面的命令来安装 GitBook。</p>
+<pre><code class="language-node">$ npm install gitbook-cli -g
+</code></pre>
+<p>安装完成之后，你可以使用下面的命令来检验是否安装成功</p>
+<pre><code class="language-node">$ gitbook -V
+CLI version: 2.3.2
+Installing GitBook 3.2.3
+</code></pre>
+<p>更多详情请参照<a href="https://docs.gitbook.com/" title="文档">GitBook 安装文档</a> 来安装 GitBook。</p>
+<h3>安装 Typora</h3>
+<p>Typora 的安装很简单，难点在于需要翻墙才能下载（当然你也可以找我要）。Git 的安装也很简单，但要用好它需要不少时间，这里就不展开了（再讲下去你就要跑啦）。</p>
+<h3>安装 GitBook 编辑器</h3>
+<p>去<a href="http://downloads.editor.gitbook.com/download/" title="官网">GitBook 官网</a> 下载 GitBook 编辑器；如果是 Mac 用户且安装过 brew cask 的话可以使用 brew cask install gitbook-editor 命令行来安装 GitBook 编辑器。</p>
+<h2>先睹为快</h2>
+<p>GitBook 准备工作做好之后，我们进入一个你要写书的目录，输入如下命令。</p>
+<pre><code class="language-node">$ gitbook init
+warn: no summary file in this book
+info: create README.md
+info: create SUMMARY.md
+info: initialization is finished
+</code></pre>
+<p>可以看到他会创建 <a href="http://README.md">README.md</a> 和 <a href="http://SUMMARY.md">SUMMARY.md</a> 这两个文件，<a href="http://README.md">README.md</a> 应该不陌生，就是说明文档，而 <a href="http://SUMMARY.md">SUMMARY.md</a> 其实就是书的章节目录，其默认内容如下所示：</p>
+<pre><code># Summary
+
+* [Introduction](README.md)
+</code></pre>
+<p>接下来，我们输入 $ gitbook serve 命令，然后在浏览器地址栏中输入 <a href="http://localhost:4000">http://localhost:4000</a> 便可预览书籍。
+效果如下所示：
+<img src="./../img/gitbook1.png" alt="效果图" title="效果图"></p>
+<p>运行该命令后会在书籍的文件夹中生成一个 _book 文件夹, 里面的内容即为生成的 html 文件，我们可以使用下面命令来生成网页而不开启服务器。</p>
+<pre><code>gitbook build
+</code></pre>
+<p>下面我们来详细介绍下 GitBook 目录结构及相关文件。</p>
+<h3>Typora 来编辑这两个文件</h3>
+<p><img src="./../img/gitbook4.png" alt="效果图" title="效果图">
+编辑 <a href="http://SUMMARY.md">SUMMARY.md</a> 文件，内容修改为：</p>
+<pre><code># 目录
+
+* [前言](README.md)
+* [第一章](Chapter1/README.md)
+  * [第1节：衣](Chapter1/衣.md)
+  * [第2节：食](Chapter1/食.md)
+  * [第3节：住](Chapter1/住.md)
+  * [第4节：行](Chapter1/行.md)
+* [第二章](Chapter2/README.md)
+* [第三章](Chapter3/README.md)
+* [第四章](Chapter4/README.md)
+
+</code></pre>
+<p>然后我们回到命令行，在 mybook 文件夹中再次执行 gitbook init 命令。GitBook 会查找 <a href="http://SUMMARY.md">SUMMARY.md</a> 文件中描述的目录和文件，如果没有则会将其创建。</p>
+<p>Typora 是所见即所得（实时渲染）的 Markdown 编辑器，这时候它是这样的：</p>
+<p><img src="./../img/gitbook5.png" alt="效果图" title="效果图"></p>
+<p>接着我们执行 gitbook serve 来预览这本书籍，执行命令后会对 Markdown 格式的文档进行转换，默认转换为 html 格式，最后提示 “Serving book on <a href="http://localhost:4000">http://localhost:4000</a>”。嗯，打开浏览器看一下吧：</p>
+<p><img src="./../img/gitbook6.png" alt="效果图" title="效果图"></p>
+<h3>gitbook 常用命令</h3>
+<p>当你写得差不多，你可以执行 gitbook build 命令构建书籍，默认将生成的静态网站输出到 _book 目录。实际上，这一步也包含在 gitbook serve 里面，因为它们是 HTML，所以 GitBook 通过 Node.js 给你提供服务了。</p>
+<ol>
+<li>当然，build 命令可以指定路径：</li>
+</ol>
+<pre><code>gitbook build [书籍路径] [输出路径]
+</code></pre>
+<ol start="2">
+<li>serve 命令也可以指定端口：</li>
+</ol>
+<pre><code>gitbook serve --port 2333
+</code></pre>
+<ol start="3">
+<li>你还可以生成 PDF 格式的电子书：</li>
+</ol>
+<pre><code>gitbook pdf ./ ./mybook.pdf
+</code></pre>
+<ol start="4">
+<li>生成 epub 格式的电子书：</li>
+</ol>
+<pre><code>gitbook epub ./ ./mybook.epub
+</code></pre>
+<ol start="5">
+<li>生成 mobi 格式的电子书：</li>
+</ol>
+<pre><code>gitbook mobi ./ ./mybook.mobi
+</code></pre>
+<p>基本命令</p>
+<pre><code>gitbook init //初始化目录文件
+gitbook help //列出gitbook所有的命令
+gitbook --help //输出gitbook-cli的帮助信息
+gitbook build //生成静态网页
+gitbook serve //生成静态网页并运行服务器
+gitbook build --gitbook=2.0.1 //生成时指定gitbook的版本, 本地没有会先下载
+gitbook ls //列出本地所有的gitbook版本
+gitbook ls-remote //列出远程可用的gitbook版本
+gitbook fetch 标签/版本号 //安装对应的gitbook版本
+gitbook update //更新到gitbook的最新版本
+gitbook uninstall 2.0.1 //卸载对应的gitbook版本
+gitbook build --log=debug //指定log的级别
+gitbook builid --debug //输出错误信息
+</code></pre>
+<p>如果生成不了，你可能还需要安装一些工具，比如 ebook-convert。或者在 Typora 中安装 Pandoc 进行导出。</p>
+<p>除此之外，别忘了还可以用 Git 做版本管理呀！在 mybook 目录下执行 git init 初始化仓库，执行 git remote add 添加远程仓库（你得先在远端建好）。接着就可以愉快地 commit，push，pull … 啦！</p>
+<p>下面我们主要来讲讲 book.json 和 <a href="http://SUMMARY.md">SUMMARY.md</a> 文件。</p>
+<h3>book.json</h3>
+<p>该文件主要用来存放配置信息，我先放出我的配置文件。</p>
+<pre><code class="language-conf">{
+    &quot;title&quot;: &quot;Blankj's Glory&quot;,
+    &quot;author&quot;: &quot;Blankj&quot;,
+    &quot;description&quot;: &quot;select * from learn&quot;,
+    &quot;language&quot;: &quot;zh-hans&quot;,
+    &quot;gitbook&quot;: &quot;3.2.3&quot;,
+    &quot;styles&quot;: {
+        &quot;website&quot;: &quot;./styles/website.css&quot;
+    },
+    &quot;structure&quot;: {
+        &quot;readme&quot;: &quot;README.md&quot;
+    },
+    &quot;links&quot;: {
+        &quot;sidebar&quot;: {
+            &quot;我的狗窝&quot;: &quot;https://blankj.com&quot;
+        }
+    },
+    &quot;plugins&quot;: [
+        &quot;-sharing&quot;,
+        &quot;splitter&quot;,
+        &quot;expandable-chapters-small&quot;,
+        &quot;anchors&quot;,
+
+        &quot;github&quot;,
+        &quot;github-buttons&quot;,
+        &quot;donate&quot;,
+        &quot;sharing-plus&quot;,
+        &quot;anchor-navigation-ex&quot;,
+        &quot;favicon&quot;
+    ],
+    &quot;pluginsConfig&quot;: {
+        &quot;github&quot;: {
+            &quot;url&quot;: &quot;https://github.com/Blankj&quot;
+        },
+        &quot;github-buttons&quot;: {
+            &quot;buttons&quot;: [{
+                &quot;user&quot;: &quot;Blankj&quot;,
+                &quot;repo&quot;: &quot;glory&quot;,
+                &quot;type&quot;: &quot;star&quot;,
+                &quot;size&quot;: &quot;small&quot;,
+                &quot;count&quot;: true
+                }
+            ]
+        },
+        &quot;donate&quot;: {
+            &quot;alipay&quot;: &quot;./source/images/donate.png&quot;,
+            &quot;title&quot;: &quot;&quot;,
+            &quot;button&quot;: &quot;赞赏&quot;,
+            &quot;alipayText&quot;: &quot; &quot;
+        },
+        &quot;sharing&quot;: {
+            &quot;douban&quot;: false,
+            &quot;facebook&quot;: false,
+            &quot;google&quot;: false,
+            &quot;hatenaBookmark&quot;: false,
+            &quot;instapaper&quot;: false,
+            &quot;line&quot;: false,
+            &quot;linkedin&quot;: false,
+            &quot;messenger&quot;: false,
+            &quot;pocket&quot;: false,
+            &quot;qq&quot;: false,
+            &quot;qzone&quot;: false,
+            &quot;stumbleupon&quot;: false,
+            &quot;twitter&quot;: false,
+            &quot;viber&quot;: false,
+            &quot;vk&quot;: false,
+            &quot;weibo&quot;: false,
+            &quot;whatsapp&quot;: false,
+            &quot;all&quot;: [
+                &quot;google&quot;, &quot;facebook&quot;, &quot;weibo&quot;, &quot;twitter&quot;,
+                &quot;qq&quot;, &quot;qzone&quot;, &quot;linkedin&quot;, &quot;pocket&quot;
+            ]
+        },
+        &quot;anchor-navigation-ex&quot;: {
+            &quot;showLevel&quot;: false
+        },
+        &quot;favicon&quot;:{
+            &quot;shortcut&quot;: &quot;./source/images/favicon.jpg&quot;,
+            &quot;bookmark&quot;: &quot;./source/images/favicon.jpg&quot;,
+            &quot;appleTouch&quot;: &quot;./source/images/apple-touch-icon.jpg&quot;,
+            &quot;appleTouchMore&quot;: {
+                &quot;120x120&quot;: &quot;./source/images/apple-touch-icon.jpg&quot;,
+                &quot;180x180&quot;: &quot;./source/images/apple-touch-icon.jpg&quot;
+            }
+        }
+    }
+}
+</code></pre>
+<p>相信很多节点自己也能猜到是什么意思，我还是简单介绍下吧。</p>
+<ul>
+<li>title:本书标题</li>
+<li>author:本书作者</li>
+<li>description:本书描述</li>
+<li>language:本书语言，中文设置 &quot;zh-hans&quot; 即可</li>
+<li>gitbook:指定使用的 GitBook 版本</li>
+<li>styles:自定义页面样式</li>
+<li>structure:指定 Readme、Summary、Glossary 和 Languages 对应的文件名</li>
+<li>links:在左侧导航栏添加链接信息</li>
+<li>plugins:配置使用的插件</li>
+<li>pluginsConfig:配置插件的属性</li>
+<li><a href="http://SUMMARY.md">SUMMARY.md</a>:这个文件主要决定 GitBook 的章节目录，它通过 Markdown 中的列表语法来表示文件的父子关系，下面是一个简单的示例：</li>
+</ul>
+<pre><code># Summary
+
+* [Introduction](README.md)
+* [Part I](part1/README.md)
+    * [Writing is nice](part1/writing.md)
+    * [GitBook is nice](part1/gitbook.md)
+* [Part II](part2/README.md)
+    * [We love feedback](part2/feedback_please.md)
+    * [Better tools for authors](part2/better_tools.md)
+</code></pre>
+<p>这个配置对应的目录结构如下所示:
+<img src="./../img/gitbook2.png" alt="如图" title="如图">
+我们通过使用 标题 或者 水平分割线 将 GitBook 分为几个不同的部分，如下所示</p>
+<pre><code># Summary
+
+### Part I
+
+* [Introduction](README.md)
+* [Writing is nice](part1/writing.md)
+* [GitBook is nice](part1/gitbook.md)
+
+### Part II
+
+* [We love feedback](part2/feedback_please.md)
+* [Better tools for authors](part2/better_tools.md)
+
+---
+
+* [Last part without title](part3/title.md)
+</code></pre>
+<p>这个配置对应的目录结构如下所示:
+<img src="./../img/gitbook3.png" alt="如图" title="如图"></p>
+<h3>插件</h3>
+<p>GitBook 有 <a href="https://plugins.gitbook.com/" title="插件官网">插件官网</a>，默认带有 5 个插件，highlight、search、sharing、font-settings、livereload，如果要去除自带的插件， 可以在插件名称前面加 -，比如：</p>
+<pre><code>&quot;plugins&quot;: [
+    &quot;-search&quot;
+]
+</code></pre>
+<p>如果要配置使用的插件可以在 book.json 文件中加入即可，比如我们添加 <a href="https://plugins.gitbook.com/plugin/github">plugin-github</a>，我们在 book.json 中加入配置如下即可：</p>
+<pre><code>{
+    &quot;plugins&quot;: [ &quot;github&quot; ],
+    &quot;pluginsConfig&quot;: {
+        &quot;github&quot;: {
+            &quot;url&quot;: &quot;https://github.com/your/repo&quot;
+        }
+    }
+}
+</code></pre>
+<p>然后在终端输入 gitbook install ./ 即可。</p>
+<h3>总结</h3>
+<ol>
+<li>
+<p>主要流程
+安装node.js &gt; 安装Gitbook &gt; 安装Gitbook编辑器 &gt; 安装calibre &gt; 导出PDF</p>
+</li>
+<li>
+<p>安装 GitBook</p>
+</li>
+</ol>
+<pre><code>npm install -g gitbook
+npm install -g gitbook-cli
+gitbook -V # 查看版本
+</code></pre>
+<ol start="3">
+<li>终端生成HTML</li>
+</ol>
+<p><a href="https://www.gitbook.com/editor">客户端编辑器下载：</a></p>
+<pre><code>cd /Users/sunshine/GitBook/Library/Import/test/
+gitbook build
+gitbook serve # 本地预览 _book
+</code></pre>
+<ol start="4">
+<li>使用calibre插件生成PDF</li>
+</ol>
+<p><a href="https://calibre-ebook.com/download">插件下载：</a></p>
+<pre><code>ln -s /Applications/calibre.app/Contents/MacOS/ebook-convert /usr/local/bin
+gitbook pdf . mypdf.pdf```
+</code></pre>
+<p>如果要指定插件的版本可以使用 plugin@0.3.1，因为一些插件可能不会随着 GitBook 版本的升级而升级。</p>
+<h3>结语</h3>
+<p>这是我对 GitBook 使用的总结，希望能帮到今后需要的小伙伴</p>
+<p><a href="https://blog.csdn.net/axi295309066/article/details/61420694/">相关资料</a></p>
+</section><footer class="footer-container"><div class="footer-body"><img src="/img/dubbo_gray.png"/><div class="cols-container"><div class="col col-12"><h3>免责声明</h3><p>免责声明的具体内容</p></div><div class="col col-6"><dl><dt>文档</dt><dd><a href="/zh-cn/docs/introduction.html" target="_self">概览</a></dd><dd><a href="/zh-cn/docs/introduction.html" target="_self">快速开始</a></dd><dd><a href="/zh-cn/docs/dir/introduction.html" target="_self">开发者指南</a></dd></dl></div><div class="col col-6"><dl><dt>资源</dt><dd><a href="/zh-cn/blog/index.html" target="_self">博客</a></dd><dd><a href="/zh-cn/community/index.html" target="_self">社区</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2018 BurningMyself</span></div></div></footer></div></div>
+	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
+	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
+	<script>
+		window.rootPath = '';
+  </script>
+	<script src="/build/blogDetail.js"></script>
+</body>
+</html>

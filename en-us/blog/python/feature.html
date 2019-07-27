@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="keywords" content="feature" />
+	<meta name="description" content="feature" />
+	<!-- 网页标签标题 -->
+	<title>feature</title>
+	<link rel="shortcut icon" href="/img/docsite.ico"/>
+	<link rel="stylesheet" href="/build/blogDetail.css" />
+</head>
+<body>
+	<div id="root"><div class="blog-detail-page" data-reactroot=""><header class="header-container header-container-normal"><div class="header-body"><a href="/en-us/index.html"><img class="logo" src="/img/dubbo_colorful.png"/></a><div class="search search-normal"><span class="icon-search"></span></div><span class="language-switch language-switch-normal">中</span><div class="header-menu"><img class="header-menu-toggle" src="/img/system/menu_gray.png"/><ul><li class="menu-item menu-item-normal"><a href="/en-us/index.html" target="_self">HOME</a></li><li class="menu-item menu-item-normal"><a href="/en-us/docs/introduction.html" target="_self">DOCS</a></li><li class="menu-item menu-item-normal menu-item-normal-active"><a href="/en-us/blog/index.html" target="_self">BLOG</a></li><li class="menu-item menu-item-normal"><a href="/en-us/community/index.html" target="_self">COMMUNITY</a></li></ul></div></div></header><section class="blog-content markdown-body"><h1>Python新特性</h1>
+<h2>Python2.x与3​​.x版本区别</h2>
+<p>Python的3​​.0版本，常被称为Python 3000，或简称Py3k。相对于Python的早期版本，这是一个较大的升级。
+为了不带入过多的累赘，Python 3.0在设计的时候没有考虑向下相容。
+许多针对早期Python版本设计的程式都无法在Python 3.0上正常执行。
+为了照顾现有程式，Python 2.6作为一个过渡版本，基本使用了Python 2.x的语法和库，同时考虑了向Python 3.0的迁移，允许使用部分Python 3.0的语法与函数。
+新的Python程式建议使用Python 3.0版本的语法。
+除非执行环境无法安装Python 3.0或者程式本身使用了不支援Python 3.0的第三方库。目前不支援Python 3.0的第三方库有Twisted, py2exe, PIL等。
+大多数第三方库都正在努力地相容Python 3.0版本。即使无法立即使用Python 3.0，也建议编写相容Python 3.0版本的程式，然后使用Python 2.6, Python 2.7来执行。
+Python 3.0的变化主要在以下几个方面:</p>
+<h3>print 函数</h3>
+<p>print语句没有了，取而代之的是print()函数。 Python 2.6与Python 2.7部分地支持这种形式的print语法。在Python 2.6与Python 2.7里面，以下三种形式是等价的：</p>
+<pre><code class="language-python"><span class="hljs-keyword">print</span> <span class="hljs-string">"fish"</span>
+<span class="hljs-keyword">print</span> (<span class="hljs-string">"fish"</span>) <span class="hljs-comment">#注意print后面有个空格</span>
+print(<span class="hljs-string">"fish"</span>) <span class="hljs-comment">#print()不能带有任何其它参数</span>
+</code></pre>
+<p>然而，Python 2.6实际已经支持新的print()语法：</p>
+<pre><code class="language-python"><span class="hljs-keyword">from</span> __future__ <span class="hljs-keyword">import</span> print_function
+print(<span class="hljs-string">"fish"</span>, <span class="hljs-string">"panda"</span>, sep=<span class="hljs-string">', '</span>)
+</code></pre>
+<h3>Unicode</h3>
+<p>Python 2 有 ASCII str() 类型，unicode() 是单独的，不是 byte 类型。
+现在， 在 Python 3，我们最终有了 Unicode (utf-8) 字符串，以及一个字节类：byte 和 bytearrays。</p>
+<p>由于 Python3.X 源码文件默认使用utf-8编码，这就使得以下代码是合法的：</p>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>中国 = <span class="hljs-string">'china'</span> 
+&gt;&gt;&gt;print(中国) 
+china
+</code></pre>
+<p>Python 2.x</p>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>str = <span class="hljs-string">"我爱北京天安门"</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>str
+<span class="hljs-string">'\xe6\x88\x91\xe7\x88\xb1\xe5\x8c\x97\xe4\xba\xac\xe5\xa4\xa9\xe5\xae\x89\xe9\x97\xa8'</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>str = <span class="hljs-string">u"我爱北京天安门"</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>str
+<span class="hljs-string">u'\u6211\u7231\u5317\u4eac\u5929\u5b89\u95e8'</span>
+</code></pre>
+<p>Python 3.x</p>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>str = <span class="hljs-string">"我爱北京天安门"</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>str
+<span class="hljs-string">'我爱北京天安门'</span>
+</code></pre>
+<h3>除法运算</h3>
+<p>Python中的除法较其它语言显得非常高端，有套很复杂的规则。Python中的除法有两个运算符，/和//
+首先来说/除法:
+在python 2.x中/除法就跟我们熟悉的大多数语言，比如Java啊C啊差不多，整数相除的结果是一个整数，把小数部分完全忽略掉，浮点数除法会保留小数点的部分得到一个浮点数的结果。
+在python 3.x中/除法不再这么做了，对于整数之间的相除，结果也会是浮点数。
+Python 2.x:</p>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-number">1</span> / <span class="hljs-number">2</span>
+<span class="hljs-number">0</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-number">1.0</span> / <span class="hljs-number">2.0</span>
+<span class="hljs-number">0.5</span>
+</code></pre>
+<p>Python 3.x:</p>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-number">1</span>/<span class="hljs-number">2</span>
+<span class="hljs-number">0.5</span>
+</code></pre>
+<p>而对于//除法，这种除法叫做floor除法，会对除法的结果自动进行一个floor操作，在python 2.x和python 3.x中是一致的。
+python 2.x:</p>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-number">-1</span> // <span class="hljs-number">2</span>
+<span class="hljs-number">-1</span>
+</code></pre>
+<p>python 3.x:</p>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-number">-1</span> // <span class="hljs-number">2</span>
+<span class="hljs-number">-1</span>
+</code></pre>
+<p>注意的是并不是舍弃小数部分，而是执行 floor 操作，如果要截取整数部分，那么需要使用 math 模块的 trunc 函数
+python 3.x:</p>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">import</span> math
+<span class="hljs-meta">&gt;&gt;&gt; </span>math.trunc(<span class="hljs-number">1</span> / <span class="hljs-number">2</span>)
+<span class="hljs-number">0</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>math.trunc(<span class="hljs-number">-1</span> / <span class="hljs-number">2</span>)
+<span class="hljs-number">0</span>
+</code></pre>
+<h3>异常</h3>
+<p>在 Python 3 中处理异常也轻微的改变了，在 Python 3 中我们现在使用 as 作为关键词。
+捕获异常的语法由 except exc, var 改为 except exc as var。
+使用语法except (exc1, exc2) as var可以同时捕获多种类别的异常。 Python 2.6已经支持这两种语法。</p>
+<ol>
+<li>在2.x时代，所有类型的对象都是可以被直接抛出的，在3.x时代，只有继承自BaseException的对象才可以被抛出。</li>
+<li>2.x raise语句使用逗号将抛出对象类型和参数分开，3.x取消了这种奇葩的写法，直接调用构造函数抛出对象即可。</li>
+</ol>
+<p>在2.x时代，异常在代码中除了表示程序错误，还经常做一些普通控制结构应该做的事情，在3.x中可以看出，设计者让异常变的更加专一，只有在错误发生的情况才能去用异常捕获语句来处理。</p>
+<h3>xrange</h3>
+<p>在 Python 2 中 xrange() 创建迭代对象的用法是非常流行的。比如： for 循环或者是列表/集合/字典推导式。
+这个表现十分像生成器（比如。&quot;惰性求值&quot;）。但是这个 xrange-iterable 是无穷的，意味着你可以无限遍历。
+由于它的惰性求值，如果你不得仅仅不遍历它一次，xrange() 函数 比 range() 更快（比如 for 循环）。尽管如此，对比迭代一次，不建议你重复迭代多次，因为生成器每次都从头开始。
+在 Python 3 中，range() 是像 xrange() 那样实现以至于一个专门的 xrange() 函数都不再存在（在 Python 3 中 xrange() 会抛出命名异常）。</p>
+<pre><code class="language-python"><span class="hljs-keyword">import</span> timeit
+
+n = <span class="hljs-number">10000</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">test_range</span><span class="hljs-params">(n)</span>:</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(n):
+        <span class="hljs-keyword">pass</span>
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">test_xrange</span><span class="hljs-params">(n)</span>:</span>
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> xrange(n):
+        <span class="hljs-keyword">pass</span>   
+</code></pre>
+<p>Python 2</p>
+<pre><code class="language-python"><span class="hljs-keyword">print</span> <span class="hljs-string">'Python'</span>, python_version()
+
+<span class="hljs-keyword">print</span> <span class="hljs-string">'\ntiming range()'</span> 
+%timeit test_range(n)
+
+<span class="hljs-keyword">print</span> <span class="hljs-string">'\n\ntiming xrange()'</span> 
+%timeit test_xrange(n)
+
+<span class="hljs-comment">#Python 2.7.6</span>
+
+timing range()
+<span class="hljs-number">1000</span> loops, best of <span class="hljs-number">3</span>: <span class="hljs-number">433</span> µs per loop
+
+
+timing xrange()
+<span class="hljs-number">1000</span> loops, best of <span class="hljs-number">3</span>: <span class="hljs-number">350</span> µs per loop
+</code></pre>
+<p>Python 3</p>
+<pre><code class="language-python">print(<span class="hljs-string">'Python'</span>, python_version())
+
+print(<span class="hljs-string">'\ntiming range()'</span>)
+%timeit test_range(n)
+
+<span class="hljs-comment">#Python 3.4.1</span>
+
+timing range()
+<span class="hljs-number">1000</span> loops, best of <span class="hljs-number">3</span>: <span class="hljs-number">520</span> µs per loop
+</code></pre>
+<pre><code class="language-python">print(xrange(10))
+---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+&lt;ipython-input-5-5d8f9b79ea70&gt; in &lt;module&gt;()
+----&gt; 1 print(xrange(10))
+
+NameError: name 'xrange' is not defined
+</code></pre>
+<h3>八进制字面量表示</h3>
+<p>八进制数必须写成0o777，原来的形式0777不能用了；二进制必须写成0b111。
+新增了一个bin()函数用于将一个整数转换成二进制字串。 Python 2.6已经支持这两种语法。
+在Python 3.x中，表示八进制字面量的方式只有一种，就是0o1000。
+python 2.x</p>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-number">0o1000</span>
+<span class="hljs-number">512</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-number">01000</span>
+<span class="hljs-number">512</span>
+</code></pre>
+<p>python 3.x</p>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-number">01000</span>
+  File <span class="hljs-string">"&lt;stdin&gt;"</span>, line <span class="hljs-number">1</span>
+    <span class="hljs-number">01000</span>
+        ^
+SyntaxError: invalid token
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-number">0o1000</span>
+<span class="hljs-number">512</span>
+</code></pre>
+<h3>不等运算符</h3>
+<p>Python 2.x中不等于有两种写法 != 和 &lt;&gt;
+Python 3.x中去掉了&lt;&gt;, 只有!=一种写法，还好，我从来没有使用&lt;&gt;的习惯</p>
+<h3>去掉了repr表达式``</h3>
+<p>Python 2.x 中反引号<code>相当于repr函数的作用 Python 3.x 中去掉了</code>这种写法，只允许使用repr函数，这样做的目的是为了使代码看上去更清晰么？不过我感觉用repr的机会很少，一般只在debug的时候才用，多数时候还是用str函数来用字符串描述对象。</p>
+<pre><code class="language-python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">sendMail</span><span class="hljs-params">(from_: str, to: str, title: str, body: str)</span> -&gt; bool:</span>
+    <span class="hljs-keyword">pass</span>
+</code></pre>
+<h3>多个模块被改名（根据PEP8）</h3>
+<table>
+<thead>
+<tr>
+<th>旧的名字</th>
+<th>新的名字</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_winreg</td>
+<td>winreg</td>
+</tr>
+<tr>
+<td>ConfigParser</td>
+<td>configParaser</td>
+</tr>
+<tr>
+<td>copy_reg</td>
+<td>copyreg</td>
+</tr>
+<tr>
+<td>Queue</td>
+<td>queue</td>
+</tr>
+<tr>
+<td>SocketServer</td>
+<td>socketserver</td>
+</tr>
+<tr>
+<td>repr</td>
+<td>reprlib</td>
+</tr>
+</tbody>
+</table>
+<p>StringIO模块现在被合并到新的io模组内。 new, md5, gopherlib等模块被删除。 Python 2.6已经支援新的io模组。
+httplib, BaseHTTPServer, CGIHTTPServer, SimpleHTTPServer, Cookie, cookielib被合并到http包内。
+取消了exec语句，只剩下exec()函数。 Python 2.6已经支援exec()函数。</p>
+<h3>数据类型</h3>
+<ol>
+<li>Py3.X去除了long类型，现在只有一种整型——int，但它的行为就像2.X版本的long</li>
+<li>新增了bytes类型，对应于2.X版本的八位串，定义一个bytes字面量的方法如下：</li>
+</ol>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>b = <span class="hljs-string">b'china'</span> 
+<span class="hljs-meta">&gt;&gt;&gt; </span>type(b) 
+&lt;type <span class="hljs-string">'bytes'</span>&gt; 
+</code></pre>
+<p>str对象和bytes对象可以使用.encode() (str -&gt; bytes) or .decode() (bytes -&gt; str)方法相互转化。</p>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>s = b.decode() 
+<span class="hljs-meta">&gt;&gt;&gt; </span>s 
+<span class="hljs-string">'china'</span> 
+<span class="hljs-meta">&gt;&gt;&gt; </span>b1 = s.encode() 
+<span class="hljs-meta">&gt;&gt;&gt; </span>b1 
+<span class="hljs-string">b'china'</span> 
+</code></pre>
+<ol start="3">
+<li>dict的.keys()、.items 和.values()方法返回迭代器，返回的值不再是list，而是view。所以dict.iterkeys(),dict.iteritems()和dict.itervalues()被去掉了。同时去掉的还有 dict.has_key()，用 in替代它吧 。</li>
+</ol>
+<h3>打开文件</h3>
+<p>原：</p>
+<pre><code class="language-python">file( ..... )
+<span class="hljs-comment">#或 </span>
+open(.....)
+</code></pre>
+<p>改为只能用</p>
+<pre><code class="language-python">open(.....)
+</code></pre>
+<h3>从键盘录入一个字符串</h3>
+<p>在python2.x中raw_input()和input( )，两个函数都存在，其中区别为：
+raw_input()---将所有输入作为字符串看待，返回字符串类型
+input()-----只能接收&quot;数字&quot;的输入，在对待纯数字输入时具有自己的特性，它返回所输入的数字的类型（int, float ）
+在python3.x中raw_input()和input( )进行了整合，去除了raw_input()，仅保留了input()函数，其接收任意任性输入，将所有输入默认为字符串处理，并返回字符串类型。
+原:</p>
+<pre><code class="language-python">raw_input( <span class="hljs-string">"提示信息"</span> )
+</code></pre>
+<p>改为:</p>
+<pre><code class="language-python">input( <span class="hljs-string">"提示信息"</span> )
+</code></pre>
+<h3>map、filter 和 reduce</h3>
+<p>这三个函数号称是函数式编程的代表。在 Python3.x 和 Python2.x 中也有了很大的差异。</p>
+<p>首先我们先简单的在 Python2.x 的交互下输入 map 和 filter,看到它们两者的类型是 built-in function(内置函数):</p>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>map
+&lt;built-<span class="hljs-keyword">in</span> function map&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span>filter
+&lt;built-<span class="hljs-keyword">in</span> function filter&gt;
+&gt;&gt;&gt;
+</code></pre>
+<p>它们输出的结果类型都是列表:</p>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>map(<span class="hljs-keyword">lambda</span> x:x *<span class="hljs-number">2</span>, [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>])
+[<span class="hljs-number">2</span>, <span class="hljs-number">4</span>, <span class="hljs-number">6</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>filter(<span class="hljs-keyword">lambda</span> x:x %<span class="hljs-number">2</span> ==<span class="hljs-number">0</span>,range(<span class="hljs-number">10</span>))
+[<span class="hljs-number">0</span>, <span class="hljs-number">2</span>, <span class="hljs-number">4</span>, <span class="hljs-number">6</span>, <span class="hljs-number">8</span>]
+&gt;&gt;&gt;
+</code></pre>
+<p>但是在Python 3.x中它们却不是这个样子了：</p>
+<pre><code class="language-python">&gt;&gt;&gt; map
+&lt;class 'map'&gt;
+&gt;&gt;&gt; map(print,[1,2,3])
+&lt;map object at 0x10d8bd400&gt;
+&gt;&gt;&gt; filter
+&lt;class 'filter'&gt;
+&gt;&gt;&gt; filter(lambda x:x % 2 == 0, range(10))
+&lt;filter object at 0x10d8bd3c8&gt;
+&gt;&gt;&gt;
+</code></pre>
+<p>首先它们从函数变成了类，其次，它们的返回结果也从当初的列表成了一个可迭代的对象, 我们尝试用 next 函数来进行手工迭代:</p>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>f =filter(<span class="hljs-keyword">lambda</span> x:x %<span class="hljs-number">2</span> ==<span class="hljs-number">0</span>, range(<span class="hljs-number">10</span>))
+<span class="hljs-meta">&gt;&gt;&gt; </span>next(f)
+<span class="hljs-number">0</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>next(f)
+<span class="hljs-number">2</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>next(f)
+<span class="hljs-number">4</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>next(f)
+<span class="hljs-number">6</span>
+&gt;&gt;&gt;
+</code></pre>
+<p>对于比较高端的 reduce 函数，它在 Python 3.x 中已经不属于 built-in 了，被挪到 functools 模块当中。</p>
+<h2>Python3.+新特性</h2>
+<p>新的语法特性：</p>
+<ul>
+<li>格式化字符串字面值</li>
+<li>数字字符串中支持下划线</li>
+<li>变量注释的语法</li>
+<li>异步生成器</li>
+<li>异步列表推导</li>
+<li>用类处理数据时减少样板代码的数据类</li>
+<li>一处可能无法向后兼容的变更涉及处理生成器中的异常</li>
+<li>面向解释器的“开发模式</li>
+<li>具有纳秒分辨率的时间对象</li>
+<li>环境中默认使用UTF-8编码的UTF-8模式</li>
+<li>触发调试器的一个新的内置函数</li>
+</ul>
+<h3>新的模块</h3>
+<p>添加了一个安全模块secrets到标准库中</p>
+<h3>CPython实现改进</h3>
+<ul>
+<li>字典基于Raymond Hettinger的建议使用更紧凑的表示重新实现了，和PyPy的字典实现类似。结果是和3.5版本相比，3.6版本字典的内存使用减少了20%到25%。</li>
+<li>使用新的协议，自定义类的创建被简化了。</li>
+<li>类属性的定义顺序能够被保存。</li>
+<li>在**kwargs中元素的顺序对应于传递给函数时的关键字参数的顺序。</li>
+<li>添加了DTrace和SystemTap探测的支持。</li>
+<li>新的PYTHONMALLOC环境变量可以用于调试解释器内存分配和访问错误。</li>
+</ul>
+<h3>重大的标准库改进</h3>
+<ul>
+<li>asyncio模块接收了新特性，重大的可用性和性能改进，然后修复了大量的BUG。从Python 3.6开始asyncio模块不再是临时的了，它已经被认为是稳定的了。</li>
+<li>新的文件系统路径协议已实现，用于支持路径类对象。所有标准库函数在处理路径时已使用新的协议。</li>
+<li>datetime模块在本地时间消除歧义上获得了支持。</li>
+<li>typing模块接受了一些改进。</li>
+<li>tracemalloc模块经过重大改造，现在可以为ResourceWarnning提供更好的输出，也为内存分配错误提供更好的诊断。</li>
+</ul>
+<h3>安全改进</h3>
+<ul>
+<li>secrets模块已被添加，可以生成更安全的伪随机数。</li>
+<li>在Linux上，os.urandom()现在会被锁住，直到系统的伪随机滴池被初始化增加安全。</li>
+<li>hashlib和ssl模块现在支持OpenSSL 1.1.0。</li>
+<li>hashlib模块现在支持BLAKE2、SHA-3和SHAKE摘要算法和scrypt()秘钥导出功能。</li>
+</ul>
+<h3>Windows改进</h3>
+<ul>
+<li>Windows文件系统和控制台编码改为了UTF-8。</li>
+<li>python.exe和pythonw.exe现在支持长路径，详情请看<a href="https://docs.python.org/3/using/windows.html#max-path">removing the MAX_PATH limitation</a>。</li>
+<li>一个._pth文件可以被添加用于隔离模块，避免全路径搜索，详情请看文档。</li>
+</ul>
+<h3>Formatted字符串字面值</h3>
+<p>Formatted字符串是带有’f’字符前缀的字符串，可以很方便的格式化字符串。</p>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>name = <span class="hljs-string">"xiaoming"</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-string">f"He name is <span class="hljs-subst">{name}</span>"</span>
+<span class="hljs-string">'He name is xiaoming'</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>width = <span class="hljs-number">10</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>precision = <span class="hljs-number">4</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>value = decimal.Decimal(<span class="hljs-string">"12.34567"</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-string">f"result: <span class="hljs-subst">{value:{width}</span>.<span class="hljs-subst">{precision}</span>}"</span>
+<span class="hljs-string">'result:      12.35'</span>
+</code></pre>
+<h3>数字中支持下划线</h3>
+<p>数字中支持使用下划线，方便阅读，例如：</p>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-number">1</span>_000_000_000_000_000
+<span class="hljs-number">1000000000000000</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-number">0</span>x_FF_FF_FF_FF
+<span class="hljs-number">4294967295</span>
+</code></pre>
+<p>字符串format方法也支持了’_’选项，当格式化为浮点数或整数时，以3位分隔，当格式化为’b’,’o’,’x’和’X’时，以4位分隔</p>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-string">'{:_}'</span>.format(<span class="hljs-number">10000000</span>)
+<span class="hljs-string">'10_000_000'</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-string">'{:_b}'</span>.format(<span class="hljs-number">10000000</span>)
+<span class="hljs-string">'1001_1000_1001_0110_1000_0000'</span>
+</code></pre>
+<h3>变量注释语法</h3>
+<p>变量注释没有给变量带来特殊的意义，只是为了方便IDE做类型检查。</p>
+<pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> List,Dict
+<span class="hljs-meta">&gt;&gt;&gt; </span>primes: List[int] = []
+<span class="hljs-meta">&gt;&gt;&gt; </span>stats: Dict[str, int] = {}
+</code></pre>
+<p>上面代码中primes为变量名，List[int]为变量注释，用来说明primes列表是用来存放int类型数据的，但是这个不是强制性的，你使用append()方法添加一个str类型数据也是可以的，IDE会提示你添加的数据有误，但是运行时不会报错。</p>
+<h3>异步生成器</h3>
+<p>在Python3.5中，await和yield不能再同一个函数中使用，但是Python3.6已经取消了这个限制，可以在同一个函数体中使用了</p>
+<pre><code class="language-python"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">ticker</span><span class="hljs-params">(delay, to)</span>:</span>
+    <span class="hljs-string">"""Yield numbers from 0 to *to* every *delay* seconds."""</span>
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(to):
+        <span class="hljs-keyword">yield</span> i
+        <span class="hljs-keyword">await</span> asyncio.sleep(delay)
+</code></pre>
+<h3>异步列表推导</h3>
+<p>增加在list、set和dict的列表推导和生成表达式中使用async for。
+如下面这段代码:</p>
+<pre><code class="language-python">result = []
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> aiter():
+    <span class="hljs-keyword">if</span> i % <span class="hljs-number">2</span>:
+        result.append(i)
+</code></pre>
+<p>使用异步推导式之后，可以简写成</p>
+<pre><code class="language-python">result = [i <span class="hljs-keyword">async</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> aiter() <span class="hljs-keyword">if</span> i % <span class="hljs-number">2</span>]
+</code></pre>
+<p>现在也支持在所有的推导式中使用await表达式</p>
+<pre><code>result = [await fun() for fun in funcs]
+</code></pre>
+<h3>Python数据类</h3>
+<p>众所周知，Python是处理结构化数据的一种快捷又方便的方法。Python提供了用来组织管理结构，并将常见行为与数据实例联系起来的类，但是拥有许多初始化器的类历来存在这个弊端：需要大量的样板代码为它们创建实例。比如说：</p>
+<pre><code class="language-python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self,name,user_id,just_joined=True)</span>:</span>
+        self.name=name
+        self.id=user_id
+        self.just_joined=just_joined
+</code></pre>
+<p>为了使这实现自动化：为类创建实例，Python 3.7引入了一个新的模块dataclasses，如<a href="https://www.python.org/dev/peps/pep-0557/">pep-0557</a>中所述。它提供了一个装饰器，能够以异常简单的方式重现上述行为：</p>
+<pre><code class="language-python"><span class="hljs-meta">@dataclass</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span><span class="hljs-params">()</span>:</span>
+    name:str
+    user_id:int
+    just_joined:bool=<span class="hljs-literal">True</span>
+</code></pre>
+<p>因而生成的类运行起来如同普通的Python类。你还可以声明某些字段是“冻结”或不可变的，并且使创建属性的特殊方法（比如__hash__或__repr__）实现自动化（或手动覆盖）。</p>
+<h3>Python生成器异常处理</h3>
+<p>正如<a href="https://www.python.org/dev/peps/pep-0479/">PEP 479</a>中概述，开发了一段时间的一处变更旨在让人们更容易调试Python生成器引发的StopIteration异常。以前，生成器遇到另一个问题时很容易引发StopIteration，而不是由于它用完了需要迭代的东西。这带来了一整批很难追踪的代码缺陷。</p>
+<p>在Python 3.7中，生成器引发StopIteration异常后，StopIteration异常将被转换成RuntimeError异常，那样它不会悄悄一路影响应用程序的堆栈框架。这意味着如何处理生成器的行为方面不太敏锐的一些程序会在Python 3.7中抛出RuntimeError。而在Python 3.6中，这种行为生成一个弃用警告；在Python 3.7中，它生成一个完整的错误。</p>
+<p>一个简易的方法是使用try/except代码段，在StopIteration传播到生成器的外面捕获它。更好的解决方案是重新考虑如何构建生成器――比如说，使用return语句来终止生成器，而不是手动引发StopIteration。想进一步了解如何在现有代码中补救这个问题，如何在新代码中防范该问题，请参阅<a href="https://www.python.org/dev/peps/pep-0479/">PEP 469</a>。</p>
+<h3>Python开发模式</h3>
+<p>Python解释器新的命令行开关：-X让开发人员可以为解释器设置许多低级选项。在Python 3.7中，选项-X dev启用“开发模式”，这种运行时检查机制通常对性能有重大影响，但在调试过程中对开发人员很有用。</p>
+<p>-X dev激活的选项包括：</p>
+<ul>
+<li>asyncio模块的调试模式。这为异步操作提供了更详细的日志记录和异常处理，而异常操作可能很难调试或推理。</li>
+<li>面向内存分配器的调试钩子。这对于编写CPython扩展件的那些人很有用。它能够实现更明确的运行时检查，了解CPython如何在内部分配内存和释放内存。</li>
+<li>启用faulthandler模块，那样发生崩溃后，traceback始终转储出去。</li>
+</ul>
+<h3>具有纳秒分辨率的Python时间函数</h3>
+<p>Python 3.7中一类新的时间函数返回纳秒精度的时间值。尽管Python是一种解释型语言，但是Python的核心开发人员维克多•斯廷纳（Victor Stinner）主张报告纳秒精度的时间。最主要的原因是，在处理转换其他程序（比如数据库）记录的时间值时，可以避免丢失精度。</p>
+<p>新的时间函数使用后缀_ns。比如说，time.process_time()的纳秒版本是time.process_time_ns()。请注意，并非所有的时间函数都有对应的纳秒版本，因为其中一些时间函数并不得益于此。</p>
+<h3>Python UTF-8模式</h3>
+<p>Python一直支持UTF-8，以便轻松处理字符串和文本。但是周围环境中的语言环境（locale）有时仍是ASCII，而不是UTF-8，检测语言环境的机制并不总是很可靠。</p>
+<p>Python 3.7添加了所谓的“UTF-8模式”，可通过-X命令行开关启用该模式，该模式假设UTF-8是环境提供的语言环境。在POSIX语言环境中，UTF-8模式默认情况下已被启用，但在其他位置默认情况下被禁用，以免破坏向后兼容。值得试一试在默认情况下开启UTF-8模式，但不应该在生产环境下启用它，除非你确信Python与周围环境的所有交互都使用UTF-8。</p>
+<h3>内置breakpoint()函数</h3>
+<p>Python随带内置的调试器，不过它也可以连入到第三方调试工具，只要它们能与Python的内部调试API进行对话。不过，Python到目前为止缺少一种从Python应用程序里面以编程方式触发调试器的标准化方法。</p>
+<p>Python 3.7添加了breakpoint()，这个内置函数使得函数被调用时，让执行切换到调试器。相应的调试器不一定是Python自己的pdb，可以是之前被设为首选调试器的任何调试器。以前，调试器不得不手动设置，然后调用，因而使代码更冗长。而有了breakpoint()，只需一个命令即可调用调试器，并且让设置调试器和调用调试器泾渭分明。</p>
+<h3>其他新的Python 3.7功能</h3>
+<p>Python 3.7有另外的众多变更。下面是你在使用最新版本的Python时可能会遇到的其他一些功能：</p>
+<p>面向线程本地存储支持的C-API</p>
+<p><a href="https://www.python.org/dev/peps/pep-0539/">PEP 539</a>中描述，线程特定存储（TSS）API取代了老式的线程本地存储（TLS）API。如果谁定制CPython或编写使用解释器的内部API的CPython扩展件，就要明白这一点。</p>
+<p>模块属性访问定制</p>
+<p>你在Python程序中创建模块时，现在可以针对该模块的实例定制属性访问的行为。为此，只需要在模块里面创建一个__getattr__方法，就跟为一个类创建方法那样。这样一来，就可以对诸如请求模块里面不存在的函数或方法之类的操作进行拦截、标记或代理。</p>
+<p>Python importlib资源</p>
+<p>importlib模块现在可用来读取“资源”，即随Python应用程序一并交付的二进制工件，比如数据文件。这样一来，开发人员可以通过importlib的抽象来访问那些文件，所以它们存储在系统上某个地方的.zip文件中还是存储在目录中并不重要。</p>
+<p>底层优化</p>
+<p>现在许多单独的操作更快速了：</p>
+<p>由于新的操作码，方法调用起来最多快20%。（除非你在编写直接处理Python操作码的代码，否则不需要担心由此带来的影响。）
+正则表达式中不区分大小写的匹配速度更快了，有时要快20倍。
+源代码中的一些常量现在可以更高效地优化。</p>
+<h3>更多特性</h3>
+<p><a href="https://github.com/leisurelicht/wtfpython-cn">Python Feature</a></p>
+</section><footer class="footer-container"><div class="footer-body"><img src="/img/dubbo_gray.png"/><div class="cols-container"><div class="col col-12"><h3>Disclaimer</h3><p>the disclaimer content</p></div><div class="col col-6"><dl><dt>Documentation</dt><dd><a href="/en-us/docs/introduction.html" target="_self">Overview</a></dd><dd><a href="/en-us/docs/introduction.html" target="_self">Quick start</a></dd><dd><a href="/en-us/docs/dir/introduction.html" target="_self">Developer guide</a></dd></dl></div><div class="col col-6"><dl><dt>Resources</dt><dd><a href="/en-us/blog/index.html" target="_self">Blog</a></dd><dd><a href="/en-us/community/index.html" target="_self">Community</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2018 BurningMyself</span></div></div></footer></div></div>
+	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
+	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
+	<script>
+		window.rootPath = '';
+  </script>
+	<script src="/build/blogDetail.js"></script>
+</body>
+</html>

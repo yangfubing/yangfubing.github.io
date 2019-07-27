@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="keywords" content="feature" />
+	<meta name="description" content="feature" />
+	<!-- 网页标签标题 -->
+	<title>feature</title>
+	<link rel="shortcut icon" href="/img/docsite.ico"/>
+	<link rel="stylesheet" href="/build/blogDetail.css" />
+</head>
+<body>
+	<div id="root"><div class="blog-detail-page" data-reactroot=""><header class="header-container header-container-normal"><div class="header-body"><a href="/en-us/index.html"><img class="logo" src="/img/dubbo_colorful.png"/></a><div class="search search-normal"><span class="icon-search"></span></div><span class="language-switch language-switch-normal">中</span><div class="header-menu"><img class="header-menu-toggle" src="/img/system/menu_gray.png"/><ul><li class="menu-item menu-item-normal"><a href="/en-us/index.html" target="_self">HOME</a></li><li class="menu-item menu-item-normal"><a href="/en-us/docs/introduction.html" target="_self">DOCS</a></li><li class="menu-item menu-item-normal menu-item-normal-active"><a href="/en-us/blog/index.html" target="_self">BLOG</a></li><li class="menu-item menu-item-normal"><a href="/en-us/community/index.html" target="_self">COMMUNITY</a></li></ul></div></div></header><section class="blog-content markdown-body"><h1>Java 新特性总结</h1>
+<p>总结的这些新特性，都是自己觉得在开发中实际用得上的。
+简单概括下就是：</p>
+<ul>
+<li>JAVA1.3：普通的原始的JAVA，基本语法相信大家都见过了</li>
+<li>JAVA1.4：assert关键字</li>
+<li>JAVA5：枚举类型、泛型、自动拆装箱</li>
+<li>JAVA6： @Override注解</li>
+<li>JAVA7： &lt;&gt;符号、ARM支持、支持多catch</li>
+<li>JAVA8：Lamda表达式，类型注解等</li>
+<li>JAVA9： 模块化、接口中的私有方法等</li>
+</ul>
+<h2>Java5  新特性总结</h2>
+<h3>泛型 Generics</h3>
+<p>引用泛型之后，允许指定集合里元素的类型，免去了强制类型转换，并且能在编译时刻进行类型检查的好处。Parameterized Type作为参数和返回值，Generic是vararg、annotation、enumeration、collection的基石。</p>
+<p>泛型可以带来如下的好处总结如下：</p>
+<ol>
+<li>类型安全：抛弃List、Map，使用List、Map给它们添加元素或者使用Iterator遍历时，编译期就可以给你检查出类型错误</li>
+<li>方法参数和返回值加上了Type: 抛弃List、Map，使用List、Map</li>
+<li>不需要类型转换：List list=new ArrayList();</li>
+<li>类型通配符“?”： 假设一个打印List中元素的方法printList,我们希望任何类型T的List都可以被打印</li>
+</ol>
+<h3>枚举类型</h3>
+<p>引入了枚举类型</p>
+<h3>自动装箱拆箱（自动类型包装和解包）autoboxing &amp; unboxing</h3>
+<p>简单的说是类型自动转换。自动装包：基本类型自动转为包装类（int ——Integer）自动拆包：包装类自动转为基本类型（Integer——int）</p>
+<h3>可变参数varargs(varargs number of arguments)</h3>
+<p>参数类型相同时，把重载函数合并到一起了。如：</p>
+<pre><code class="language-java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test</span><span class="hljs-params">(object... objs)</span></span>{
+    <span class="hljs-keyword">for</span>(Object obj:objs){
+        System.out.println(obj);
+    }
+}
+</code></pre>
+<h3>Annotations（重要） 它是java中的metadata（注释）</h3>
+<p>注解在JAVA5中就引入了。这是非常重要的特性。现在注解的应用已经随处可见。不过JAVA5的注解还不成熟，没法自定义注解。</p>
+<h3>新的迭代语句</h3>
+<pre><code class="language-java"><span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> n:numbers){
+<span class="hljs-comment">//process</span>
+}
+</code></pre>
+<h3>静态导入（import static ）</h3>
+<p>导入静态对象，可以省略些代码。不过这个也不常用。</p>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> <span class="hljs-keyword">static</span> java.lang.System.out;<span class="hljs-comment">//导入java.lang包下的System类的静态方法out;</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HelloWorld</span></span>{
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span></span>{
+        out.print(<span class="hljs-string">"Hello World!"</span>);<span class="hljs-comment">//既是在这里不用再写成System.out.println("Hello World!")了，因为已经导入了这个静态方法out。</span>
+    }
+}
+</code></pre>
+<h3>新的格式化方法java.util.Formatter）</h3>
+<pre><code class="language-java">formatter.format(<span class="hljs-string">"Remaining account balance: $%.2f"</span>, balance);
+</code></pre>
+<h3>新的线程模型和并发库Thread Framework(重要)</h3>
+<p>最主要的就是引入了java.util.concurrent包，这个都是需要重点掌握的。</p>
+<p>HashMap的替代者ConcurrentHashMap和ArrayList的替代者CopyOnWriteArrayList在大并发量读取时采用java.util.concurrent包里的一些类会让大家满意BlockingQueue、Callable、Executor、Semaphore</p>
+<h2>Java6 新特性总结</h2>
+<h3>Web Services</h3>
+<p>优先支持编写 XML web service 客户端程序。你可以用过简单的annotaion将你的API发布成.NET交互的web services. Mustang 添加了新的解析和 XML 在 Java object-mapping APIs中, 之前只在Java EE平台实现或者Java Web Services Pack中提供.</p>
+<h3>Scripting</h3>
+<p>现在你可以在Java源代码中混入JavaScript了，这对开发原型很有有用，你也可以插入自己的脚本引擎。</p>
+<h3>JDBC4.0</h3>
+<p>JAVA6将联合绑定 Java DB (Apache Derby). JDBC 4.0 增加了许多特性例如支持XML作为SQL数据类型，更好的集成Binary Large OBjects (BLOBs) 和 Character Large OBjects (CLOBs) .</p>
+<h3>UI优化</h3>
+<ol>
+<li>GUI 开发者可以有更多的技巧来使用 SwingWorker utility ，以帮助GUI应用中的多线程。, JTable 分类和过滤，以及添加splash闪屏。</li>
+<li>Swing拥有更好的 look-and-feel , LCD 文本呈现, 整体GUI性能的提升。Java应用程序可以和本地平台更好的集成，例如访问平台的系统托盘和开始菜单。Mustang将Java插件技术和Java Web Start引擎统一了起来。</li>
+</ol>
+<h3>监控管理增强</h3>
+<p>添加更多的诊断信息，绑定了不是很知名的 memory-heap 分析工具Jhat 来查看内核导出。</p>
+<h3>编译API</h3>
+<p>compiler API提供编程访问javac，可以实现进程内编译，动态产生Java代码</p>
+<h3>自定义注解</h3>
+<p>Java tool和framework 提供商可以定义自己的 annotations ，并且内核支持自定义annotation的插件和执行处理器</p>
+<h3>安全性</h3>
+<p>XML-数字签名(XML-DSIG) APIs 用于创建和操纵数字签名); 新的方法来访问本地平台的安全服务，例如本地Microsoft Windows for secure authentication and communicationnative 的Public Key Infrastructure (PKI) 和 cryptographic services， Java Generic Security Services (Java GSS) 和 Kerberos services for authentication, 以及访问 LDAP servers 来认证用户.</p>
+<h2>Java7 新特性总结</h2>
+<h3>switch中使用String</h3>
+<p>java7以前在switch中只能使用number或enum,现在可以使用string了。</p>
+<p>示例：</p>
+<pre><code class="language-java">String s = <span class="hljs-string">"a"</span>;
+<span class="hljs-keyword">switch</span> (s) {
+    <span class="hljs-keyword">case</span> <span class="hljs-string">"a"</span>:
+        System.out.println(<span class="hljs-string">"is a"</span>);
+        <span class="hljs-keyword">break</span>;
+    <span class="hljs-keyword">case</span> <span class="hljs-string">"b"</span>:
+        System.out.println(<span class="hljs-string">"is b"</span>);
+        <span class="hljs-keyword">break</span>;
+    <span class="hljs-keyword">default</span>:
+        System.out.println(<span class="hljs-string">"is c"</span>);
+        <span class="hljs-keyword">break</span>;
+}
+</code></pre>
+<h3>异常处理</h3>
+<ul>
+<li>Throwable类增加addSuppressed方法和getSuppressed方法，支持原始异常中加入被抑制的异常。</li>
+<li>异常抑制：在try和finally中同时抛出异常时，finally中抛出的异常会在异常栈中向上传递，而try中产生的原始异常会消失。</li>
+<li>在Java7之前的版本，可以将原始异常保存，在finally中产生异常时抛出原始异常：</li>
+</ul>
+<pre><code class="language-java"><span class="hljs-comment">//java 7 以前</span>
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">read</span><span class="hljs-params">(String filename)</span> <span class="hljs-keyword">throws</span> BaseException </span>{  
+    FileInputStream input = <span class="hljs-keyword">null</span>;  
+    IOException readException = <span class="hljs-keyword">null</span>;  
+    <span class="hljs-keyword">try</span> {  
+        input = <span class="hljs-keyword">new</span> FileInputStream(filename);  
+    } <span class="hljs-keyword">catch</span> (IOException ex) {  
+        readException = ex;   <span class="hljs-comment">//保存原始异常  </span>
+    } <span class="hljs-keyword">finally</span> {  
+        <span class="hljs-keyword">if</span> (input != <span class="hljs-keyword">null</span>) {  
+            <span class="hljs-keyword">try</span> {  
+                input.close();  
+            } <span class="hljs-keyword">catch</span> (IOException ex) {  
+                <span class="hljs-keyword">if</span> (readException == <span class="hljs-keyword">null</span>) {  
+                    readException = ex;  
+                }  
+            }  
+        }  
+        <span class="hljs-keyword">if</span> (readException != <span class="hljs-keyword">null</span>) {  
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> BaseException(readException);  
+        }  
+    }  
+}
+
+<span class="hljs-comment">//在Java7中的版本，可以使用addSuppressed方法记录被抑制的异常：</span>
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">read</span><span class="hljs-params">(String filename)</span> <span class="hljs-keyword">throws</span> IOException </span>{  
+    FileInputStream input = <span class="hljs-keyword">null</span>;  
+    IOException readException = <span class="hljs-keyword">null</span>;  
+    <span class="hljs-keyword">try</span> {  
+        input = <span class="hljs-keyword">new</span> FileInputStream(filename);  
+    } <span class="hljs-keyword">catch</span> (IOException ex) {  
+        readException = ex;  
+    } <span class="hljs-keyword">finally</span> {  
+        <span class="hljs-keyword">if</span> (input != <span class="hljs-keyword">null</span>) {  
+            <span class="hljs-keyword">try</span> {  
+                input.close();  
+            } <span class="hljs-keyword">catch</span> (IOException ex) {  
+                <span class="hljs-keyword">if</span> (readException != <span class="hljs-keyword">null</span>) {    <span class="hljs-comment">//此处的区别  </span>
+                    readException.addSuppressed(ex);  
+                }  
+                <span class="hljs-keyword">else</span> {  
+                    readException = ex;  
+                }  
+            }  
+        }  
+        <span class="hljs-keyword">if</span> (readException != <span class="hljs-keyword">null</span>) {  
+            <span class="hljs-keyword">throw</span> readException;  
+        }  
+    }  
+}  
+</code></pre>
+<h3>try-with-resources</h3>
+<p>java7以前对某些资源的操作是需要手动关闭，如InputStream，Writes，Sockets，Sql等，需要在finally中进行关闭资源的操作，现在不需要使用finally来保证打开的流被正确关闭，现在是自动完成的，会自动释放资源,确保每一个资源在处理完成后都会关闭，就不需要我们代码去close();</p>
+<ul>
+<li>在采用try-with-resources方式后，不需要再次声明流的关闭。</li>
+<li>可以使用try-with-resources的资源有：任何实现了java.lang.AutoCloseable接口和java.io.Closeable接口的对象。为了支持这个行为，所有可关闭的类将被修改为可以实现一个Closable（可关闭的）接口。</li>
+</ul>
+<pre><code class="language-java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Closeable</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AutoCloseable</span></span>{}
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Reader</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Readable</span>, <span class="hljs-title">Closeable</span></span>{}
+</code></pre>
+<p>如果在try语句中写入了没有实现该接口的类，会提示：</p>
+<blockquote>
+<p>The resource type File does not implement java.lang.AutoCloseable</p>
+</blockquote>
+<p>示例：</p>
+<pre><code class="language-java"><span class="hljs-comment">//java 7 以前</span>
+OutputStream fos = <span class="hljs-keyword">null</span>;
+<span class="hljs-keyword">try</span> {
+    fos = <span class="hljs-keyword">new</span> FileOutputStream(<span class="hljs-string">"D:/file"</span>);
+} <span class="hljs-keyword">finally</span> {
+    fos.close();
+}
+<span class="hljs-comment">//java 7 以后</span>
+<span class="hljs-keyword">try</span>(OutputStream fos = <span class="hljs-keyword">new</span> FileOutputStream(<span class="hljs-string">"D:/file"</span>);){
+    <span class="hljs-comment">// 不需要再次指明fos.close();</span>
+}
+<span class="hljs-comment">//try子句中可以管理多个资源</span>
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">copyFile</span><span class="hljs-params">(String fromPath, String toPath)</span> <span class="hljs-keyword">throws</span> IOException </span>{  
+<span class="hljs-keyword">try</span> ( InputStream input = <span class="hljs-keyword">new</span> FileInputStream(fromPath);  
+    OutputStream output = <span class="hljs-keyword">new</span> FileOutputStream(toPath) ) {  
+    <span class="hljs-keyword">byte</span>[] buffer = <span class="hljs-keyword">new</span> <span class="hljs-keyword">byte</span>[<span class="hljs-number">8192</span>];  
+    <span class="hljs-keyword">int</span> len = -<span class="hljs-number">1</span>;  
+    <span class="hljs-keyword">while</span>( (len=input.read(buffer))!=-<span class="hljs-number">1</span> ) {  
+        output.write(buffer, <span class="hljs-number">0</span>, len);  
+        }  
+    }
+}  
+</code></pre>
+<h3>捕获多个异常</h3>
+<p>java7以前在一个方法抛出多个异常时，只能一个个的catch，这样代码会有多个catch,显得很不友好，现在只需一个catch语句，多个异常类型用&quot;|&quot;隔开。
+示例：</p>
+<pre><code class="language-java"><span class="hljs-comment">//java 7 以前</span>
+<span class="hljs-keyword">try</span> {
+    result = field.get(obj);
+} <span class="hljs-keyword">catch</span> (IllegalArgumentException e) {
+    e.printStackTrace();
+} <span class="hljs-keyword">catch</span> (IllegalAccessException e) {
+    e.printStackTrace();
+}
+<span class="hljs-comment">//java 7 以后</span>
+<span class="hljs-keyword">try</span> {
+    result = field.get(obj);
+} <span class="hljs-keyword">catch</span> (IllegalArgumentException | IllegalAccessException e) {
+    e.printStackTrace();
+}
+</code></pre>
+<h3>泛型实例化类型自动推断</h3>
+<p>运用泛型实例化类型自动推断，对通用实例创建(diamond)的type引用进行了改进
+示例：</p>
+<pre><code class="language-java"><span class="hljs-comment">//java 7 以前</span>
+List&lt;String&gt; list = <span class="hljs-keyword">new</span> ArrayList&lt;String&gt;();
+<span class="hljs-comment">//java 7 以后</span>
+List&lt;String&gt; list = <span class="hljs-keyword">new</span> ArrayList&lt;&gt;();
+</code></pre>
+<h3>增加二进制表示</h3>
+<p>Java7前支持十进制（123）、八进制（0123）、十六进制（0X12AB）</p>
+<p>Java7增加二进制表示（0B11110001、0b11110001）
+示例：</p>
+<pre><code class="language-java"><span class="hljs-keyword">int</span> binary = <span class="hljs-number">0b0001_1001</span>;
+System.out.println(<span class="hljs-string">"binary is :"</span>+binary);
+                binary is :<span class="hljs-number">25</span>
+</code></pre>
+<h3>数字中可添加分隔符</h3>
+<p>Java7中支持在数字中间增加'_'作为分隔符，分隔长int以及long（也支持double,float），显示更直观，如（12_123_456）。</p>
+<p>下划线只能在数字中间，编译时编译器自动删除数字中的下划线。</p>
+<p>示例：</p>
+<pre><code class="language-java"><span class="hljs-keyword">int</span> intOne = <span class="hljs-number">1_000_000</span>;
+<span class="hljs-keyword">long</span> longOne = <span class="hljs-number">1_000_000</span>;
+<span class="hljs-keyword">double</span> doubleOne = <span class="hljs-number">1_000_000</span>;
+<span class="hljs-keyword">float</span> floatOne = <span class="hljs-number">1_000_000</span>;
+</code></pre>
+<h3>变长参数方法的优化</h3>
+<p>参数类型相同时，把重载函数合并到一起了
+使用可变参数时，提升编译器的警告和错误信息</p>
+<pre><code class="language-java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">sum</span><span class="hljs-params">(<span class="hljs-keyword">int</span>... args)</span> </span>{  
+    <span class="hljs-keyword">int</span> result = <span class="hljs-number">0</span>;  
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> value : args) {  
+        result += value;  
+    }  
+    <span class="hljs-keyword">return</span> result;  
+}  
+</code></pre>
+<h3>集合类的语法支持</h3>
+<pre><code class="language-java"><span class="hljs-comment">//java 7 以前</span>
+List&lt;String&gt; list = <span class="hljs-keyword">new</span> ArrayList&lt;String&gt;();
+         list.add(<span class="hljs-string">"item"</span>);
+         String item = list.get(<span class="hljs-number">0</span>);
+
+         Set&lt;String&gt; set = <span class="hljs-keyword">new</span> HashSet&lt;String&gt;();
+         set.add(<span class="hljs-string">"item"</span>);
+         Map&lt;String, Integer&gt; map = <span class="hljs-keyword">new</span> HashMap&lt;String, Integer&gt;();
+         map.put(<span class="hljs-string">"key"</span>, <span class="hljs-number">1</span>);
+         <span class="hljs-keyword">int</span> value = map.get(<span class="hljs-string">"key"</span>);
+<span class="hljs-comment">//java 7 以后</span>
+List&lt;String&gt; list = [<span class="hljs-string">"item"</span>];
+         String item = list[<span class="hljs-number">0</span>];
+
+         Set&lt;String&gt; set = {<span class="hljs-string">"item"</span>};
+
+         Map&lt;String, Integer&gt; map = {<span class="hljs-string">"key"</span> : <span class="hljs-number">1</span>};
+         <span class="hljs-keyword">int</span> value = map[<span class="hljs-string">"key"</span>];         
+</code></pre>
+<h3>自动资源管理</h3>
+<p>Java中某些资源是需要手动关闭的，如InputStream，Writes，Sockets，Sql classes等。这个新的语言特性允许try语句本身申请更多的资源，这些资源作用于try代码块，并自动关闭。</p>
+<pre><code class="language-java"><span class="hljs-comment">//java 7 以前</span>
+BufferedReader br = <span class="hljs-keyword">new</span> BufferedReader(<span class="hljs-keyword">new</span> FileReader(path));
+<span class="hljs-keyword">try</span> {
+<span class="hljs-keyword">return</span> br.readLine();
+    } <span class="hljs-keyword">finally</span> {
+        br.close();
+}
+<span class="hljs-comment">//java 7 以后</span>
+<span class="hljs-keyword">try</span> (BufferedReader br = <span class="hljs-keyword">new</span> BufferedReader(<span class="hljs-keyword">new</span> FileReader(path)) {
+    <span class="hljs-keyword">return</span> br.readLine();
+}
+</code></pre>
+<h3>新增一些取环境信息的工具方法</h3>
+<pre><code class="language-java">File System.getJavaIoTempDir() <span class="hljs-comment">// IO临时文件夹  </span>
+File System.getJavaHomeDir() <span class="hljs-comment">// JRE的安装目录  </span>
+File System.getUserHomeDir() <span class="hljs-comment">// 当前用户目录  </span>
+File System.getUserDir() <span class="hljs-comment">// 启动java进程时所在的目录</span>
+</code></pre>
+<h2>Java8 新特性总结</h2>
+<p>Java8 新增了非常多的特性，我们主要讨论以下几个：</p>
+<ol>
+<li>Lambda 表达式 − Lambda允许把函数作为一个方法的参数(函数作为参数传递进方法中)。</li>
+<li>方法引用 − 方法引用提供了非常有用的语法，可以直接引用已有Java类或对象（实例）的方法或构造器。与lambda联合使用，方法引用可以使语言的构造更紧凑简洁，减少冗余代码。</li>
+<li>默认方法 − 默认方法就是一个在接口里面有了一个实现的方法。</li>
+<li>新工具 − 新的编译工具，如：Nashorn引擎 jjs、 类依赖分析器jdeps。</li>
+<li>Stream API −新添加的Stream API（java.util.stream） 把真正的函数式编程风格引入到Java中。</li>
+<li>Date Time API − 加强对日期与时间的处理。</li>
+<li>Optional 类 − Optional 类已经成为 Java 8 类库的一部分，用来解决空指针异常。</li>
+<li>Nashorn, JavaScript 引擎 − Java 8提供了一个新的Nashorn javascript引擎，它允许我们在JVM上运行特定的javascript应用。</li>
+</ol>
+<h3>Lambda表达式和函数式接口</h3>
+<p>Lambda表达式（也称为闭包）是Java 8中最大和最令人期待的语言改变。它允许我们将函数当成参数传递给某个方法，或者把代码本身当作数据处理：函数式开发者非常熟悉这些概念。很多JVM平台上的语言（Groovy、Scala等）从诞生之日就支持Lambda表达式，但是Java开发者没有选择，只能使用匿名内部类代替Lambda表达式。</p>
+<p>Lambda的设计耗费了很多时间和很大的社区力量，最终找到一种折中的实现方案，可以实现简洁而紧凑的语言结构。最简单的Lambda表达式可由逗号分隔的参数列表、-&gt;符号和语句块组成，例如：</p>
+<pre><code class="language-java">Arrays.asList( <span class="hljs-string">"a"</span>, <span class="hljs-string">"b"</span>, <span class="hljs-string">"d"</span> ).forEach( e -&gt; System.out.println( e ) );
+</code></pre>
+<p>在上面这个代码中的参数e的类型是由编译器推理得出的，你也可以显式指定该参数的类型，例如：</p>
+<pre><code class="language-java">Arrays.asList( <span class="hljs-string">"a"</span>, <span class="hljs-string">"b"</span>, <span class="hljs-string">"d"</span> ).forEach( ( String e ) -&gt; System.out.println( e ) );
+</code></pre>
+<p>如果Lambda表达式需要更复杂的语句块，则可以使用花括号将该语句块括起来，类似于Java中的函数体，例如：</p>
+<pre><code class="language-java">Arrays.asList( <span class="hljs-string">"a"</span>, <span class="hljs-string">"b"</span>, <span class="hljs-string">"d"</span> ).forEach( e -&gt; {
+    System.out.print( e );
+    System.out.print( e );
+} );
+</code></pre>
+<p>Lambda表达式可以引用类成员和局部变量（会将这些变量隐式得转换成final的），例如下列两个代码块的效果完全相同：</p>
+<pre><code class="language-java">String separator = <span class="hljs-string">","</span>;
+Arrays.asList( <span class="hljs-string">"a"</span>, <span class="hljs-string">"b"</span>, <span class="hljs-string">"d"</span> ).forEach( 
+    ( String e ) -&gt; System.out.print( e + separator ) );
+<span class="hljs-comment">//和</span>
+<span class="hljs-keyword">final</span> String separator = <span class="hljs-string">","</span>;
+Arrays.asList( <span class="hljs-string">"a"</span>, <span class="hljs-string">"b"</span>, <span class="hljs-string">"d"</span> ).forEach( 
+    ( String e ) -&gt; System.out.print( e + separator ) );    
+</code></pre>
+<p>Lambda表达式有返回值，返回值的类型也由编译器推理得出。如果Lambda表达式中的语句块只有一行，则可以不用使用return语句，下列两个代码片段效果相同：</p>
+<pre><code class="language-java">Arrays.asList( <span class="hljs-string">"a"</span>, <span class="hljs-string">"b"</span>, <span class="hljs-string">"d"</span> ).sort( ( e1, e2 ) -&gt; e1.compareTo( e2 ) );
+<span class="hljs-comment">//和</span>
+Arrays.asList( <span class="hljs-string">"a"</span>, <span class="hljs-string">"b"</span>, <span class="hljs-string">"d"</span> ).sort( ( e1, e2 ) -&gt; {
+    <span class="hljs-keyword">int</span> result = e1.compareTo( e2 );
+    <span class="hljs-keyword">return</span> result;
+} );
+</code></pre>
+<p>Lambda的设计者们为了让现有的功能与Lambda表达式良好兼容，考虑了很多方法，于是产生了函数接口这个概念。函数接口指的是只有一个函数的接口，这样的接口可以隐式转换为Lambda表达式。java.lang.Runnable和java.util.concurrent.Callable是函数式接口的最佳例子。在实践中，函数式接口非常脆弱：只要某个开发者在该接口中添加一个函数，则该接口就不再是函数式接口进而导致编译失败。为了克服这种代码层面的脆弱性，并显式说明某个接口是函数式接口，Java 8 提供了一个特殊的注解@FunctionalInterface（Java 库中的所有相关接口都已经带有这个注解了），举个简单的函数式接口的定义：</p>
+<pre><code class="language-java"><span class="hljs-meta">@FunctionalInterface</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Functional</span> </span>{
+    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">method</span><span class="hljs-params">()</span></span>;
+}
+</code></pre>
+<p>不过有一点需要注意，默认方法和静态方法不会破坏函数式接口的定义，因此如下的代码是合法的。</p>
+<pre><code class="language-java"><span class="hljs-meta">@FunctionalInterface</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">FunctionalDefaultMethods</span> </span>{
+    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">method</span><span class="hljs-params">()</span></span>;
+
+    <span class="hljs-function"><span class="hljs-keyword">default</span> <span class="hljs-keyword">void</span> <span class="hljs-title">defaultMethod</span><span class="hljs-params">()</span> </span>{
+        System.out.print(<span class="hljs-string">"defaultMethod"</span>);
+    }
+    <span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">staticMethod</span><span class="hljs-params">()</span></span>{
+        System.out.print(<span class="hljs-string">"staticMethod"</span>);
+    }
+}
+</code></pre>
+<p>Lambda表达式作为Java 8的最大卖点，它有潜力吸引更多的开发者加入到JVM平台，并在纯Java编程中使用函数式编程的概念。如果你需要了解更多Lambda表达式的细节，可以参考<a href="https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html" title="官方文档">官方文档</a>。</p>
+<h3>接口的默认方法和静态方法</h3>
+<p>Java 8使用两个新概念扩展了接口的含义：默认方法和静态方法。默认方法使得接口有点类似traits，不过要实现的目标不一样。默认方法使得开发者可以在 不破坏二进制兼容性的前提下，往现存接口中添加新的方法，即不强制那些实现了该接口的类也同时实现这个新加的方法。</p>
+<p>默认方法和抽象方法之间的区别在于抽象方法需要实现，而默认方法不需要。接口提供的默认方法会被接口的实现类继承或者覆写，例子代码如下：</p>
+<pre><code class="language-java"><span class="hljs-keyword">private</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Defaulable</span> </span>{
+    <span class="hljs-comment">// Interfaces now allow default methods, the implementer may or </span>
+    <span class="hljs-comment">// may not implement (override) them.</span>
+    <span class="hljs-function"><span class="hljs-keyword">default</span> String <span class="hljs-title">notRequired</span><span class="hljs-params">()</span> </span>{ 
+        <span class="hljs-keyword">return</span> <span class="hljs-string">"Default implementation"</span>; 
+    }        
+}
+
+<span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">DefaultableImpl</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Defaulable</span> </span>{
+}
+
+<span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">OverridableImpl</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Defaulable</span> </span>{
+    <span class="hljs-meta">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">notRequired</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-string">"Overridden implementation"</span>;
+    }
+}
+</code></pre>
+<p>Defaulable接口使用关键字default定义了一个默认方法notRequired()。DefaultableImpl类实现了这个接口，同时默认继承了这个接口中的默认方法；OverridableImpl类也实现了这个接口，但覆写了该接口的默认方法，并提供了一个不同的实现。</p>
+<p>Java 8带来的另一个有趣的特性是在接口中可以定义静态方法，例子代码如下：</p>
+<pre><code class="language-java"><span class="hljs-keyword">private</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">DefaulableFactory</span> </span>{
+    <span class="hljs-comment">// Interfaces now allow static methods</span>
+    <span class="hljs-function"><span class="hljs-keyword">static</span> Defaulable <span class="hljs-title">create</span><span class="hljs-params">( Supplier&lt; Defaulable &gt; supplier )</span> </span>{
+        <span class="hljs-keyword">return</span> supplier.get();
+    }
+}
+</code></pre>
+<p>下面的代码片段整合了默认方法和静态方法的使用场景：</p>
+<pre><code class="language-java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">( String[] args )</span> </span>{
+    Defaulable defaulable = DefaulableFactory.create( DefaultableImpl::<span class="hljs-keyword">new</span> );
+    System.out.println( defaulable.notRequired() );
+
+    defaulable = DefaulableFactory.create( OverridableImpl::<span class="hljs-keyword">new</span> );
+    System.out.println( defaulable.notRequired() );
+}
+</code></pre>
+<p>这段代码的输出结果如下：</p>
+<blockquote>
+<p>Default implementation
+Overridden implementation</p>
+</blockquote>
+<p>由于JVM上的默认方法的实现在字节码层面提供了支持，因此效率非常高。默认方法允许在不打破现有继承体系的基础上改进接口。该特性在官方库中的应用是：给java.util.Collection接口添加新方法，如stream()、parallelStream()、forEach()和removeIf()等等。</p>
+<p>尽管默认方法有这么多好处，但在实际开发中应该谨慎使用：在复杂的继承体系中，默认方法可能引起歧义和编译错误。如果你想了解更多细节，可以参考<a href="https://docs.oracle.com/javase/tutorial/java/IandI/defaultmethods.html" title="官方文档">官方文档</a>。</p>
+<h3>方法引用</h3>
+<p>方法引用使得开发者可以直接引用现存的方法、Java类的构造方法或者实例对象。方法引用和Lambda表达式配合使用，使得java类的构造方法看起来紧凑而简洁，没有很多复杂的模板代码。</p>
+<p>西门的例子中，Car类是不同方法引用的例子，可以帮助读者区分四种类型的方法引用。</p>
+<pre><code class="language-java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Car</span> </span>{
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Car <span class="hljs-title">create</span><span class="hljs-params">( <span class="hljs-keyword">final</span> Supplier&lt; Car &gt; supplier )</span> </span>{
+        <span class="hljs-keyword">return</span> supplier.get();
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">collide</span><span class="hljs-params">( <span class="hljs-keyword">final</span> Car car )</span> </span>{
+        System.out.println( <span class="hljs-string">"Collided "</span> + car.toString() );
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">follow</span><span class="hljs-params">( <span class="hljs-keyword">final</span> Car another )</span> </span>{
+        System.out.println( <span class="hljs-string">"Following the "</span> + another.toString() );
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">repair</span><span class="hljs-params">()</span> </span>{   
+        System.out.println( <span class="hljs-string">"Repaired "</span> + <span class="hljs-keyword">this</span>.toString() );
+    }
+}
+</code></pre>
+<p>第一种方法引用的类型是构造器引用，语法是Class::new，或者更一般的形式：Class<T>::new。注意：这个构造器没有参数。</p>
+<pre><code class="language-java"><span class="hljs-keyword">final</span> Car car = Car.create( Car::<span class="hljs-keyword">new</span> );
+<span class="hljs-keyword">final</span> List&lt; Car &gt; cars = Arrays.asList( car );
+</code></pre>
+<p>第二种方法引用的类型是静态方法引用，语法是Class::static_method。注意：这个方法接受一个Car类型的参数。</p>
+<pre><code class="language-java">cars.forEach( Car::collide );
+</code></pre>
+<p>第三种方法引用的类型是某个类的成员方法的引用，语法是Class::method，注意，这个方法没有定义入参：</p>
+<pre><code class="language-java">cars.forEach( Car::repair );
+</code></pre>
+<p>第四种方法引用的类型是某个实例对象的成员方法的引用，语法是instance::method。注意：这个方法接受一个Car类型的参数：</p>
+<pre><code class="language-java"><span class="hljs-keyword">final</span> Car police = Car.create( Car::<span class="hljs-keyword">new</span> );
+cars.forEach( police::follow );
+</code></pre>
+<p>运行上述例子，可以在控制台看到如下输出（Car实例可能不同）：</p>
+<blockquote>
+<p>Collided com.javacodegeeks.java8.method.references.MethodReferences<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>C</mi><mi>a</mi><mi>r</mi><mi mathvariant="normal">@</mi><mn>7</mn><mi>a</mi><mn>8</mn><mn>1</mn><mn>1</mn><mn>9</mn><mn>7</mn><mi>d</mi><mi>R</mi><mi>e</mi><mi>p</mi><mi>a</mi><mi>i</mi><mi>r</mi><mi>e</mi><mi>d</mi><mi>c</mi><mi>o</mi><mi>m</mi><mi mathvariant="normal">.</mi><mi>j</mi><mi>a</mi><mi>v</mi><mi>a</mi><mi>c</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>g</mi><mi>e</mi><mi>e</mi><mi>k</mi><mi>s</mi><mi mathvariant="normal">.</mi><mi>j</mi><mi>a</mi><mi>v</mi><mi>a</mi><mn>8</mn><mi mathvariant="normal">.</mi><mi>m</mi><mi>e</mi><mi>t</mi><mi>h</mi><mi>o</mi><mi>d</mi><mi mathvariant="normal">.</mi><mi>r</mi><mi>e</mi><mi>f</mi><mi>e</mi><mi>r</mi><mi>e</mi><mi>n</mi><mi>c</mi><mi>e</mi><mi>s</mi><mi mathvariant="normal">.</mi><mi>M</mi><mi>e</mi><mi>t</mi><mi>h</mi><mi>o</mi><mi>d</mi><mi>R</mi><mi>e</mi><mi>f</mi><mi>e</mi><mi>r</mi><mi>e</mi><mi>n</mi><mi>c</mi><mi>e</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">Car@7a81197d
+Repaired com.javacodegeeks.java8.method.references.MethodReferences</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.07153em;">C</span><span class="mord mathit">a</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathrm">@</span><span class="mord mathrm">7</span><span class="mord mathit">a</span><span class="mord mathrm">8</span><span class="mord mathrm">1</span><span class="mord mathrm">1</span><span class="mord mathrm">9</span><span class="mord mathrm">7</span><span class="mord mathit">d</span><span class="mord mathit" style="margin-right:0.00773em;">R</span><span class="mord mathit">e</span><span class="mord mathit">p</span><span class="mord mathit">a</span><span class="mord mathit">i</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit">e</span><span class="mord mathit">d</span><span class="mord mathit">c</span><span class="mord mathit">o</span><span class="mord mathit">m</span><span class="mord mathrm">.</span><span class="mord mathit" style="margin-right:0.05724em;">j</span><span class="mord mathit">a</span><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="mord mathit">a</span><span class="mord mathit">c</span><span class="mord mathit">o</span><span class="mord mathit">d</span><span class="mord mathit">e</span><span class="mord mathit" style="margin-right:0.03588em;">g</span><span class="mord mathit">e</span><span class="mord mathit">e</span><span class="mord mathit" style="margin-right:0.03148em;">k</span><span class="mord mathit">s</span><span class="mord mathrm">.</span><span class="mord mathit" style="margin-right:0.05724em;">j</span><span class="mord mathit">a</span><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="mord mathit">a</span><span class="mord mathrm">8</span><span class="mord mathrm">.</span><span class="mord mathit">m</span><span class="mord mathit">e</span><span class="mord mathit">t</span><span class="mord mathit">h</span><span class="mord mathit">o</span><span class="mord mathit">d</span><span class="mord mathrm">.</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit">e</span><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="mord mathit">e</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit">e</span><span class="mord mathit">n</span><span class="mord mathit">c</span><span class="mord mathit">e</span><span class="mord mathit">s</span><span class="mord mathrm">.</span><span class="mord mathit" style="margin-right:0.10903em;">M</span><span class="mord mathit">e</span><span class="mord mathit">t</span><span class="mord mathit">h</span><span class="mord mathit">o</span><span class="mord mathit">d</span><span class="mord mathit" style="margin-right:0.00773em;">R</span><span class="mord mathit">e</span><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="mord mathit">e</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit">e</span><span class="mord mathit">n</span><span class="mord mathit">c</span><span class="mord mathit">e</span><span class="mord mathit">s</span></span></span></span>Car@7a81197d
+Following the com.javacodegeeks.java8.method.references.MethodReferences$Car@7a81197d</p>
+</blockquote>
+<p>如果想了解和学习更详细的内容，可以参考<a href="https://docs.oracle.com/javase/tutorial/java/javaOO/methodreferences.html" title="官方文档">官方文档</a>。</p>
+<h3>重复注解</h3>
+<p>自从Java 5中引入注解以来，这个特性开始变得非常流行，并在各个框架和项目中被广泛使用。不过，注解有一个很大的限制是：在同一个地方不能多次使用同一个注解。Java 8打破了这个限制，引入了重复注解的概念，允许在同一个地方多次使用同一个注解。</p>
+<p>在Java 8中使用@Repeatable注解定义重复注解，实际上，这并不是语言层面的改进，而是编译器做的一个trick，底层的技术仍然相同。可以利用下面的代码说明：</p>
+<pre><code class="language-java"><span class="hljs-keyword">package</span> com.javacodegeeks.java8.repeatable.annotations;
+
+<span class="hljs-keyword">import</span> java.lang.annotation.ElementType;
+<span class="hljs-keyword">import</span> java.lang.annotation.Repeatable;
+<span class="hljs-keyword">import</span> java.lang.annotation.Retention;
+<span class="hljs-keyword">import</span> java.lang.annotation.RetentionPolicy;
+<span class="hljs-keyword">import</span> java.lang.annotation.Target;
+
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RepeatingAnnotations</span> </span>{
+    <span class="hljs-meta">@Target</span>( ElementType.TYPE )
+    <span class="hljs-meta">@Retention</span>( RetentionPolicy.RUNTIME )
+    <span class="hljs-keyword">public</span> <span class="hljs-meta">@interface</span> Filters {
+        Filter[] value();
+    }
+
+    <span class="hljs-meta">@Target</span>( ElementType.TYPE )
+    <span class="hljs-meta">@Retention</span>( RetentionPolicy.RUNTIME )
+    <span class="hljs-meta">@Repeatable</span>( Filters.class )
+    <span class="hljs-keyword">public</span> <span class="hljs-meta">@interface</span> Filter {
+        <span class="hljs-function">String <span class="hljs-title">value</span><span class="hljs-params">()</span></span>;
+    };
+
+    <span class="hljs-meta">@Filter</span>( <span class="hljs-string">"filter1"</span> )
+    <span class="hljs-meta">@Filter</span>( <span class="hljs-string">"filter2"</span> )
+    <span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Filterable</span> </span>{
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{
+        <span class="hljs-keyword">for</span>( Filter filter: Filterable.class.getAnnotationsByType( Filter.class ) ) {
+            System.out.println( filter.value() );
+        }
+    }
+}
+</code></pre>
+<p>正如我们所见，这里的Filter类使用@Repeatable(Filters.class)注解修饰，而Filters是存放Filter注解的容器，编译器尽量对开发者屏蔽这些细节。这样，Filterable接口可以用两个Filter注解注释（这里并没有提到任何关于Filters的信息）。</p>
+<p>另外，反射API提供了一个新的方法：getAnnotationsByType()，可以返回某个类型的重复注解，例如Filterable.class.getAnnoation(Filters.class)将返回两个Filter实例，输出到控制台的内容如下所示：</p>
+<blockquote>
+<p>filter1
+filter2</p>
+</blockquote>
+<p>如果想了解和学习更详细的内容，可以参考<a href="https://docs.oracle.com/javase/tutorial/java/annotations/repeating.html" title="官方文档">官方文档</a>。</p>
+<h3>更好的类型推断</h3>
+<p>Java 8编译器在类型推断方面有很大的提升，在很多场景下编译器可以推导出某个参数的数据类型，从而使得代码更为简洁。例子代码如下：</p>
+<pre><code class="language-java"><span class="hljs-keyword">package</span> com.javacodegeeks.java8.type.inference;
+
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Value</span>&lt; <span class="hljs-title">T</span> &gt; </span>{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span>&lt; T &gt; <span class="hljs-function">T <span class="hljs-title">defaultValue</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> T <span class="hljs-title">getOrDefault</span><span class="hljs-params">( T value, T defaultValue )</span> </span>{
+        <span class="hljs-keyword">return</span> ( value != <span class="hljs-keyword">null</span> ) ? value : defaultValue;
+    }
+}
+</code></pre>
+<p>下列代码是Value<String>类型的应用：</p>
+<pre><code class="language-java"><span class="hljs-keyword">package</span> com.javacodegeeks.java8.type.inference;
+
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TypeInference</span> </span>{
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{
+        <span class="hljs-keyword">final</span> Value&lt; String &gt; value = <span class="hljs-keyword">new</span> Value&lt;&gt;();
+        value.getOrDefault( <span class="hljs-string">"22"</span>, Value.defaultValue() );
+    }
+}
+</code></pre>
+<p>参数Value.defaultValue()的类型由编译器推导得出，不需要显式指明。在Java 7中这段代码会有编译错误，除非使用Value.<String>defaultValue()。</p>
+<h3>拓宽注解的应用场景</h3>
+<p>Java 8拓宽了注解的应用场景。现在，注解几乎可以使用在任何元素上：局部变量、接口类型、超类和接口实现类，甚至可以用在函数的异常定义上。下面是一些例子：</p>
+<pre><code class="language-java"><span class="hljs-keyword">package</span> com.javacodegeeks.java8.annotations;
+
+<span class="hljs-keyword">import</span> java.lang.annotation.ElementType;
+<span class="hljs-keyword">import</span> java.lang.annotation.Retention;
+<span class="hljs-keyword">import</span> java.lang.annotation.RetentionPolicy;
+<span class="hljs-keyword">import</span> java.lang.annotation.Target;
+<span class="hljs-keyword">import</span> java.util.ArrayList;
+<span class="hljs-keyword">import</span> java.util.Collection;
+
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Annotations</span> </span>{
+    <span class="hljs-meta">@Retention</span>( RetentionPolicy.RUNTIME )
+    <span class="hljs-meta">@Target</span>( { ElementType.TYPE_USE, ElementType.TYPE_PARAMETER } )
+    <span class="hljs-keyword">public</span> <span class="hljs-meta">@interface</span> NonEmpty {
+    }
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Holder</span>&lt; @<span class="hljs-title">NonEmpty</span> <span class="hljs-title">T</span> &gt; <span class="hljs-keyword">extends</span> @<span class="hljs-title">NonEmpty</span> <span class="hljs-title">Object</span> </span>{
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">method</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> @NonEmpty Exception </span>{
+        }
+    }
+
+    <span class="hljs-meta">@SuppressWarnings</span>( <span class="hljs-string">"unused"</span> )
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{
+        <span class="hljs-keyword">final</span> Holder&lt; String &gt; holder = <span class="hljs-keyword">new</span> <span class="hljs-meta">@NonEmpty</span> Holder&lt; String &gt;();
+        <span class="hljs-meta">@NonEmpty</span> Collection&lt; <span class="hljs-meta">@NonEmpty</span> String &gt; strings = <span class="hljs-keyword">new</span> ArrayList&lt;&gt;();
+    }
+}
+</code></pre>
+<p>ElementType.TYPE_USER和ElementType.TYPE_PARAMETER是Java 8新增的两个注解，用于描述注解的使用场景。Java 语言也做了对应的改变，以识别这些新增的注解。</p>
+<h3>Java编译器的新特性</h3>
+<p>为了在运行时获得Java程序中方法的参数名称，老一辈的Java程序员必须使用不同方法，例如Paranamer library。Java 8终于将这个特性规范化，在语言层面（使用反射API和Parameter.getName()方法）和字节码层面（使用新的javac编译器以及-parameters参数）提供支持。</p>
+<pre><code class="language-java"><span class="hljs-keyword">package</span> com.javacodegeeks.java8.parameter.names;
+
+<span class="hljs-keyword">import</span> java.lang.reflect.Method;
+<span class="hljs-keyword">import</span> java.lang.reflect.Parameter;
+
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ParameterNames</span> </span>{
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception </span>{
+        Method method = ParameterNames.class.getMethod( <span class="hljs-string">"main"</span>, String[].class );
+        <span class="hljs-keyword">for</span>( <span class="hljs-keyword">final</span> Parameter parameter: method.getParameters() ) {
+            System.out.println( <span class="hljs-string">"Parameter: "</span> + parameter.getName() );
+        }
+    }
+}
+</code></pre>
+<p>在Java 8中这个特性是默认关闭的，因此如果不带-parameters参数编译上述代码并运行，则会输出如下结果：</p>
+<blockquote>
+<p>Parameter: arg0
+如果带-parameters参数，则会输出如下结果（正确的结果）：
+Parameter: args
+如果你使用Maven进行项目管理，则可以在maven-compiler-plugin编译器的配置项中配置-parameters参数：</p>
+</blockquote>
+<pre><code class="language-yml"><span class="hljs-string">&lt;plugin&gt;</span>
+    <span class="hljs-string">&lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</span>
+    <span class="hljs-string">&lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;</span>
+    <span class="hljs-string">&lt;version&gt;3.1&lt;/version&gt;</span>
+    <span class="hljs-string">&lt;configuration&gt;</span>
+        <span class="hljs-string">&lt;compilerArgument&gt;-parameters&lt;/compilerArgument&gt;</span>
+        <span class="hljs-string">&lt;source&gt;1.8&lt;/source&gt;</span>
+        <span class="hljs-string">&lt;target&gt;1.8&lt;/target&gt;</span>
+    <span class="hljs-string">&lt;/configuration&gt;</span>
+<span class="hljs-string">&lt;/plugin&gt;</span>
+</code></pre>
+<h3>Optional</h3>
+<p>Java应用中最常见的bug就是空值异常。在Java 8之前，Google Guava引入了Optionals类来解决NullPointerException，从而避免源码被各种null检查污染，以便开发者写出更加整洁的代码。Java 8也将Optional加入了官方库。</p>
+<p>Optional仅仅是一个容器：存放T类型的值或者null。它提供了一些有用的接口来避免显式的null检查，可以参考Java 8官方文档了解更多细节。</p>
+<p>接下来看一点使用Optional的例子：可能为空的值或者某个类型的值：</p>
+<pre><code class="language-java">Optional&lt; String &gt; fullName = Optional.ofNullable( <span class="hljs-keyword">null</span> );
+System.out.println( <span class="hljs-string">"Full Name is set? "</span> + fullName.isPresent() );
+System.out.println( <span class="hljs-string">"Full Name: "</span> + fullName.orElseGet( () -&gt; <span class="hljs-string">"[none]"</span> ) );
+System.out.println( fullName.map( s -&gt; <span class="hljs-string">"Hey "</span> + s + <span class="hljs-string">"!"</span> ).orElse( <span class="hljs-string">"Hey Stranger!"</span> ) );
+</code></pre>
+<p>如果Optional实例持有一个非空值，则isPresent()方法返回true，否则返回false；orElseGet()方法，Optional实例持有null，则可以接受一个lambda表达式生成的默认值；map()方法可以将现有的Opetional实例的值转换成新的值；orElse()方法与orElseGet()方法类似，但是在持有null的时候返回传入的默认值。</p>
+<p>上述代码的输出结果如下：</p>
+<blockquote>
+<p>Full Name is set? false
+Full Name: [none]
+Hey Stranger!</p>
+</blockquote>
+<p>再看下另一个简单的例子：</p>
+<pre><code class="language-java">Optional&lt; String &gt; firstName = Optional.of( <span class="hljs-string">"Tom"</span> );
+System.out.println( <span class="hljs-string">"First Name is set? "</span> + firstName.isPresent() );
+System.out.println( <span class="hljs-string">"First Name: "</span> + firstName.orElseGet( () -&gt; <span class="hljs-string">"[none]"</span> ) );
+System.out.println( firstName.map( s -&gt; <span class="hljs-string">"Hey "</span> + s + <span class="hljs-string">"!"</span> ).orElse( <span class="hljs-string">"Hey Stranger!"</span> ) );
+System.out.println();
+</code></pre>
+<p>如果想了解和学习更详细的内容，可以参考<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Optional.html" title="官方文档">官方文档</a>。</p>
+<h3>Streams</h3>
+<p>新增的Stream API（java.util.stream）将生成环境的函数式编程引入了Java库中。这是目前为止最大的一次对Java库的完善，以便开发者能够写出更加有效、更加简洁和紧凑的代码。</p>
+<p>Steam API极大得简化了集合操作（后面我们会看到不止是集合），首先看下这个叫Task的类：</p>
+<pre><code class="language-java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Streams</span>  </span>{
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">enum</span> Status {
+        OPEN, CLOSED
+    };
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Task</span> </span>{
+        <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> Status status;
+        <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> Integer points;
+
+        Task( <span class="hljs-keyword">final</span> Status status, <span class="hljs-keyword">final</span> Integer points ) {
+            <span class="hljs-keyword">this</span>.status = status;
+            <span class="hljs-keyword">this</span>.points = points;
+        }
+
+        <span class="hljs-function"><span class="hljs-keyword">public</span> Integer <span class="hljs-title">getPoints</span><span class="hljs-params">()</span> </span>{
+            <span class="hljs-keyword">return</span> points;
+        }
+
+        <span class="hljs-function"><span class="hljs-keyword">public</span> Status <span class="hljs-title">getStatus</span><span class="hljs-params">()</span> </span>{
+            <span class="hljs-keyword">return</span> status;
+        }
+
+        <span class="hljs-meta">@Override</span>
+        <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">toString</span><span class="hljs-params">()</span> </span>{
+            <span class="hljs-keyword">return</span> String.format( <span class="hljs-string">"[%s, %d]"</span>, status, points );
+        }
+    }
+}
+</code></pre>
+<p>Task类有一个分数（或伪复杂度）的概念，另外还有两种状态：OPEN或者CLOSED。现在假设有一个task集合：</p>
+<pre><code class="language-java"><span class="hljs-keyword">final</span> Collection&lt; Task &gt; tasks = Arrays.asList(
+    <span class="hljs-keyword">new</span> Task( Status.OPEN, <span class="hljs-number">5</span> ),
+    <span class="hljs-keyword">new</span> Task( Status.OPEN, <span class="hljs-number">13</span> ),
+    <span class="hljs-keyword">new</span> Task( Status.CLOSED, <span class="hljs-number">8</span> ) 
+);
+</code></pre>
+<p>首先看一个问题：在这个task集合中一共有多少个OPEN状态的点？在Java 8之前，要解决这个问题，则需要使用foreach循环遍历task集合；但是在Java 8中可以利用steams解决：包括一系列元素的列表，并且支持顺序和并行处理。</p>
+<pre><code class="language-java"><span class="hljs-comment">// Calculate total points of all active tasks using sum()</span>
+<span class="hljs-keyword">final</span> <span class="hljs-keyword">long</span> totalPointsOfOpenTasks = tasks
+    .stream()
+    .filter( task -&gt; task.getStatus() == Status.OPEN )
+    .mapToInt( Task::getPoints )
+    .sum();
+
+System.out.println( <span class="hljs-string">"Total points: "</span> + totalPointsOfOpenTasks );
+</code></pre>
+<p>运行这个方法的控制台输出是：</p>
+<blockquote>
+<p>Total points: 18
+这里有很多知识点值得说。首先，tasks集合被转换成steam表示；其次，在steam上的filter操作会过滤掉所有CLOSED的task；第三，mapToInt操作基于每个task实例的Task::getPoints方法将task流转换成Integer集合；最后，通过sum方法计算总和，得出最后的结果。</p>
+</blockquote>
+<p>在学习下一个例子之前，还需要记住一些steams（<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Optional.html" title="点此更多细节">点此更多细节</a>）的知识点。Steam之上的操作可分为中间操作和晚期操作。</p>
+<p>中间操作会返回一个新的steam——执行一个中间操作（例如filter）并不会执行实际的过滤操作，而是创建一个新的steam，并将原steam中符合条件的元素放入新创建的steam。</p>
+<p>晚期操作（例如forEach或者sum），会遍历steam并得出结果或者附带结果；在执行晚期操作之后，steam处理线已经处理完毕，就不能使用了。在几乎所有情况下，晚期操作都是立刻对steam进行遍历。</p>
+<p>steam的另一个价值是创造性地支持并行处理（parallel processing）。对于上述的tasks集合，我们可以用下面的代码计算所有任务的点数之和：</p>
+<pre><code class="language-java"><span class="hljs-comment">// Calculate total points of all tasks</span>
+<span class="hljs-keyword">final</span> <span class="hljs-keyword">double</span> totalPoints = tasks
+   .stream()
+   .parallel()
+   .map( task -&gt; task.getPoints() ) <span class="hljs-comment">// or map( Task::getPoints ) </span>
+   .reduce( <span class="hljs-number">0</span>, Integer::sum );
+
+System.out.println( <span class="hljs-string">"Total points (all tasks): "</span> + totalPoints );
+</code></pre>
+<p>这里我们使用parallel方法并行处理所有的task，并使用reduce方法计算最终的结果。控制台输出如下：</p>
+<blockquote>
+<p>Total points（all tasks）: 26.0</p>
+</blockquote>
+<p>对于一个集合，经常需要根据某些条件对其中的元素分组。利用steam提供的API可以很快完成这类任务，代码如下：</p>
+<pre><code class="language-java"><span class="hljs-comment">// Group tasks by their status</span>
+<span class="hljs-keyword">final</span> Map&lt; Status, List&lt; Task &gt; &gt; map = tasks
+    .stream()
+    .collect( Collectors.groupingBy( Task::getStatus ) );
+System.out.println( map );
+</code></pre>
+<p>控制台的输出如下：</p>
+<blockquote>
+<p>{CLOSED=[[CLOSED, 8]], OPEN=[[OPEN, 5], [OPEN, 13]]}</p>
+</blockquote>
+<p>最后一个关于tasks集合的例子问题是：如何计算集合中每个任务的点数在集合中所占的比重，具体处理的代码如下：</p>
+<pre><code class="language-java"><span class="hljs-comment">// Calculate the weight of each tasks (as percent of total points) </span>
+<span class="hljs-keyword">final</span> Collection&lt; String &gt; result = tasks
+    .stream()                                        <span class="hljs-comment">// Stream&lt; String &gt;</span>
+    .mapToInt( Task::getPoints )                     <span class="hljs-comment">// IntStream</span>
+    .asLongStream()                                  <span class="hljs-comment">// LongStream</span>
+    .mapToDouble( points -&gt; points / totalPoints )   <span class="hljs-comment">// DoubleStream</span>
+    .boxed()                                         <span class="hljs-comment">// Stream&lt; Double &gt;</span>
+    .mapToLong( weigth -&gt; ( <span class="hljs-keyword">long</span> )( weigth * <span class="hljs-number">100</span> ) ) <span class="hljs-comment">// LongStream</span>
+    .mapToObj( percentage -&gt; percentage + <span class="hljs-string">"%"</span> )      <span class="hljs-comment">// Stream&lt; String&gt; </span>
+    .collect( Collectors.toList() );                 <span class="hljs-comment">// List&lt; String &gt; </span>
+
+System.out.println( result );
+</code></pre>
+<p>控制台输出结果如下：</p>
+<blockquote>
+<p>[19%, 50%, 30%]</p>
+</blockquote>
+<p>最后，正如之前所说，Steam API不仅可以作用于Java集合，传统的IO操作（从文件或者网络一行一行得读取数据）可以受益于steam处理，这里有一个小例子：</p>
+<pre><code class="language-java"><span class="hljs-keyword">final</span> Path path = <span class="hljs-keyword">new</span> File( filename ).toPath();
+<span class="hljs-keyword">try</span>( Stream&lt; String &gt; lines = Files.lines( path, StandardCharsets.UTF_8 ) ) {
+    lines.onClose( () -&gt; System.out.println(<span class="hljs-string">"Done!"</span>) ).forEach( System.out::println );
+}
+</code></pre>
+<p>Stream的方法onClose 返回一个等价的有额外句柄的Stream，当Stream的close（）方法被调用的时候这个句柄会被执行。Stream API、Lambda表达式还有接口默认方法和静态方法支持的方法引用，是Java 8对软件开发的现代范式的响应。</p>
+<p><a href="https://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html" title="点此更多细节">点此更多细节</a></p>
+<h3>Date/Time API(JSR 310)</h3>
+<p>Java 8引入了新的Date-Time API(JSR 310)来改进时间、日期的处理。时间和日期的管理一直是最令Java开发者痛苦的问题。java.util.Date和后来的java.util.Calendar一直没有解决这个问题（甚至令开发者更加迷茫）。</p>
+<p>因为上面这些原因，诞生了第三方库Joda-Time，可以替代Java的时间管理API。Java 8中新的时间和日期管理API深受Joda-Time影响，并吸收了很多Joda-Time的精华。新的java.time包包含了所有关于日期、时间、时区、Instant（跟日期类似但是精确到纳秒）、duration（持续时间）和时钟操作的类。新设计的API认真考虑了这些类的不变性（从java.util.Calendar吸取的教训），如果某个实例需要修改，则返回一个新的对象。</p>
+<p>我们接下来看看java.time包中的关键类和各自的使用例子。首先，Clock类使用时区来返回当前的纳秒时间和日期。Clock可以替代System.currentTimeMillis()和TimeZone.getDefault()。</p>
+<pre><code class="language-java"><span class="hljs-comment">// Get the system clock as UTC offset </span>
+<span class="hljs-keyword">final</span> Clock clock = Clock.systemUTC();
+System.out.println( clock.instant() );
+System.out.println( clock.millis() );
+</code></pre>
+<p>这个例子的输出结果是：</p>
+<blockquote>
+<p>2014-04-12T15:19:29.282Z
+1397315969360</p>
+</blockquote>
+<p>第二，关注下LocalDate和LocalTime类。LocalDate仅仅包含ISO-8601日历系统中的日期部分；LocalTime则仅仅包含该日历系统中的时间部分。这两个类的对象都可以使用Clock对象构建得到。</p>
+<pre><code class="language-java"><span class="hljs-comment">// Get the local date and local time</span>
+<span class="hljs-keyword">final</span> LocalDate date = LocalDate.now();
+<span class="hljs-keyword">final</span> LocalDate dateFromClock = LocalDate.now( clock );
+
+System.out.println( date );
+System.out.println( dateFromClock );
+
+<span class="hljs-comment">// Get the local date and local time</span>
+<span class="hljs-keyword">final</span> LocalTime time = LocalTime.now();
+<span class="hljs-keyword">final</span> LocalTime timeFromClock = LocalTime.now( clock );
+
+System.out.println( time );
+System.out.println( timeFromClock );
+</code></pre>
+<p>上述例子的输出结果如下：</p>
+<blockquote>
+<p>2014-04-12
+2014-04-12
+11:25:54.568
+15:25:54.568</p>
+</blockquote>
+<p>LocalDateTime类包含了LocalDate和LocalTime的信息，但是不包含ISO-8601日历系统中的时区信息。这里有一些关于LocalDate和LocalTime的例子：</p>
+<pre><code class="language-java"><span class="hljs-comment">// Get the local date/time</span>
+<span class="hljs-keyword">final</span> LocalDateTime datetime = LocalDateTime.now();
+<span class="hljs-keyword">final</span> LocalDateTime datetimeFromClock = LocalDateTime.now( clock );
+
+System.out.println( datetime );
+System.out.println( datetimeFromClock );
+</code></pre>
+<p>上述这个例子的输出结果如下：</p>
+<blockquote>
+<p>2014-04-12T11:37:52.309
+2014-04-12T15:37:52.309</p>
+</blockquote>
+<p>如果你需要特定时区的data/time信息，则可以使用ZoneDateTime，它保存有ISO-8601日期系统的日期和时间，而且有时区信息。下面是一些使用不同时区的例子：</p>
+<pre><code class="language-java"><span class="hljs-comment">// Get the zoned date/time</span>
+<span class="hljs-keyword">final</span> ZonedDateTime zonedDatetime = ZonedDateTime.now();
+<span class="hljs-keyword">final</span> ZonedDateTime zonedDatetimeFromClock = ZonedDateTime.now( clock );
+<span class="hljs-keyword">final</span> ZonedDateTime zonedDatetimeFromZone = ZonedDateTime.now( ZoneId.of( <span class="hljs-string">"America/Los_Angeles"</span> ) );
+
+System.out.println( zonedDatetime );
+System.out.println( zonedDatetimeFromClock );
+System.out.println( zonedDatetimeFromZone );
+</code></pre>
+<p>这个例子的输出结果是：</p>
+<blockquote>
+<p>2014-04-12T11:47:01.017-04:00[America/New_York]
+2014-04-12T15:47:01.017Z
+2014-04-12T08:47:01.017-07:00[America/Los_Angeles]</p>
+</blockquote>
+<p>最后看下Duration类，它持有的时间精确到秒和纳秒。这使得我们可以很容易得计算两个日期之间的不同，例子代码如下：</p>
+<pre><code class="language-java"><span class="hljs-comment">// Get duration between two dates</span>
+<span class="hljs-keyword">final</span> LocalDateTime from = LocalDateTime.of( <span class="hljs-number">2014</span>, Month.APRIL, <span class="hljs-number">16</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span> );
+<span class="hljs-keyword">final</span> LocalDateTime to = LocalDateTime.of( <span class="hljs-number">2015</span>, Month.APRIL, <span class="hljs-number">16</span>, <span class="hljs-number">23</span>, <span class="hljs-number">59</span>, <span class="hljs-number">59</span> );
+
+<span class="hljs-keyword">final</span> Duration duration = Duration.between( from, to );
+System.out.println( <span class="hljs-string">"Duration in days: "</span> + duration.toDays() );
+System.out.println( <span class="hljs-string">"Duration in hours: "</span> + duration.toHours() );
+</code></pre>
+<p>这个例子用于计算2014年4月16日和2015年4月16日之间的天数和小时数，输出结果如下：</p>
+<blockquote>
+<p>Duration in days: 365
+Duration in hours: 8783</p>
+</blockquote>
+<p>对于Java 8的新日期时间的总体印象还是比较积极的，一部分是因为Joda-Time的积极影响，另一部分是因为官方终于听取了开发人员的需求。如果想了解和学习更详细的内容，可以参考<a href="https://docs.oracle.com/javase/tutorial/datetime/index.html" title="官方文档">官方文档</a>。</p>
+<h3>Nashorn JavaScript引擎</h3>
+<p>Java 8提供了新的Nashorn JavaScript引擎，使得我们可以在JVM上开发和运行JS应用。Nashorn JavaScript引擎是javax.script.ScriptEngine的另一个实现版本，这类Script引擎遵循相同的规则，允许Java和JavaScript交互使用，例子代码如下：</p>
+<pre><code class="language-java">ScriptEngineManager manager = <span class="hljs-keyword">new</span> ScriptEngineManager();
+ScriptEngine engine = manager.getEngineByName( <span class="hljs-string">"JavaScript"</span> );
+
+System.out.println( engine.getClass().getName() );
+System.out.println( <span class="hljs-string">"Result:"</span> + engine.eval( <span class="hljs-string">"function f() { return 1; }; f() + 1;"</span> ) );
+</code></pre>
+<p>这个代码的输出结果如下：</p>
+<blockquote>
+<p>jdk.nashorn.api.scripting.NashornScriptEngine
+Result: 2</p>
+</blockquote>
+<h3>Base64</h3>
+<p>对Base64编码的支持已经被加入到Java 8官方库中，这样不需要使用第三方库就可以进行Base64编码，例子代码如下：</p>
+<pre><code class="language-java"><span class="hljs-keyword">package</span> com.javacodegeeks.java8.base64;
+
+<span class="hljs-keyword">import</span> java.nio.charset.StandardCharsets;
+<span class="hljs-keyword">import</span> java.util.Base64;
+
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Base64s</span> </span>{
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{
+        <span class="hljs-keyword">final</span> String text = <span class="hljs-string">"Base64 finally in Java 8!"</span>;
+
+        <span class="hljs-keyword">final</span> String encoded = Base64
+            .getEncoder()
+            .encodeToString( text.getBytes( StandardCharsets.UTF_8 ) );
+        System.out.println( encoded );
+
+        <span class="hljs-keyword">final</span> String decoded = <span class="hljs-keyword">new</span> String( 
+            Base64.getDecoder().decode( encoded ),
+            StandardCharsets.UTF_8 );
+        System.out.println( decoded );
+    }
+}
+</code></pre>
+<p>这个例子的输出结果如下：</p>
+<blockquote>
+<p>QmFzZTY0IGZpbmFsbHkgaW4gSmF2YSA4IQ==
+Base64 finally in Java 8!</p>
+</blockquote>
+<p>新的Base64API也支持URL和MINE的编码解码。
+(Base64.getUrlEncoder() / Base64.getUrlDecoder(), Base64.getMimeEncoder() / Base64.getMimeDecoder())。</p>
+<h3>并行数组</h3>
+<p>Java8版本新增了很多新的方法，用于支持并行数组处理。最重要的方法是parallelSort()，可以显著加快多核机器上的数组排序。下面的例子论证了parallexXxx系列的方法：</p>
+<pre><code class="language-java"><span class="hljs-keyword">package</span> com.javacodegeeks.java8.parallel.arrays;
+
+<span class="hljs-keyword">import</span> java.util.Arrays;
+<span class="hljs-keyword">import</span> java.util.concurrent.ThreadLocalRandom;
+
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ParallelArrays</span> </span>{
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">( String[] args )</span> </span>{
+        <span class="hljs-keyword">long</span>[] arrayOfLong = <span class="hljs-keyword">new</span> <span class="hljs-keyword">long</span> [ <span class="hljs-number">20000</span> ];
+
+        Arrays.parallelSetAll( arrayOfLong,
+            index -&gt; ThreadLocalRandom.current().nextInt( <span class="hljs-number">1000000</span> ) );
+        Arrays.stream( arrayOfLong ).limit( <span class="hljs-number">10</span> ).forEach(
+            i -&gt; System.out.print( i + <span class="hljs-string">" "</span> ) );
+        System.out.println();
+
+        Arrays.parallelSort( arrayOfLong );
+        Arrays.stream( arrayOfLong ).limit( <span class="hljs-number">10</span> ).forEach(
+            i -&gt; System.out.print( i + <span class="hljs-string">" "</span> ) );
+        System.out.println();
+    }
+}
+</code></pre>
+<p>上述这些代码使用parallelSetAll()方法生成20000个随机数，然后使用parallelSort()方法进行排序。这个程序会输出乱序数组和排序数组的前10个元素。上述例子的代码输出的结果是：</p>
+<blockquote>
+<p>Unsorted: 591217 891976 443951 424479 766825 351964 242997 642839 119108 552378
+Sorted: 39 220 263 268 325 607 655 678 723 793</p>
+</blockquote>
+<h3>并发性</h3>
+<p>基于新增的lambda表达式和steam特性，为Java 8中为java.util.concurrent.ConcurrentHashMap类添加了新的方法来支持聚焦操作；另外，也为java.util.concurrentForkJoinPool类添加了新的方法来支持通用线程池操作</p>
+<p>Java 8还添加了新的java.util.concurrent.locks.StampedLock类，用于支持基于容量的锁——该锁有三个模型用于支持读写操作（可以把这个锁当做是java.util.concurrent.locks.ReadWriteLock的替代者）。</p>
+<p>在java.util.concurrent.atomic包中也新增了不少工具类，列举如下：</p>
+<ol>
+<li>DoubleAccumulator</li>
+<li>DoubleAdder</li>
+<li>LongAccumulator</li>
+<li>LongAdder</li>
+</ol>
+<h3>新的Java工具</h3>
+<h4>Nashorn引擎：jjs</h4>
+<p>jjs是一个基于标准Nashorn引擎的命令行工具，可以接受js源码并执行。例如，我们写一个func.js文件，内容如下：</p>
+<pre><code class="language-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
+     <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;
+};
+
+print( f() + <span class="hljs-number">1</span> );
+</code></pre>
+<p>可以在命令行中执行这个命令：jjs func.js，控制台输出结果是：</p>
+<blockquote>
+<p>2</p>
+</blockquote>
+<p>如果需要了解细节，可以参考<a href="https://docs.oracle.com/javase/8/docs/technotes/tools/unix/jjs.html" title="官方文档">官方文档</a>。</p>
+<h4>类依赖分析器：jdeps</h4>
+<p>jdeps是一个相当棒的命令行工具，它可以展示包层级和类层级的Java类依赖关系，它以.class文件、目录或者Jar文件为输入，然后会把依赖关系输出到控制台。</p>
+<p>我们可以利用jedps分析下Spring Framework库，为了让结果少一点，仅仅分析一个JAR文件：org.springframework.core-3.0.5.RELEASE.jar。</p>
+<pre><code class="language-java">jdeps org.springframework.core-<span class="hljs-number">3.0</span>.5.RELEASE.jar
+</code></pre>
+<p>这个命令会输出很多结果，我们仅看下其中的一部分：依赖关系按照包分组，如果在classpath上找不到依赖，则显示&quot;not found&quot;.</p>
+<pre><code class="language-s">org.springframework.core-3.0.5.RELEASE.jar -&gt; C:\Program Files\Java\jdk1.8.0\jre\lib\rt.jar
+   org.springframework.core (org.springframework.core-3.0.5.RELEASE.jar)
+      -&gt; java.io
+      -&gt; java.lang
+      -&gt; java.lang.annotation
+      -&gt; java.lang.ref
+      -&gt; java.lang.reflect
+      -&gt; java.util
+      -&gt; java.util.concurrent
+      -&gt; org.apache.commons.logging                         not found
+      -&gt; org.springframework.asm                            not found
+      -&gt; org.springframework.asm.commons                    not found
+   org.springframework.core.annotation (org.springframework.core-3.0.5.RELEASE.jar)
+      -&gt; java.lang
+      -&gt; java.lang.annotation
+      -&gt; java.lang.reflect
+      -&gt; java.util
+</code></pre>
+<p>如果需要了解细节，可以参考<a href="https://docs.oracle.com/javase/8/docs/technotes/tools/unix/jdeps.html" title="官方文档">官方文档</a>。</p>
+<h3>JVM的新特性</h3>
+<p>使用Metaspace（JEP 122）代替持久代（PermGen space）。在JVM参数方面，使用-XX:MetaSpaceSize和-XX:MaxMetaspaceSize代替原来的-XX:PermSize和-XX:MaxPermSize。</p>
+<h2>Java 9 新特性总结</h2>
+<ol>
+<li>模块系统：模块是一个包的容器，Java 9 最大的变化之一是引入了模块系统（Jigsaw 项目）。</li>
+<li>REPL (JShell)：交互式编程环境。</li>
+<li>HTTP 2 客户端：HTTP/2标准是HTTP协议的最新版本，新的 HTTPClient API 支持 WebSocket 和 HTTP2 流以及服务器推送特性。</li>
+<li>改进的 Javadoc：Javadoc 现在支持在 API 文档中的进行搜索。另外，Javadoc 的输出现在符合兼容 HTML5 标准。</li>
+<li>多版本兼容 JAR 包：多版本兼容 JAR 功能能让你创建仅在特定版本的 Java 环境中运行库程序时选择使用的 class 版本。</li>
+<li>集合工厂方法：List，Set 和 Map 接口中，新的静态工厂方法可以创建这些集合的不可变实例。</li>
+<li>私有接口方法：在接口中使用private私有方法。我们可以使用 private 访问修饰符在接口中编写私有方法。</li>
+<li>进程 API: 改进的 API 来控制和管理操作系统进程。引进 java.lang.ProcessHandle 及其嵌套接口 Info 来让开发者逃离时常因为要获取一个本地进程的 PID 而不得不使用本地代码的窘境。</li>
+<li>改进的 Stream API：改进的 Stream API 添加了一些便利的方法，使流处理更容易，并使用收集器编写复杂的查询。</li>
+<li>改进 try-with-resources：如果你已经有一个资源是 final 或等效于 final 变量,您可以在 try-with-resources 语句中使用该变量，而无需在 try-with-resources 语句中声明一个新变量。</li>
+<li>改进的弃用注解 @Deprecated：注解 @Deprecated 可以标记 Java API 状态，可以表示被标记的 API 将会被移除，或者已经破坏。</li>
+<li>改进钻石操作符(Diamond Operator) ：匿名类可以使用钻石操作符(Diamond Operator)。</li>
+<li>改进 Optional 类：java.util.Optional 添加了很多新的有用方法，Optional 可以直接转为 stream。</li>
+<li>多分辨率图像 API：定义多分辨率图像API，开发者可以很容易的操作和展示不同分辨率的图像了。</li>
+<li>改进的 CompletableFuture API ： CompletableFuture 类的异步机制可以在 ProcessHandle.onExit 方法退出时执行操作。</li>
+<li>轻量级的 JSON API：内置了一个轻量级的JSON API</li>
+<li>响应式流（Reactive Streams) API: Java 9中引入了新的响应式流 API 来支持 Java 9 中的响应式编程。</li>
+</ol>
+<h3>Java9 新特性之---目录结构</h3>
+<p>包含jdk8及以前的jdk版本，所有目录结构以及目录含义如图：
+<img src="./../img/java1.png" alt="java" title="java">
+<img src="./../img/java2.png" alt="java" title="java">
+jdk9之后，目录结构发生变化如图：
+<img src="./../img/java3.png" alt="java" title="java">
+这个新特性只要了解下就可以了，这个目录结构是方便为了接下来新特性做保证</p>
+<h3>模块化</h3>
+<p>一个大型的项目，比如淘宝商城等，都会包含多个模块，比如订单模块，前台模块，后台管理模块，广告位模块，会员模块.....等等，各个模块之间会相互调用，不过这种情况下会很少，只针对特殊情况，如果一个项目有30个模块系统进行开发，但是只要某个单独模块运行时，都会带动所有的模块，这样对于jvm来说在内存和性能上会很低，所以，java9提供了这一个特性，某一个模块运行的时候，jvm只会启动和它有依赖的模块，并不会加载所有的模块到内存中，这样性能大大的提高了。写法上如下：</p>
+<p><img src="./../img/java4.png" alt="java" title="java">
+一个项目中的两个模块，模块之间通过module-info.java来关联，在IDEA编辑器右键创建package-info.java
+<img src="./../img/java5.png" alt="java" title="java">
+在这个两个模块java9Demo和java9Test中，java9demo编写一个实体类Person,在java9Test调用这样一个过程</p>
+<p>这个是java9Demo 将 java9Test 模块需要的文件导出 exports 把它所在的包导出</p>
+<pre><code class="language-java"><span class="hljs-keyword">module</span> java9Demo{
+    <span class="hljs-keyword">requires</span> com.mdxl.layer_cj.entity;
+}
+</code></pre>
+<p>然后在java9Test模块中创建一个package-info.java,引入java9Demo模块导出包名</p>
+<pre><code class="language-java"><span class="hljs-keyword">module</span> java9Test{
+    <span class="hljs-keyword">requires</span> java9Demo;
+}
+</code></pre>
+<p>这样就可以直接在java9Test中引入Person实体类了，这只是一个简单的例子。exports 控制着那些包可以被模块访问，所以不被导出的包不能被其他模块访问</p>
+<h3>JShell工具</h3>
+<p>怎么理解，怎么用呢？这个只是针对于java9来说，相当于cmd工具，你可以和cmd一样，直接写方法等等，不过我认为只是适用于初学者做一些最简单的运算和写一些方法：
+在cmd中打开这个工具：</p>
+<pre><code class="language-s">$ jshell
+|  Welcome to JShell -- Version 9-ea
+|  For an introduction type: /help intro
+jshell&gt;
+</code></pre>
+<p>查看 JShell 命令</p>
+<p>输入 /help 可以查看 JShell相关的命令：</p>
+<pre><code class="language-s">jshell&gt; /help
+|  Type a Java language expression, statement, or declaration.
+|  Or type one of the following commands:
+|  /list [&lt;name or id&gt;|-all|-start]
+|  list the source you have typed
+|  /edit &lt;name or id&gt;
+|  edit a source entry referenced by name or id
+|  /drop &lt;name or id&gt;
+|  delete a source entry referenced by name or id
+|  /save [-all|-history|-start] &lt;file&gt;
+|  Save snippet source to a file.
+|  /open &lt;file&gt;
+|  open a file as source input
+|  /vars [&lt;name or id&gt;|-all|-start]
+|  list the declared variables and their values
+|  /methods [&lt;name or id&gt;|-all|-start]
+|  list the declared methods and their signatures
+|  /types [&lt;name or id&gt;|-all|-start]
+|  list the declared types
+|  /imports 
+|  list the imported items
+</code></pre>
+<p>执行 JShell 命令</p>
+<p>/imports 命令用于查看已导入的包：</p>
+<pre><code class="language-s">jshell&gt; /imports
+|    import java.io.*
+|    import java.math.*
+|    import java.net.*
+|    import java.nio.file.*
+|    import java.util.*
+|    import java.util.concurrent.*
+|    import java.util.function.*
+|    import java.util.prefs.*
+|    import java.util.regex.*
+|    import java.util.stream.*
+jshell&gt;
+</code></pre>
+<p>等等，我认为只适用于初学者学习java不用其他编辑工具就可以学习java</p>
+<h3>HTTP 2 客户端</h3>
+<p>JDK9之前提供HttpURLConnection API来实现Http访问功能，但是这个类基本很少使用，一般都会选择Apache的Http Client，此次在Java 9的版本中引入了一个新的package:java.net.http，里面提供了对Http访问很好的支持，不仅支持Http1.1而且还支持HTTP2（什么是HTTP2？请参见HTTP2的时代来了...），以及WebSocket，据说性能特别好。</p>
+<p><img src="./../img/java6.png" alt="java" title="java">
+注意：新的 HttpClient API 在 Java 9 中以所谓的孵化器模块交付。也就是说，这套 API 不能保证 100% 完成。</p>
+<h3>改进 Javadoc</h3>
+<p>javadoc 工具可以生成 Java 文档， Java 9 的 javadoc 的输出现在符合兼容 HTML5 标准。</p>
+<pre><code class="language-s">//java 9 之前
+C:\JAVA&gt;javadoc -d C:/JAVA Tester.java
+//java 9 之后
+C:\JAVA&gt; javadoc -d C:/JAVA -html5 Tester.java
+</code></pre>
+<h3>多版本兼容 jar 包</h3>
+<p>多版本兼容 JAR 功能能让你创建仅在特定版本的 Java 环境中运行库程序时选择使用的 class 版本。</p>
+<p>通过 --release 参数指定编译版本。</p>
+<p>具体的变化就是 META-INF 目录下 MANIFEST.MF 文件新增了一个属性：</p>
+<blockquote>
+<p>Multi-Release: true</p>
+</blockquote>
+<p>然后 META-INF 目录下还新增了一个 versions 目录，如果是要支持 java9，则在 versions 目录下有 9 的目录。</p>
+<pre><code class="language-s">multirelease.jar
+├── META-INF
+│   └── versions
+│       └── 9
+│           └── multirelease
+│               └── Helper.class
+├── multirelease
+    ├── Helper.class
+    └── Main.class
+</code></pre>
+<h3>集合工厂方法</h3>
+<p>Java 9 List，Set 和 Map 接口中，新的静态工厂方法可以创建这些集合的不可变实例。</p>
+<p>这些工厂方法可以以更简洁的方式来创建集合。</p>
+<p>旧方法创建集合:</p>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> java.util.ArrayList;
+<span class="hljs-keyword">import</span> java.util.Collections;
+<span class="hljs-keyword">import</span> java.util.HashMap;
+<span class="hljs-keyword">import</span> java.util.HashSet;
+<span class="hljs-keyword">import</span> java.util.List;
+<span class="hljs-keyword">import</span> java.util.Map;
+<span class="hljs-keyword">import</span> java.util.Set;
+
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Tester</span> </span>{
+   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String []args)</span> </span>{
+      Set&lt;String&gt; set = <span class="hljs-keyword">new</span> HashSet&lt;&gt;();
+      set.add(<span class="hljs-string">"A"</span>);
+      set.add(<span class="hljs-string">"B"</span>);
+      set.add(<span class="hljs-string">"C"</span>);
+      set = Collections.unmodifiableSet(set);
+      System.out.println(set);
+      List&lt;String&gt; list = <span class="hljs-keyword">new</span> ArrayList&lt;&gt;();
+
+      list.add(<span class="hljs-string">"A"</span>);
+      list.add(<span class="hljs-string">"B"</span>);
+      list.add(<span class="hljs-string">"C"</span>);
+      list = Collections.unmodifiableList(list);
+      System.out.println(list);
+      Map&lt;String, String&gt; map = <span class="hljs-keyword">new</span> HashMap&lt;&gt;();
+
+      map.put(<span class="hljs-string">"A"</span>,<span class="hljs-string">"Apple"</span>);
+      map.put(<span class="hljs-string">"B"</span>,<span class="hljs-string">"Boy"</span>);
+      map.put(<span class="hljs-string">"C"</span>,<span class="hljs-string">"Cat"</span>);
+      map = Collections.unmodifiableMap(map);
+      System.out.println(map);
+   }
+}
+</code></pre>
+<p>执行输出结果为：</p>
+<pre><code class="language-s">[A, B, C]
+[A, B, C]
+{A=Apple, B=Boy, C=Cat}
+</code></pre>
+<p>新方法创建集合：</p>
+<p>Java 9 中，以下方法被添加到 List，Set 和 Map 接口以及它们的重载对象。</p>
+<pre><code class="language-java"><span class="hljs-keyword">static</span> &lt;E&gt; <span class="hljs-function">List&lt;E&gt; <span class="hljs-title">of</span><span class="hljs-params">(E e1, E e2, E e3)</span></span>;
+<span class="hljs-keyword">static</span> &lt;E&gt; <span class="hljs-function">Set&lt;E&gt;  <span class="hljs-title">of</span><span class="hljs-params">(E e1, E e2, E e3)</span></span>;
+<span class="hljs-keyword">static</span> &lt;K,V&gt; <span class="hljs-function">Map&lt;K,V&gt; <span class="hljs-title">of</span><span class="hljs-params">(K k1, V v1, K k2, V v2, K k3, V v3)</span></span>;
+<span class="hljs-keyword">static</span> &lt;K,V&gt; <span class="hljs-function">Map&lt;K,V&gt; <span class="hljs-title">ofEntries</span><span class="hljs-params">(Map.Entry&lt;? extends K,? extends V&gt;... entries)</span>
+</span></code></pre>
+<ul>
+<li>List 和 Set 接口, of(...) 方法重载了 0 ~ 10 个参数的不同方法 。</li>
+<li>Map 接口, of(...) 方法重载了 0 ~ 10 个参数的不同方法 。</li>
+<li>Map 接口如果超过 10 个参数, 可以使用 ofEntries(...) 方法。</li>
+</ul>
+<p>新方法创建集合:</p>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> java.util.ArrayList;
+<span class="hljs-keyword">import</span> java.util.Collections;
+<span class="hljs-keyword">import</span> java.util.HashMap;
+<span class="hljs-keyword">import</span> java.util.HashSet;
+<span class="hljs-keyword">import</span> java.util.List;
+<span class="hljs-keyword">import</span> java.util.AbstractMap;
+<span class="hljs-keyword">import</span> java.util.Map;
+<span class="hljs-keyword">import</span> java.util.Set;
+
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Tester</span> </span>{
+
+   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String []args)</span> </span>{
+      Set&lt;String&gt; set = Set.of(<span class="hljs-string">"A"</span>, <span class="hljs-string">"B"</span>, <span class="hljs-string">"C"</span>);      
+      System.out.println(set);
+      List&lt;String&gt; list = List.of(<span class="hljs-string">"A"</span>, <span class="hljs-string">"B"</span>, <span class="hljs-string">"C"</span>);
+      System.out.println(list);
+      Map&lt;String, String&gt; map = Map.of(<span class="hljs-string">"A"</span>,<span class="hljs-string">"Apple"</span>,<span class="hljs-string">"B"</span>,<span class="hljs-string">"Boy"</span>,<span class="hljs-string">"C"</span>,<span class="hljs-string">"Cat"</span>);
+      System.out.println(map);
+  
+      Map&lt;String, String&gt; map1 = Map.ofEntries (
+         <span class="hljs-keyword">new</span> AbstractMap.SimpleEntry&lt;&gt;(<span class="hljs-string">"A"</span>,<span class="hljs-string">"Apple"</span>),
+         <span class="hljs-keyword">new</span> AbstractMap.SimpleEntry&lt;&gt;(<span class="hljs-string">"B"</span>,<span class="hljs-string">"Boy"</span>),
+         <span class="hljs-keyword">new</span> AbstractMap.SimpleEntry&lt;&gt;(<span class="hljs-string">"C"</span>,<span class="hljs-string">"Cat"</span>));
+      System.out.println(map1);
+   }
+}
+</code></pre>
+<p>输出结果为：</p>
+<pre><code class="language-s">[A, B, C]
+[A, B, C]
+{A=Apple, B=Boy, C=Cat}
+{A=Apple, B=Boy, C=Cat}
+</code></pre>
+<h3>私有接口方法</h3>
+<p>在 Java 8之前，接口可以有常量变量和抽象方法。</p>
+<p>我们不能在接口中提供方法实现。如果我们要提供抽象方法和非抽象方法（方法与实现）的组合，那么我们就得使用抽象类。</p>
+<pre><code class="language-java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Tests</span></span>{
+    <span class="hljs-comment">//java 7 及以前特性 常量 抽象方法</span>
+    String str=<span class="hljs-string">'hello wrold'</span>;
+    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">show</span><span class="hljs-params">(T str)</span></span>;
+    <span class="hljs-comment">//java 8 特性 默认方法 静态方法</span>
+    <span class="hljs-function"><span class="hljs-keyword">default</span> <span class="hljs-keyword">void</span> <span class="hljs-title">def</span><span class="hljs-params">()</span></span>{
+        System.out.print(<span class="hljs-string">"default method"</span>);
+    }
+    <span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">sta</span><span class="hljs-params">()</span></span>{
+        System.out.print(<span class="hljs-string">"static method"</span>);
+    }
+    <span class="hljs-comment">//java 9 特性 私有方法 私有静态方法</span>
+    <span class="hljs-function"><span class="hljs-keyword">private</span>  <span class="hljs-keyword">void</span> <span class="hljs-title">pri</span><span class="hljs-params">()</span></span>{
+        System.out.print(<span class="hljs-string">"private method"</span>);
+    }
+    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">pri_sta</span><span class="hljs-params">()</span></span>{
+        System.out.print(<span class="hljs-string">"private static method"</span>);
+    }
+}
+</code></pre>
+<h3>改进的进程 API</h3>
+<p>在 Java 9 之前，Process API 仍然缺乏对使用本地进程的基本支持，例如获取进程的 PID 和所有者，进程的开始时间，进程使用了多少 CPU 时间，多少本地进程正在运行等。</p>
+<p>Java 9 向 Process API 添加了一个名为 ProcessHandle 的接口来增强 java.lang.Process 类。</p>
+<p>ProcessHandle 接口的实例标识一个本地进程，它允许查询进程状态并管理进程。</p>
+<p>ProcessHandle 嵌套接口 Info 来让开发者逃离时常因为要获取一个本地进程的 PID 而不得不使用本地代码的窘境。</p>
+<p>我们不能在接口中提供方法实现。如果我们要提供抽象方法和非抽象方法（方法与实现）的组合，那么我们就得使用抽象类。</p>
+<p>ProcessHandle 接口中声明的 onExit() 方法可用于在某个进程终止时触发某些操作。</p>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> java.time.ZoneId;
+<span class="hljs-keyword">import</span> java.util.stream.Stream;
+<span class="hljs-keyword">import</span> java.util.stream.Collectors;
+<span class="hljs-keyword">import</span> java.io.IOException;
+
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Tester</span> </span>{
+   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> IOException </span>{
+      ProcessBuilder pb = <span class="hljs-keyword">new</span> ProcessBuilder(<span class="hljs-string">"notepad.exe"</span>);
+      String np = <span class="hljs-string">"Not Present"</span>;
+      Process p = pb.start();
+      ProcessHandle.Info info = p.info();
+      System.out.printf(<span class="hljs-string">"Process ID : %s%n"</span>, p.pid());
+      System.out.printf(<span class="hljs-string">"Command name : %s%n"</span>, info.command().orElse(np));
+      System.out.printf(<span class="hljs-string">"Command line : %s%n"</span>, info.commandLine().orElse(np));
+
+      System.out.printf(<span class="hljs-string">"Start time: %s%n"</span>,
+         info.startInstant().map(i -&gt; i.atZone(ZoneId.systemDefault())
+         .toLocalDateTime().toString()).orElse(np));
+
+      System.out.printf(<span class="hljs-string">"Arguments : %s%n"</span>,
+         info.arguments().map(a -&gt; Stream.of(a).collect(
+         Collectors.joining(<span class="hljs-string">" "</span>))).orElse(np));
+
+      System.out.printf(<span class="hljs-string">"User : %s%n"</span>, info.user().orElse(np));
+   }
+}
+</code></pre>
+<p>以上实例执行输出结果为：</p>
+<pre><code class="language-s">Process ID : 5800
+Command name : C:\Windows\System32\notepad.exe
+Command line : Not Present
+Start time: 2017-11-04T21:35:03.626
+Arguments : Not Present
+User: administrator
+</code></pre>
+<h3>改进的 Stream API</h3>
+<p>Java 9 改进的 Stream API 添加了一些便利的方法，使流处理更容易，并使用收集器编写复杂的查询。</p>
+<p>Java 9 为 Stream 新增了几个方法：dropWhile、takeWhile、ofNullable，为 iterate 方法新增了一个重载方法。</p>
+<h4>takeWhile 方法 语法</h4>
+<pre><code class="language-java"><span class="hljs-function"><span class="hljs-keyword">default</span> Stream&lt;T&gt; <span class="hljs-title">takeWhile</span><span class="hljs-params">(Predicate&lt;? <span class="hljs-keyword">super</span> T&gt; predicate)</span>
+</span></code></pre>
+<p>takeWhile() 方法使用一个断言作为参数，返回给定 Stream 的子集直到断言语句第一次返回 false。如果第一个值不满足断言条件，将返回一个空的 Stream。</p>
+<p>takeWhile() 方法在有序的 Stream 中，takeWhile 返回从开头开始的尽量多的元素；在无序的 Stream 中，takeWhile 返回从开头开始的符合 Predicate 要求的元素的子集。</p>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> java.util.stream.Stream;
+
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Tester</span> </span>{
+   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{
+      Stream.of(<span class="hljs-string">"a"</span>,<span class="hljs-string">"b"</span>,<span class="hljs-string">"c"</span>,<span class="hljs-string">""</span>,<span class="hljs-string">"e"</span>,<span class="hljs-string">"f"</span>).takeWhile(s-&gt;!s.isEmpty())
+         .forEach(System.out::print);
+   }
+}
+</code></pre>
+<p>以上实例 takeWhile 方法在碰到空字符串时停止循环输出，执行输出结果为：</p>
+<pre><code class="language-s">abc
+</code></pre>
+<h4>dropWhile 方法 语法:</h4>
+<pre><code class="language-java"><span class="hljs-function"><span class="hljs-keyword">default</span> Stream&lt;T&gt; <span class="hljs-title">dropWhile</span><span class="hljs-params">(Predicate&lt;? <span class="hljs-keyword">super</span> T&gt; predicate)</span>
+</span></code></pre>
+<p>dropWhile 方法和 takeWhile 作用相反的，使用一个断言作为参数，直到断言语句第一次返回 true 才返回给定 Stream 的子集。</p>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> java.util.stream.Stream;
+
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Tester</span> </span>{
+   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{
+      Stream.of(<span class="hljs-string">"a"</span>,<span class="hljs-string">"b"</span>,<span class="hljs-string">"c"</span>,<span class="hljs-string">""</span>,<span class="hljs-string">"e"</span>,<span class="hljs-string">"f"</span>).dropWhile(s-&gt; !s.isEmpty())
+         .forEach(System.out::print);
+   }
+}
+</code></pre>
+<p>以上实例 dropWhile 方法在碰到空字符串时开始循环输出，执行输出结果为：</p>
+<pre><code class="language-s">ef
+</code></pre>
+<h4>iterate 方法 语法:</h4>
+<pre><code class="language-java"><span class="hljs-keyword">static</span> &lt;T&gt; <span class="hljs-function">Stream&lt;T&gt; <span class="hljs-title">iterate</span><span class="hljs-params">(T seed, Predicate&lt;? <span class="hljs-keyword">super</span> T&gt; hasNext, UnaryOperator&lt;T&gt; next)</span>
+</span></code></pre>
+<p>方法允许使用初始种子值创建顺序（可能是无限）流，并迭代应用指定的下一个方法。 当指定的 hasNext 的 predicate 返回 false 时，迭代停止。</p>
+<pre><code class="language-java">java.util.stream.IntStream;
+
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Tester</span> </span>{
+   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{
+      IntStream.iterate(<span class="hljs-number">3</span>, x -&gt; x &lt; <span class="hljs-number">10</span>, x -&gt; x+ <span class="hljs-number">3</span>).forEach(System.out::println);
+   }
+}
+</code></pre>
+<p>执行输出结果为：</p>
+<pre><code class="language-s">3
+6
+9
+</code></pre>
+<h4>ofNullable 方法 语法:</h4>
+<pre><code class="language-java"><span class="hljs-keyword">static</span> &lt;T&gt; <span class="hljs-function">Stream&lt;T&gt; <span class="hljs-title">ofNullable</span><span class="hljs-params">(T t)</span>
+</span></code></pre>
+<p>ofNullable 方法可以预防 NullPointerExceptions 异常， 可以通过检查流来避免 null 值。</p>
+<p>如果指定元素为非 null，则获取一个元素并生成单个元素流，元素为 null 则返回一个空流。</p>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> java.util.stream.Stream;
+
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Tester</span> </span>{
+   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{
+      <span class="hljs-keyword">long</span> count = Stream.ofNullable(<span class="hljs-number">100</span>).count();
+      System.out.println(count);
+  
+      count = Stream.ofNullable(<span class="hljs-keyword">null</span>).count();
+      System.out.println(count);
+   }
+}
+</code></pre>
+<p>执行输出结果为：</p>
+<pre><code class="language-s">1
+0
+</code></pre>
+<h3>改进的 try-with-resources</h3>
+<p>try-with-resources 是 JDK 7 中一个新的异常处理机制，它能够很容易地关闭在 try-catch 语句块中使用的资源。所谓的资源（resource）是指在程序完成后，必须关闭的对象。try-with-resources 语句确保了每个资源在语句结束时关闭。所有实现了 java.lang.AutoCloseable 接口（其中，它包括实现了 java.io.Closeable 的所有对象），可以使用作为资源。</p>
+<p>try-with-resources 声明在 JDK 9 已得到改进。如果你已经有一个资源是 final 或等效于 final 变量,您可以在 try-with-resources 语句中使用该变量，而无需在 try-with-resources 语句中声明一个新变量。</p>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> java.io.BufferedReader;
+<span class="hljs-keyword">import</span> java.io.IOException;
+<span class="hljs-keyword">import</span> java.io.Reader;
+<span class="hljs-keyword">import</span> java.io.StringReader;
+
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Tester</span> </span>{
+   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> IOException </span>{
+      System.out.println(readData(<span class="hljs-string">"test"</span>));
+   }
+   <span class="hljs-function"><span class="hljs-keyword">static</span> String <span class="hljs-title">readData</span><span class="hljs-params">(String message)</span> <span class="hljs-keyword">throws</span> IOException </span>{
+      Reader inputString = <span class="hljs-keyword">new</span> StringReader(message);
+      BufferedReader br = <span class="hljs-keyword">new</span> BufferedReader(inputString);
+      <span class="hljs-keyword">try</span> (BufferedReader br1 = br) {
+         <span class="hljs-keyword">return</span> br1.readLine();
+      }
+   }
+}
+</code></pre>
+<p>输出结果为：</p>
+<pre><code class="language-s">test
+</code></pre>
+<p>以上实例中我们需要在 try 语句块中声明资源 br1，然后才能使用它。
+在 Java 9 中，我们不需要声明资源 br1 就可以使用它，并得到相同的结果。</p>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> java.io.BufferedReader;
+<span class="hljs-keyword">import</span> java.io.IOException;
+<span class="hljs-keyword">import</span> java.io.Reader;
+<span class="hljs-keyword">import</span> java.io.StringReader;
+
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Tester</span> </span>{
+   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> IOException </span>{
+      System.out.println(readData(<span class="hljs-string">"test"</span>));
+   }
+   <span class="hljs-function"><span class="hljs-keyword">static</span> String <span class="hljs-title">readData</span><span class="hljs-params">(String message)</span> <span class="hljs-keyword">throws</span> IOException </span>{
+      Reader inputString = <span class="hljs-keyword">new</span> StringReader(message);
+      BufferedReader br = <span class="hljs-keyword">new</span> BufferedReader(inputString);
+      <span class="hljs-keyword">try</span> (br) {
+         <span class="hljs-keyword">return</span> br.readLine();
+      }
+   }
+}
+</code></pre>
+<p>执行输出结果为：</p>
+<pre><code class="language-s">test
+</code></pre>
+<p>在处理必须关闭的资源时，使用try-with-resources语句替代try-finally语句。 生成的代码更简洁，更清晰，并且生成的异常更有用。 try-with-resources语句在编写必须关闭资源的代码时会更容易，也不会出错，而使用try-finally语句实际上是不可能的。</p>
+<h3>改进的 @Deprecated 注解</h3>
+<p>注解 @Deprecated 可以标记 Java API 状态，可以是以下几种：</p>
+<p>使用它存在风险，可能导致错误
+可能在未来版本中不兼容
+可能在未来版本中删除
+一个更好和更高效的方案已经取代它。
+Java 9 中注解增加了两个新元素：since 和 forRemoval。</p>
+<ul>
+<li>since: 元素指定已注解的API元素已被弃用的版本。</li>
+<li>forRemoval: 元素表示注解的 API 元素在将来的版本中被删除，应该迁移 API。</li>
+</ul>
+<h3>钻石操作符的升级</h3>
+<p>钻石操作符是在 java 7 中引入的，可以让代码更易读，但它不能用于匿名的内部类。</p>
+<p>在 java 9 中， 它可以与匿名的内部类一起使用，从而提高代码的可读性。</p>
+<pre><code class="language-java"><span class="hljs-comment">//java6 及之前</span>
+Map&lt;String,String&gt; map6=<span class="hljs-keyword">new</span> HashMap&lt;String,String&gt;();
+<span class="hljs-comment">//java7和8 &lt;&gt;没有了数据类型</span>
+Map&lt;String,String&gt; map6=<span class="hljs-keyword">new</span> HashMap&lt;&gt;();
+<span class="hljs-comment">//java9 添加了匿名内部类的功能 后面添加大括号{} 可以做一些细节操作</span>
+Map&lt;String,String&gt; map6=<span class="hljs-keyword">new</span> HashMap&lt;&gt;(){};
+</code></pre>
+<h3>改进的 Optional 类</h3>
+<p>Optional 类在 Java 8 中引入，Optional 类的引入很好的解决空指针异常。。在 java 9 中, 添加了三个方法来改进它的功能：</p>
+<ul>
+<li>stream()</li>
+<li>ifPresentOrElse()</li>
+<li>or()</li>
+</ul>
+<h4>stream() 方法 语法:</h4>
+<pre><code class="language-java"><span class="hljs-function"><span class="hljs-keyword">public</span> Stream&lt;T&gt; <span class="hljs-title">stream</span><span class="hljs-params">()</span>
+</span></code></pre>
+<p>stream 方法的作用就是将 Optional 转为一个 Stream，如果该 Optional 中包含值，那么就返回包含这个值的 Stream，否则返回一个空的 Stream（Stream.empty()）。</p>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> java.util.Arrays;
+<span class="hljs-keyword">import</span> java.util.List;
+<span class="hljs-keyword">import</span> java.util.Optional;
+<span class="hljs-keyword">import</span> java.util.stream.Collectors;
+<span class="hljs-keyword">import</span> java.util.stream.Stream;
+
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Tester</span> </span>{
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{
+   List&lt;Optional&lt;String&gt;&gt; list = Arrays.asList (
+      Optional.empty(), 
+      Optional.of(<span class="hljs-string">"A"</span>), 
+      Optional.empty(), 
+      Optional.of(<span class="hljs-string">"B"</span>));
+
+      <span class="hljs-comment">//filter the list based to print non-empty values</span>
+  
+      <span class="hljs-comment">//if optional is non-empty, get the value in stream, otherwise return empty</span>
+      List&lt;String&gt; filteredList = list.stream()
+         .flatMap(o -&gt; o.isPresent() ? Stream.of(o.get()) : Stream.empty())
+         .collect(Collectors.toList());
+
+      <span class="hljs-comment">//Optional::stream method will return a stream of either one </span>
+      <span class="hljs-comment">//or zero element if data is present or not.</span>
+      List&lt;String&gt; filteredListJava9 = list.stream()
+         .flatMap(Optional::stream)
+         .collect(Collectors.toList());
+
+      System.out.println(filteredList);
+      System.out.println(filteredListJava9);
+   }  
+}
+</code></pre>
+<p>执行输出结果为：</p>
+<pre><code class="language-s">[A, B]
+[A, B]
+</code></pre>
+<h4>ifPresentOrElse() 方法 语法:</h4>
+<pre><code class="language-java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">ifPresentOrElse</span><span class="hljs-params">(Consumer&lt;? <span class="hljs-keyword">super</span> T&gt; action, Runnable emptyAction)</span>
+</span></code></pre>
+<p>ifPresentOrElse 方法的改进就是有了 else，接受两个参数 Consumer 和 Runnable。</p>
+<p>ifPresentOrElse 方法的用途是，如果一个 Optional 包含值，则对其包含的值调用函数 action，即 action.accept(value)，这与 ifPresent 一致；与 ifPresent 方法的区别在于，ifPresentOrElse 还有第二个参数 emptyAction —— 如果 Optional 不包含值，那么 ifPresentOrElse 便会调用 emptyAction，即 emptyAction.run()。</p>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> java.util.Optional;
+
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Tester</span> </span>{
+   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{
+      Optional&lt;Integer&gt; optional = Optional.of(<span class="hljs-number">1</span>);
+
+      optional.ifPresentOrElse( x -&gt; System.out.println(<span class="hljs-string">"Value: "</span> + x),() -&gt; 
+         System.out.println(<span class="hljs-string">"Not Present."</span>));
+
+      optional = Optional.empty();
+
+      optional.ifPresentOrElse( x -&gt; System.out.println(<span class="hljs-string">"Value: "</span> + x),() -&gt; 
+         System.out.println(<span class="hljs-string">"Not Present."</span>));
+   }  
+}
+</code></pre>
+<p>执行输出结果为：</p>
+<pre><code class="language-s">Value: 1
+Not Present.
+</code></pre>
+<h4>or() 方法 语法:</h4>
+<pre><code class="language-java"><span class="hljs-function"><span class="hljs-keyword">public</span> Optional&lt;T&gt; <span class="hljs-title">or</span><span class="hljs-params">(Supplier&lt;? extends Optional&lt;? extends T&gt;&gt; supplier)</span>
+</span></code></pre>
+<p>如果值存在，返回 Optional 指定的值，否则返回一个预设的值。</p>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> java.util.Optional;
+<span class="hljs-keyword">import</span> java.util.function.Supplier;
+
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Tester</span> </span>{
+   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{
+      Optional&lt;String&gt; optional1 = Optional.of(<span class="hljs-string">"Mahesh"</span>);
+      Supplier&lt;Optional&lt;String&gt;&gt; supplierString = () -&gt; Optional.of(<span class="hljs-string">"Not Present"</span>);
+      optional1 = optional1.or( supplierString);
+      optional1.ifPresent( x -&gt; System.out.println(<span class="hljs-string">"Value: "</span> + x));
+      optional1 = Optional.empty();    
+      optional1 = optional1.or( supplierString);
+      optional1.ifPresent( x -&gt; System.out.println(<span class="hljs-string">"Value: "</span> + x));  
+   }  
+}
+</code></pre>
+<p>执行输出结果为：</p>
+<pre><code class="language-s">Value: Mahesh
+Value: Not Present
+</code></pre>
+<h3>多分辨率图像 API</h3>
+<p>Java 9 定义多分辨率图像 API，开发者可以很容易的操作和展示不同分辨率的图像了。</p>
+<p>以下是多分辨率图像的主要操作方法：</p>
+<ul>
+<li>
+<p>Image getResolutionVariant(double destImageWidth, double destImageHeight) − 获取特定分辨率的图像变体-表示一张已知分辨率单位为DPI的特定尺寸大小的逻辑图像，并且这张图像是最佳的变体。。</p>
+</li>
+<li>
+<p>List<Image> getResolutionVariants() − 返回可读的分辨率的图像变体列表。</p>
+</li>
+</ul>
+<h3>改进的 CompletableFuture API</h3>
+<p>Java 8 引入了 CompletableFuture<T> 类，可能是 java.util.concurrent.Future<T> 明确的完成版（设置了它的值和状态），也可能被用作java.util.concurrent.CompleteStage 。支持 future 完成时触发一些依赖的函数和动作。Java 9 引入了一些CompletableFuture 的改进：</p>
+<p>Java 9 对 CompletableFuture 做了改进：</p>
+<ul>
+<li>支持 delays 和 timeouts</li>
+<li>提升了对子类化的支持</li>
+<li>新的工厂方法</li>
+</ul>
+<h4>支持 delays 和 timeouts</h4>
+<pre><code class="language-java"><span class="hljs-function"><span class="hljs-keyword">public</span> CompletableFuture&lt;T&gt; <span class="hljs-title">completeOnTimeout</span><span class="hljs-params">(T value, <span class="hljs-keyword">long</span> timeout, TimeUnit unit)</span>
+</span></code></pre>
+<p>在 timeout（单位在 java.util.concurrent.Timeunits units 中，比如 MILLISECONDS ）前以给定的 value 完成这个 CompletableFutrue。返回这个 CompletableFutrue。</p>
+<pre><code class="language-java"><span class="hljs-function"><span class="hljs-keyword">public</span> CompletableFuture&lt;T&gt; <span class="hljs-title">orTimeout</span><span class="hljs-params">(<span class="hljs-keyword">long</span> timeout, TimeUnit unit)</span>
+</span></code></pre>
+<p>如果没有在给定的 timeout 内完成，就以 java.util.concurrent.TimeoutException 完成这个 CompletableFutrue，并返回这个 CompletableFutrue</p>
+<h4>增强了对子类化的支持</h4>
+<p>做了许多改进使得 CompletableFuture 可以被更简单的继承。比如，你也许想重写新的 public Executor defaultExecutor() 方法来代替默认的 executor。</p>
+<p>另一个新的使子类化更容易的方法是：</p>
+<pre><code class="language-java"><span class="hljs-keyword">public</span> &lt;U&gt; <span class="hljs-function">CompletableFuture&lt;U&gt; <span class="hljs-title">newIncompleteFuture</span><span class="hljs-params">()</span>
+</span></code></pre>
+<h3>新的工厂方法</h3>
+<pre><code class="language-s">Java 8引入了 &lt;U&gt; CompletableFuture&lt;U&gt; completedFuture(U value) 工厂方法来返回一个已经以给定 value 完成了的 CompletableFuture。Java 9以 一个新的 &lt;U&gt; CompletableFuture &lt;U&gt; failedFuture(Throwable ex) 来补充了这个方法，可以返回一个以给定异常完成的 CompletableFuture。
+
+除此以外，Java 9 引入了下面这对 stage-oriented 工厂方法，返回完成的或异常完成的 completion stages:
+
+* &lt;U&gt; CompletionStage&lt;U&gt; completedStage(U value): 返回一个新的以指定 value 完成的CompletionStage ，并且只支持 CompletionStage 里的接口。
+* &lt;U&gt; CompletionStage&lt;U&gt; failedStage(Throwable ex): 返回一个新的以指定异常完成的CompletionStage ，并且只支持 CompletionStage 里的接口。
+</code></pre>
+</section><footer class="footer-container"><div class="footer-body"><img src="/img/dubbo_gray.png"/><div class="cols-container"><div class="col col-12"><h3>Disclaimer</h3><p>the disclaimer content</p></div><div class="col col-6"><dl><dt>Documentation</dt><dd><a href="/en-us/docs/introduction.html" target="_self">Overview</a></dd><dd><a href="/en-us/docs/introduction.html" target="_self">Quick start</a></dd><dd><a href="/en-us/docs/dir/introduction.html" target="_self">Developer guide</a></dd></dl></div><div class="col col-6"><dl><dt>Resources</dt><dd><a href="/en-us/blog/index.html" target="_self">Blog</a></dd><dd><a href="/en-us/community/index.html" target="_self">Community</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2018 BurningMyself</span></div></div></footer></div></div>
+	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
+	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
+	<script>
+		window.rootPath = '';
+  </script>
+	<script src="/build/blogDetail.js"></script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+{
+  "en-us": [
+    {
+      "filename": "demo3.md",
+      "link": "\\en-us\\docs\\dir\\demo3.html",
+      "meta": {}
+    },
+    {
+      "filename": "introduction.md",
+      "link": "\\en-us\\docs\\introduction.html",
+      "meta": {}
+    }
+  ],
+  "zh-cn": [
+    {
+      "filename": "demo3.md",
+      "link": "\\zh-cn\\docs\\dir\\demo3.html",
+      "meta": {}
+    },
+    {
+      "filename": "introduction.md",
+      "link": "\\zh-cn\\docs\\introduction.html",
+      "meta": {}
+    }
+  ]
+}

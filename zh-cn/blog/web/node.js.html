@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="keywords" content="node.js" />
+	<meta name="description" content="node.js" />
+	<!-- 网页标签标题 -->
+	<title>node.js</title>
+	<link rel="shortcut icon" href="/img/docsite.ico"/>
+	<link rel="stylesheet" href="/build/blogDetail.css" />
+</head>
+<body>
+	<div id="root"><div class="blog-detail-page" data-reactroot=""><header class="header-container header-container-normal"><div class="header-body"><a href="/zh-cn/index.html"><img class="logo" src="/img/dubbo_colorful.png"/></a><div class="search search-normal"><span class="icon-search"></span></div><span class="language-switch language-switch-normal">En</span><div class="header-menu"><img class="header-menu-toggle" src="/img/system/menu_gray.png"/><ul><li class="menu-item menu-item-normal"><a href="/zh-cn/index.html" target="_self">首页</a></li><li class="menu-item menu-item-normal"><a href="/zh-cn/docs/introduction.html" target="_self">文档</a></li><li class="menu-item menu-item-normal menu-item-normal-active"><a href="/zh-cn/blog/index.html" target="_self">博客</a></li><li class="menu-item menu-item-normal"><a href="/zh-cn/community/index.html" target="_self">社区</a></li></ul></div></div></header><section class="blog-content markdown-body"><h2>Node 介绍</h2>
+<ul>
+<li>
+<p>Node 中的 JavaScript</p>
+<ul>
+<li>EcmaScript
+<ul>
+<li>变量</li>
+<li>方法</li>
+<li>数据类型</li>
+<li>内置对象</li>
+<li>Array</li>
+<li>Object</li>
+<li>Date</li>
+<li>Math</li>
+</ul>
+</li>
+<li>模块系统
+<ul>
+<li>在 Node 中没有全局作用域的概念</li>
+<li>在 Node 中，只能通过 require 方法来加载执行多个 JavaScript 脚本文件</li>
+<li>require 加载只能是执行其中的代码，文件与文件之间由于是模块作用域，所以不会有污染的问题
+<ul>
+<li>模块完全是封闭的</li>
+<li>外部无法访问内部</li>
+<li>内部也无法访问外部</li>
+</ul>
+</li>
+<li>模块作用域固然带来了一些好处，可以加载执行多个文件，可以完全避免变量命名冲突污染的问题</li>
+<li>但是某些情况下，模块与模块是需要进行通信的</li>
+<li>在每个模块中，都提供了一个对象：<code>exports</code></li>
+<li>该对象默认是一个空对象</li>
+<li>你要做的就是把需要被外部访问使用的成员手动的挂载到 <code>exports</code> 接口对象中</li>
+<li>然后谁来 <code>require</code> 这个模块，谁就可以得到模块内部的 <code>exports</code> 接口对象</li>
+<li>还有其它的一些规则，具体后面讲，以及如何在项目中去使用这种编程方式，会通过后面的案例来处理</li>
+</ul>
+</li>
+<li>核心模块
+<ul>
+<li>核心模块是由 Node 提供的一个个的具名的模块，它们都有自己特殊的名称标识，例如
+<ul>
+<li>fs 文件操作模块</li>
+<li>http 网络服务构建模块</li>
+<li>os 操作系统信息模块</li>
+<li>path 路径处理模块</li>
+<li>。。。。</li>
+</ul>
+</li>
+<li>所有核心模块在使用的时候都必须手动的先使用 <code>require</code> 方法来加载，然后才可以使用，例如：
+<ul>
+<li><code>var fs = require('fs')</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>http</p>
+<ul>
+<li>require</li>
+<li>端口号
+<ul>
+<li>ip 地址定位计算机</li>
+<li>端口号定位具体的应用程序</li>
+</ul>
+</li>
+<li>Content-Type
+<ul>
+<li>服务器最好把每次响应的数据是什么内容类型都告诉客户端，而且要正确的告诉</li>
+<li>不同的资源对应的 Content-Type 是不一样，具体参照：<a href="http://tool.oschina.net/commons">http://tool.oschina.net/commons</a></li>
+<li>对于文本类型的数据，最好都加上编码，目的是为了防止中文解析乱码问题</li>
+</ul>
+</li>
+<li>通过网络发送文件
+<ul>
+<li>发送的并不是文件，本质上来讲发送是文件的内容</li>
+<li>当浏览器收到服务器响应内容之后，就会根据你的 Content-Type 进行对应的解析处理</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>模块系统</p>
+</li>
+<li>
+<p>Node 中的其它的核心模块</p>
+</li>
+<li>
+<p>做一个小管理系统：</p>
+<ul>
+<li>CRUD</li>
+</ul>
+</li>
+<li>
+<p>Express Web 开发框架</p>
+<ul>
+<li><code>npm install express</code></li>
+</ul>
+</li>
+</ul>
+<h2>文档</h2>
+<ul>
+<li><a href="https://nodejs.org/en/docs/">官方文档</a></li>
+<li><a href="http://www.runoob.com/nodejs/nodejs-tutorial.html">菜鸟文档</a></li>
+<li><a href="https://www.liaoxuefeng.com/wiki/001434446689867b27157e896e74d51a89c25cc8b43bdb3000/001434501245426ad4b91f2b880464ba876a8e3043fc8ef000">廖雪峰文档</a></li>
+</ul>
+</section><footer class="footer-container"><div class="footer-body"><img src="/img/dubbo_gray.png"/><div class="cols-container"><div class="col col-12"><h3>免责声明</h3><p>免责声明的具体内容</p></div><div class="col col-6"><dl><dt>文档</dt><dd><a href="/zh-cn/docs/introduction.html" target="_self">概览</a></dd><dd><a href="/zh-cn/docs/introduction.html" target="_self">快速开始</a></dd><dd><a href="/zh-cn/docs/dir/introduction.html" target="_self">开发者指南</a></dd></dl></div><div class="col col-6"><dl><dt>资源</dt><dd><a href="/zh-cn/blog/index.html" target="_self">博客</a></dd><dd><a href="/zh-cn/community/index.html" target="_self">社区</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2018 BurningMyself</span></div></div></footer></div></div>
+	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
+	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
+	<script>
+		window.rootPath = '';
+  </script>
+	<script src="/build/blogDetail.js"></script>
+</body>
+</html>
