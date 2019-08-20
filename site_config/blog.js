@@ -71,7 +71,7 @@ export default {
         author: 'BurningMyself',
         dateStr: 'August 12nd，2019',
         desc: 'How to understand agile development',
-        link: '/en-us/blog/framework/aglity.html',
+        link: '/en-us/blog/framework/agility.html',
       },  
       {
         title: 'Move towards the skills required of an architect',
@@ -154,7 +154,7 @@ export default {
         author: 'BurningMyself',
         dateStr: 'August 12nd，2019',
         desc: '如何理解敏捷开发',
-        link: '/en-us/blog/framework/aglity.html',
+        link: '/en-us/blog/framework/agility.html',
       },  
       {
         title: '走向架构师必备的技能',
