@@ -62,7 +62,7 @@ export default {
         },
       ],
     },
-    copyright: 'Copyright © 2018 BurningMyself',
+    copyright: 'Copyright © 2019 BurningMyself',
   },
   'zh-cn': {
     pageMenu: [
@@ -121,6 +121,6 @@ export default {
         },
       ],
     },
-    copyright: 'Copyright © 2018 BurningMyself',
+    copyright: 'Copyright © 2019 BurningMyself',
   },
 };

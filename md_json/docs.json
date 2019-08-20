@@ -7,6 +7,11 @@
     },
     {
       "filename": "introduction.md",
+      "link": "\\en-us\\docs\\dir\\introduction.html",
+      "meta": {}
+    },
+    {
+      "filename": "introduction.md",
       "link": "\\en-us\\docs\\introduction.html",
       "meta": {}
     }
@@ -15,6 +20,11 @@
     {
       "filename": "demo3.md",
       "link": "\\zh-cn\\docs\\dir\\demo3.html",
+      "meta": {}
+    },
+    {
+      "filename": "introduction.md",
+      "link": "\\zh-cn\\docs\\dir\\introduction.html",
       "meta": {}
     },
     {

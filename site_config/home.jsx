@@ -13,7 +13,7 @@ export default {
         },
         {
           text: '查看Github',
-          link: 'https://github.com/burningmyself',
+          link: 'https://github.com/burningmyself/bank.logo',
           type: 'normal',
         },
       ],
