@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="keywords" content="react_interview" />
+	<meta name="description" content="react_interview" />
+	<!-- 网页标签标题 -->
+	<title>react_interview</title>
+	<link rel="shortcut icon" href="/img/docsite.ico"/>
+	<link rel="stylesheet" href="/build/blogDetail.css" />
+</head>
+<body>
+	<div id="root"><div class="blog-detail-page" data-reactroot=""><header class="header-container header-container-normal"><div class="header-body"><a href="/en-us/index.html"><img class="logo" src="/img/dubbo_colorful.png"/></a><div class="search search-normal"><span class="icon-search"></span></div><span class="language-switch language-switch-normal">中</span><div class="header-menu"><img class="header-menu-toggle" src="/img/system/menu_gray.png"/><ul><li class="menu-item menu-item-normal"><a href="/en-us/index.html" target="_self">HOME</a></li><li class="menu-item menu-item-normal"><a href="/en-us/docs/introduction.html" target="_self">DOCS</a></li><li class="menu-item menu-item-normal menu-item-normal-active"><a href="/en-us/blog/index.html" target="_self">BLOG</a></li><li class="menu-item menu-item-normal"><a href="/en-us/community/index.html" target="_self">COMMUNITY</a></li></ul></div></div></header><section class="blog-content markdown-body"><h1>React 面试问题</h1>
+<blockquote>
+<p>如果你是一位有理想的前端开发人员，并且正在准备面试，那么这篇文章就是为你准备的。本文收集了 React 面试中最常见的 50 大问题，这是一份理想的指南，让你为 React 相关的面试做好充分的准备工作。首先我们快速了解一下 React 在市场上的需求和现状，然后再开始讨论 React 面试问题。</p>
+</blockquote>
+<p>JavaScript 工具的市场地位正在缓慢而稳定地上升当中，而对 React 认证的需求正在飞速增长。选择正确的技术来开发应用程序或网站变得愈加艰难。React 被认为是 Javascript 语言中增长最快的框架。</p>
+<p>虚拟 DOM 和可复用部件等独特特性吸引了前端开发人员的注意。尽管成熟的框架（如 Angular、Meteor 和 Vue 等）在 MVC（模型 - 视图 - 控制器）中只是一个“视图”库，但它们都有很强的竞争力。下图显示了常见 JS 框架的趋势：</p>
+<p><img src="./../img/react-top.png" alt="react-top"></p>
+<p>以下是面试官最有可能提出的 50 个面试问题和答案。</p>
+<h2>React 面试问题——常规知识</h2>
+<ol>
+<li>
+<p>真实 DOM 和虚拟 DOM 的区别</p>
+<table>
+<thead>
+<tr>
+<th>真实 DOM</th>
+<th style="text-align:left">虚拟 DOM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.更新较慢</td>
+<td style="text-align:left">1.更新较快</td>
+</tr>
+<tr>
+<td>2.可以直接更新 HTML</td>
+<td style="text-align:left">2.不能直接更新 HTML</td>
+</tr>
+<tr>
+<td>3.元素更新时创建一个新 DOM</td>
+<td style="text-align:left">3.元素更新时更新 JSX</td>
+</tr>
+<tr>
+<td>4.DOM 操作开销较大</td>
+<td style="text-align:left">4.DOM 操作非常容易</td>
+</tr>
+<tr>
+<td>5.内存浪费严重</td>
+<td style="text-align:left">5.没有内存浪费</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>什么是 React？</p>
+<ul>
+<li>React 是 2011 年由 Facebook 开发的前端 JavaScript 库。</li>
+<li>它遵循基于组件的方法，这种方法可以用来构建可复用的 UI 组件。</li>
+<li>它用于复杂的交互式 Web 端和移动端用户界面开发。</li>
+<li>尽管它在 2015 年才开源，但得到了一家巨头的支持。</li>
+</ul>
+</li>
+<li>
+<p>React 的特点是什么？</p>
+<ul>
+<li>轻量级 DOM，以获得更好的性能。</li>
+<li>在 React 中，一切都被视为组件。</li>
+<li>React 使用 JSX（JavaScript eXtension），使我们可以编写类似于 HTML 的 JavaScript。</li>
+<li>React 不是直接运行在浏览器的文档对象模型（DOM）上，而是运行在虚拟 DOM 上。</li>
+<li>ReactJS 遵循单向数据流或单向数据绑定。</li>
+</ul>
+</li>
+<li>
+<p>列出 React 的一些主要优势。</p>
+<ul>
+<li>可以提高应用程序的性能。</li>
+<li>可以方便地用在客户端和服务端。</li>
+<li>由于有了 JSX，代码的可读性提高了。</li>
+<li>使用 React 后，编写 UI 测试用例变得非常容易。</li>
+</ul>
+</li>
+<li>
+<p>React 有哪些局限？</p>
+<ul>
+<li>React 只是一个库，而不是一个成熟的框架。</li>
+<li>它的库很大，需要花费一些时间来理解。</li>
+<li>新手程序员可能很难入门。</li>
+<li>由于它使用了内联模板和 JSX，编码也比较复杂。</li>
+</ul>
+</li>
+<li>
+<p>什么是 JSX？</p>
+</li>
+</ol>
+<p>JSX 是 JavaScript XML 的简写。这是 React 使用的一种文件类型，具备 JavaScript 的表现力，并使用 HTML 作为模板语法。这样一来 HTML 文件理解起来就非常简单。这种文件可以创造稳健的应用程序并提高其效率。下面是一个 JSX 实例：</p>
+<pre><code class="language-jsx">render(){
+    <span class="hljs-keyword">return</span>(        
+           <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span> Hello World from Codersera!!<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+           <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+          );
+        }
+</code></pre>
+<ol start="7">
+<li>你对虚拟 DOM 有什么了解？解释其工作机制。</li>
+</ol>
+<p>虚拟 DOM 是轻量级的 JavaScript 对象，一开始只是真实 DOM 的一个副本。它是一个节点树，将组件列为对象及其属性和内容的列表。React 的渲染功能从 React 的各个部分生成一个节点树。然后，它会根据由不同用户或系统行为引起的信息模型突变来更新此树。
+虚拟 DOM 的工作机制只有简单的三步组成。</p>
+<pre><code>1. 每当任何基础信息更改时，整个 UI 就会以虚拟 DOM 的表示形式重新渲染。
+</code></pre>
+<p><img src="./../img/ui-dom-1.png" alt="ui-dom"></p>
+<pre><code>2. 然后计算先前的 DOM 表示和新的 DOM 表示之间的区别。
+</code></pre>
+<p><img src="./../img/ui-dom-2.png" alt="ui-dom"></p>
+<pre><code>3. 计算完成后，只有实际更改的内容才会更新到真实 DOM。
+</code></pre>
+<p><img src="./../img/ui-dom-3.png" alt="ui-dom"></p>
+<ol start="8">
+<li>为什么浏览器无法读取 JSX？</li>
+</ol>
+<p>React 使用 JSX（JavaScript eXtension），我们可以用它编写类似于 HTML 的 JavaScript。但由于 JSX 不是合法的 JavaScript，因此浏览器无法直接读取它。如果 JavaScript 文件包含 JSX，则必须将其转换。你需要一个转换器将 JSX 转换为浏览器可以理解的常规 Javascript。目前最常用的转换器是 Babel。</p>
+<ol start="9">
+<li>与 ES5 相比，React 的 ES6 语法有何不同？</li>
+</ol>
+<p>ES5 和 ES6 的语法区别如下：</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// ES5</span>
+<span class="hljs-keyword">var</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
+<span class="hljs-comment">// ES6</span>
+<span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
+ 
+********  <span class="hljs-keyword">export</span> vs exports *********
+ 
+<span class="hljs-comment">// ES5</span>
+<span class="hljs-built_in">module</span>.exports = Component;
+<span class="hljs-comment">// ES6</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> Component;
+ 
+****** <span class="hljs-function"><span class="hljs-keyword">function</span> *****
+// <span class="hljs-title">ES5</span>
+ 
+<span class="hljs-title">var</span> <span class="hljs-title">MyComponent</span> = <span class="hljs-title">React</span>.<span class="hljs-title">createClass</span>(<span class="hljs-params">{
+  render: function(</span>) </span>{
+    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">h3</span>&gt;</span> Hello CoderSera! <span class="hljs-tag">&lt;/<span class="hljs-name">h3</span>&gt;</span></span>
+  },
+});
+ 
+<span class="hljs-comment">// ES6</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyComponent</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+  render() {
+    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">h3</span>&gt;</span> Hello CoderSera! <span class="hljs-tag">&lt;/<span class="hljs-name">h3</span>&gt;</span></span>
+  }
+}
+ 
+ *******  props  ******
+ 
+<span class="hljs-comment">// ES5</span>
+<span class="hljs-keyword">var</span> App = React.createClass({
+  <span class="hljs-attr">propTypes</span>: { <span class="hljs-attr">name</span>: React.PropTypes.string },
+  <span class="hljs-attr">render</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">h3</span>&gt;</span> Hello, { this.props.name }! <span class="hljs-tag">&lt; /<span class="hljs-attr">h3</span>&gt;</span></span>
+  },
+});
+ 
+<span class="hljs-comment">// ES6</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+  render() {
+    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">h3</span>&gt;</span> Hello, { this.props.name }! <span class="hljs-tag">&lt;/<span class="hljs-name">h3</span>&gt;</span></span>
+  }
+}
+ 
+ ****** state *****
+ 
+<span class="hljs-comment">// ES5</span>
+<span class="hljs-keyword">var</span> App = React.createClass({
+  <span class="hljs-attr">getInitialState</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">return</span> { <span class="hljs-attr">name</span>: <span class="hljs-string">'world'</span> };
+  } 
+  
+  render: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">h3</span>&gt;</span> Hello, { this.state.name }! <span class="hljs-tag">&lt; /<span class="hljs-attr">h3</span>&gt;</span></span>;
+  },
+});
+ 
+<span class="hljs-comment">// ES6</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+  <span class="hljs-keyword">constructor</span>() {
+    <span class="hljs-keyword">super</span>();
+    <span class="hljs-keyword">this</span>.state = { <span class="hljs-attr">name</span>: <span class="hljs-string">'world'</span> };
+  }
+ 
+  render() {
+    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">h3</span>&gt;</span> Hello, { this.state.name }! <span class="hljs-tag">&lt; /<span class="hljs-attr">h3</span>&gt;</span></span>
+  }
+  render() {
+    <span class="hljs-keyword">return</span>;
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">h3</span>&gt;</span> Hello, { this.state.name }! <span class="hljs-tag">&lt; /<span class="hljs-attr">h3</span>&gt;</span></span>
+  }
+
+</code></pre>
+<ol start="10">
+<li>React 和 Angular 有何不同？</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>React 对比 Angular</th>
+<th style="text-align:left">React</th>
+<th style="text-align:left">Angular</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>架构</td>
+<td style="text-align:left">使用虚拟 DOM</td>
+<td style="text-align:left">使用真实 DOM</td>
+</tr>
+<tr>
+<td>渲染</td>
+<td style="text-align:left">服务端渲染</td>
+<td style="text-align:left">客户端渲染</td>
+</tr>
+<tr>
+<td>DOM</td>
+<td style="text-align:left">使用虚拟 DOM</td>
+<td style="text-align:left">使用真实 DOM</td>
+</tr>
+<tr>
+<td>数据绑定</td>
+<td style="text-align:left">单向数据绑定</td>
+<td style="text-align:left">双向数据绑定</td>
+</tr>
+<tr>
+<td>调试</td>
+<td style="text-align:left">编译时调试</td>
+<td style="text-align:left">运行时调试</td>
+</tr>
+<tr>
+<td>开发者</td>
+<td style="text-align:left">Facebook</td>
+<td style="text-align:left">谷歌</td>
+</tr>
+</tbody>
+</table>
+<ol start="11">
+<li>如何理解“在 React 中，一切都是组件”。</li>
+</ol>
+<p>React 应用程序的 UI 构建块都是组件。这些部分将整个 UI 划分为许多可自治和可复用的微小部分。然后独立的某个部分发生变化就不会影响 UI 的其余部分。</p>
+<ol start="12">
+<li>解释 React 中 render() 的目的。</li>
+</ol>
+<p>它被视为普通函数，但 render() 函数必须返回某些值，无论值是否为空。调用组件文件时默认会调用 render() 方法，因为组件需要显示 HTML 标记，或者我们可以说 JSX 语法。每个 React 组件必须有一个 render() 函数，它返回单个 React 元素，该元素代表原生 DOM 组件。如果需要渲染多个 HTML 元素，则必须将它们分组在一个封闭的标签内，如form、group和div等。此函数必须保持纯净，就是说它在每次调用时必须返回相同的结果。</p>
+<pre><code class="language-jsx"><span class="hljs-keyword">import</span> React, { Component } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
+ 
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{
+  render() {
+    <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-name">h1</span> <span class="hljs-attr">className</span>=<span class="hljs-string">'App-title'</span>&gt;</span> hello CoderSera <span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>)
+  }
+}
+ 
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> App;
+
+</code></pre>
+<ol start="13">
+<li>什么是 Hooks？</li>
+</ol>
+<p>Hooks 是一项新功能，使你无需编写类即可使用状态等 React 功能。来看一个 useState hook 示例。</p>
+<pre><code class="language-jsx">&lt;em&gt;<span class="hljs-keyword">import</span> &lt;<span class="hljs-regexp">/em&gt;{useState} &lt;em&gt;from &lt;/</span>em&gt;<span class="hljs-string">'react'</span>;&lt;br&gt;&lt;br&gt;&lt;em&gt;function &lt;/em&gt;Example() {&lt;br&gt;    &lt;em&gt;// Declare a new
+</code></pre>
+<ol start="14">
+<li>什么是 props？</li>
+</ol>
+<ul>
+<li>
+<p>Props 用于将数据从父级传递到子级或由组件本身传递。它们是不可变的，因此不会更改。</p>
+</li>
+<li>
+<p>Props 是不可变的。因为它们是基于纯函数的概念开发的。在纯函数中，我们无法更改参数数据。因此在 ReactJS 中也无法更改 props 的数据。</p>
+</li>
+</ul>
+<ol start="15">
+<li>React 中的状态是什么，如何使用？</li>
+</ol>
+<p>组件可以通过状态来跟踪其执行的任何渲染之间的信息。</p>
+<p>状态用于可变数据或将要更改的数据。这对于用户输入尤其方便。以搜索栏为例，用户输入数据时他们看到的内容也会更新。</p>
+<ol start="16">
+<li>状态和 props 的区别。</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>条件</th>
+<th style="text-align:left">状态</th>
+<th style="text-align:left">Props</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>从父组件接收初始值</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">是</td>
+</tr>
+<tr>
+<td>父组件可以更改值</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left">是</td>
+</tr>
+<tr>
+<td>在组件内设置默认值</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">是</td>
+</tr>
+<tr>
+<td>在组件内更改</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">否</td>
+</tr>
+<tr>
+<td>为子组件设置初始值</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">是</td>
+</tr>
+<tr>
+<td>在子组件内更改</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left">是</td>
+</tr>
+</tbody>
+</table>
+<ol start="17">
+<li>如何更新组件的状态？</li>
+</ol>
+<p>可以使用 this.setState() 更新组件的状态。</p>
+<pre><code class="language-jsx"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyComponent</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+    <span class="hljs-keyword">constructor</span>() {
+        <span class="hljs-keyword">super</span>();
+        <span class="hljs-keyword">this</span>.state = {
+            <span class="hljs-attr">name</span>: <span class="hljs-string">'Maxx'</span>,
+            <span class="hljs-attr">id</span>: <span class="hljs-string">'101'</span>
+        }
+    }
+    render()
+        {
+            setTimeout(<span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span>{<span class="hljs-keyword">this</span>.setState({<span class="hljs-attr">name</span>:<span class="hljs-string">'Jaeha'</span>, <span class="hljs-attr">id</span>:<span class="hljs-string">'222'</span>})},<span class="hljs-number">2000</span>)
+            <span class="hljs-keyword">return</span> (              
+                    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+                         <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Hello {this.state.name}<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+                         <span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span>Your Id is {this.state.id}<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span>
+                    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+             );
+        }
+    }
+    ReactDOM.render(
+               <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">MyComponent</span>/&gt;</span></span>, <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'content'</span>)
+);
+
+</code></pre>
+<p>18.React 中的箭头函数是什么？如何使用？</p>
+<p><strong>粗箭头</strong>=&gt; 用于定义匿名函数，这通常是将参数传递给回调函数的最简单方法。但是你需要在使用它时优化性能。注意：每次渲染组件时，在 render 方法中使用箭头函数都会创建一个新函数，这可能会影响性能。</p>
+<pre><code class="language-jsx"><span class="hljs-comment">//General way</span>
+render() {    
+    <span class="hljs-keyword">return</span>(
+        &lt;MyInput onChange={this.handleChange.bind(this) } /&gt;
+    );
+}
+//With Arrow Function
+render() {  
+    return(
+        &lt;MyInput onChange={ (e) =&gt; this.handleOnChange(e) } /&gt;
+    );
+}
+
+</code></pre>
+<ol start="19">
+<li>有状态和无状态组件的区别。</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>有状态组件</th>
+<th style="text-align:left">无状态组件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>在内存中存储组件状态更改的信息</td>
+<td style="text-align:left">计算组件的内部状态</td>
+</tr>
+<tr>
+<td>有权更改状态</td>
+<td style="text-align:left">无权更改状态</td>
+</tr>
+<tr>
+<td>包含过去、现在和可能的未来状态更改的信息</td>
+<td style="text-align:left">没有包含关于状态更改的信息</td>
+</tr>
+<tr>
+<td>无状态组件通知它们关于状态更改的需求，然后它们将 props 传递给前者</td>
+<td style="text-align:left">它们从有状态组件接收 props，将其视为回调函数</td>
+</tr>
+</tbody>
+</table>
+<ol start="20">
+<li>React 组件的生命周期有哪些阶段？</li>
+</ol>
+<p>React 组件的生命周期分为三个不同阶段：</p>
+<ul>
+<li>
+<p><strong>初始化</strong>：在初始化阶段，我们为 this.props 和 this.state 定义默认值和初始值。</p>
+</li>
+<li>
+<p><strong>挂载</strong>：挂载是将组件插入 DOM 时发生的过程</p>
+</li>
+<li>
+<p><strong>更新</strong>：这个阶段中，每当状态更改或组件收到新的 prop 时，组件都会更新</p>
+</li>
+<li>
+<p><strong>卸载</strong>：这是从 DOM 卸载组件的阶段。</p>
+</li>
+</ul>
+<ol start="21">
+<li>详细解释 React 组件的生命周期技术。</li>
+</ol>
+<p>一些最重要的生命周期方法包括：</p>
+<ul>
+<li>
+<p>componentWillMount()——在初始渲染发生之前，即在 React 将组件插入 DOM 之前立即调用一次。请务必注意，在此方法中调用 this.setState() 不会触发重新渲染。</p>
+</li>
+<li>
+<p>componentDidMount()——在渲染函数之后触发此方法。现在可以访问更新的 DOM，这意味着该方法是初始化其他需要访问 DOM 的 Javascript 库以及数据提取操作的最佳选择。</p>
+</li>
+<li>
+<p>componentWillReceiveProps()——componentWillReceiveProps() 在组件接收新 props 时调用。在调用 render() 方法之前，我们可以用这个方法对 prop 过渡做出反应。在此函数中调用 this.setState() 不会触发额外的重新渲染，我们可以通过 this.props 访问旧的 props。</p>
+</li>
+<li>
+<p>shouldComponentUpdate()——我们可以用它来决定下一个组件的状态是否应触发重新渲染。此方法返回一个布尔值，默认为 true。但是我们可以返回 false，并且不会调用以下方法：</p>
+</li>
+<li>
+<p>componentWillUpdate()——当接收到新的 props 或状态时，在渲染（更新）之前立即调用此方法。我们可以用它在更新之前做准备，但是不允许使用 this.setState()。</p>
+</li>
+<li>
+<p>componentDidUpdate()——React 更新 DOM 后立即调用此方法。我们可以使用此方法与更新后的 DOM 交互，或执行任何渲染后操作。</p>
+</li>
+<li>
+<p>componentWillUnmount()——从 DOM 卸载组件之前立即调用此方法。我们可以用它执行可能需要的任何清理工作。</p>
+</li>
+</ul>
+<ol start="22">
+<li>React 中的事件是什么？</li>
+</ol>
+<p>在 React 中，事件是对特定动作（如鼠标悬停、鼠标单击和按键等）触发的反应。处理这些事件类似于处理 DOM 元素上的事件。但是在语法上存在一些差异，例如：</p>
+<ul>
+<li>
+<p>事件命名使用驼峰式大小写，而不是仅使用小写字母。</p>
+</li>
+<li>
+<p>事件作为函数而不是字符串传递。</p>
+</li>
+</ul>
+<p>事件参数包含一组特定于事件的属性。每个事件类型都包含它自己的属性和行为，这些属性和行为只能通过它的事件处理程序访问。</p>
+<ol start="23">
+<li>如何在 React 中创建事件？</li>
+</ol>
+<pre><code class="language-jsx"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Display</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span>(</span>{    
+    show(evt) {
+        <span class="hljs-comment">// code   </span>
+    },   
+    render() {      
+        <span class="hljs-comment">// Render the div with an onClick prop (value is a function)        </span>
+        <span class="hljs-keyword">return</span> (            
+                <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{this.show}</span>&gt;</span>Click Me!<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+         );    
+    }
+});
+
+
+</code></pre>
+<ol start="24">
+<li>什么是 React 中的合成事件？</li>
+</ol>
+<p>合成事件是围绕浏览器原生事件充当跨浏览器包装器的对象。它们将不同的浏览器行为合并为一个 API。这样做是为了确保在各个浏览器的事件中显示一致的特征。</p>
+<ol start="25">
+<li>如何理解 React 中的引用？</li>
+</ol>
+<p>Ref 是 React 引用的简写。它是一个属性，帮助存储对特定元素或组件的引用，由组件渲染的配置函数返回。它用于返回对渲染返回的特定元素或组件的引用。当我们需要 DOM 测量或向组件添加方法时，它们会派上用场。</p>
+<pre><code class="language-jsx"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ReferenceDemo</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span></span>{
+     display() {
+         <span class="hljs-keyword">const</span> name = <span class="hljs-keyword">this</span>.inputDemo.value;
+         <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'disp'</span>).innerHTML = name;
+               }
+     render() {
+             <span class="hljs-keyword">return</span>(        
+                  <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+            Name: <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text"</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">{input</span> =&gt;</span> this.inputDemo = input} /&gt;
+            <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"Click"</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{this.display}</span>&gt;</span>Click<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>            
+             
+                        <span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span>Hello <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"disp"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span> !!!<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span>
+                  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+     );
+   }
+ }
+
+</span></code></pre>
+<ol start="26">
+<li>列出一些应该使用引用的情况？</li>
+</ol>
+<p>以下是应使用 ref 的情况：</p>
+<ul>
+<li>
+<p>当你需要管理焦点、选择文本或媒体播放时。</p>
+</li>
+<li>
+<p>触发命令式动画。</p>
+</li>
+<li>
+<p>与第三方 DOM 库集成。</p>
+</li>
+</ul>
+<ol start="27">
+<li>如何模块化 React 代码？</li>
+</ol>
+<p>可以使用 export 和 import 属性来模块化软件。它们有助于在不同的文档中单独编写组件。</p>
+<pre><code class="language-jsx"><span class="hljs-comment">//ChildComponent.jsx</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ChildComponent</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+    render() {
+        <span class="hljs-keyword">return</span>(  <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+                       <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>This is a child component<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+                 <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>)
+    }
+}
+ 
+<span class="hljs-comment">//ParentComponent.jsx</span>
+<span class="hljs-keyword">import</span> ChildComponent <span class="hljs-keyword">from</span> <span class="hljs-string">'./childcomponent.js'</span>;
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ParentComponent</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{    
+    render() {        
+        <span class="hljs-keyword">return</span>(           
+             <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>               
+                <span class="hljs-tag">&lt;<span class="hljs-name">App</span> /&gt;</span>          
+            <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+        );  
+    }
+}
+
+</code></pre>
+<ol start="28">
+<li>在 React 中如何创建表单？</li>
+</ol>
+<p>React 提供了一种有状态的，响应式的方法来构建表单。与其他 DOM 元素不同，HTML 表单元素在 React 中的工作机制有所不同。例如，表单数据通常由组件而不是 DOM 处理，并且通常使用受控组件来实现。
+区别在于可以使用回调函数来处理表单事件，然后使用容器的状态存储表单数据。这使你的组件可以更好地控制表单控制元素和表单数据。
+回调函数是在发生事件（包括更改表单控制值或表单提交）时触发的。</p>
+<pre><code class="language-jsx">handleSubmit(event) {
+    alert(<span class="hljs-string">'A name was submitted: '</span> + <span class="hljs-keyword">this</span>.state.value);
+    event.preventDefault();
+}
+ 
+render() {
+    <span class="hljs-keyword">return</span> (        
+         
+ 
+ 
+&lt;form onSubmit={this.handleSubmit}&gt;
+            &lt;label&gt;
+                Name:
+                &lt;input type="text" value={this.state.value} onChange={this.handleSubmit} /&gt;
+            &lt;/label&gt;
+            &lt;input type="submit" value="Submit" /&gt;
+        &lt;/form&gt;
+ 
+ 
+ 
+    );
+}
+
+</code></pre>
+<ol start="29">
+<li>如何理解受控和非受控组件？</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>受控组件</th>
+<th style="text-align:left">非受控组件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>它们不维护自己的状态</td>
+<td style="text-align:left">它们维护自己的状态</td>
+</tr>
+<tr>
+<td>数据由父组件控制</td>
+<td style="text-align:left">数据由 DOM 控制</td>
+</tr>
+<tr>
+<td>它们通过 props 获得当前值，然后通过回调通知更改</td>
+<td style="text-align:left">使用引用来获得它们的当前值</td>
+</tr>
+</tbody>
+</table>
+<ol start="30">
+<li>高阶组件（HOC）是什么意思？</li>
+</ol>
+<p>React 中的高阶组件是一种在组件之间共享通用功能而无需重复代码的模式。
+高阶组件实际上不是组件，它是一个接受组件并返回新组件的函数。它将一个组件转换为另一个组件，并添加其他数据或功能</p>
+<ol start="31">
+<li>HOC 可以做什么？</li>
+</ol>
+<p>HOC 可用于许多任务，例如：</p>
+<ul>
+<li>
+<p>代码复用，逻辑和引导抽象。</p>
+</li>
+<li>
+<p>渲染劫持。</p>
+</li>
+<li>
+<p>状态抽象和控制。</p>
+</li>
+<li>
+<p>Props 操控。</p>
+</li>
+</ul>
+<ol start="32">
+<li>什么是纯组件？</li>
+</ol>
+<p>React 并没有在我们的组件中编写 shouldComponent 方法，而是引入了一个带有内置 shouldComponentUpdate 实现的新组件，它是 React.PureComponent 组件。
+React.PureComponent 通过浅层 prop 和状态比较来实现它。在某些情况下，你可以使用 React.PureComponent 来提高性能。</p>
+<ol start="33">
+<li>React 中键有什么用途？</li>
+</ol>
+<p>键可帮助 React 识别哪些项目已更改、添加或删除。应该为数组内的元素提供键，以赋予元素稳定的身份。键必须是唯一的。
+当使用动态创建的组件或用户更改列表时，React 键非常有用。设置键值后，更改后的组件就能保持唯一标识。</p>
+<ol start="34">
+<li>MVC 框架的主要问题有哪些？</li>
+</ol>
+<p>以下是 MVC 框架的一些主要问题：</p>
+<ul>
+<li>MVC 不能解决代码复杂性问题。它也不能解决代码复用或灵活性问题。</li>
+<li>它不保证解耦代码。</li>
+</ul>
+<ol start="35">
+<li>你对 Flux 有什么了解？</li>
+</ol>
+<p>Flux 是 Facebook 内部与 React 搭配使用的架构。它不是框架或库。只是一种新型的体系结构，是对 React 和单向数据流概念的补充：</p>
+<p>Flux 的各个组成部分如下：</p>
+<ul>
+<li>动作（Actions）——帮助数据传递到调度器的辅助方法。</li>
+<li>调度器（Dispatcher）——接收动作并将负载广播到已注册的回调。</li>
+<li>存储（Stores）——具有已注册到调度器的回调的应用程序状态和逻辑的容器。</li>
+<li>控制器视图（Controller Views）——从组件中获取状态并通过 props 传递给子组件的 React 组件。</li>
+</ul>
+<p><img src="./../img/ui-dom-4.png" alt="'ui-dom-4'"></p>
+<ol start="36">
+<li>什么是 Redux？</li>
+</ol>
+<p>Redux 是一种状态管理工具。尽管它主要与 React 搭配使用，但也可以与其他任何 JavaScript 框架或库搭配。</p>
+<p>Redux 允许你在一个称为存储（Store）的对象中管理整个应用程序状态。</p>
+<p>对存储的更新将触发与存储的已更新部分连接的组件的重新渲染。当我们想要更新某些东西时，我们称之为动作（Action）。我们还创建函数来处理这些动作并返回更新的存储。这些函数称为 Reducer。</p>
+<ol start="37">
+<li>Redux 遵循的三大原则是什么？</li>
+</ol>
+<ul>
+<li>
+<p>单一可信来源：整个应用程序的状态存储在单个存储区中的对象 / 状态树中。单一状态树使我们能更容易地跟踪历史更改，更方便地调试或检查应用程序。</p>
+</li>
+<li>
+<p>状态是只读的：更改状态的唯一方法是触发动作。动作是描述更改的普通 JS 对象。就像状态是数据的最小表示一样，动作是数据更改的最小表示。</p>
+</li>
+<li>
+<p>使用纯函数更改：为了确认动作是如何转换状态树的，你需要纯函数。纯函数是返回值仅取决于其参数值的函数。</p>
+</li>
+</ul>
+<ol start="38">
+<li>如何理解“单一可信源”？</li>
+</ol>
+<p>单一可信源（SSOT）是构造信息模型和相关数据模式的实践，其中每个数据元素都只能在一个地方掌握（或编辑）
+Redux 使用“存储”将应用程序的整个状态存储在一个位置。因此，组件的所有状态都存储在存储中，并且存储本身会接收更新。单一状态树使我们能更容易地跟踪历史更改，更方便地调试或检查应用程序。</p>
+<ol start="39">
+<li>列出 Redux 的组件。</li>
+</ol>
+<p>Redux 由以下组件组成：</p>
+<ul>
+<li>动作——这是一个描述发生了什么的对象。</li>
+<li>Reducer——确定状态如何变化的地方。</li>
+<li>存储——整个应用程序的状态 / 对象树保存在存储中。</li>
+<li>视图——仅显示存储提供的数据。</li>
+</ul>
+<ol start="40">
+<li>数据在 Redux 中是如何流动的？</li>
+</ol>
+<p><img src="./../img/ui-dom-5.png" alt="'ui-dom-5'"></p>
+<ol start="41">
+<li>在 Redux 中如何定义动作？</li>
+</ol>
+<p>React 中的动作必须具有 type 属性，该属性指示正在执行的 ACTION 的类型。必须将它们定义为字符串常量，你也可以为其添加更多属性。在 Redux 中使用称为“动作创建者”的函数来创建动作。以下是动作和动作创建者的示例：</p>
+<pre><code class="language-jsx"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addTodo</span>(<span class="hljs-params">text</span>) </span>{
+       <span class="hljs-keyword">return</span> {
+                <span class="hljs-attr">type</span>: ADD_TODO,    
+                 text    
+    }
+}
+
+</code></pre>
+<ol start="42">
+<li>说明 Reducer 的作用。</li>
+</ol>
+<p>Reducer 是用于指示 ACTION 反应中应用程序状态变化的简单功能。它接收先前的状态和动作，然后返回新的状态。它根据动作类型确定需要哪种更新，然后返回新值。如果没有要完成的工作，它将按原样返回先前状态。</p>
+<ol start="43">
+<li>在 Redux 中存储的用途是什么？</li>
+</ol>
+<p>存储是一个 JavaScript 对象，可以保存应用程序的状态，并提供一些辅助方法来访问状态、调度动作并记录侦听器。应用程序的整个状态 / 对象树存储在单个存储中。因此 Redux 非常容易理解且可预测。我们可以将中间件转移到存储，以管理数据处理任务，并维护更改存储状态的各种活动的日志。通过 Reducer，所有活动都返回新的状态。</p>
+<ol start="44">
+<li>Redux 与 Flux 有何不同？</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Flux</th>
+<th style="text-align:left">Redux</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>存储包括状态和更改逻辑</td>
+<td style="text-align:left">存储和更改逻辑是分离的</td>
+</tr>
+<tr>
+<td>有多个存储</td>
+<td style="text-align:left">只有一个存储</td>
+</tr>
+<tr>
+<td>所有存储不互通，是平行的</td>
+<td style="text-align:left">带有分层 Reducer 的单个存储</td>
+</tr>
+<tr>
+<td>有单个调度器</td>
+<td style="text-align:left">没有调度器的概念</td>
+</tr>
+<tr>
+<td>React 组件订阅到存储</td>
+<td style="text-align:left">容器组件是有联系的</td>
+</tr>
+<tr>
+<td>状态是可变的</td>
+<td style="text-align:left">状态是不可变的</td>
+</tr>
+</tbody>
+</table>
+<ol start="45">
+<li>Redux 有哪些优势？</li>
+</ol>
+<p>Redux 的优点如下：</p>
+<ul>
+<li>结果的可预测性——由于总是有单一可信源，比如存储，因此当前状态与动作及应用程序的其他部分同步时不会出现混乱。</li>
+<li>可维护性——代码易于维护，具有可预测的结果和严格的结构。</li>
+<li>服务端渲染——你只需将在服务器上创建的存储传递给客户端即可。这对于初始渲染非常有用，并优化了应用程序性能，提供了更好的用户体验。</li>
+<li>开发人员工具——从动作到状态更改，开发人员可以利用这些工具实时跟踪应用程序中发生的所有事情。</li>
+<li>社区和生态系统——Redux 背后拥有巨大的社区，用起来更加便利。大批优秀的开发者为库的发展做出了贡献，并开发了很多应用程序。</li>
+<li>易于测试——Redux 的代码主要是较小的、纯净的和孤立的函数。这使代码可测试且独立。</li>
+<li>组织——Redux 精确地规定了代码的组织方式，这使得团队合作时代码更加一致，更容易理解。</li>
+</ul>
+<ol start="46">
+<li>什么是 React Router？</li>
+</ol>
+<p>React Router 是建立在 React 之上的功能强大的路由库。它使 URL 与网页上显示的数据保持同步。它保持标准化的结构和行为，可用于开发单页 Web 应用程序。React Router 有一个简单的 API。React Router 提供了一种方法，<strong>只会显示你的应用中路由匹配你的定义的那些组件</strong>。</p>
+<ol start="47">
+<li>为什么在 React Router v4 中使用 switch 关键字？</li>
+</ol>
+<p>在 Switch 组件内，<strong>Route</strong>和<strong>Redirect</strong>组件嵌套在内部。从 Switch 顶部的 Route/Redirect 组件开始到底部的 Route/Redirect，根据浏览器中当前的 URL 是否与 Route/Redirect 组件的 prop/ 路径匹配，将每个组件评估为 true 或 false。
+Switch 只会渲染第一个匹配的子级。当我们嵌套了下面这样的路由时真的很方便：</p>
+<pre><code class="language-jsx">&lt;Switch&gt;
+  <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Route</span> <span class="hljs-attr">path</span>=<span class="hljs-string">"/accounts/new"</span> <span class="hljs-attr">component</span>=<span class="hljs-string">{AddForm}</span> /&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">Route</span> <span class="hljs-attr">path</span>=<span class="hljs-string">{</span>`/<span class="hljs-attr">accounts</span>/<span class="hljs-attr">:accountId</span>`} <span class="hljs-attr">component</span>=<span class="hljs-string">{Profile}</span> /&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">Switch</span>&gt;</span>
+
+</span></code></pre>
+<ol start="48">
+<li>为什么我们在 React 中需要一个路由器？</li>
+</ol>
+<p>路由器用于定义多个路由，并且当用户键入特定的 URL 时，如果该 URL 与路由器内部定义的任何“路由”的路径匹配，则该用户将被重定向到该路由。因此我们需要在应用程序中添加一个路由器库，以允许创建多个路由，每个路由都为我们指向一个独特的视图。</p>
+<p>从 React Router 包导入的组件有两个属性，一个是将用户引导到指定路径的 path，另一个是用于定义所述路径中内容的 component。</p>
+<pre><code class="language-jsx">&lt;<span class="hljs-keyword">switch</span>&gt;
+    &lt;route exact path=’/’ component={Home}/&gt;
+    &lt;route path=’/posts/:id’ component={Newpost}/&gt;
+    &lt;route path=’/posts’   component={Post}/&gt;
+&lt;/switch&gt;
+
+</code></pre>
+<ol start="49">
+<li>列出 React Router 的优点。</li>
+</ol>
+<p>几个优点是：</p>
+<ol>
+<li>
+<p>就像 React 基于组件的理念一样，在 React Router v4 中 API 是“完全组件化的”。路由器可以可视化为单个根组件（），其中包含特定的子路由（）。</p>
+</li>
+<li>
+<p>无需手动设置历史值：在 React Router v4 中，我们要做的就是将路由包装在组件中。</p>
+</li>
+<li>
+<p>包是拆分的：三个包分别用于 Web、Native 和 Core。这使我们的应用更加紧凑。它们的编码样式类似，所以很容易来回切换。</p>
+</li>
+<li>
+<p>React Router 与传统路由有何不同？</p>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>~</th>
+<th style="text-align:left">传统路由</th>
+<th style="text-align:left">React 路由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>参与的页面</td>
+<td style="text-align:left">每个视图对应一个新页面</td>
+<td style="text-align:left">只涉及单个 HTML 页面</td>
+</tr>
+<tr>
+<td>URL 更改</td>
+<td style="text-align:left">向服务器发送一个 HTTP 请求并接收对应的 HTML 页面</td>
+<td style="text-align:left">只有历史属性被更改</td>
+</tr>
+<tr>
+<td>体验</td>
+<td style="text-align:left">用户其实是在每个视图的不同页面间切换</td>
+<td style="text-align:left">用户以为自己正在不同的页面间切换</td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://codersera.com/blog/top-50-react-questions-you-need-to-prepare-for-the-interview-in-2019/">原文链接：</a><a href="https://codersera.com/blog/top-50-react-questions-you-need-to-prepare-for-the-interview-in-2019/">https://codersera.com/blog/top-50-react-questions-you-need-to-prepare-for-the-interview-in-2019/</a></p>
+</section><footer class="footer-container"><div class="footer-body"><img src="/img/dubbo_gray.png"/><div class="cols-container"><div class="col col-12"><h3>Disclaimer</h3><p>the disclaimer content</p></div><div class="col col-6"><dl><dt>Documentation</dt><dd><a href="/en-us/docs/introduction.html" target="_self">Overview</a></dd><dd><a href="/en-us/docs/introduction.html" target="_self">Quick start</a></dd><dd><a href="/en-us/docs/dir/introduction.html" target="_self">Developer guide</a></dd></dl></div><div class="col col-6"><dl><dt>Resources</dt><dd><a href="/en-us/blog/index.html" target="_self">Blog</a></dd><dd><a href="/en-us/community/index.html" target="_self">Community</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2019 BurningMyself</span></div></div></footer></div></div>
+	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
+	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
+	<script>
+		window.rootPath = '';
+  </script>
+	<script src="/build/blogDetail.js"></script>
+</body>
+</html>

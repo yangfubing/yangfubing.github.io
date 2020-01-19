@@ -1,6 +1,21 @@
 {
   "en-us": [
     {
+      "filename": "syntax.md",
+      "link": "\\en-us\\blog\\dart\\syntax.html",
+      "meta": {}
+    },
+    {
+      "filename": "docker-compose.md",
+      "link": "\\en-us\\blog\\docker\\docker-compose.html",
+      "meta": {}
+    },
+    {
+      "filename": "docker-jenkins.md",
+      "link": "\\en-us\\blog\\docker\\docker-jenkins.html",
+      "meta": {}
+    },
+    {
       "filename": "docker.md",
       "link": "\\en-us\\blog\\docker\\docker.html",
       "meta": {}
@@ -166,6 +181,11 @@
       "meta": {}
     },
     {
+      "filename": "cto.md",
+      "link": "\\en-us\\blog\\exp\\cto.html",
+      "meta": {}
+    },
+    {
       "filename": "devops.md",
       "link": "\\en-us\\blog\\exp\\devops.html",
       "meta": {}
@@ -241,6 +261,11 @@
       "meta": {}
     },
     {
+      "filename": "javavm.md",
+      "link": "\\en-us\\blog\\java\\javavm.html",
+      "meta": {}
+    },
+    {
       "filename": "load-class.md",
       "link": "\\en-us\\blog\\java\\load-class.html",
       "meta": {}
@@ -253,6 +278,11 @@
     {
       "filename": "rmq-1.md",
       "link": "\\en-us\\blog\\java\\rocketmq\\rmq-1.html",
+      "meta": {}
+    },
+    {
+      "filename": "springAnnotation.md",
+      "link": "\\en-us\\blog\\java\\springAnnotation.html",
       "meta": {}
     },
     {
@@ -316,6 +346,11 @@
       "meta": {}
     },
     {
+      "filename": "c_sqlserver_nginx.md",
+      "link": "\\en-us\\blog\\net\\c_sqlserver_nginx.html",
+      "meta": {}
+    },
+    {
       "filename": "kj.md",
       "link": "\\en-us\\blog\\php\\kj.html",
       "meta": {}
@@ -343,6 +378,16 @@
     {
       "filename": "data_split.md",
       "link": "\\en-us\\blog\\sql\\data_split.html",
+      "meta": {}
+    },
+    {
+      "filename": "mybatis.md",
+      "link": "\\en-us\\blog\\sql\\mybatis.html",
+      "meta": {}
+    },
+    {
+      "filename": "mysql_backups.md",
+      "link": "\\en-us\\blog\\sql\\mysql_backups.html",
       "meta": {}
     },
     {
@@ -378,16 +423,6 @@
     {
       "filename": "sql_server_master.md",
       "link": "\\en-us\\blog\\sql\\sql_server_master.html",
-      "meta": {}
-    },
-    {
-      "filename": "20190706.md",
-      "link": "\\en-us\\blog\\summary\\20190706.html",
-      "meta": {}
-    },
-    {
-      "filename": "20190715.md",
-      "link": "\\en-us\\blog\\summary\\20190715.html",
       "meta": {}
     },
     {
@@ -431,6 +466,11 @@
       "meta": {}
     },
     {
+      "filename": "minio.md",
+      "link": "\\en-us\\blog\\tool\\minio.html",
+      "meta": {}
+    },
+    {
       "filename": "mkdocs.md",
       "link": "\\en-us\\blog\\tool\\mkdocs.html",
       "meta": {}
@@ -446,6 +486,16 @@
       "meta": {}
     },
     {
+      "filename": "javascript.md",
+      "link": "\\en-us\\blog\\web\\javascript.html",
+      "meta": {}
+    },
+    {
+      "filename": "js_tool_method.md",
+      "link": "\\en-us\\blog\\web\\js_tool_method.html",
+      "meta": {}
+    },
+    {
       "filename": "node.js.md",
       "link": "\\en-us\\blog\\web\\node.js.html",
       "meta": {}
@@ -454,9 +504,34 @@
       "filename": "react.md",
       "link": "\\en-us\\blog\\web\\react.html",
       "meta": {}
+    },
+    {
+      "filename": "react_interview.md",
+      "link": "\\en-us\\blog\\web\\react_interview.html",
+      "meta": {}
+    },
+    {
+      "filename": "vue_cp_react.md",
+      "link": "\\en-us\\blog\\web\\vue_cp_react.html",
+      "meta": {}
     }
   ],
   "zh-cn": [
+    {
+      "filename": "syntax.md",
+      "link": "\\zh-cn\\blog\\dart\\syntax.html",
+      "meta": {}
+    },
+    {
+      "filename": "docker-compose.md",
+      "link": "\\zh-cn\\blog\\docker\\docker-compose.html",
+      "meta": {}
+    },
+    {
+      "filename": "docker-jenkins.md",
+      "link": "\\zh-cn\\blog\\docker\\docker-jenkins.html",
+      "meta": {}
+    },
     {
       "filename": "docker.md",
       "link": "\\zh-cn\\blog\\docker\\docker.html",
@@ -623,6 +698,11 @@
       "meta": {}
     },
     {
+      "filename": "cto.md",
+      "link": "\\zh-cn\\blog\\exp\\cto.html",
+      "meta": {}
+    },
+    {
       "filename": "devops.md",
       "link": "\\zh-cn\\blog\\exp\\devops.html",
       "meta": {}
@@ -698,6 +778,11 @@
       "meta": {}
     },
     {
+      "filename": "javavm.md",
+      "link": "\\zh-cn\\blog\\java\\javavm.html",
+      "meta": {}
+    },
+    {
       "filename": "load-class.md",
       "link": "\\zh-cn\\blog\\java\\load-class.html",
       "meta": {}
@@ -710,6 +795,11 @@
     {
       "filename": "rmq-1.md",
       "link": "\\zh-cn\\blog\\java\\rocketmq\\rmq-1.html",
+      "meta": {}
+    },
+    {
+      "filename": "springAnnotation.md",
+      "link": "\\zh-cn\\blog\\java\\springAnnotation.html",
       "meta": {}
     },
     {
@@ -773,6 +863,11 @@
       "meta": {}
     },
     {
+      "filename": "c_sqlserver_nginx.md",
+      "link": "\\zh-cn\\blog\\net\\c_sqlserver_nginx.html",
+      "meta": {}
+    },
+    {
       "filename": "kj.md",
       "link": "\\zh-cn\\blog\\php\\kj.html",
       "meta": {}
@@ -800,6 +895,16 @@
     {
       "filename": "data_split.md",
       "link": "\\zh-cn\\blog\\sql\\data_split.html",
+      "meta": {}
+    },
+    {
+      "filename": "mybatis.md",
+      "link": "\\zh-cn\\blog\\sql\\mybatis.html",
+      "meta": {}
+    },
+    {
+      "filename": "mysql_backups.md",
+      "link": "\\zh-cn\\blog\\sql\\mysql_backups.html",
       "meta": {}
     },
     {
@@ -835,16 +940,6 @@
     {
       "filename": "sql_server_master.md",
       "link": "\\zh-cn\\blog\\sql\\sql_server_master.html",
-      "meta": {}
-    },
-    {
-      "filename": "20190706.md",
-      "link": "\\zh-cn\\blog\\summary\\20190706.html",
-      "meta": {}
-    },
-    {
-      "filename": "20190715.md",
-      "link": "\\zh-cn\\blog\\summary\\20190715.html",
       "meta": {}
     },
     {
@@ -888,6 +983,11 @@
       "meta": {}
     },
     {
+      "filename": "minio.md",
+      "link": "\\zh-cn\\blog\\tool\\minio.html",
+      "meta": {}
+    },
+    {
       "filename": "mkdocs.md",
       "link": "\\zh-cn\\blog\\tool\\mkdocs.html",
       "meta": {}
@@ -903,6 +1003,16 @@
       "meta": {}
     },
     {
+      "filename": "javascript.md",
+      "link": "\\zh-cn\\blog\\web\\javascript.html",
+      "meta": {}
+    },
+    {
+      "filename": "js_tool_method.md",
+      "link": "\\zh-cn\\blog\\web\\js_tool_method.html",
+      "meta": {}
+    },
+    {
       "filename": "node.js.md",
       "link": "\\zh-cn\\blog\\web\\node.js.html",
       "meta": {}
@@ -910,6 +1020,16 @@
     {
       "filename": "react.md",
       "link": "\\zh-cn\\blog\\web\\react.html",
+      "meta": {}
+    },
+    {
+      "filename": "react_interview.md",
+      "link": "\\zh-cn\\blog\\web\\react_interview.html",
+      "meta": {}
+    },
+    {
+      "filename": "vue_cp_react.md",
+      "link": "\\zh-cn\\blog\\web\\vue_cp_react.html",
       "meta": {}
     }
   ]

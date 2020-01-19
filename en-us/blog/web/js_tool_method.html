@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="keywords" content="js_tool_method" />
+	<meta name="description" content="js_tool_method" />
+	<!-- 网页标签标题 -->
+	<title>js_tool_method</title>
+	<link rel="shortcut icon" href="/img/docsite.ico"/>
+	<link rel="stylesheet" href="/build/blogDetail.css" />
+</head>
+<body>
+	<div id="root"><div class="blog-detail-page" data-reactroot=""><header class="header-container header-container-normal"><div class="header-body"><a href="/en-us/index.html"><img class="logo" src="/img/dubbo_colorful.png"/></a><div class="search search-normal"><span class="icon-search"></span></div><span class="language-switch language-switch-normal">中</span><div class="header-menu"><img class="header-menu-toggle" src="/img/system/menu_gray.png"/><ul><li class="menu-item menu-item-normal"><a href="/en-us/index.html" target="_self">HOME</a></li><li class="menu-item menu-item-normal"><a href="/en-us/docs/introduction.html" target="_self">DOCS</a></li><li class="menu-item menu-item-normal menu-item-normal-active"><a href="/en-us/blog/index.html" target="_self">BLOG</a></li><li class="menu-item menu-item-normal"><a href="/en-us/community/index.html" target="_self">COMMUNITY</a></li></ul></div></div></header><section class="blog-content markdown-body"><h1>JavaScript 工具函数大全</h1>
+<h2>数组</h2>
+<ol>
+<li>all：布尔全等判断</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> all = <span class="hljs-function">(<span class="hljs-params">arr, fn = <span class="hljs-built_in">Boolean</span></span>) =&gt;</span> arr.every(fn);
+
+all([<span class="hljs-number">4</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>], x =&gt; x &gt; <span class="hljs-number">1</span>); <span class="hljs-comment">// true</span>
+all([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]); <span class="hljs-comment">// true</span>
+
+</code></pre>
+<ol start="2">
+<li>allEqual：检查数组各项相等</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> allEqual = <span class="hljs-function"><span class="hljs-params">arr</span> =&gt;</span> arr.every(<span class="hljs-function"><span class="hljs-params">val</span> =&gt;</span> val === arr[<span class="hljs-number">0</span>]);
+
+allEqual([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>]); <span class="hljs-comment">// false</span>
+allEqual([<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>]); <span class="hljs-comment">// true</span>
+
+</code></pre>
+<ol start="3">
+<li>approximatelyEqual：约等于</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> approximatelyEqual = <span class="hljs-function">(<span class="hljs-params">v1, v2, epsilon = <span class="hljs-number">0.001</span></span>) =&gt;</span> <span class="hljs-built_in">Math</span>.abs(v1 - v2) &lt; epsilon;
+
+approximatelyEqual(<span class="hljs-built_in">Math</span>.PI / <span class="hljs-number">2.0</span>, <span class="hljs-number">1.5708</span>); <span class="hljs-comment">// true</span>
+
+</code></pre>
+<ol start="4">
+<li>arrayToCSV：数组转CSV格式（带空格的字符串）</li>
+</ol>
+<pre><code class="language-js">
+<span class="hljs-keyword">const</span> arrayToCSV = <span class="hljs-function">(<span class="hljs-params">arr, delimiter = <span class="hljs-string">','</span></span>) =&gt;</span>
+  arr.map(<span class="hljs-function"><span class="hljs-params">v</span> =&gt;</span> v.map(<span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> <span class="hljs-string">`"<span class="hljs-subst">${x}</span>"`</span>).join(delimiter)).join(<span class="hljs-string">'\n'</span>);
+  
+arrayToCSV([[<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>], [<span class="hljs-string">'c'</span>, <span class="hljs-string">'d'</span>]]); <span class="hljs-comment">// '"a","b"\n"c","d"'</span>
+arrayToCSV([[<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>], [<span class="hljs-string">'c'</span>, <span class="hljs-string">'d'</span>]], <span class="hljs-string">';'</span>); <span class="hljs-comment">// '"a";"b"\n"c";"d"'</span>
+
+</code></pre>
+<ol start="5">
+<li>arrayToHtmlList：数组转li列表</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> arrayToHtmlList = <span class="hljs-function">(<span class="hljs-params">arr, listID</span>) =&gt;</span>
+  (<span class="hljs-function"><span class="hljs-params">el</span> =&gt;</span> (
+    (el = <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#'</span> + listID)),
+    (el.innerHTML += arr.map(<span class="hljs-function"><span class="hljs-params">item</span> =&gt;</span> <span class="hljs-string">`&lt;li&gt;<span class="hljs-subst">${item}</span>&lt;/li&gt;`</span>).join(<span class="hljs-string">''</span>))
+  ))();
+  
+arrayToHtmlList([<span class="hljs-string">'item 1'</span>, <span class="hljs-string">'item 2'</span>], <span class="hljs-string">'myListID'</span>);
+
+</code></pre>
+<ol start="6">
+<li>average：平均数</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> average = <span class="hljs-function">(<span class="hljs-params">...nums</span>) =&gt;</span> nums.reduce(<span class="hljs-function">(<span class="hljs-params">acc, val</span>) =&gt;</span> acc + val, <span class="hljs-number">0</span>) / nums.length;
+average(...[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]); <span class="hljs-comment">// 2</span>
+average(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>); <span class="hljs-comment">// 2</span>
+
+</code></pre>
+<ol start="7">
+<li>averageBy：数组对象属性平均数</li>
+</ol>
+<p>此代码段将获取数组对象属性的平均值</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> averageBy = <span class="hljs-function">(<span class="hljs-params">arr, fn</span>) =&gt;</span>
+  arr.map(<span class="hljs-keyword">typeof</span> fn === <span class="hljs-string">'function'</span> ? fn : <span class="hljs-function"><span class="hljs-params">val</span> =&gt;</span> val[fn]).reduce(<span class="hljs-function">(<span class="hljs-params">acc, val</span>) =&gt;</span> acc + val, <span class="hljs-number">0</span>) /
+  arr.length;
+  
+averageBy([{ <span class="hljs-attr">n</span>: <span class="hljs-number">4</span> }, { <span class="hljs-attr">n</span>: <span class="hljs-number">2</span> }, { <span class="hljs-attr">n</span>: <span class="hljs-number">8</span> }, { <span class="hljs-attr">n</span>: <span class="hljs-number">6</span> }], o =&gt; o.n); <span class="hljs-comment">// 5</span>
+averageBy([{ <span class="hljs-attr">n</span>: <span class="hljs-number">4</span> }, { <span class="hljs-attr">n</span>: <span class="hljs-number">2</span> }, { <span class="hljs-attr">n</span>: <span class="hljs-number">8</span> }, { <span class="hljs-attr">n</span>: <span class="hljs-number">6</span> }], <span class="hljs-string">'n'</span>); <span class="hljs-comment">// 5</span>
+
+</code></pre>
+<ol start="8">
+<li>bifurcate：拆分断言后的数组</li>
+</ol>
+<p>可以根据每个元素返回的值，使用reduce()和push() 将元素添加到第二次参数fn中 。</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> bifurcate = <span class="hljs-function">(<span class="hljs-params">arr, filter</span>) =&gt;</span>
+  arr.reduce(<span class="hljs-function">(<span class="hljs-params">acc, val, i</span>) =&gt;</span> (acc[filter[i] ? <span class="hljs-number">0</span> : <span class="hljs-number">1</span>].push(val), acc), [[], []]);
+bifurcate([<span class="hljs-string">'beep'</span>, <span class="hljs-string">'boop'</span>, <span class="hljs-string">'foo'</span>, <span class="hljs-string">'bar'</span>], [<span class="hljs-literal">true</span>, <span class="hljs-literal">true</span>, <span class="hljs-literal">false</span>, <span class="hljs-literal">true</span>]); 
+<span class="hljs-comment">// [ ['beep', 'boop', 'bar'], ['foo'] ]</span>
+
+</code></pre>
+<ol start="9">
+<li>castArray：其它类型转数组</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> castArray = <span class="hljs-function"><span class="hljs-params">val</span> =&gt;</span> (<span class="hljs-built_in">Array</span>.isArray(val) ? val : [val]);
+
+castArray(<span class="hljs-string">'foo'</span>); <span class="hljs-comment">// ['foo']</span>
+castArray([<span class="hljs-number">1</span>]); <span class="hljs-comment">// [1]</span>
+castArray(<span class="hljs-number">1</span>); <span class="hljs-comment">// [1]</span>
+
+</code></pre>
+<ol start="10">
+<li>compact：去除数组中的无效/无用值</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> compact = <span class="hljs-function"><span class="hljs-params">arr</span> =&gt;</span> arr.filter(<span class="hljs-built_in">Boolean</span>);
+
+compact([<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-literal">false</span>, <span class="hljs-number">2</span>, <span class="hljs-string">''</span>, <span class="hljs-number">3</span>, <span class="hljs-string">'a'</span>, <span class="hljs-string">'e'</span> * <span class="hljs-number">23</span>, <span class="hljs-literal">NaN</span>, <span class="hljs-string">'s'</span>, <span class="hljs-number">34</span>]); 
+<span class="hljs-comment">// [ 1, 2, 3, 'a', 's', 34 ]</span>
+
+</code></pre>
+<ol start="11">
+<li>countOccurrences：检测数值出现次数</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> countOccurrences = <span class="hljs-function">(<span class="hljs-params">arr, val</span>) =&gt;</span> arr.reduce(<span class="hljs-function">(<span class="hljs-params">a, v</span>) =&gt;</span> (v === val ? a + <span class="hljs-number">1</span> : a), <span class="hljs-number">0</span>);
+countOccurrences([<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>], <span class="hljs-number">1</span>); <span class="hljs-comment">// 3</span>
+
+</code></pre>
+<ol start="12">
+<li>deepFlatten：递归扁平化数组</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> deepFlatten = <span class="hljs-function"><span class="hljs-params">arr</span> =&gt;</span> [].concat(...arr.map(<span class="hljs-function"><span class="hljs-params">v</span> =&gt;</span> (<span class="hljs-built_in">Array</span>.isArray(v) ? deepFlatten(v) : v)));
+
+deepFlatten([<span class="hljs-number">1</span>, [<span class="hljs-number">2</span>], [[<span class="hljs-number">3</span>], <span class="hljs-number">4</span>], <span class="hljs-number">5</span>]); <span class="hljs-comment">// [1,2,3,4,5]</span>
+
+</code></pre>
+<ol start="13">
+<li>difference：寻找差异（并返回第一个数组独有的）</li>
+</ol>
+<p>此代码段查找两个数组之间的差异，并返回第一个数组独有的。</p>
+<pre><code class="language-js">
+<span class="hljs-keyword">const</span> difference = <span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> s = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>(b);
+  <span class="hljs-keyword">return</span> a.filter(<span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> !s.has(x));
+};
+
+difference([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">4</span>]); <span class="hljs-comment">// [3]</span>
+
+</code></pre>
+<ol start="14">
+<li>differenceBy：先执行再寻找差异</li>
+</ol>
+<p>在将给定函数应用于两个列表的每个元素之后，此方法返回两个数组之间的差异。</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> differenceBy = <span class="hljs-function">(<span class="hljs-params">a, b, fn</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> s = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>(b.map(fn));
+  <span class="hljs-keyword">return</span> a.filter(<span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> !s.has(fn(x)));
+};
+
+differenceBy([<span class="hljs-number">2.1</span>, <span class="hljs-number">1.2</span>], [<span class="hljs-number">2.3</span>, <span class="hljs-number">3.4</span>], <span class="hljs-built_in">Math</span>.floor); <span class="hljs-comment">// [1.2]</span>
+differenceBy([{ <span class="hljs-attr">x</span>: <span class="hljs-number">2</span> }, { <span class="hljs-attr">x</span>: <span class="hljs-number">1</span> }], [{ <span class="hljs-attr">x</span>: <span class="hljs-number">1</span> }], v =&gt; v.x); <span class="hljs-comment">// [ { x: 2 } ]</span>
+
+</code></pre>
+<ol start="15">
+<li>dropWhile：删除不符合条件的值</li>
+</ol>
+<p>此代码段从数组顶部开始删除元素，直到传递的函数返回为true。</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> dropWhile = <span class="hljs-function">(<span class="hljs-params">arr, func</span>) =&gt;</span> {
+  <span class="hljs-keyword">while</span> (arr.length &gt; <span class="hljs-number">0</span> &amp;&amp; !func(arr[<span class="hljs-number">0</span>])) arr = arr.slice(<span class="hljs-number">1</span>);
+  <span class="hljs-keyword">return</span> arr;
+};
+
+dropWhile([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>], n =&gt; n &gt;= <span class="hljs-number">3</span>); <span class="hljs-comment">// [3,4]</span>
+
+</code></pre>
+<ol start="16">
+<li>flatten：指定深度扁平化数组</li>
+</ol>
+<p>此代码段第二参数可指定深度。</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> flatten = <span class="hljs-function">(<span class="hljs-params">arr, depth = <span class="hljs-number">1</span></span>) =&gt;</span>
+  arr.reduce(<span class="hljs-function">(<span class="hljs-params">a, v</span>) =&gt;</span> a.concat(depth &gt; <span class="hljs-number">1</span> &amp;&amp; <span class="hljs-built_in">Array</span>.isArray(v) ? flatten(v, depth - <span class="hljs-number">1</span>) : v), []);
+
+flatten([<span class="hljs-number">1</span>, [<span class="hljs-number">2</span>], <span class="hljs-number">3</span>, <span class="hljs-number">4</span>]); <span class="hljs-comment">// [1, 2, 3, 4]</span>
+flatten([<span class="hljs-number">1</span>, [<span class="hljs-number">2</span>, [<span class="hljs-number">3</span>, [<span class="hljs-number">4</span>, <span class="hljs-number">5</span>], <span class="hljs-number">6</span>], <span class="hljs-number">7</span>], <span class="hljs-number">8</span>], <span class="hljs-number">2</span>); <span class="hljs-comment">// [1, 2, 3, [4, 5], 6, 7, 8]</span>
+
+</code></pre>
+<ol start="17">
+<li>indexOfAll：返回数组中某值的所有索引</li>
+</ol>
+<p>此代码段可用于获取数组中某个值的所有索引，如果此值中未包含该值，则返回一个空数组。</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> indexOfAll = <span class="hljs-function">(<span class="hljs-params">arr, val</span>) =&gt;</span> arr.reduce(<span class="hljs-function">(<span class="hljs-params">acc, el, i</span>) =&gt;</span> (el === val ? [...acc, i] : acc), []);
+
+indexOfAll([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>], <span class="hljs-number">1</span>); <span class="hljs-comment">// [0,3]</span>
+indexOfAll([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>], <span class="hljs-number">4</span>); <span class="hljs-comment">// []</span>
+
+</code></pre>
+<ol start="18">
+<li>intersection：两数组的交集</li>
+</ol>
+<pre><code class="language-js">
+<span class="hljs-keyword">const</span> intersection = <span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> s = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>(b);
+  <span class="hljs-keyword">return</span> a.filter(<span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> s.has(x));
+};
+
+intersection([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>], [<span class="hljs-number">4</span>, <span class="hljs-number">3</span>, <span class="hljs-number">2</span>]); <span class="hljs-comment">// [2, 3]</span>
+
+</code></pre>
+<ol start="19">
+<li>intersectionWith：两数组都符合条件的交集</li>
+</ol>
+<p>此片段可用于在对两个数组的每个元素执行了函数之后，返回两个数组中存在的元素列表。</p>
+<pre><code class="language-js">
+<span class="hljs-keyword">const</span> intersectionBy = <span class="hljs-function">(<span class="hljs-params">a, b, fn</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> s = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>(b.map(fn));
+  <span class="hljs-keyword">return</span> a.filter(<span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> s.has(fn(x)));
+};
+
+intersectionBy([<span class="hljs-number">2.1</span>, <span class="hljs-number">1.2</span>], [<span class="hljs-number">2.3</span>, <span class="hljs-number">3.4</span>], <span class="hljs-built_in">Math</span>.floor); <span class="hljs-comment">// [2.1]</span>
+
+</code></pre>
+<ol start="20">
+<li>intersectionWith：先比较后返回交集</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> intersectionWith = <span class="hljs-function">(<span class="hljs-params">a, b, comp</span>) =&gt;</span> a.filter(<span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> b.findIndex(<span class="hljs-function"><span class="hljs-params">y</span> =&gt;</span> comp(x, y)) !== <span class="hljs-number">-1</span>);
+
+intersectionWith([<span class="hljs-number">1</span>, <span class="hljs-number">1.2</span>, <span class="hljs-number">1.5</span>, <span class="hljs-number">3</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">1.9</span>, <span class="hljs-number">3</span>, <span class="hljs-number">0</span>, <span class="hljs-number">3.9</span>], (a, b) =&gt; <span class="hljs-built_in">Math</span>.round(a) === <span class="hljs-built_in">Math</span>.round(b)); <span class="hljs-comment">// [1.5, 3, 0]</span>
+
+</code></pre>
+<ol start="21">
+<li>minN：返回指定长度的升序数组</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> minN = <span class="hljs-function">(<span class="hljs-params">arr, n = <span class="hljs-number">1</span></span>) =&gt;</span> [...arr].sort(<span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> a - b).slice(<span class="hljs-number">0</span>, n);
+
+minN([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]); <span class="hljs-comment">// [1]</span>
+minN([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>], <span class="hljs-number">2</span>); <span class="hljs-comment">// [1,2]</span>
+
+</code></pre>
+<ol start="22">
+<li>negate：根据条件反向筛选</li>
+</ol>
+<pre><code class="language-js">
+<span class="hljs-keyword">const</span> negate = <span class="hljs-function"><span class="hljs-params">func</span> =&gt;</span> <span class="hljs-function">(<span class="hljs-params">...args</span>) =&gt;</span> !func(...args);
+
+[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>].filter(negate(<span class="hljs-function"><span class="hljs-params">n</span> =&gt;</span> n % <span class="hljs-number">2</span> === <span class="hljs-number">0</span>)); <span class="hljs-comment">// [ 1, 3, 5 ]</span>
+
+</code></pre>
+<ol start="23">
+<li>randomIntArrayInRange：生成两数之间指定长度的随机数组</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> randomIntArrayInRange = <span class="hljs-function">(<span class="hljs-params">min, max, n = <span class="hljs-number">1</span></span>) =&gt;</span>
+  <span class="hljs-built_in">Array</span>.from({ <span class="hljs-attr">length</span>: n }, () =&gt; <span class="hljs-built_in">Math</span>.floor(<span class="hljs-built_in">Math</span>.random() * (max - min + <span class="hljs-number">1</span>)) + min);
+  
+randomIntArrayInRange(<span class="hljs-number">12</span>, <span class="hljs-number">35</span>, <span class="hljs-number">10</span>); <span class="hljs-comment">// [ 34, 14, 27, 17, 30, 27, 20, 26, 21, 14 ]</span>
+
+</code></pre>
+<ol start="24">
+<li>sample：在指定数组中获取随机数</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> sample = <span class="hljs-function"><span class="hljs-params">arr</span> =&gt;</span> arr[<span class="hljs-built_in">Math</span>.floor(<span class="hljs-built_in">Math</span>.random() * arr.length)];
+
+sample([<span class="hljs-number">3</span>, <span class="hljs-number">7</span>, <span class="hljs-number">9</span>, <span class="hljs-number">11</span>]); <span class="hljs-comment">// 9</span>
+
+</code></pre>
+<ol start="25">
+<li>sampleSize：在指定数组中获取指定长度的随机数</li>
+</ol>
+<p>此代码段可用于从数组中获取指定长度的随机数，直至穷尽数组。 使用Fisher-Yates算法对数组中的元素进行随机选择。</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> sampleSize = <span class="hljs-function">(<span class="hljs-params">[...arr], n = <span class="hljs-number">1</span></span>) =&gt;</span> {
+  <span class="hljs-keyword">let</span> m = arr.length;
+  <span class="hljs-keyword">while</span> (m) {
+    <span class="hljs-keyword">const</span> i = <span class="hljs-built_in">Math</span>.floor(<span class="hljs-built_in">Math</span>.random() * m--);
+    [arr[m], arr[i]] = [arr[i], arr[m]];
+  }
+  <span class="hljs-keyword">return</span> arr.slice(<span class="hljs-number">0</span>, n);
+};
+
+sampleSize([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>], <span class="hljs-number">2</span>); <span class="hljs-comment">// [3,1]</span>
+sampleSize([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>], <span class="hljs-number">4</span>); <span class="hljs-comment">// [2,3,1]</span>
+
+</code></pre>
+<ol start="26">
+<li>shuffle：“洗牌” 数组</li>
+</ol>
+<p>此代码段使用Fisher-Yates算法随机排序数组的元素。</p>
+<pre><code class="language-js">
+<span class="hljs-keyword">const</span> shuffle = <span class="hljs-function">(<span class="hljs-params">[...arr]</span>) =&gt;</span> {
+  <span class="hljs-keyword">let</span> m = arr.length;
+  <span class="hljs-keyword">while</span> (m) {
+    <span class="hljs-keyword">const</span> i = <span class="hljs-built_in">Math</span>.floor(<span class="hljs-built_in">Math</span>.random() * m--);
+    [arr[m], arr[i]] = [arr[i], arr[m]];
+  }
+  <span class="hljs-keyword">return</span> arr;
+};
+
+<span class="hljs-keyword">const</span> foo = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];
+shuffle(foo); <span class="hljs-comment">// [2, 3, 1], foo = [1, 2, 3]</span>
+
+</code></pre>
+<ol start="27">
+<li>nest：根据parent_id生成树结构（阿里一面真题）</li>
+</ol>
+<p>根据每项的parent_id，生成具体树形结构的对象。</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> nest = <span class="hljs-function">(<span class="hljs-params">items, id = <span class="hljs-literal">null</span>, link = <span class="hljs-string">'parent_id'</span></span>) =&gt;</span>
+  items
+    .filter(<span class="hljs-function"><span class="hljs-params">item</span> =&gt;</span> item[link] === id)
+    .map(<span class="hljs-function"><span class="hljs-params">item</span> =&gt;</span> ({ ...item, <span class="hljs-attr">children</span>: nest(items, item.id) }));
+
+</code></pre>
+<p>用法：</p>
+<pre><code class="language-js">  <span class="hljs-keyword">const</span> comments = [
+  { <span class="hljs-attr">id</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">parent_id</span>: <span class="hljs-literal">null</span> },
+  { <span class="hljs-attr">id</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">parent_id</span>: <span class="hljs-number">1</span> },
+  { <span class="hljs-attr">id</span>: <span class="hljs-number">3</span>, <span class="hljs-attr">parent_id</span>: <span class="hljs-number">1</span> },
+  { <span class="hljs-attr">id</span>: <span class="hljs-number">4</span>, <span class="hljs-attr">parent_id</span>: <span class="hljs-number">2</span> },
+  { <span class="hljs-attr">id</span>: <span class="hljs-number">5</span>, <span class="hljs-attr">parent_id</span>: <span class="hljs-number">4</span> }
+];
+<span class="hljs-keyword">const</span> nestedComments = nest(comments); <span class="hljs-comment">// [{ id: 1, parent_id: null, children: [...] }]</span>
+
+</code></pre>
+<h2>函数</h2>
+<ol>
+<li>attempt：捕获函数运行异常</li>
+</ol>
+<p>该代码段执行一个函数，返回结果或捕获的错误对象。</p>
+<pre><code class="language-js">onst attempt = <span class="hljs-function">(<span class="hljs-params">fn, ...args</span>) =&gt;</span> {
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">return</span> fn(...args);
+  } <span class="hljs-keyword">catch</span> (e) {
+    <span class="hljs-keyword">return</span> e <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Error</span> ? e : <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(e);
+  }
+};
+<span class="hljs-keyword">var</span> elements = attempt(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">selector</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-built_in">document</span>.querySelectorAll(selector);
+}, <span class="hljs-string">'&gt;_&gt;'</span>);
+<span class="hljs-keyword">if</span> (elements <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Error</span>) elements = []; <span class="hljs-comment">// elements = []</span>
+
+</code></pre>
+<ol start="2">
+<li>defer：推迟执行</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> defer = <span class="hljs-function">(<span class="hljs-params">fn, ...args</span>) =&gt;</span> setTimeout(fn, <span class="hljs-number">1</span>, ...args);
+
+defer(<span class="hljs-built_in">console</span>.log, <span class="hljs-string">'a'</span>), <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'b'</span>); <span class="hljs-comment">// logs 'b' then 'a'</span>
+
+</code></pre>
+<ol start="3">
+<li>runPromisesInSeries：运行多个Promises</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> runPromisesInSeries = <span class="hljs-function"><span class="hljs-params">ps</span> =&gt;</span> ps.reduce(<span class="hljs-function">(<span class="hljs-params">p, next</span>) =&gt;</span> p.then(next), <span class="hljs-built_in">Promise</span>.resolve());
+<span class="hljs-keyword">const</span> delay = <span class="hljs-function"><span class="hljs-params">d</span> =&gt;</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function"><span class="hljs-params">r</span> =&gt;</span> setTimeout(r, d));
+
+runPromisesInSeries([<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> delay(<span class="hljs-number">1000</span>), () =&gt; delay(<span class="hljs-number">2000</span>)]);
+<span class="hljs-comment">//依次执行每个Promises ，总共需要3秒钟才能完成</span>
+
+</code></pre>
+<ol start="4">
+<li>timeTaken：计算函数执行时间</li>
+</ol>
+<pre><code class="language-js">
+<span class="hljs-keyword">const</span> timeTaken = <span class="hljs-function"><span class="hljs-params">callback</span> =&gt;</span> {
+  <span class="hljs-built_in">console</span>.time(<span class="hljs-string">'timeTaken'</span>);
+  <span class="hljs-keyword">const</span> r = callback();
+  <span class="hljs-built_in">console</span>.timeEnd(<span class="hljs-string">'timeTaken'</span>);
+  <span class="hljs-keyword">return</span> r;
+};
+
+timeTaken(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">Math</span>.pow(<span class="hljs-number">2</span>, <span class="hljs-number">10</span>)); <span class="hljs-comment">// 1024, (logged): timeTaken: 0.02099609375ms</span>
+
+</code></pre>
+<ol start="5">
+<li>createEventHub：简单的发布/订阅模式</li>
+</ol>
+<p>创建一个发布/订阅（发布-订阅）事件集线，有emit，on和off方法。</p>
+<ul>
+<li>使用Object.create(null)创建一个空的hub对象。</li>
+<li>emit，根据event参数解析处理程序数组，然后.forEach()通过传入数据作为参数来运行每个处理程序。</li>
+<li>on，为事件创建一个数组（若不存在则为空数组），然后.push()将处理程序添加到该数组。</li>
+<li>off，用.findIndex()在事件数组中查找处理程序的索引，并使用.splice()删除。</li>
+</ul>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> createEventHub = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> ({
+  <span class="hljs-attr">hub</span>: <span class="hljs-built_in">Object</span>.create(<span class="hljs-literal">null</span>),
+  emit(event, data) {
+    (<span class="hljs-keyword">this</span>.hub[event] || []).forEach(<span class="hljs-function"><span class="hljs-params">handler</span> =&gt;</span> handler(data));
+  },
+  on(event, handler) {
+    <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.hub[event]) <span class="hljs-keyword">this</span>.hub[event] = [];
+    <span class="hljs-keyword">this</span>.hub[event].push(handler);
+  },
+  off(event, handler) {
+    <span class="hljs-keyword">const</span> i = (<span class="hljs-keyword">this</span>.hub[event] || []).findIndex(<span class="hljs-function"><span class="hljs-params">h</span> =&gt;</span> h === handler);
+    <span class="hljs-keyword">if</span> (i &gt; <span class="hljs-number">-1</span>) <span class="hljs-keyword">this</span>.hub[event].splice(i, <span class="hljs-number">1</span>);
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.hub[event].length === <span class="hljs-number">0</span>) <span class="hljs-keyword">delete</span> <span class="hljs-keyword">this</span>.hub[event];
+  }
+});
+
+</code></pre>
+<p>用法：</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> handler = <span class="hljs-function"><span class="hljs-params">data</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(data);
+<span class="hljs-keyword">const</span> hub = createEventHub();
+<span class="hljs-keyword">let</span> increment = <span class="hljs-number">0</span>;
+
+<span class="hljs-comment">// 订阅，监听不同事件</span>
+hub.on(<span class="hljs-string">'message'</span>, handler);
+hub.on(<span class="hljs-string">'message'</span>, () =&gt; <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Message event fired'</span>));
+hub.on(<span class="hljs-string">'increment'</span>, () =&gt; increment++);
+
+<span class="hljs-comment">// 发布：发出事件以调用所有订阅给它们的处理程序，并将数据作为参数传递给它们</span>
+hub.emit(<span class="hljs-string">'message'</span>, <span class="hljs-string">'hello world'</span>); <span class="hljs-comment">// 打印 'hello world' 和 'Message event fired'</span>
+hub.emit(<span class="hljs-string">'message'</span>, { <span class="hljs-attr">hello</span>: <span class="hljs-string">'world'</span> }); <span class="hljs-comment">// 打印 对象 和 'Message event fired'</span>
+hub.emit(<span class="hljs-string">'increment'</span>); <span class="hljs-comment">// increment = 1</span>
+
+<span class="hljs-comment">// 停止订阅</span>
+hub.off(<span class="hljs-string">'message'</span>, handler);
+
+</code></pre>
+<ol start="6">
+<li>memoize：缓存函数</li>
+</ol>
+<p>通过实例化一个Map对象来创建一个空的缓存。</p>
+<p>通过检查输入值的函数输出是否已缓存，返回存储一个参数的函数，该参数将被提供给已记忆的函数；如果没有，则存储并返回它。</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> memoize = <span class="hljs-function"><span class="hljs-params">fn</span> =&gt;</span> {
+  <span class="hljs-keyword">const</span> cache = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Map</span>();
+  <span class="hljs-keyword">const</span> cached = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">val</span>) </span>{
+    <span class="hljs-keyword">return</span> cache.has(val) ? cache.get(val) : cache.set(val, fn.call(<span class="hljs-keyword">this</span>, val)) &amp;&amp; cache.get(val);
+  };
+  cached.cache = cache;
+  <span class="hljs-keyword">return</span> cached;
+};
+
+
+</code></pre>
+<p>Ps: 这个版本可能不是很清晰，还有Vue源码版的：</p>
+<pre><code class="language-js"><span class="hljs-comment">/**
+ * Create a cached version of a pure function.
+ */</span>
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">cached</span>&lt;<span class="hljs-title">F</span>: <span class="hljs-title">Function</span>&gt; (<span class="hljs-params">fn: F</span>): <span class="hljs-title">F</span> </span>{
+  <span class="hljs-keyword">const</span> cache = <span class="hljs-built_in">Object</span>.create(<span class="hljs-literal">null</span>)
+  <span class="hljs-keyword">return</span> (<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">cachedFn</span> (<span class="hljs-params">str: string</span>) </span>{
+    <span class="hljs-keyword">const</span> hit = cache[str]
+    <span class="hljs-keyword">return</span> hit || (cache[str] = fn(str))
+  }: any)
+}
+
+</code></pre>
+<ol start="7">
+<li>once：只调用一次的函数</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> once = <span class="hljs-function"><span class="hljs-params">fn</span> =&gt;</span> {
+  <span class="hljs-keyword">let</span> called = <span class="hljs-literal">false</span>
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">if</span> (!called) {
+      called = <span class="hljs-literal">true</span>
+      fn.apply(<span class="hljs-keyword">this</span>, <span class="hljs-built_in">arguments</span>)
+    }
+  }
+};
+
+</code></pre>
+<ol start="8">
+<li>flattenObject：以键的路径扁平化对象</li>
+</ol>
+<p>使用递归。</p>
+<ul>
+<li>利用Object.keys(obj)联合Array.prototype.reduce()，以每片叶子节点转换为扁平的路径节点。</li>
+<li>如果键的值是一个对象，则函数使用调用适当的自身prefix以创建路径Object.assign()。</li>
+<li>否则，它将适当的前缀键值对添加到累加器对象。</li>
+<li>prefix除非您希望每个键都有一个前缀，否则应始终省略第二个参数。</li>
+</ul>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> flattenObject = <span class="hljs-function">(<span class="hljs-params">obj, prefix = <span class="hljs-string">''</span></span>) =&gt;</span>
+  <span class="hljs-built_in">Object</span>.keys(obj).reduce(<span class="hljs-function">(<span class="hljs-params">acc, k</span>) =&gt;</span> {
+    <span class="hljs-keyword">const</span> pre = prefix.length ? prefix + <span class="hljs-string">'.'</span> : <span class="hljs-string">''</span>;
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> obj[k] === <span class="hljs-string">'object'</span>) <span class="hljs-built_in">Object</span>.assign(acc, flattenObject(obj[k], pre + k));
+    <span class="hljs-keyword">else</span> acc[pre + k] = obj[k];
+    <span class="hljs-keyword">return</span> acc;
+  }, {});
+  
+flattenObject({ <span class="hljs-attr">a</span>: { <span class="hljs-attr">b</span>: { <span class="hljs-attr">c</span>: <span class="hljs-number">1</span> } }, <span class="hljs-attr">d</span>: <span class="hljs-number">1</span> }); <span class="hljs-comment">// { 'a.b.c': 1, d: 1 }</span>
+
+</code></pre>
+<ol start="9">
+<li>unflattenObject：以键的路径展开对象</li>
+</ol>
+<p>与上面的相反，展开对象。</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> unflattenObject = <span class="hljs-function"><span class="hljs-params">obj</span> =&gt;</span>
+  <span class="hljs-built_in">Object</span>.keys(obj).reduce(<span class="hljs-function">(<span class="hljs-params">acc, k</span>) =&gt;</span> {
+    <span class="hljs-keyword">if</span> (k.indexOf(<span class="hljs-string">'.'</span>) !== <span class="hljs-number">-1</span>) {
+      <span class="hljs-keyword">const</span> keys = k.split(<span class="hljs-string">'.'</span>);
+      <span class="hljs-built_in">Object</span>.assign(
+        acc,
+        <span class="hljs-built_in">JSON</span>.parse(
+          <span class="hljs-string">'{'</span> +
+            keys.map(<span class="hljs-function">(<span class="hljs-params">v, i</span>) =&gt;</span> (i !== keys.length - <span class="hljs-number">1</span> ? <span class="hljs-string">`"<span class="hljs-subst">${v}</span>":{`</span> : <span class="hljs-string">`"<span class="hljs-subst">${v}</span>":`</span>)).join(<span class="hljs-string">''</span>) +
+            obj[k] +
+            <span class="hljs-string">'}'</span>.repeat(keys.length)
+        )
+      );
+    } <span class="hljs-keyword">else</span> acc[k] = obj[k];
+    <span class="hljs-keyword">return</span> acc;
+  }, {});
+  
+unflattenObject({ <span class="hljs-string">'a.b.c'</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">d</span>: <span class="hljs-number">1</span> }); <span class="hljs-comment">// { a: { b: { c: 1 } }, d: 1 }</span>
+
+</code></pre>
+<p>这个的用途，在做Tree组件或复杂表单时取值非常舒服。</p>
+<h2>字符串</h2>
+<ol>
+<li>byteSize：返回字符串的字节长度</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> byteSize = <span class="hljs-function"><span class="hljs-params">str</span> =&gt;</span> <span class="hljs-keyword">new</span> Blob([str]).size;
+
+byteSize(<span class="hljs-string">'😀'</span>); <span class="hljs-comment">// 4</span>
+byteSize(<span class="hljs-string">'Hello World'</span>); <span class="hljs-comment">// 11</span>
+
+</code></pre>
+<ol start="2">
+<li>capitalize：首字母大写</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> capitalize = <span class="hljs-function">(<span class="hljs-params">[first, ...rest]</span>) =&gt;</span>
+  first.toUpperCase() + rest.join(<span class="hljs-string">''</span>);
+  
+capitalize(<span class="hljs-string">'fooBar'</span>); <span class="hljs-comment">// 'FooBar'</span>
+capitalize(<span class="hljs-string">'fooBar'</span>, <span class="hljs-literal">true</span>); <span class="hljs-comment">// 'Foobar'</span>
+
+</code></pre>
+<ol start="3">
+<li>capitalizeEveryWord：每个单词首字母大写</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> capitalizeEveryWord = <span class="hljs-function"><span class="hljs-params">str</span> =&gt;</span> str.replace(<span class="hljs-regexp">/\b[a-z]/g</span>, char =&gt; char.toUpperCase());
+
+capitalizeEveryWord(<span class="hljs-string">'hello world!'</span>); <span class="hljs-comment">// 'Hello World!'</span>
+
+</code></pre>
+<ol start="4">
+<li>decapitalize：首字母小写</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> decapitalize = <span class="hljs-function">(<span class="hljs-params">[first, ...rest]</span>) =&gt;</span>
+  first.toLowerCase() + rest.join(<span class="hljs-string">''</span>)
+
+decapitalize(<span class="hljs-string">'FooBar'</span>); <span class="hljs-comment">// 'fooBar'</span>
+decapitalize(<span class="hljs-string">'FooBar'</span>); <span class="hljs-comment">// 'fooBar'</span>
+
+</code></pre>
+<ol start="5">
+<li>luhnCheck：银行卡号码校验（luhn算法）</li>
+</ol>
+<p>Luhn算法的实现，用于验证各种标识号，例如信用卡号，IMEI号，国家提供商标识号等。</p>
+<p>与String.prototype.split('')结合使用，以获取数字数组。获得最后一个数字。实施luhn算法。如果被整除，则返回，否则返回。</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> luhnCheck = <span class="hljs-function"><span class="hljs-params">num</span> =&gt;</span> {
+  <span class="hljs-keyword">let</span> arr = (num + <span class="hljs-string">''</span>)
+    .split(<span class="hljs-string">''</span>)
+    .reverse()
+    .map(<span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> <span class="hljs-built_in">parseInt</span>(x));
+  <span class="hljs-keyword">let</span> lastDigit = arr.splice(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>)[<span class="hljs-number">0</span>];
+  <span class="hljs-keyword">let</span> sum = arr.reduce(<span class="hljs-function">(<span class="hljs-params">acc, val, i</span>) =&gt;</span> (i % <span class="hljs-number">2</span> !== <span class="hljs-number">0</span> ? acc + val : acc + ((val * <span class="hljs-number">2</span>) % <span class="hljs-number">9</span>) || <span class="hljs-number">9</span>), <span class="hljs-number">0</span>);
+  sum += lastDigit;
+  <span class="hljs-keyword">return</span> sum % <span class="hljs-number">10</span> === <span class="hljs-number">0</span>;
+};
+
+</code></pre>
+<p>用例:</p>
+<pre><code class="language-js">luhnCheck(<span class="hljs-string">'4485275742308327'</span>); <span class="hljs-comment">// true</span>
+luhnCheck(<span class="hljs-number">6011329933655299</span>); <span class="hljs-comment">//  false</span>
+luhnCheck(<span class="hljs-number">123456789</span>); <span class="hljs-comment">// false</span>
+</code></pre>
+<p>补充：银行卡号码的校验规则：</p>
+<p>银行卡号码的校验采用Luhn算法，校验过程大致如下：</p>
+<ul>
+<li>从右到左给卡号字符串编号，最右边第一位是1，最右边第二位是2，最右边第三位是3….</li>
+<li>从右向左遍历，对每一位字符t执行第三个步骤，并将每一位的计算结果相加得到一个数s。</li>
+<li>对每一位的计算规则：如果这一位是奇数位，则返回t本身，如果是偶数位，则先将t乘以2得到一个数n，如果n是一位数（小于10），直接返回n，否则将n的个位数和十位数相加返回。</li>
+<li>如果s能够整除10，则此号码有效，否则号码无效。</li>
+</ul>
+<p>因为最终的结果会对10取余来判断是否能够整除10，所以又叫做模10算法。
+当然，还是库比较香: bankcardinfo</p>
+<ol start="6">
+<li>splitLines：将多行字符串拆分为行数组。</li>
+</ol>
+<p>使用String.prototype.split()和正则表达式匹配换行符并创建一个数组。</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> splitLines = <span class="hljs-function"><span class="hljs-params">str</span> =&gt;</span> str.split(<span class="hljs-regexp">/\r?\n/</span>);
+
+splitLines(<span class="hljs-string">'This\nis a\nmultiline\nstring.\n'</span>); <span class="hljs-comment">// ['This', 'is a', 'multiline', 'string.' , '']</span>
+
+</code></pre>
+<ol start="7">
+<li>stripHTMLTags：删除字符串中的HTMl标签</li>
+</ol>
+<p>从字符串中删除HTML / XML标签。</p>
+<p>使用正则表达式从字符串中删除HTML / XML 标记。</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> stripHTMLTags = <span class="hljs-function"><span class="hljs-params">str</span> =&gt;</span> str.replace(<span class="hljs-regexp">/&lt;[^&gt;]*&gt;/g</span>, <span class="hljs-string">''</span>);
+
+stripHTMLTags(<span class="hljs-string">'&lt;p&gt;&lt;em&gt;lorem&lt;/em&gt; &lt;strong&gt;ipsum&lt;/strong&gt;&lt;/p&gt;'</span>); <span class="hljs-comment">// 'lorem ipsum'</span>
+
+</code></pre>
+<h2>对象</h2>
+<ol>
+<li>dayOfYear：当前日期天数</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> dayOfYear = <span class="hljs-function"><span class="hljs-params">date</span> =&gt;</span>
+  <span class="hljs-built_in">Math</span>.floor((date - <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(date.getFullYear(), <span class="hljs-number">0</span>, <span class="hljs-number">0</span>)) / <span class="hljs-number">1000</span> / <span class="hljs-number">60</span> / <span class="hljs-number">60</span> / <span class="hljs-number">24</span>);
+
+dayOfYear(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>()); <span class="hljs-comment">// 285</span>
+
+</code></pre>
+<ol start="2">
+<li>forOwn：迭代属性并执行回调</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> forOwn = <span class="hljs-function">(<span class="hljs-params">obj, fn</span>) =&gt;</span> <span class="hljs-built_in">Object</span>.keys(obj).forEach(<span class="hljs-function"><span class="hljs-params">key</span> =&gt;</span> fn(obj[key], key, obj));
+forOwn({ <span class="hljs-attr">foo</span>: <span class="hljs-string">'bar'</span>, <span class="hljs-attr">a</span>: <span class="hljs-number">1</span> }, v =&gt; <span class="hljs-built_in">console</span>.log(v)); <span class="hljs-comment">// 'bar', 1</span>
+
+</code></pre>
+<ol start="3">
+<li>Get Time From Date：返回当前24小时制时间的字符串</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> getColonTimeFromDate = <span class="hljs-function"><span class="hljs-params">date</span> =&gt;</span> date.toTimeString().slice(<span class="hljs-number">0</span>, <span class="hljs-number">8</span>);
+
+getColonTimeFromDate(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>()); <span class="hljs-comment">// "08:38:00"</span>
+
+</code></pre>
+<ol start="4">
+<li>Get Days Between Dates：返回日期间的天数</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> getDaysDiffBetweenDates = <span class="hljs-function">(<span class="hljs-params">dateInitial, dateFinal</span>) =&gt;</span>
+  (dateFinal - dateInitial) / (<span class="hljs-number">1000</span> * <span class="hljs-number">3600</span> * <span class="hljs-number">24</span>);
+  
+getDaysDiffBetweenDates(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">'2019-01-01'</span>), <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">'2019-10-14'</span>)); <span class="hljs-comment">// 286</span>
+
+</code></pre>
+<ol start="5">
+<li>is：检查值是否为特定类型。</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> is = <span class="hljs-function">(<span class="hljs-params">type, val</span>) =&gt;</span> ![, <span class="hljs-literal">null</span>].includes(val) &amp;&amp; val.constructor === type;
+
+is(<span class="hljs-built_in">Array</span>, [<span class="hljs-number">1</span>]); <span class="hljs-comment">// true</span>
+is(<span class="hljs-built_in">ArrayBuffer</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">ArrayBuffer</span>()); <span class="hljs-comment">// true</span>
+is(<span class="hljs-built_in">Map</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">Map</span>()); <span class="hljs-comment">// true</span>
+is(<span class="hljs-built_in">RegExp</span>, /./g); <span class="hljs-comment">// true</span>
+is(<span class="hljs-built_in">Set</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>()); <span class="hljs-comment">// true</span>
+is(<span class="hljs-built_in">WeakMap</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">WeakMap</span>()); <span class="hljs-comment">// true</span>
+is(<span class="hljs-built_in">WeakSet</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">WeakSet</span>()); <span class="hljs-comment">// true</span>
+is(<span class="hljs-built_in">String</span>, <span class="hljs-string">''</span>); <span class="hljs-comment">// true</span>
+is(<span class="hljs-built_in">String</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">String</span>(<span class="hljs-string">''</span>)); <span class="hljs-comment">// true</span>
+is(<span class="hljs-built_in">Number</span>, <span class="hljs-number">1</span>); <span class="hljs-comment">// true</span>
+is(<span class="hljs-built_in">Number</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">Number</span>(<span class="hljs-number">1</span>)); <span class="hljs-comment">// true</span>
+is(<span class="hljs-built_in">Boolean</span>, <span class="hljs-literal">true</span>); <span class="hljs-comment">// true</span>
+is(<span class="hljs-built_in">Boolean</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">Boolean</span>(<span class="hljs-literal">true</span>)); <span class="hljs-comment">// true</span>
+
+</code></pre>
+<ol start="6">
+<li>isAfterDate：检查是否在某日期后</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> isAfterDate = <span class="hljs-function">(<span class="hljs-params">dateA, dateB</span>) =&gt;</span> dateA &gt; dateB;
+
+isAfterDate(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-number">2010</span>, <span class="hljs-number">10</span>, <span class="hljs-number">21</span>), <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-number">2010</span>, <span class="hljs-number">10</span>, <span class="hljs-number">20</span>)); <span class="hljs-comment">// true</span>
+
+</code></pre>
+<ol start="7">
+<li>isBeforeDate：检查是否在某日期前</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> isBeforeDate = <span class="hljs-function">(<span class="hljs-params">dateA, dateB</span>) =&gt;</span> dateA &lt; dateB;
+
+isBeforeDate(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-number">2010</span>, <span class="hljs-number">10</span>, <span class="hljs-number">20</span>), <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-number">2010</span>, <span class="hljs-number">10</span>, <span class="hljs-number">21</span>)); <span class="hljs-comment">// true</span>
+
+</code></pre>
+<ol start="8">
+<li>tomorrow：获取明天的字符串格式时间</li>
+</ol>
+<pre><code class="language-js">
+<span class="hljs-keyword">const</span> tomorrow = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+  <span class="hljs-keyword">let</span> t = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>();
+  t.setDate(t.getDate() + <span class="hljs-number">1</span>);
+  <span class="hljs-keyword">return</span> t.toISOString().split(<span class="hljs-string">'T'</span>)[<span class="hljs-number">0</span>];
+};
+
+tomorrow(); <span class="hljs-comment">// 2019-10-15 (如果明天是2019-10-15)</span>
+
+</code></pre>
+<ol start="9">
+<li>equals：全等判断</li>
+</ol>
+<p>在两个变量之间进行深度比较以确定它们是否全等。</p>
+<p>此代码段精简的核心在于Array.prototype.every()的使用。</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> equals = <span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (a === b) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+  <span class="hljs-keyword">if</span> (a <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Date</span> &amp;&amp; b <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Date</span>) <span class="hljs-keyword">return</span> a.getTime() === b.getTime();
+  <span class="hljs-keyword">if</span> (!a || !b || (<span class="hljs-keyword">typeof</span> a !== <span class="hljs-string">'object'</span> &amp;&amp; <span class="hljs-keyword">typeof</span> b !== <span class="hljs-string">'object'</span>)) <span class="hljs-keyword">return</span> a === b;
+  <span class="hljs-keyword">if</span> (a.prototype !== b.prototype) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+  <span class="hljs-keyword">let</span> keys = <span class="hljs-built_in">Object</span>.keys(a);
+  <span class="hljs-keyword">if</span> (keys.length !== <span class="hljs-built_in">Object</span>.keys(b).length) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+  <span class="hljs-keyword">return</span> keys.every(<span class="hljs-function"><span class="hljs-params">k</span> =&gt;</span> equals(a[k], b[k]));
+};
+
+</code></pre>
+<p>用法：</p>
+<pre><code class="language-js">equals({ <span class="hljs-attr">a</span>: [<span class="hljs-number">2</span>, { <span class="hljs-attr">e</span>: <span class="hljs-number">3</span> }], <span class="hljs-attr">b</span>: [<span class="hljs-number">4</span>], <span class="hljs-attr">c</span>: <span class="hljs-string">'foo'</span> }, { <span class="hljs-attr">a</span>: [<span class="hljs-number">2</span>, { <span class="hljs-attr">e</span>: <span class="hljs-number">3</span> }], <span class="hljs-attr">b</span>: [<span class="hljs-number">4</span>], <span class="hljs-attr">c</span>: <span class="hljs-string">'foo'</span> }); <span class="hljs-comment">// true</span>
+
+</code></pre>
+<h2>数字</h2>
+<ol>
+<li>randomIntegerInRange：生成指定范围的随机整数</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> randomIntegerInRange = <span class="hljs-function">(<span class="hljs-params">min, max</span>) =&gt;</span> <span class="hljs-built_in">Math</span>.floor(<span class="hljs-built_in">Math</span>.random() * (max - min + <span class="hljs-number">1</span>)) + min;
+
+randomIntegerInRange(<span class="hljs-number">0</span>, <span class="hljs-number">5</span>); <span class="hljs-comment">// 3</span>
+
+</code></pre>
+<ol start="2">
+<li>randomNumberInRange：生成指定范围的随机小数</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> randomNumberInRange = <span class="hljs-function">(<span class="hljs-params">min, max</span>) =&gt;</span> <span class="hljs-built_in">Math</span>.random() * (max - min) + min;
+
+randomNumberInRange(<span class="hljs-number">2</span>, <span class="hljs-number">10</span>); <span class="hljs-comment">// 6.0211363285087005</span>
+
+</code></pre>
+<ol start="3">
+<li>round：四舍五入到指定位数</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> round = <span class="hljs-function">(<span class="hljs-params">n, decimals = <span class="hljs-number">0</span></span>) =&gt;</span> <span class="hljs-built_in">Number</span>(<span class="hljs-string">`<span class="hljs-subst">${<span class="hljs-built_in">Math</span>.round(<span class="hljs-string">`<span class="hljs-subst">${n}</span>e<span class="hljs-subst">${decimals}</span>`</span>)}</span>e-<span class="hljs-subst">${decimals}</span>`</span>);
+
+round(<span class="hljs-number">1.005</span>, <span class="hljs-number">2</span>); <span class="hljs-comment">// 1.01</span>
+
+</code></pre>
+<ol start="4">
+<li>sum：计算数组或多个数字的总和</li>
+</ol>
+<pre><code class="language-js">
+<span class="hljs-keyword">const</span> sum = <span class="hljs-function">(<span class="hljs-params">...arr</span>) =&gt;</span> [...arr].reduce(<span class="hljs-function">(<span class="hljs-params">acc, val</span>) =&gt;</span> acc + val, <span class="hljs-number">0</span>);
+
+sum(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>); <span class="hljs-comment">// 10</span>
+sum(...[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>]); <span class="hljs-comment">// 10</span>
+
+</code></pre>
+<ol start="5">
+<li>toCurrency：简单的货币单位转换</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> toCurrency = <span class="hljs-function">(<span class="hljs-params">n, curr, LanguageFormat = <span class="hljs-literal">undefined</span></span>) =&gt;</span>
+  <span class="hljs-built_in">Intl</span>.NumberFormat(LanguageFormat, { <span class="hljs-attr">style</span>: <span class="hljs-string">'currency'</span>, <span class="hljs-attr">currency</span>: curr }).format(n);
+  
+toCurrency(<span class="hljs-number">123456.789</span>, <span class="hljs-string">'EUR'</span>); <span class="hljs-comment">// €123,456.79</span>
+toCurrency(<span class="hljs-number">123456.789</span>, <span class="hljs-string">'USD'</span>, <span class="hljs-string">'en-us'</span>); <span class="hljs-comment">// $123,456.79  </span>
+toCurrency(<span class="hljs-number">123456.789</span>, <span class="hljs-string">'USD'</span>, <span class="hljs-string">'fa'</span>); <span class="hljs-comment">// ۱۲۳٬۴۵۶٫۷۹</span>
+toCurrency(<span class="hljs-number">322342436423.2435</span>, <span class="hljs-string">'JPY'</span>); <span class="hljs-comment">// ¥322,342,436,423 </span>
+
+</code></pre>
+<h2>浏览器操作及其它</h2>
+<ol>
+<li>bottomVisible：检查页面底部是否可见</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> bottomVisible = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span>
+  <span class="hljs-built_in">document</span>.documentElement.clientHeight + <span class="hljs-built_in">window</span>.scrollY &gt;=
+  (<span class="hljs-built_in">document</span>.documentElement.scrollHeight || <span class="hljs-built_in">document</span>.documentElement.clientHeight);
+
+bottomVisible(); <span class="hljs-comment">// true</span>
+
+</code></pre>
+<ol start="2">
+<li>Create Directory：检查创建目录</li>
+</ol>
+<p>此代码段调用fs模块的existsSync()检查目录是否存在，如果不存在，则mkdirSync()创建该目录。</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fs'</span>);
+<span class="hljs-keyword">const</span> createDirIfNotExists = <span class="hljs-function"><span class="hljs-params">dir</span> =&gt;</span> (!fs.existsSync(dir) ? fs.mkdirSync(dir) : <span class="hljs-literal">undefined</span>);
+createDirIfNotExists(<span class="hljs-string">'test'</span>); 
+
+</code></pre>
+<ol start="3">
+<li>currentURL：返回当前链接url</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> currentURL = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">window</span>.location.href;
+
+currentURL(); <span class="hljs-comment">// 'https://juejin.im'</span>
+
+</code></pre>
+<ol start="4">
+<li>distance：返回两点间的距离</li>
+</ol>
+<p>该代码段通过计算欧几里得距离来返回两点之间的距离。</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> distance = <span class="hljs-function">(<span class="hljs-params">x0, y0, x1, y1</span>) =&gt;</span> <span class="hljs-built_in">Math</span>.hypot(x1 - x0, y1 - y0);
+
+distance(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>); <span class="hljs-comment">// 2.23606797749979</span>
+
+</code></pre>
+<ol start="5">
+<li>elementContains：检查是否包含子元素
+此代码段检查父元素是否包含子元素。</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> elementContains = <span class="hljs-function">(<span class="hljs-params">parent, child</span>) =&gt;</span> parent !== child &amp;&amp; parent.contains(child);
+
+elementContains(<span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'head'</span>), <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'title'</span>)); <span class="hljs-comment">// true</span>
+elementContains(<span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'body'</span>), <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'body'</span>)); <span class="hljs-comment">// false</span>
+
+</code></pre>
+<ol start="6">
+<li>getStyle：返回指定元素的生效样式</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> getStyle = <span class="hljs-function">(<span class="hljs-params">el, ruleName</span>) =&gt;</span> getComputedStyle(el)[ruleName];
+
+getStyle(<span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'p'</span>), <span class="hljs-string">'font-size'</span>); <span class="hljs-comment">// '16px'</span>
+
+</code></pre>
+<ol start="7">
+<li>getType：返回值或变量的类型名</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> getType = <span class="hljs-function"><span class="hljs-params">v</span> =&gt;</span>
+  v === <span class="hljs-literal">undefined</span> ? <span class="hljs-string">'undefined'</span> : v === <span class="hljs-literal">null</span> ? <span class="hljs-string">'null'</span> : v.constructor.name.toLowerCase();
+  
+getType(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>])); <span class="hljs-comment">// 'set'</span>
+getType([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]); <span class="hljs-comment">// 'array'</span>
+
+</code></pre>
+<ol start="8">
+<li>hasClass：校验指定元素的类名</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> hasClass = <span class="hljs-function">(<span class="hljs-params">el, className</span>) =&gt;</span> el.classList.contains(className);
+hasClass(<span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'p.special'</span>), <span class="hljs-string">'special'</span>); <span class="hljs-comment">// true</span>
+
+</code></pre>
+<ol start="9">
+<li>hide：隐藏所有的指定标签</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> hide = <span class="hljs-function">(<span class="hljs-params">...el</span>) =&gt;</span> [...el].forEach(<span class="hljs-function"><span class="hljs-params">e</span> =&gt;</span> (e.style.display = <span class="hljs-string">'none'</span>));
+
+hide(<span class="hljs-built_in">document</span>.querySelectorAll(<span class="hljs-string">'img'</span>)); <span class="hljs-comment">// 隐藏所有&lt;img&gt;标签</span>
+
+</code></pre>
+<ol start="10">
+<li>httpsRedirect：HTTP 跳转 HTTPS</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> httpsRedirect = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+  <span class="hljs-keyword">if</span> (location.protocol !== <span class="hljs-string">'https:'</span>) location.replace(<span class="hljs-string">'https://'</span> + location.href.split(<span class="hljs-string">'//'</span>)[<span class="hljs-number">1</span>]);
+};
+
+httpsRedirect(); <span class="hljs-comment">// 若在`http://www.baidu.com`, 则跳转到`https://www.baidu.com`</span>
+
+</code></pre>
+<ol start="11">
+<li>insertAfter：在指定元素之后插入新元素</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> insertAfter = <span class="hljs-function">(<span class="hljs-params">el, htmlString</span>) =&gt;</span> el.insertAdjacentHTML(<span class="hljs-string">'afterend'</span>, htmlString);
+
+<span class="hljs-comment">// &lt;div id="myId"&gt;...&lt;/div&gt; &lt;p&gt;after&lt;/p&gt;</span>
+insertAfter(<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'myId'</span>), <span class="hljs-string">'&lt;p&gt;after&lt;/p&gt;'</span>); 
+
+</code></pre>
+<ol start="12">
+<li>insertBefore：在指定元素之前插入新元素</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> insertBefore = <span class="hljs-function">(<span class="hljs-params">el, htmlString</span>) =&gt;</span> el.insertAdjacentHTML(<span class="hljs-string">'beforebegin'</span>, htmlString);
+
+insertBefore(<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'myId'</span>), <span class="hljs-string">'&lt;p&gt;before&lt;/p&gt;'</span>); <span class="hljs-comment">// &lt;p&gt;before&lt;/p&gt; &lt;div id="myId"&gt;...&lt;/div&gt;</span>
+
+</code></pre>
+<ol start="13">
+<li>isBrowser：检查是否为浏览器环境</li>
+</ol>
+<p>此代码段可用于确定当前运行时环境是否为浏览器。这有助于避免在服务器（节点）上运行前端模块时出错。</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> isBrowser = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> ![<span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span>, <span class="hljs-keyword">typeof</span> <span class="hljs-built_in">document</span>].includes(<span class="hljs-string">'undefined'</span>);
+
+isBrowser(); <span class="hljs-comment">// true (browser)</span>
+isBrowser(); <span class="hljs-comment">// false (Node)</span>
+
+</code></pre>
+<ol start="14">
+<li>isBrowserTab：检查当前标签页是否活动</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> isBrowserTabFocused = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> !<span class="hljs-built_in">document</span>.hidden;
+
+isBrowserTabFocused(); <span class="hljs-comment">// true</span>
+
+</code></pre>
+<ol start="15">
+<li>nodeListToArray：转换nodeList为数组</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> nodeListToArray = <span class="hljs-function"><span class="hljs-params">nodeList</span> =&gt;</span> [...nodeList];
+
+nodeListToArray(<span class="hljs-built_in">document</span>.childNodes); <span class="hljs-comment">// [ &lt;!DOCTYPE html&gt;, html ]</span>
+
+</code></pre>
+<ol start="16">
+<li>Random Hexadecimal Color Code：随机十六进制颜色</li>
+</ol>
+<pre><code class="language-js">
+<span class="hljs-keyword">const</span> randomHexColorCode = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+  <span class="hljs-keyword">let</span> n = (<span class="hljs-built_in">Math</span>.random() * <span class="hljs-number">0xfffff</span> * <span class="hljs-number">1000000</span>).toString(<span class="hljs-number">16</span>);
+  <span class="hljs-keyword">return</span> <span class="hljs-string">'#'</span> + n.slice(<span class="hljs-number">0</span>, <span class="hljs-number">6</span>);
+};
+
+randomHexColorCode(); <span class="hljs-comment">// "#e34155"</span>
+
+</code></pre>
+<ol start="17">
+<li>scrollToTop：平滑滚动至顶部</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> scrollToTop = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+  <span class="hljs-keyword">const</span> c = <span class="hljs-built_in">document</span>.documentElement.scrollTop || <span class="hljs-built_in">document</span>.body.scrollTop;
+  <span class="hljs-keyword">if</span> (c &gt; <span class="hljs-number">0</span>) {
+    <span class="hljs-built_in">window</span>.requestAnimationFrame(scrollToTop);
+    <span class="hljs-built_in">window</span>.scrollTo(<span class="hljs-number">0</span>, c - c / <span class="hljs-number">8</span>);
+  }
+};
+
+scrollToTop();
+
+</code></pre>
+<ol start="18">
+<li>smoothScroll：滚动到指定元素区域</li>
+</ol>
+<p>该代码段可将指定元素平滑滚动到浏览器窗口的可见区域。</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> smoothScroll = <span class="hljs-function"><span class="hljs-params">element</span> =&gt;</span>
+  <span class="hljs-built_in">document</span>.querySelector(element).scrollIntoView({
+    <span class="hljs-attr">behavior</span>: <span class="hljs-string">'smooth'</span>
+  });
+  
+smoothScroll(<span class="hljs-string">'#fooBar'</span>); 
+smoothScroll(<span class="hljs-string">'.fooBar'</span>); 
+
+</code></pre>
+<ol start="19">
+<li>detectDeviceType：检测移动/PC设备</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> detectDeviceType = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span>
+  <span class="hljs-regexp">/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i</span>.test(navigator.userAgent)
+    ? <span class="hljs-string">'Mobile'</span>
+    : <span class="hljs-string">'Desktop'</span>;
+
+</code></pre>
+<ol start="20">
+<li>getScrollPosition：返回当前的滚动位置</li>
+</ol>
+<p>默认参数为window ，pageXOffset(pageYOffset)为第一选择，没有则用scrollLeft(scrollTop)</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> getScrollPosition = <span class="hljs-function">(<span class="hljs-params">el = <span class="hljs-built_in">window</span></span>) =&gt;</span> ({
+  <span class="hljs-attr">x</span>: el.pageXOffset !== <span class="hljs-literal">undefined</span> ? el.pageXOffset : el.scrollLeft,
+  <span class="hljs-attr">y</span>: el.pageYOffset !== <span class="hljs-literal">undefined</span> ? el.pageYOffset : el.scrollTop
+});
+
+getScrollPosition(); <span class="hljs-comment">// {x: 0, y: 200}</span>
+
+</code></pre>
+<ol start="21">
+<li>size：获取不同类型变量的字节长度</li>
+</ol>
+<p>这个的实现非常巧妙，利用Blob类文件对象的特性，获取对象的长度。</p>
+<p>另外，多重三元运算符，是真香。</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> size = <span class="hljs-function"><span class="hljs-params">val</span> =&gt;</span>
+  <span class="hljs-built_in">Array</span>.isArray(val)
+    ? val.length
+    : val &amp;&amp; <span class="hljs-keyword">typeof</span> val === <span class="hljs-string">'object'</span>
+    ? val.size || val.length || <span class="hljs-built_in">Object</span>.keys(val).length
+    : <span class="hljs-keyword">typeof</span> val === <span class="hljs-string">'string'</span>
+    ? <span class="hljs-keyword">new</span> Blob([val]).size
+    : <span class="hljs-number">0</span>;
+
+size([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]); <span class="hljs-comment">// 5</span>
+size(<span class="hljs-string">'size'</span>); <span class="hljs-comment">// 4</span>
+size({ <span class="hljs-attr">one</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">two</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">three</span>: <span class="hljs-number">3</span> }); <span class="hljs-comment">// 3</span>
+
+
+</code></pre>
+<ol start="22">
+<li>escapeHTML：转义HTML</li>
+</ol>
+<p>当然是用来防XSS攻击啦。</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> escapeHTML = <span class="hljs-function"><span class="hljs-params">str</span> =&gt;</span>
+  str.replace(
+    <span class="hljs-regexp">/[&amp;&lt;&gt;'"]/g</span>,
+    tag =&gt;
+      ({
+        <span class="hljs-string">'&amp;'</span>: <span class="hljs-string">'&amp;amp;'</span>,
+        <span class="hljs-string">'&lt;'</span>: <span class="hljs-string">'&amp;lt;'</span>,
+        <span class="hljs-string">'&gt;'</span>: <span class="hljs-string">'&amp;gt;'</span>,
+        <span class="hljs-string">"'"</span>: <span class="hljs-string">'&amp;#39;'</span>,
+        <span class="hljs-string">'"'</span>: <span class="hljs-string">'&amp;quot;'</span>
+      }[tag] || tag)
+  );
+
+escapeHTML(<span class="hljs-string">'&lt;a href="#"&gt;Me &amp; you&lt;/a&gt;'</span>); <span class="hljs-comment">// '&amp;lt;a href=&amp;quot;#&amp;quot;&amp;gt;Me &amp;amp; you&amp;lt;/a&amp;gt;'</span>
+
+</code></pre>
+</section><footer class="footer-container"><div class="footer-body"><img src="/img/dubbo_gray.png"/><div class="cols-container"><div class="col col-12"><h3>Disclaimer</h3><p>the disclaimer content</p></div><div class="col col-6"><dl><dt>Documentation</dt><dd><a href="/en-us/docs/introduction.html" target="_self">Overview</a></dd><dd><a href="/en-us/docs/introduction.html" target="_self">Quick start</a></dd><dd><a href="/en-us/docs/dir/introduction.html" target="_self">Developer guide</a></dd></dl></div><div class="col col-6"><dl><dt>Resources</dt><dd><a href="/en-us/blog/index.html" target="_self">Blog</a></dd><dd><a href="/en-us/community/index.html" target="_self">Community</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2019 BurningMyself</span></div></div></footer></div></div>
+	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
+	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
+	<script>
+		window.rootPath = '';
+  </script>
+	<script src="/build/blogDetail.js"></script>
+</body>
+</html>
