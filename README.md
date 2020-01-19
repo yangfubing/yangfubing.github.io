@@ -21,6 +21,8 @@
 * [README.md](README.md)
 * [Docker]
 * * [Docker介绍使用](blog/zh-cn/docker/docker.md)
+* * [docker和docker-compose配置常用环境](blog/zh-cn/docker/docker-compose.md)
+* * [Docker部署Jenkins](blog/zh-cn/docker/docker-jenkins.md)
 * [经验]
 * * [集群和负载均衡](blog/zh-cn/exp/cl.md)
 * * [DevOps是什么](blog/zh-cn/exp/devops.md)  
@@ -33,6 +35,7 @@
 * * [产品与技术](blog/zh-cn/exp/pt.md)
 * * [深度学习框架](blog/zh-cn/exp/four_deep_learning.md)
 * * [在阿里做了5年技术Leader，我总结出这些套路！](blog/zh-cn/exp/tl.md)
+* * [CTO 技能图谱](blog/zh-cn/exp/cto.md)
 * [Img]
 * [Java]
 * * [Java 新特性](blog/zh-cn/java/feature.md)
@@ -40,6 +43,8 @@
 * * [Orm的优缺点](blog/zh-cn/java/orm.md)
 * * [BIO与NIO](blog/zh-cn/java/bio-nio.md)
 * * [RocketMq下载与安装](blog/zh-cn/java/rocketmq/rmq-1.md)
+* * [Spring常用注解](blog/zh-cn/java/springAnnotation.md)
+* * [Java 虚拟机](blog/zh-cn/java/javavm.md)
 * [Linux]
 * * [Linux常用命令](blog/zh-cn/linux/often.md)
 * * [实用的Linux 命令](blog/zh-cn/linux/ope.md)
@@ -51,8 +56,8 @@
 * * [基于DDD的微服务设计和开发实战](blog/zh-cn/micro/ddd.md)
 * [.NET]
 * * [C#语法新特性](blog/zh-cn/net/c_sharp.md)
-* * [.Ner Core Docker 部署](blog/zh-cn/net/c_docker.md)
-* * [使用 Docker 容器化部署 ASP.NET Core + MySQL + Nginx](blog/zh-cn/net/c_mysql_nginx.md)
+* * [.Net Core Docker 部署](blog/zh-cn/net/c_docker.md)
+* * [Docker容器化部署ASP.NET Core](blog/zh-cn/net/c_sqlserver_nginx.md)
 * * [让你的ASP.NET Core应用程序更安全](blog/zh-cn/net/c_core_safety.md)
 * * [ASP.NET Core开发者指南](blog/zh-cn/net/c_core_study_route.md)
 * [PHP]
@@ -69,8 +74,10 @@
 * * [MySQL 索引](blog/zh-cn/sql/mysql_index.md)
 * * [MySQL PXC集群](blog/zh-cn/sql/mysql_pxc.md)
 * * [MySQL MySQL数据库应用](blog/zh-cn/sql/mysql_use.md)
+* * [MySql 备份](blog/zh-cn/sql/mysql_backs.md)
 * * [Sql Server 主从备份](blog/zh-cn/sql/sql_server_master.md)
 * * [数据库之互联网常用分库分表方案](blog/zh-cn/sql/data_split.md)
+* * [Mybatis使用心德](blog/zh-cn/sql/mybatis.md)
 * [TOOL]
 * * [Git命令](blog/zh-cn/tool/git.md)
 * * [GitBook](blog/zh-cn/tool/gitbook.md)
@@ -79,16 +86,24 @@
 * * [Git提交日志规范](blog/zh-cn/tool/gitcmr.md)
 * * [MarkDown](blog/zh-cn/tool/markdown.md)
 * * [CI/CD](blog/zh-cn/tool/cicd.md)
-* * [mkdocs简单使用](blog/zh-cn/tool/mkdocs.md)
-* * [Git的黑魔法](blog/zh-cn/tool/gitsutdy.md)
+* * [mkblog/zh-cn简单使用](blog/zh-cn/tool/mkblog/zh-cn.md)
+* * [Git的黑魔法](blog/zh-cn/tool/gitstudy.md)
+* * [MinIO 搭建使用](blog/zh-cn/tool/minio.md)
 * [前端]
 * * [阿里js样式](blog/zh-cn/web/ali_js_style.md)
 * * [ES6语法](blog/zh-cn/web/es6.md)
 * * [Node.js](blog/zh-cn/web/node.js.md)
 * * [React 开发者指南](blog/zh-cn/web/react.md)
+* * [Dart语法学习](blog/zh-cn/dart/syntax.md)
+* * [React 面试](blog/zh-cn/web/react_interview.md)
+* * [Js 工具函数](blog/zh-cn/web/js_tool_method.md)
+* * [vue与react比较](blog/zh-cn/web/vue_cp_react.md)
+* * [JavaScript 基础](blog/zh-cn/web/javascript.md)
 * [构架]
 * * [构架拆分](blog/zh-cn/framework/split.md)
 * * [分布式、高并发、多线程](blog/zh-cn/framework/fgb.md)
+* * [如何理解敏捷开发](blog/zh-cn/framework/agility.md)
+* * [走向架构师必备的技能](blog/zh-cn/framework/fwork.md)
 * [医学]
 * * [脑炎](blog/zh-cn/doctor/ae.md)
 * [情感]
@@ -110,7 +125,7 @@
 * * [所有的失去，都会以另一种方式归来](blog/zh-cn/emotion/losecome.md)
 * * [人生有这三种好心态](blog/zh-cn/emotion/threeheart.md)
 * * [一个感情真相](blog/zh-cn/emotion/onelike.md)
-* * [情商与道理](blog/zh-cn/emotion/notruch.md)
+* * [情商与道理](blog/zh-cn/emotion/notruth.md)
 * * [六种男人远离](blog/zh-cn/emotion/smf.md)
 * * [决定接下来人生归属的，不是努力，而是选择](blog/zh-cn/emotion/select.md)
 * * [被你拉黑的那个人，你一定很喜欢吧](blog/zh-cn/emotion/nolike.md)
