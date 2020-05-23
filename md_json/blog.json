@@ -261,6 +261,26 @@
       "meta": {}
     },
     {
+      "filename": "java-simple.md",
+      "link": "\\en-us\\blog\\java\\java-simple.html",
+      "meta": {}
+    },
+    {
+      "filename": "java-string.md",
+      "link": "\\en-us\\blog\\java\\java-string.html",
+      "meta": {}
+    },
+    {
+      "filename": "java-utils.md",
+      "link": "\\en-us\\blog\\java\\java-utils.html",
+      "meta": {}
+    },
+    {
+      "filename": "java-validator.md",
+      "link": "\\en-us\\blog\\java\\java-validator.html",
+      "meta": {}
+    },
+    {
       "filename": "javavm.md",
       "link": "\\en-us\\blog\\java\\javavm.html",
       "meta": {}
@@ -281,8 +301,18 @@
       "meta": {}
     },
     {
+      "filename": "spring-cloud.md",
+      "link": "\\en-us\\blog\\java\\spring-cloud.html",
+      "meta": {}
+    },
+    {
       "filename": "springAnnotation.md",
       "link": "\\en-us\\blog\\java\\springAnnotation.html",
+      "meta": {}
+    },
+    {
+      "filename": "springdesign.md",
+      "link": "\\en-us\\blog\\java\\springdesign.html",
       "meta": {}
     },
     {
@@ -313,6 +343,16 @@
     {
       "filename": "fbs-lock.md",
       "link": "\\en-us\\blog\\micro\\fbs-lock.html",
+      "meta": {}
+    },
+    {
+      "filename": "kafka.md",
+      "link": "\\en-us\\blog\\micro\\kafka.html",
+      "meta": {}
+    },
+    {
+      "filename": "redis-cluster.md",
+      "link": "\\en-us\\blog\\micro\\redis-cluster.html",
       "meta": {}
     },
     {
@@ -778,6 +818,26 @@
       "meta": {}
     },
     {
+      "filename": "java-simple.md",
+      "link": "\\zh-cn\\blog\\java\\java-simple.html",
+      "meta": {}
+    },
+    {
+      "filename": "java-string.md",
+      "link": "\\zh-cn\\blog\\java\\java-string.html",
+      "meta": {}
+    },
+    {
+      "filename": "java-utils.md",
+      "link": "\\zh-cn\\blog\\java\\java-utils.html",
+      "meta": {}
+    },
+    {
+      "filename": "java-validator.md",
+      "link": "\\zh-cn\\blog\\java\\java-validator.html",
+      "meta": {}
+    },
+    {
       "filename": "javavm.md",
       "link": "\\zh-cn\\blog\\java\\javavm.html",
       "meta": {}
@@ -798,8 +858,18 @@
       "meta": {}
     },
     {
+      "filename": "spring-cloud.md",
+      "link": "\\zh-cn\\blog\\java\\spring-cloud.html",
+      "meta": {}
+    },
+    {
       "filename": "springAnnotation.md",
       "link": "\\zh-cn\\blog\\java\\springAnnotation.html",
+      "meta": {}
+    },
+    {
+      "filename": "springdesign.md",
+      "link": "\\zh-cn\\blog\\java\\springdesign.html",
       "meta": {}
     },
     {
@@ -830,6 +900,16 @@
     {
       "filename": "fbs-lock.md",
       "link": "\\zh-cn\\blog\\micro\\fbs-lock.html",
+      "meta": {}
+    },
+    {
+      "filename": "kafka.md",
+      "link": "\\zh-cn\\blog\\micro\\kafka.html",
+      "meta": {}
+    },
+    {
+      "filename": "redis-cluster.md",
+      "link": "\\zh-cn\\blog\\micro\\redis-cluster.html",
       "meta": {}
     },
     {

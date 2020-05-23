@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="keywords" content="java-validator" />
+	<meta name="description" content="java-validator" />
+	<!-- 网页标签标题 -->
+	<title>java-validator</title>
+	<link rel="shortcut icon" href="/img/docsite.ico"/>
+	<link rel="stylesheet" href="/build/blogDetail.css" />
+</head>
+<body>
+	<div id="root"><div class="blog-detail-page" data-reactroot=""><header class="header-container header-container-normal"><div class="header-body"><a href="/en-us/index.html"><img class="logo" src="/img/dubbo_colorful.png"/></a><div class="search search-normal"><span class="icon-search"></span></div><span class="language-switch language-switch-normal">中</span><div class="header-menu"><img class="header-menu-toggle" src="/img/system/menu_gray.png"/><ul><li class="menu-item menu-item-normal"><a href="/en-us/index.html" target="_self">HOME</a></li><li class="menu-item menu-item-normal"><a href="/en-us/docs/introduction.html" target="_self">DOCS</a></li><li class="menu-item menu-item-normal menu-item-normal-active"><a href="/en-us/blog/index.html" target="_self">BLOG</a></li><li class="menu-item menu-item-normal"><a href="/en-us/community/index.html" target="_self">COMMUNITY</a></li></ul></div></div></header><section class="blog-content markdown-body"><h1>Validator 注解使用</h1>
+<h2>为什么要用validator</h2>
+<ul>
+<li>javax.validation的一系列注解可以帮我们完成参数校验,免去繁琐的串行校验</li>
+</ul>
+<p>不然我们的代码就像下面这样:</p>
+<pre><code class="language-java"><span class="hljs-comment">/**
+     * 走串行校验
+     *
+     * <span class="hljs-doctag">@param</span> userVO
+     * <span class="hljs-doctag">@return</span>
+     */</span>
+    <span class="hljs-meta">@PostMapping</span>(<span class="hljs-string">"/save/serial"</span>)
+    <span class="hljs-function"><span class="hljs-keyword">public</span> Object <span class="hljs-title">save</span><span class="hljs-params">(@RequestBody UserVO userVO)</span> </span>{
+        String mobile = userVO.getMobile();
+
+        <span class="hljs-comment">//手动逐个 参数校验~ 写法</span>
+        <span class="hljs-keyword">if</span> (StringUtils.isBlank(mobile)) {
+            <span class="hljs-keyword">return</span> RspDTO.paramFail(<span class="hljs-string">"mobile:手机号码不能为空"</span>);
+        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (!Pattern.matches(<span class="hljs-string">"^[1][3,4,5,6,7,8,9][0-9]{9}$"</span>, mobile)) {
+            <span class="hljs-keyword">return</span> RspDTO.paramFail(<span class="hljs-string">"mobile:手机号码格式不对"</span>);
+        }
+
+        <span class="hljs-comment">//抛出自定义异常等~写法</span>
+        <span class="hljs-keyword">if</span> (StringUtils.isBlank(userVO.getUsername())) {
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> BizException(Constant.PARAM_FAIL_CODE, <span class="hljs-string">"用户名不能为空"</span>);
+        }
+
+        <span class="hljs-comment">// 比如写一个map返回</span>
+        <span class="hljs-keyword">if</span> (StringUtils.isBlank(userVO.getSex())) {
+            Map&lt;String, Object&gt; result = <span class="hljs-keyword">new</span> HashMap&lt;&gt;(<span class="hljs-number">5</span>);
+            result.put(<span class="hljs-string">"code"</span>, Constant.PARAM_FAIL_CODE);
+            result.put(<span class="hljs-string">"msg"</span>, <span class="hljs-string">"性别不能为空"</span>);
+            <span class="hljs-keyword">return</span> result;
+        }
+        <span class="hljs-comment">//.........各种写法 ...</span>
+        userService.save(userVO);
+        <span class="hljs-keyword">return</span> RspDTO.success();
+  }
+
+</code></pre>
+<p>这被大佬看见,一定说,都9102了还这么写,然后被劝退了</p>
+<ul>
+<li>什么是javax.validation</li>
+</ul>
+<blockquote>
+<p>JSR303 是一套JavaBean参数校验的标准，它定义了很多常用的校验注解，我们可以直接将这些注解加在我们JavaBean的属性上面(面向注解编程的时代)，就可以在需要校验的时候进行校验了,在SpringBoot中已经包含在starter-web中,再其他项目中可以引用依赖,并自行调整版本:</p>
+</blockquote>
+<pre><code class="language-java">&lt;!--jsr 303--&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;javax.validation&lt;/groupId&gt;
+    &lt;artifactId&gt;validation-api&lt;/artifactId&gt;
+    &lt;version&gt;1.1.0.Final&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!-- hibernate validator--&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.hibernate&lt;/groupId&gt;
+    &lt;artifactId&gt;hibernate-validator&lt;/artifactId&gt;
+    &lt;version&gt;5.2.0.Final&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p><img src="../img/java-validator-1.png" alt="java-validator"></p>
+<ul>
+<li>注解说明</li>
+</ul>
+<pre><code class="language-java"><span class="hljs-number">1</span>.<span class="hljs-meta">@NotNull</span>：不能为<span class="hljs-keyword">null</span>，但可以为empty(<span class="hljs-string">""</span>,<span class="hljs-string">" "</span>,<span class="hljs-string">"   "</span>)
+<span class="hljs-number">2</span>.<span class="hljs-meta">@NotEmpty</span>：不能为<span class="hljs-keyword">null</span>，而且长度必须大于<span class="hljs-number">0</span> (<span class="hljs-string">" "</span>,<span class="hljs-string">"  "</span>)
+<span class="hljs-number">3</span>.<span class="hljs-meta">@NotBlank</span>：只能作用在String上，不能为<span class="hljs-keyword">null</span>，而且调用trim()后，长度必须大于<span class="hljs-number">0</span>(<span class="hljs-string">"test"</span>)    即：必须有实际字符
+
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>验证注解</th>
+<th style="text-align:center">验证的数据类型</th>
+<th style="text-align:right">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>@AssertFalse</td>
+<td style="text-align:center">Boolean,boolean</td>
+<td style="text-align:right">验证注解的元素值是false</td>
+</tr>
+<tr>
+<td>@AssertTrue</td>
+<td style="text-align:center">Boolean,boolean</td>
+<td style="text-align:right">验证注解的元素值是true</td>
+</tr>
+<tr>
+<td>@NotNull</td>
+<td style="text-align:center">任意类型</td>
+<td style="text-align:right">验证注解的元素值不是null</td>
+</tr>
+<tr>
+<td>@Null</td>
+<td style="text-align:center">任意类型</td>
+<td style="text-align:right">验证注解的元素值是null</td>
+</tr>
+<tr>
+<td>@Min(value=值)</td>
+<td style="text-align:center">BigDecimal，BigInteger, byte,short, int, long，等任何Number或CharSequence（存储的是数字）子类型</td>
+<td style="text-align:right">验证注解的元素值大于等于@Min指定的value值</td>
+</tr>
+<tr>
+<td>@Max（value=值）</td>
+<td style="text-align:center">和@Min要求一样</td>
+<td style="text-align:right">验证注解的元素值小于等于@Max指定的value值</td>
+</tr>
+<tr>
+<td>@DecimalMin(value=值)</td>
+<td style="text-align:center">和@Min要求一样</td>
+<td style="text-align:right">验证注解的元素值大于等于@ DecimalMin指定的value值</td>
+</tr>
+<tr>
+<td>@DecimalMax(value=值)</td>
+<td style="text-align:center">和@Min要求一样</td>
+<td style="text-align:right">验证注解的元素值小于等于@ DecimalMax指定的value值</td>
+</tr>
+<tr>
+<td>@Digits(integer=整数位数, fraction=小数位数)</td>
+<td style="text-align:center">和@Min要求一样</td>
+<td style="text-align:right">验证注解的元素值的整数位数和小数位数上限</td>
+</tr>
+<tr>
+<td>@Size(min=下限, max=上限)</td>
+<td style="text-align:center">字符串、Collection、Map、数组等</td>
+<td style="text-align:right">验证注解的元素值的在min和max（包含）指定区间之内，如字符长度、集合大小</td>
+</tr>
+<tr>
+<td>@Past</td>
+<td style="text-align:center">java.util.Date,java.util.Calendar;Joda Time类库的日期类型</td>
+<td style="text-align:right">验证注解的元素值（日期类型）比当前时间早</td>
+</tr>
+<tr>
+<td>@Future</td>
+<td style="text-align:center">与@Past要求一样</td>
+<td style="text-align:right">验证注解的元素值（日期类型）比当前时间晚</td>
+</tr>
+<tr>
+<td>@NotBlank</td>
+<td style="text-align:center">CharSequence子类型</td>
+<td style="text-align:right">验证注解的元素值不为空（不为null、去除首位空格后长度为0），不同于@NotEmpty，@NotBlank只应用于字符串且在比较时会去除字符串的首位空格</td>
+</tr>
+<tr>
+<td>@Length(min=下限, max=上限)</td>
+<td style="text-align:center">CharSequence子类型</td>
+<td style="text-align:right">验证注解的元素值长度在min和max区间内</td>
+</tr>
+<tr>
+<td>@NotEmpty</td>
+<td style="text-align:center">CharSequence子类型、Collection、Map、数组</td>
+<td style="text-align:right">验证注解的元素值不为null且不为空（字符串长度不为0、集合大小不为0）</td>
+</tr>
+<tr>
+<td>@Range(min=最小值, max=最大值)</td>
+<td style="text-align:center">BigDecimal,BigInteger,CharSequence, byte, short, int, long等原子类型和包装类型</td>
+<td style="text-align:right">验证注解的元素值在最小值和最大值之间</td>
+</tr>
+<tr>
+<td>@Email(regexp=正则表达式,flag=标志的模式)</td>
+<td style="text-align:center">CharSequence子类型（如String）</td>
+<td style="text-align:right">验证注解的元素值是Email，也可以通过regexp和flag指定自定义的email格式</td>
+</tr>
+<tr>
+<td>@Pattern(regexp=正则表达式,flag=标志的模式)</td>
+<td style="text-align:center">String，任何CharSequence的子类型</td>
+<td style="text-align:right">验证注解的元素值与指定的正则表达式匹配</td>
+</tr>
+<tr>
+<td>@Valid</td>
+<td style="text-align:center">任何非原子类型</td>
+<td style="text-align:right">指定递归验证关联的对象如用户对象中有个地址对象属性，如果想在验证用户对象时一起验证地址对象的话，在地址对象上加@Valid注解即可级联验证</td>
+</tr>
+</tbody>
+</table>
+<p>此处只列出Hibernate Validator提供的大部分验证约束注解，请参考hibernate validator官方文档了解其他验证约束注解和进行自定义的验证约束注解定义。</p>
+<h2>实战演练</h2>
+<ul>
+<li>@Validated 声明要检查的参数</li>
+</ul>
+<p>这里我们在控制器层进行注解声明</p>
+<pre><code class="language-java"><span class="hljs-comment">/**
+     * 走参数校验注解
+     *
+     * <span class="hljs-doctag">@param</span> userDTO
+     * <span class="hljs-doctag">@return</span>
+     */</span>
+    <span class="hljs-meta">@PostMapping</span>(<span class="hljs-string">"/save/valid"</span>)
+    <span class="hljs-function"><span class="hljs-keyword">public</span> RspDTO <span class="hljs-title">save</span><span class="hljs-params">(@RequestBody @Validated UserDTO userDTO)</span> </span>{
+        userService.save(userDTO);
+        <span class="hljs-keyword">return</span> RspDTO.success();
+    }
+
+</code></pre>
+<ul>
+<li>对参数的字段进行注解标注</li>
+</ul>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> lombok.Data;
+<span class="hljs-keyword">import</span> org.hibernate.validator.constraints.Length;
+
+<span class="hljs-keyword">import</span> javax.validation.constraints.*;
+<span class="hljs-keyword">import</span> java.io.Serializable;
+<span class="hljs-keyword">import</span> java.util.Date;
+
+<span class="hljs-comment">/**
+ * <span class="hljs-doctag">@author</span> LiJing
+ * <span class="hljs-doctag">@ClassName</span>: UserDTO
+ * <span class="hljs-doctag">@Description</span>: 用户传输对象
+ * <span class="hljs-doctag">@date</span> 2019/7/30 13:55
+ */</span>
+<span class="hljs-meta">@Data</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserDTO</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Serializable</span> </span>{
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">long</span> serialVersionUID = <span class="hljs-number">1L</span>;
+
+    <span class="hljs-comment">/*** 用户ID*/</span>
+    <span class="hljs-meta">@NotNull</span>(message = <span class="hljs-string">"用户id不能为空"</span>)
+    <span class="hljs-keyword">private</span> Long userId;
+
+    <span class="hljs-comment">/** 用户名*/</span>
+    <span class="hljs-meta">@NotBlank</span>(message = <span class="hljs-string">"用户名不能为空"</span>)
+    <span class="hljs-meta">@Length</span>(max = <span class="hljs-number">20</span>, message = <span class="hljs-string">"用户名不能超过20个字符"</span>)
+    <span class="hljs-meta">@Pattern</span>(regexp = <span class="hljs-string">"^[\\u4E00-\\u9FA5A-Za-z0-9\\*]*$"</span>, message = <span class="hljs-string">"用户昵称限制：最多20字符，包含文字、字母和数字"</span>)
+    <span class="hljs-keyword">private</span> String username;
+
+    <span class="hljs-comment">/** 手机号*/</span>
+    <span class="hljs-meta">@NotBlank</span>(message = <span class="hljs-string">"手机号不能为空"</span>)
+    <span class="hljs-meta">@Pattern</span>(regexp = <span class="hljs-string">"^[1][3,4,5,6,7,8,9][0-9]{9}$"</span>, message = <span class="hljs-string">"手机号格式有误"</span>)
+    <span class="hljs-keyword">private</span> String mobile;
+
+    <span class="hljs-comment">/**性别*/</span>
+    <span class="hljs-keyword">private</span> String sex;
+
+    <span class="hljs-comment">/** 邮箱*/</span>
+    <span class="hljs-meta">@NotBlank</span>(message = <span class="hljs-string">"联系邮箱不能为空"</span>)
+    <span class="hljs-meta">@Email</span>(message = <span class="hljs-string">"邮箱格式不对"</span>)
+    <span class="hljs-keyword">private</span> String email;
+
+    <span class="hljs-comment">/** 密码*/</span>
+    <span class="hljs-keyword">private</span> String password;
+
+    <span class="hljs-comment">/*** 创建时间 */</span>
+    <span class="hljs-meta">@Future</span>(message = <span class="hljs-string">"时间必须是将来时间"</span>)
+    <span class="hljs-keyword">private</span> Date createTime;
+
+}
+
+</code></pre>
+<ul>
+<li>在全局校验中增加校验异常</li>
+</ul>
+<blockquote>
+<p>MethodArgumentNotValidException是springBoot中进行绑定参数校验时的异常,需要在springBoot中处理,其他需要 处理ConstraintViolationException异常进行处理.</p>
+</blockquote>
+<ul>
+<li>为了优雅一点,我们将参数异常,业务异常,统一做了一个全局异常,将控制层的异常包装到我们自定义的异常中</li>
+<li>为了优雅一点,我们还做了一个统一的结构体,将请求的code,和msg,data一起统一封装到结构体中,增加了代码的复用性</li>
+</ul>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> com.boot.lea.mybot.dto.RspDTO;
+<span class="hljs-keyword">import</span> org.slf4j.Logger;
+<span class="hljs-keyword">import</span> org.slf4j.LoggerFactory;
+<span class="hljs-keyword">import</span> org.springframework.dao.DuplicateKeyException;
+<span class="hljs-keyword">import</span> org.springframework.web.bind.MethodArgumentNotValidException;
+<span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.ExceptionHandler;
+<span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.RestControllerAdvice;
+<span class="hljs-keyword">import</span> org.springframework.web.servlet.NoHandlerFoundException;
+
+<span class="hljs-keyword">import</span> javax.validation.ConstraintViolationException;
+<span class="hljs-keyword">import</span> javax.validation.ValidationException;
+
+
+<span class="hljs-comment">/**
+ * <span class="hljs-doctag">@author</span> LiJing
+ * <span class="hljs-doctag">@ClassName</span>: GlobalExceptionHandler
+ * <span class="hljs-doctag">@Description</span>: 全局异常处理器
+ * <span class="hljs-doctag">@date</span> 2019/7/30 13:57
+ */</span>
+<span class="hljs-meta">@RestControllerAdvice</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">GlobalExceptionHandler</span> </span>{
+
+    <span class="hljs-keyword">private</span> Logger logger = LoggerFactory.getLogger(getClass());
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> DUPLICATE_KEY_CODE = <span class="hljs-number">1001</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> PARAM_FAIL_CODE = <span class="hljs-number">1002</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> VALIDATION_CODE = <span class="hljs-number">1003</span>;
+
+    <span class="hljs-comment">/**
+     * 处理自定义异常
+     */</span>
+    <span class="hljs-meta">@ExceptionHandler</span>(BizException.class)
+    <span class="hljs-function"><span class="hljs-keyword">public</span> RspDTO <span class="hljs-title">handleRRException</span><span class="hljs-params">(BizException e)</span> </span>{
+        logger.error(e.getMessage(), e);
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> RspDTO(e.getCode(), e.getMessage());
+    }
+
+    <span class="hljs-comment">/**
+     * 方法参数校验
+     */</span>
+    <span class="hljs-meta">@ExceptionHandler</span>(MethodArgumentNotValidException.class)
+    <span class="hljs-function"><span class="hljs-keyword">public</span> RspDTO <span class="hljs-title">handleMethodArgumentNotValidException</span><span class="hljs-params">(MethodArgumentNotValidException e)</span> </span>{
+        logger.error(e.getMessage(), e);
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> RspDTO(PARAM_FAIL_CODE, e.getBindingResult().getFieldError().getDefaultMessage());
+    }
+
+    <span class="hljs-comment">/**
+     * ValidationException
+     */</span>
+    <span class="hljs-meta">@ExceptionHandler</span>(ValidationException.class)
+    <span class="hljs-function"><span class="hljs-keyword">public</span> RspDTO <span class="hljs-title">handleValidationException</span><span class="hljs-params">(ValidationException e)</span> </span>{
+        logger.error(e.getMessage(), e);
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> RspDTO(VALIDATION_CODE, e.getCause().getMessage());
+    }
+
+    <span class="hljs-comment">/**
+     * ConstraintViolationException
+     */</span>
+    <span class="hljs-meta">@ExceptionHandler</span>(ConstraintViolationException.class)
+    <span class="hljs-function"><span class="hljs-keyword">public</span> RspDTO <span class="hljs-title">handleConstraintViolationException</span><span class="hljs-params">(ConstraintViolationException e)</span> </span>{
+        logger.error(e.getMessage(), e);
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> RspDTO(PARAM_FAIL_CODE, e.getMessage());
+    }
+
+    <span class="hljs-meta">@ExceptionHandler</span>(NoHandlerFoundException.class)
+    <span class="hljs-function"><span class="hljs-keyword">public</span> RspDTO <span class="hljs-title">handlerNoFoundException</span><span class="hljs-params">(Exception e)</span> </span>{
+        logger.error(e.getMessage(), e);
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> RspDTO(<span class="hljs-number">404</span>, <span class="hljs-string">"路径不存在，请检查路径是否正确"</span>);
+    }
+
+    <span class="hljs-meta">@ExceptionHandler</span>(DuplicateKeyException.class)
+    <span class="hljs-function"><span class="hljs-keyword">public</span> RspDTO <span class="hljs-title">handleDuplicateKeyException</span><span class="hljs-params">(DuplicateKeyException e)</span> </span>{
+        logger.error(e.getMessage(), e);
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> RspDTO(DUPLICATE_KEY_CODE, <span class="hljs-string">"数据重复，请检查后提交"</span>);
+    }
+
+
+    <span class="hljs-meta">@ExceptionHandler</span>(Exception.class)
+    <span class="hljs-function"><span class="hljs-keyword">public</span> RspDTO <span class="hljs-title">handleException</span><span class="hljs-params">(Exception e)</span> </span>{
+        logger.error(e.getMessage(), e);
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> RspDTO(<span class="hljs-number">500</span>, <span class="hljs-string">"系统繁忙,请稍后再试"</span>);
+    }
+}
+
+</code></pre>
+<ul>
+<li>测试</li>
+</ul>
+<p>如下文:确实做到了参数校验时返回异常信息和对应的code,方便了我们不再繁琐的处理参数校验</p>
+<p><img src="../img/java-validatior-2.png" alt="java-validatior"></p>
+<h2>自定义参数注解</h2>
+<ul>
+<li>比如我们来个 自定义身份证校验 注解</li>
+</ul>
+<pre><code class="language-java"><span class="hljs-meta">@Documented</span>
+<span class="hljs-meta">@Target</span>({ElementType.PARAMETER, ElementType.FIELD})
+<span class="hljs-meta">@Retention</span>(RetentionPolicy.RUNTIME)
+<span class="hljs-meta">@Constraint</span>(validatedBy = IdentityCardNumberValidator.class)
+<span class="hljs-keyword">public</span> <span class="hljs-meta">@interface</span> IdentityCardNumber {
+
+    <span class="hljs-function">String <span class="hljs-title">message</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> "身份证号码不合法"</span>;
+
+    Class&lt;?&gt;[] groups() <span class="hljs-keyword">default</span> {};
+
+    Class&lt;? extends Payload&gt;[] payload() <span class="hljs-keyword">default</span> {};
+}
+
+</code></pre>
+<p>这个注解是作用在Field字段上，运行时生效，触发的是IdentityCardNumber这个验证类。</p>
+<blockquote>
+<p>message 定制化的提示信息，主要是从ValidationMessages.properties里提取，也可以依据实际情况进行定制</p>
+</blockquote>
+<blockquote>
+<p>groups 这里主要进行将validator进行分类，不同的类group中会执行不同的validator操作</p>
+</blockquote>
+<blockquote>
+<p>payload 主要是针对bean的，使用不多。</p>
+</blockquote>
+<ul>
+<li>然后自定义Validator</li>
+</ul>
+<p>这个是真正进行验证的逻辑代码：</p>
+<pre><code class="language-java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">IdentityCardNumberValidator</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">ConstraintValidator</span>&lt;<span class="hljs-title">IdentityCardNumber</span>, <span class="hljs-title">Object</span>&gt; </span>{
+
+    <span class="hljs-meta">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">initialize</span><span class="hljs-params">(IdentityCardNumber identityCardNumber)</span> </span>{
+    }
+
+    <span class="hljs-meta">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">isValid</span><span class="hljs-params">(Object o, ConstraintValidatorContext constraintValidatorContext)</span> </span>{
+        <span class="hljs-keyword">return</span> IdCardValidatorUtils.isValidate18Idcard(o.toString());
+    }
+}
+
+</code></pre>
+<ul>
+<li>使用自定义的注解</li>
+</ul>
+<pre><code class="language-java">    <span class="hljs-meta">@NotBlank</span>(message = <span class="hljs-string">"身份证号不能为空"</span>)
+    <span class="hljs-meta">@IdentityCardNumber</span>(message = <span class="hljs-string">"身份证信息有误,请核对后提交"</span>)
+    <span class="hljs-keyword">private</span> String clientCardNo;
+</code></pre>
+<ul>
+<li>使用groups的校验</li>
+</ul>
+<p>有的宝宝说同一个对象要复用,比如UserDTO在更新时候要校验userId,在保存的时候不需要校验userId,在两种情况下都要校验username,那就用上groups了:</p>
+<blockquote>
+<p>先定义groups的分组接口Create和Update</p>
+</blockquote>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> javax.validation.groups.Default;
+
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Create</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Default</span> </span>{
+}
+
+<span class="hljs-keyword">import</span> javax.validation.groups.Default;
+
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Update</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Default</span></span>{
+}
+
+</code></pre>
+<blockquote>
+<p>再在需要校验的地方@Validated声明校验组</p>
+</blockquote>
+<pre><code class="language-java"><span class="hljs-comment">/**
+     * 走参数校验注解的 groups 组合校验
+     *
+     * <span class="hljs-doctag">@param</span> userDTO
+     * <span class="hljs-doctag">@return</span>
+     */</span>
+    <span class="hljs-meta">@PostMapping</span>(<span class="hljs-string">"/update/groups"</span>)
+    <span class="hljs-function"><span class="hljs-keyword">public</span> RspDTO <span class="hljs-title">update</span><span class="hljs-params">(@RequestBody @Validated(Update.class)</span> UserDTO userDTO) </span>{
+        userService.updateById(userDTO);
+        <span class="hljs-keyword">return</span> RspDTO.success();
+    }
+
+</code></pre>
+<blockquote>
+<p>在DTO中的字段上定义好groups = {}的分组类型</p>
+</blockquote>
+<pre><code class="language-java"><span class="hljs-meta">@Data</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserDTO</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Serializable</span> </span>{
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">long</span> serialVersionUID = <span class="hljs-number">1L</span>;
+
+    <span class="hljs-comment">/*** 用户ID*/</span>
+    <span class="hljs-meta">@NotNull</span>(message = <span class="hljs-string">"用户id不能为空"</span>, groups = Update.class)
+    <span class="hljs-keyword">private</span> Long userId;
+
+    <span class="hljs-comment">/**
+     * 用户名
+     */</span>
+    <span class="hljs-meta">@NotBlank</span>(message = <span class="hljs-string">"用户名不能为空"</span>)
+    <span class="hljs-meta">@Length</span>(max = <span class="hljs-number">20</span>, message = <span class="hljs-string">"用户名不能超过20个字符"</span>, groups = {Create.class, Update.class})
+    <span class="hljs-meta">@Pattern</span>(regexp = <span class="hljs-string">"^[\\u4E00-\\u9FA5A-Za-z0-9\\*]*$"</span>, message = <span class="hljs-string">"用户昵称限制：最多20字符，包含文字、字母和数字"</span>)
+    <span class="hljs-keyword">private</span> String username;
+
+    <span class="hljs-comment">/**
+     * 手机号
+     */</span>
+    <span class="hljs-meta">@NotBlank</span>(message = <span class="hljs-string">"手机号不能为空"</span>)
+    <span class="hljs-meta">@Pattern</span>(regexp = <span class="hljs-string">"^[1][3,4,5,6,7,8,9][0-9]{9}$"</span>, message = <span class="hljs-string">"手机号格式有误"</span>, groups = {Create.class, Update.class})
+    <span class="hljs-keyword">private</span> String mobile;
+
+    <span class="hljs-comment">/**
+     * 性别
+     */</span>
+    <span class="hljs-keyword">private</span> String sex;
+
+    <span class="hljs-comment">/**
+     * 邮箱
+     */</span>
+    <span class="hljs-meta">@NotBlank</span>(message = <span class="hljs-string">"联系邮箱不能为空"</span>)
+    <span class="hljs-meta">@Email</span>(message = <span class="hljs-string">"邮箱格式不对"</span>)
+    <span class="hljs-keyword">private</span> String email;
+
+    <span class="hljs-comment">/**
+     * 密码
+     */</span>
+    <span class="hljs-keyword">private</span> String password;
+
+    <span class="hljs-comment">/*** 创建时间 */</span>
+    <span class="hljs-meta">@Future</span>(message = <span class="hljs-string">"时间必须是将来时间"</span>, groups = {Create.class})
+    <span class="hljs-keyword">private</span> Date createTime;
+
+}
+
+</code></pre>
+<p>注意:在声明分组的时候尽量加上 extend javax.validation.groups.Default否则,在你声明@Validated(Update.class)的时候,就会出现你在默认没添加groups = {}的时候的校验组@Email(message = &quot;邮箱格式不对&quot;),会不去校验,因为默认的校验组是groups = {Default.class}.</p>
+<ul>
+<li>restful风格用法</li>
+</ul>
+<blockquote>
+<p>在多个参数校验,或者@RequestParam 形式时候,需要在controller上加注@Validated</p>
+</blockquote>
+<pre><code class="language-java"><span class="hljs-meta">@GetMapping</span>(<span class="hljs-string">"/get"</span>)
+<span class="hljs-function"><span class="hljs-keyword">public</span> RspDTO <span class="hljs-title">getUser</span><span class="hljs-params">(@RequestParam(<span class="hljs-string">"userId"</span>)</span> @<span class="hljs-title">NotNull</span><span class="hljs-params">(message = <span class="hljs-string">"用户id不能为空"</span>)</span> Long userId) </span>{
+    User user = userService.selectById(userId);
+    <span class="hljs-keyword">if</span> (user == <span class="hljs-keyword">null</span>) {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> RspDTO&lt;User&gt;().nonAbsent(<span class="hljs-string">"用户不存在"</span>);
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> RspDTO&lt;User&gt;().success(user);
+}
+
+
+<span class="hljs-meta">@RestController</span>
+<span class="hljs-meta">@RequestMapping</span>(<span class="hljs-string">"user/"</span>)
+<span class="hljs-meta">@Validated</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserController</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AbstractController</span> </span>{
+  <span class="hljs-meta">@GetMapping</span>(<span class="hljs-string">"/get"</span>)
+  <span class="hljs-function"><span class="hljs-keyword">public</span> RspDTO <span class="hljs-title">getUser</span><span class="hljs-params">(@RequestParam(<span class="hljs-string">"userId"</span>)</span> @<span class="hljs-title">NotNull</span><span class="hljs-params">(message = <span class="hljs-string">"用户id不能为空"</span>)</span> Long userId) </span>{
+    User user = userService.selectById(userId);
+    <span class="hljs-keyword">if</span> (user == <span class="hljs-keyword">null</span>) {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> RspDTO&lt;User&gt;().nonAbsent(<span class="hljs-string">"用户不存在"</span>);
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> RspDTO&lt;User&gt;().success(user);
+  }
+}
+</code></pre>
+</section><footer class="footer-container"><div class="footer-body"><img src="/img/dubbo_gray.png"/><div class="cols-container"><div class="col col-12"><h3>Disclaimer</h3><p>the disclaimer content</p></div><div class="col col-6"><dl><dt>Documentation</dt><dd><a href="/en-us/docs/introduction.html" target="_self">Overview</a></dd><dd><a href="/en-us/docs/introduction.html" target="_self">Quick start</a></dd><dd><a href="/en-us/docs/dir/introduction.html" target="_self">Developer guide</a></dd></dl></div><div class="col col-6"><dl><dt>Resources</dt><dd><a href="/en-us/blog/index.html" target="_self">Blog</a></dd><dd><a href="/en-us/community/index.html" target="_self">Community</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2019 BurningMyself</span></div></div></footer></div></div>
+	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
+	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
+	<script>
+		window.rootPath = '';
+  </script>
+	<script src="/build/blogDetail.js"></script>
+</body>
+</html>
