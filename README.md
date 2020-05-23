@@ -45,6 +45,12 @@
 * * [RocketMq下载与安装](blog/zh-cn/java/rocketmq/rmq-1.md)
 * * [Spring常用注解](blog/zh-cn/java/springAnnotation.md)
 * * [Java 虚拟机](blog/zh-cn/java/javavm.md)
+* * [Spring 常用设计](blog/zh-cn/java/springdesign.md)
+* * [Spring Cloud](blog/zh-cn/java/spring-cloud.md)
+* * [Java Simple](blog/zh-cn/java/java-simple.md)
+* * [Java Validator](blog/zh-cn/java/java-validator.md)
+* * [Java String](blog/zh-cn/java/java-string.md)
+* * [Java Utils](blog/zh-cn/java/java-utils.md)
 * [Linux]
 * * [Linux常用命令](blog/zh-cn/linux/often.md)
 * * [实用的Linux 命令](blog/zh-cn/linux/ope.md)
@@ -54,6 +60,8 @@
 * * [微服务设计](blog/zh-cn/micro/design.md)
 * * [分布式系统与消息的投递](blog/zh-cn/micro/distrimsg.md)
 * * [基于DDD的微服务设计和开发实战](blog/zh-cn/micro/ddd.md)
+* * [Kafka架构原理](blog/zh-cn/micro/kafka.md)
+* * [Redis Cluster原理](blog/zh-cn/micro/redis-cluster.md)
 * [.NET]
 * * [C#语法新特性](blog/zh-cn/net/c_sharp.md)
 * * [.Net Core Docker 部署](blog/zh-cn/net/c_docker.md)
@@ -86,7 +94,7 @@
 * * [Git提交日志规范](blog/zh-cn/tool/gitcmr.md)
 * * [MarkDown](blog/zh-cn/tool/markdown.md)
 * * [CI/CD](blog/zh-cn/tool/cicd.md)
-* * [mkblog/zh-cn简单使用](blog/zh-cn/tool/mkblog/zh-cn.md)
+* * [mkdocs简单使用](blog/zh-cn/tool/mkdocs.md)
 * * [Git的黑魔法](blog/zh-cn/tool/gitstudy.md)
 * * [MinIO 搭建使用](blog/zh-cn/tool/minio.md)
 * [前端]
