@@ -1,0 +1,1905 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="keywords" content="syntax" />
+	<meta name="description" content="syntax" />
+	<!-- 网页标签标题 -->
+	<title>syntax</title>
+	<link rel="shortcut icon" href="/img/docsite.ico"/>
+	<link rel="stylesheet" href="/build/blogDetail.css" />
+</head>
+<body>
+	<div id="root"><div class="blog-detail-page" data-reactroot=""><header class="header-container header-container-normal"><div class="header-body"><a href="/zh-cn/index.html"><img class="logo" src="/img/dubbo_colorful.png"/></a><div class="search search-normal"><span class="icon-search"></span></div><span class="language-switch language-switch-normal">En</span><div class="header-menu"><img class="header-menu-toggle" src="/img/system/menu_gray.png"/><ul><li class="menu-item menu-item-normal"><a href="/zh-cn/index.html" target="_self">首页</a></li><li class="menu-item menu-item-normal"><a href="/zh-cn/docs/introduction.html" target="_self">文档</a></li><li class="menu-item menu-item-normal menu-item-normal-active"><a href="/zh-cn/blog/index.html" target="_self">博客</a></li><li class="menu-item menu-item-normal"><a href="/zh-cn/community/index.html" target="_self">社区</a></li></ul></div></div></header><section class="blog-content markdown-body"><h1>Dart语法学习</h1>
+<h2>目录</h2>
+<ul>
+<li>参考资料</li>
+<li>语言特性</li>
+<li>关键字</li>
+<li>变量与常量</li>
+<li>数据类型</li>
+<li>运算符 operators</li>
+<li>控制流程语句</li>
+<li>异常 Exceptions</li>
+<li>函数 Function</li>
+<li>类 Class</li>
+<li>类-方法</li>
+<li>类-抽象类</li>
+<li>类-隐式接口</li>
+<li>类-扩展一个类（重写）</li>
+<li>库和可见性</li>
+<li>异步支持</li>
+</ul>
+<h2>参考资料</h2>
+<ul>
+<li><a href="https://www.dartlang.org/guides/language/language-tour">【官方文档】</a></li>
+<li><a href="http://wiki.jikexueyuan.com/project/dart-language-tour/">【极客学院】</a></li>
+<li><a href="https://www.jianshu.com/p/3d927a7bf020">【author：AWeiLoveAndroid】</a></li>
+<li><a href="https://www.jianshu.com/p/a7cc623132b0">【author：soojade】</a></li>
+<li><a href="https://www.jianshu.com/p/8a62b1a2fd75">【author：优腾爱乐】</a></li>
+</ul>
+<h2>语言特性</h2>
+<ul>
+<li>
+<p>Dart所有的东西都是对象， 即使是数字numbers、函数function、null也都是对象，所有的对象都继承自Object类。</p>
+</li>
+<li>
+<p>Dart动态类型语言, 尽量给变量定义一个类型，会更安全，没有显示定义类型的变量在 debug 模式下会类型会是 dynamic(动态的)。</p>
+</li>
+<li>
+<p>Dart 在 running 之前解析你的所有代码，指定数据类型和编译时的常量，可以提高运行速度。</p>
+</li>
+<li>
+<p>Dart中的类和接口是统一的，类即接口，你可以继承一个类，也可以实现一个类（接口），自然也包含了良好的面向对象和并发编程的支持。</p>
+</li>
+<li>
+<p>Dart 提供了顶级函数(如：main())。</p>
+</li>
+<li>
+<p>Dart 没有 public、private、protected 这些关键字，变量名以&quot;_&quot;开头意味着对它的 lib 是私有的。</p>
+</li>
+<li>
+<p>没有初始化的变量都会被赋予默认值 null。</p>
+</li>
+<li>
+<p>final的值只能被设定一次。const 是一个编译时的常量，可以通过 const 来创建常量值，var c=const[];，这里 c 还是一个变量，只是被赋值了一个常量值，它还是可以赋其它值。实例变量可以是 final，但不能是  const。</p>
+</li>
+<li>
+<p>编程语言并不是孤立存在的，Dart也是这样，他由语言规范、虚拟机、类库和工具等组成：</p>
+<ul>
+<li>SDK：SDK 包含 Dart VM、dart2js、Pub、库和工具。</li>
+<li>Dartium：内嵌 Dart VM 的 Chromium ，可以在浏览器中直接执行 dart 代码。</li>
+<li>Dart2js：将 Dart 代码编译为 JavaScript 的工具。</li>
+<li>Dart Editor：基于 Eclipse 的全功能 IDE，并包含以上所有工具。支持代码补全、代码导航、快速修正、重构、调试等功能。</li>
+</ul>
+</li>
+</ul>
+<h2>关键字（56个）</h2>
+<table>
+<thead>
+<tr>
+<th>关键字</th>
+<th>-</th>
+<th>-</th>
+<th>-</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>abstract</td>
+<td>do</td>
+<td>import</td>
+<td>super</td>
+</tr>
+<tr>
+<td>as</td>
+<td>dynamic</td>
+<td>in</td>
+<td>switch</td>
+</tr>
+<tr>
+<td>assert</td>
+<td>else</td>
+<td>interface</td>
+<td>sync</td>
+</tr>
+<tr>
+<td>enum</td>
+<td>implements</td>
+<td>is</td>
+<td>this</td>
+</tr>
+<tr>
+<td>async</td>
+<td>export</td>
+<td>library</td>
+<td>throw</td>
+</tr>
+<tr>
+<td>await</td>
+<td>external</td>
+<td>mixin</td>
+<td>true</td>
+</tr>
+<tr>
+<td>break</td>
+<td>extends</td>
+<td>new</td>
+<td>try</td>
+</tr>
+<tr>
+<td>case</td>
+<td>factory</td>
+<td>null</td>
+<td>typedef</td>
+</tr>
+<tr>
+<td>catch</td>
+<td>false</td>
+<td>operator</td>
+<td>var</td>
+</tr>
+<tr>
+<td>class</td>
+<td>final</td>
+<td>part</td>
+<td>void</td>
+</tr>
+<tr>
+<td>const</td>
+<td>finally</td>
+<td>rethrow</td>
+<td>while</td>
+</tr>
+<tr>
+<td>continue</td>
+<td>for</td>
+<td>return</td>
+<td>with</td>
+</tr>
+<tr>
+<td>covariant</td>
+<td>get</td>
+<td>set</td>
+<td>yield</td>
+</tr>
+<tr>
+<td>default</td>
+<td>if</td>
+<td>static</td>
+<td>deferred</td>
+</tr>
+</tbody>
+</table>
+<h2>变量与常量</h2>
+<ol>
+<li>变量声明与初始化</li>
+</ol>
+<ul>
+<li>调用的变量name包含对String值为“张三” 的对象的引用，name推断变量的类型是String，但可以通过指定它来更改该类型，如果对象不限于单一类型（没有明确的类型），请使用Object或dynamic关键字。</li>
+</ul>
+<pre><code class="language-dart">  <span class="hljs-comment">// 没有明确类型，编译的时候根据值明确类型</span>
+  <span class="hljs-keyword">var</span> name = ‘Bob’; 
+  <span class="hljs-built_in">Object</span> name = <span class="hljs-string">'张三'</span>;
+  <span class="hljs-keyword">dynamic</span> name = <span class="hljs-string">'李四'</span>;
+
+  <span class="hljs-comment">// 显示声明将被推断类型, 可以使用String显示声明字符串类型</span>
+  <span class="hljs-built_in">String</span> name = <span class="hljs-string">'Bob'</span> ;
+</code></pre>
+<ol start="2">
+<li>默认值</li>
+</ol>
+<ul>
+<li>未初始化的变量的初始值为null（包括数字），因此数字、字符串都可以调用各种方法</li>
+</ul>
+<pre><code class="language-dart"> <span class="hljs-comment">//测试 数字类型的初始值是什么?</span>
+  <span class="hljs-built_in">int</span> lineCount;
+  <span class="hljs-comment">// 为false的时候抛出异常</span>
+  <span class="hljs-keyword">assert</span>(lineCount == <span class="hljs-keyword">null</span>);
+  <span class="hljs-built_in">print</span>(lineCount); <span class="hljs-comment">//打印结果为null，证明数字类型初始化值是null</span>
+</code></pre>
+<ol start="3">
+<li>
+<p>final and const</p>
+<ul>
+<li>
+<p>如果您从未打算更改一个变量，那么使用 final 或 const，不是var，也不是一个类型。
+一个 final 变量只能被初始化一次; const变量是一个编译时常量，(Const变量是隐式的final)
+final的顶级或类变量在第一次使用时被初始化。</p>
+</li>
+<li>
+<p>被final修饰的顶级变量或类变量在第一次声明的时候就需要初始化。</p>
+</li>
+</ul>
+<pre><code class="language-dart">    <span class="hljs-comment">// The final variable 'outSideFinalName' must be initialized.</span>
+    <span class="hljs-keyword">final</span> <span class="hljs-built_in">String</span> outSideFinalName
+
+</code></pre>
+<ul>
+<li>被final或者const修饰的变量，变量类型可以省略，建议指定数据类型。</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-comment">//可以省略String这个类型声明</span>
+<span class="hljs-keyword">final</span> name = <span class="hljs-string">"Bob"</span>;
+<span class="hljs-keyword">final</span> <span class="hljs-built_in">String</span> name1  = <span class="hljs-string">"张三"</span>;
+
+<span class="hljs-keyword">const</span> name2 = <span class="hljs-string">"alex"</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-built_in">String</span> name3 = <span class="hljs-string">"李四"</span>;
+</code></pre>
+<ul>
+<li>被 final 或 const 修饰的变量无法再去修改其值。</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">final</span> <span class="hljs-built_in">String</span> outSideFinalName = <span class="hljs-string">"Alex"</span>;
+<span class="hljs-comment">// outSideFinalName', a final variable, can only be set once</span>
+<span class="hljs-comment">// 一个final变量，只能被设置一次。</span>
+outSideFinalName = <span class="hljs-string">"Bill"</span>;
+
+<span class="hljs-keyword">const</span> <span class="hljs-built_in">String</span> outSideName = <span class="hljs-string">'Bill'</span>;
+<span class="hljs-comment">// 这样写，编译器提示：Constant variables can't be assigned a value</span>
+<span class="hljs-comment">// const常量不能赋值</span>
+<span class="hljs-comment">// outSideName = "小白";</span>
+</code></pre>
+<ul>
+<li>flnal 或者 const 不能和 var 同时使用</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-comment">// Members can't be declared to be both 'const' and 'var'</span>
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">var</span> <span class="hljs-built_in">String</span> outSideName = <span class="hljs-string">'Bill'</span>;
+
+<span class="hljs-comment">// Members can't be declared to be both 'final' and 'var'</span>
+<span class="hljs-keyword">final</span> <span class="hljs-keyword">var</span> <span class="hljs-built_in">String</span> name = <span class="hljs-string">'Lili'</span>;    
+</code></pre>
+<ul>
+<li>常量如果是类级别的，请使用 static const</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-comment">// 常量如果是类级别的，请使用 static const</span>
+<span class="hljs-keyword">static</span> <span class="hljs-keyword">const</span> <span class="hljs-built_in">String</span> name3 = <span class="hljs-string">'Tom'</span>;
+
+<span class="hljs-comment">// 这样写保存</span>
+<span class="hljs-comment">// Only static fields can be declared as const</span>
+<span class="hljs-comment">// 只有静态字段可以声明为const</span>
+<span class="hljs-comment">//const String name3 = 'Tom';    </span>
+</code></pre>
+<ul>
+<li>常量的运算</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">const</span> speed = <span class="hljs-number">100</span>; <span class="hljs-comment">//速度（km/h）</span>
+<span class="hljs-keyword">const</span> <span class="hljs-built_in">double</span> distance = <span class="hljs-number">2.5</span> * speed; <span class="hljs-comment">// 距离 = 时间 * 速度</span>
+
+<span class="hljs-keyword">final</span> speed2 = <span class="hljs-number">100</span>; <span class="hljs-comment">//速度（km/h）</span>
+<span class="hljs-keyword">final</span> <span class="hljs-built_in">double</span> distance2 = <span class="hljs-number">2.5</span> * speed2; <span class="hljs-comment">// 距离 = 时间 * 速度</span>
+
+</code></pre>
+<ul>
+<li>const关键字不只是声明常数变量，您也可以使用它来创建常量值，以及声明创建常量值的构造函数，任何变量都可以有一个常量值。</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-comment">// 注意: [] 创建的是一个空的list集合</span>
+<span class="hljs-comment">// const []创建一个空的、不可变的列表（EIL）。</span>
+<span class="hljs-keyword">var</span> varList = <span class="hljs-keyword">const</span> []; <span class="hljs-comment">// varList 当前是一个EIL</span>
+<span class="hljs-keyword">final</span> finalList = <span class="hljs-keyword">const</span> []; <span class="hljs-comment">// finalList一直是EIL</span>
+<span class="hljs-keyword">const</span> constList = <span class="hljs-keyword">const</span> []; <span class="hljs-comment">// constList 是一个编译时常量的EIL</span>
+
+<span class="hljs-comment">// 可以更改非final,非const变量的值</span>
+<span class="hljs-comment">// 即使它曾经具有const值</span>
+varList = [<span class="hljs-string">"haha"</span>];
+
+<span class="hljs-comment">// 不能更改final变量或const变量的值</span>
+<span class="hljs-comment">// 这样写，编译器提示：a final variable, can only be set once</span>
+<span class="hljs-comment">// finalList = ["haha"];</span>
+<span class="hljs-comment">// 这样写，编译器提示：Constant variables can't be assigned a value  </span>
+<span class="hljs-comment">// constList = ["haha"];</span>
+
+</code></pre>
+<ul>
+<li>在常量表达式中，该运算符的操作数必须为'bool'、'num'、'String'或'null', const常量必须用conat类型的值初始化。</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">const</span> <span class="hljs-built_in">String</span> outSideName = <span class="hljs-string">'Bill'</span>;
+<span class="hljs-keyword">final</span> <span class="hljs-built_in">String</span> outSideFinalName = <span class="hljs-string">'Alex'</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-built_in">String</span> outSideName2 = <span class="hljs-string">'Tom'</span>;
+
+<span class="hljs-keyword">const</span> aConstList = <span class="hljs-keyword">const</span> [<span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>];
+
+<span class="hljs-comment">// In constant expressions, operands of this operator must be of type 'bool', 'num', 'String' or 'null'</span>
+<span class="hljs-comment">// 在常量表达式中，该运算符的操作数必须为'bool'、'num'、'String'或'null'。</span>
+<span class="hljs-keyword">const</span> validConstString = <span class="hljs-string">'<span class="hljs-subst">$outSideName</span> <span class="hljs-subst">$outSideName2</span> <span class="hljs-subst">$aConstList</span>'</span>;
+
+<span class="hljs-comment">// Const variables must be initialized with a constant value</span>
+<span class="hljs-comment">// const常量必须用conat类型的值初始化</span>
+<span class="hljs-keyword">const</span> validConstString = <span class="hljs-string">'<span class="hljs-subst">$outSideName</span> <span class="hljs-subst">$outSideName2</span> <span class="hljs-subst">$outSideFinalName</span>'</span>;
+
+<span class="hljs-keyword">var</span> outSideVarName=<span class="hljs-string">'Cathy'</span>;
+<span class="hljs-comment">// Const variables must be initialized with a constant value.</span>
+<span class="hljs-comment">// const常量必须用conat类型的值初始化</span>
+<span class="hljs-keyword">const</span> validConstString = <span class="hljs-string">'<span class="hljs-subst">$outSideName</span> <span class="hljs-subst">$outSideName2</span> <span class="hljs-subst">$outSideVarName</span>'</span>;
+
+<span class="hljs-comment">// 正确写法</span>
+<span class="hljs-keyword">const</span> <span class="hljs-built_in">String</span> outSideConstName = <span class="hljs-string">'Joy'</span>;
+<span class="hljs-keyword">const</span> validConstString = <span class="hljs-string">'<span class="hljs-subst">$outSideName</span> <span class="hljs-subst">$outSideName2</span> <span class="hljs-subst">$outSideConstName</span>'</span>;
+
+</code></pre>
+</li>
+</ol>
+<h2>数据类型</h2>
+<ol>
+<li>
+<p>num</p>
+<ul>
+<li>
+<p>num 是数字类型的父类，有两个子类 int 和 double。</p>
+</li>
+<li>
+<p>int 根据平台的不同，整数值不大于64位。在Dart VM上，值可以从-263到263 - 1，编译成JavaScript的Dart使用JavaScript代码，允许值从-253到253 - 1。</p>
+</li>
+<li>
+<p>double 64位（双精度）浮点数，如IEEE 754标准所规定。</p>
+</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-built_in">int</span> a = <span class="hljs-number">1</span>;
+<span class="hljs-built_in">print</span>(a);
+
+<span class="hljs-built_in">double</span> b = <span class="hljs-number">1.12</span>;
+<span class="hljs-built_in">print</span>(b);
+
+<span class="hljs-comment">// String -&gt; int</span>
+<span class="hljs-built_in">int</span> one = <span class="hljs-built_in">int</span>.parse(<span class="hljs-string">'1'</span>);
+<span class="hljs-comment">// 输出3</span>
+<span class="hljs-built_in">print</span>(one + <span class="hljs-number">2</span>);
+
+<span class="hljs-comment">// String -&gt; double</span>
+<span class="hljs-keyword">var</span> onePointOne = <span class="hljs-built_in">double</span>.parse(<span class="hljs-string">'1.1'</span>);
+<span class="hljs-comment">// 输出3.1</span>
+<span class="hljs-built_in">print</span>(onePointOne + <span class="hljs-number">2</span>);
+
+<span class="hljs-comment">// int -&gt; String</span>
+<span class="hljs-built_in">String</span> oneAsString = <span class="hljs-number">1.</span>toString();
+<span class="hljs-comment">// The argument type 'int' can't be assigned to the parameter type 'String'</span>
+<span class="hljs-comment">//print(oneAsString + 2);</span>
+<span class="hljs-comment">// 输出 1 + 2</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">'<span class="hljs-subst">$oneAsString</span> + 2'</span>);
+<span class="hljs-comment">// 输出 1 2</span>
+<span class="hljs-built_in">print</span>(<span class="hljs-string">'<span class="hljs-subst">$oneAsString</span> 2'</span>);
+
+<span class="hljs-comment">// double -&gt; String 注意括号中要有小数点位数，否则报错</span>
+<span class="hljs-built_in">String</span> piAsString = <span class="hljs-number">3.14159</span>.toStringAsFixed(<span class="hljs-number">2</span>);
+<span class="hljs-comment">// 截取两位小数, 输出3.14</span>
+<span class="hljs-built_in">print</span>(piAsString);
+
+<span class="hljs-built_in">String</span> aString = <span class="hljs-number">1.12618</span>.toStringAsFixed(<span class="hljs-number">2</span>);
+<span class="hljs-comment">// 检查是否四舍五入，输出1.13，发现会做四舍五入</span>
+<span class="hljs-built_in">print</span>(aString);
+</code></pre>
+</li>
+<li>
+<p>String</p>
+<ul>
+<li>
+<p>Dart里面的String是一系列 UTF-16 代码单元。</p>
+</li>
+<li>
+<p>Dart里面的String是一系列 UTF-16 代码单元。</p>
+</li>
+<li>
+<p>单引号或者双引号里面嵌套使用引号。</p>
+</li>
+<li>
+<p>用 或{} 来计算字符串中变量的值，需要注意的是如果是表达式需要${表达式}</p>
+</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-built_in">String</span> singleString = <span class="hljs-string">'abcdddd'</span>;
+<span class="hljs-built_in">String</span> doubleString = <span class="hljs-string">"abcsdfafd"</span>;
+
+<span class="hljs-built_in">String</span> sdString = <span class="hljs-string">'<span class="hljs-subst">$singleString</span> a "bcsd" <span class="hljs-subst">${singleString}</span>'</span>;
+<span class="hljs-built_in">String</span> dsString = <span class="hljs-string">"abc 'aaa' <span class="hljs-subst">$sdString</span>"</span>;
+<span class="hljs-built_in">print</span>(sdString);
+<span class="hljs-built_in">print</span>(dsString);
+
+
+<span class="hljs-built_in">String</span> singleString = <span class="hljs-string">'aaa'</span>;
+<span class="hljs-built_in">String</span> doubleString = <span class="hljs-string">"bbb"</span>;
+<span class="hljs-comment">// 单引号嵌套双引号</span>
+<span class="hljs-built_in">String</span> sdString = <span class="hljs-string">'<span class="hljs-subst">$singleString</span> a "bbb" <span class="hljs-subst">${doubleString}</span>'</span>;
+<span class="hljs-comment">// 输出 aaa a "bbb" bbb</span>
+<span class="hljs-built_in">print</span>(sdString);
+
+<span class="hljs-comment">// 双引号嵌套单引号</span>
+<span class="hljs-built_in">String</span> dsString = <span class="hljs-string">"<span class="hljs-subst">${singleString.toUpperCase()}</span> abc 'aaa' <span class="hljs-subst">$doubleString</span>.toUpperCase()"</span>;
+<span class="hljs-comment">// 输出 AAA abc 'aaa' bbb.toUpperCase(), </span>
+可以看出 ”$doubleString.toUpperCase()“ 没有加“{}“，导致输出结果是”bbb.toUpperCase()“
+<span class="hljs-built_in">print</span>(dsString);
+</code></pre>
+</li>
+<li>
+<p>bool</p>
+<ul>
+<li>Dart 是强 bool 类型检查，只有bool 类型的值是true 才被认为是true。</li>
+<li>只有两个对象具有bool类型：true和false，它们都是编译时常量。</li>
+<li>Dart的类型安全意味着您不能使用 if（nonbooleanValue） 或 assert（nonbooleanValue） 等代码, 相反Dart使用的是显式的检查值。</li>
+<li>assert 是语言内置的断言函数，仅在检查模式下有效在开发过程中， 除非条件为真，否则会引发异常。(断言失败则程序立刻终止)。</li>
+</ul>
+<pre><code class="language-dart"> <span class="hljs-comment">// 检查是否为空字符串</span>
+<span class="hljs-keyword">var</span> fullName = <span class="hljs-string">''</span>;
+<span class="hljs-keyword">assert</span>(fullName.isEmpty);
+
+<span class="hljs-comment">// 检查0</span>
+<span class="hljs-keyword">var</span> hitPoints = <span class="hljs-number">0</span>;
+<span class="hljs-keyword">assert</span>(hitPoints &lt;= <span class="hljs-number">0</span>);
+
+<span class="hljs-comment">// 检查是否为null</span>
+<span class="hljs-keyword">var</span> unicorn;
+<span class="hljs-keyword">assert</span>(unicorn == <span class="hljs-keyword">null</span>);
+
+<span class="hljs-comment">// 检查是否为NaN</span>
+<span class="hljs-keyword">var</span> iMeantToDoThis = <span class="hljs-number">0</span> / <span class="hljs-number">0</span>;
+<span class="hljs-keyword">assert</span>(iMeantToDoThis.isNaN);
+
+</code></pre>
+</li>
+<li>
+<p>List集合</p>
+<ul>
+<li>在Dart中，数组是List对象，因此大多数人只是将它们称为List。Dart list文字看起来像JavaScript数组文字</li>
+</ul>
+<pre><code class="language-dart"> <span class="hljs-comment">//创建一个int类型的list</span>
+<span class="hljs-built_in">List</span> list = [<span class="hljs-number">10</span>, <span class="hljs-number">7</span>, <span class="hljs-number">23</span>];
+<span class="hljs-comment">// 输出[10, 7, 23]</span>
+<span class="hljs-built_in">print</span>(list);
+
+<span class="hljs-comment">// 使用List的构造函数，也可以添加int参数，表示List固定长度，不能进行添加 删除操作</span>
+<span class="hljs-keyword">var</span> fruits = <span class="hljs-keyword">new</span> <span class="hljs-built_in">List</span>();
+
+<span class="hljs-comment">// 添加元素</span>
+fruits.add(<span class="hljs-string">'apples'</span>);
+
+<span class="hljs-comment">// 添加多个元素</span>
+fruits.addAll([<span class="hljs-string">'oranges'</span>, <span class="hljs-string">'bananas'</span>]);
+
+<span class="hljs-built_in">List</span> subFruits = [<span class="hljs-string">'apples'</span>, <span class="hljs-string">'oranges'</span>, <span class="hljs-string">'banans'</span>];
+<span class="hljs-comment">// 添加多个元素</span>
+fruits.addAll(subFruits);
+
+<span class="hljs-comment">// 输出： [apples, oranges, bananas, apples, oranges, banans]</span>
+<span class="hljs-built_in">print</span>(fruits);
+
+<span class="hljs-comment">// 获取List的长度</span>
+<span class="hljs-built_in">print</span>(fruits.length);
+
+<span class="hljs-comment">// 获取第一个元素</span>
+<span class="hljs-built_in">print</span>(fruits.first);
+
+<span class="hljs-comment">// 获取元素最后一个元素</span>
+<span class="hljs-built_in">print</span>(fruits.last);
+
+<span class="hljs-comment">// 利用索引获取元素</span>
+<span class="hljs-built_in">print</span>(fruits[<span class="hljs-number">0</span>]);
+
+<span class="hljs-comment">// 查找某个元素的索引号</span>
+<span class="hljs-built_in">print</span>(fruits.indexOf(<span class="hljs-string">'apples'</span>));
+
+<span class="hljs-comment">// 删除指定位置的元素，返回删除的元素</span>
+<span class="hljs-built_in">print</span>(fruits.removeAt(<span class="hljs-number">0</span>));
+
+<span class="hljs-comment">// 删除指定元素,成功返回true，失败返回false</span>
+<span class="hljs-comment">// 如果集合里面有多个“apples”, 只会删除集合中第一个改元素</span>
+fruits.remove(<span class="hljs-string">'apples'</span>);
+
+<span class="hljs-comment">// 删除最后一个元素，返回删除的元素</span>
+fruits.removeLast();
+
+<span class="hljs-comment">// 删除指定范围(索引)元素，含头不含尾</span>
+fruits.removeRange(start,end);
+
+<span class="hljs-comment">// 删除指定条件的元素(这里是元素长度大于6)</span>
+fruits.removeWhere((item) =&gt; item.length &gt;<span class="hljs-number">6</span>)；
+
+<span class="hljs-comment">// 删除所有的元素</span>
+fruits.clear();
+</code></pre>
+<ul>
+<li>
+<p>注意事项：</p>
+<ol>
+<li>可以直接打印list包括list的元素，list也是一个对象。但是java必须遍历才能打印list，直接打印是地址值。</li>
+<li>和java一样list里面的元素必须保持类型一致，不一致就会报错。</li>
+<li>和java一样list的角标从0开始。</li>
+<li>如果集合里面有多个相同的元素“X”, 只会删除集合中第一个改元素</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>
+<p>Map集合</p>
+<ul>
+<li>一般来说，map是将键和值相关联的对象。键和值都可以是任何类型的对象。每个键只出现一次，但您可以多次使用相同的值。Dart支持map由map文字和map类型提供。</li>
+<li>初始化Map方式一： 直接声明，用{}表示，里面写key和value，每组键值对中间用逗号隔开。</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-comment">// Two keys in a map literal can't be equal.</span>
+<span class="hljs-comment">// Map companys = {'Alibaba': '阿里巴巴', 'Tencent': '腾讯', 'baidu': '百度', 'Alibaba': '钉钉', 'Tenect': 'qq-music'};</span>
+
+<span class="hljs-built_in">Map</span> companys = {<span class="hljs-string">'Alibaba'</span>: <span class="hljs-string">'阿里巴巴'</span>, <span class="hljs-string">'Tencent'</span>: <span class="hljs-string">'腾讯'</span>, <span class="hljs-string">'baidu'</span>: <span class="hljs-string">'百度'</span>};
+<span class="hljs-comment">// 输出：{Alibaba: 阿里巴巴, Tencent: 腾讯, baidu: 百度}</span>
+<span class="hljs-built_in">print</span>(companys);
+
+</code></pre>
+<ul>
+<li>创建Map方式二：先声明，再去赋值。</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-built_in">Map</span> schoolsMap = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Map</span>();
+schoolsMap[<span class="hljs-string">'first'</span>] = <span class="hljs-string">'清华'</span>;
+schoolsMap[<span class="hljs-string">'second'</span>] = <span class="hljs-string">'北大'</span>;
+schoolsMap[<span class="hljs-string">'third'</span>] = <span class="hljs-string">'复旦'</span>;
+<span class="hljs-comment">// 打印结果 {first: 清华, second: 北大, third: 复旦}</span>
+<span class="hljs-built_in">print</span>(schoolsMap);
+
+<span class="hljs-keyword">var</span> fruits = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Map</span>();
+fruits[<span class="hljs-string">"first"</span>] = <span class="hljs-string">"apple"</span>;
+fruits[<span class="hljs-string">"second"</span>] = <span class="hljs-string">"banana"</span>;
+fruits[<span class="hljs-string">"fifth"</span>] = <span class="hljs-string">"orange"</span>;
+<span class="hljs-comment">//换成双引号,换成var 打印结果 {first: apple, second: banana, fifth: orange}</span>
+<span class="hljs-built_in">print</span>(fruits);
+</code></pre>
+<ul>
+<li>Map API</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-comment">// 指定键值对的参数类型</span>
+<span class="hljs-keyword">var</span> aMap = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Map</span>&lt;<span class="hljs-built_in">int</span>, <span class="hljs-built_in">String</span>&gt;();
+
+<span class="hljs-comment">// Map的赋值，中括号中是Key，这里可不是数组</span>
+aMap[<span class="hljs-number">1</span>] = <span class="hljs-string">'小米'</span>;
+
+<span class="hljs-comment">//Map中的键值对是唯一的</span>
+<span class="hljs-comment">//同Set不同，第二次输入的Key如果存在，Value会覆盖之前的数据</span>
+aMap[<span class="hljs-number">1</span>] = <span class="hljs-string">'alibaba'</span>;
+
+<span class="hljs-comment">// map里面的value可以相同</span>
+aMap[<span class="hljs-number">2</span>] = <span class="hljs-string">'alibaba'</span>;
+
+<span class="hljs-comment">// map里面value可以为空字符串</span>
+aMap[<span class="hljs-number">3</span>] = <span class="hljs-string">''</span>;
+
+<span class="hljs-comment">// map里面的value可以为null</span>
+aMap[<span class="hljs-number">4</span>] = <span class="hljs-keyword">null</span>;
+
+<span class="hljs-built_in">print</span>(aMap);
+
+<span class="hljs-comment">// 检索Map是否含有某Key</span>
+<span class="hljs-keyword">assert</span>(aMap.containsKey(<span class="hljs-number">1</span>));
+
+<span class="hljs-comment">//删除某个键值对</span>
+aMap.remove(<span class="hljs-number">1</span>); 
+
+<span class="hljs-built_in">print</span>(aMap);  
+</code></pre>
+<ul>
+<li>注意事项
+<ol>
+<li>map的key类型不一致也不会报错。</li>
+<li>添加元素的时候，会按照你添加元素的顺序逐个加入到map里面，哪怕你的key，比如分别是 1,2,4，看起来有间隔，事实上添加到map的时候是{1:value,2:value,4:value} 这种形式。</li>
+<li>map里面的key不能相同。但是value可以相同,value可以为空字符串或者为null。</li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+<h2>运算符</h2>
+<table>
+<thead>
+<tr>
+<th>描述</th>
+<th>操作符</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>一元后置操作符</td>
+<td>expr++  expr--  ()  []  .  ?.</td>
+</tr>
+<tr>
+<td>一元前置操作符</td>
+<td>expr !expr ~expr ++expr --expr</td>
+</tr>
+<tr>
+<td>乘除</td>
+<td>*  / %  ~/</td>
+</tr>
+<tr>
+<td>加减</td>
+<td>+ -</td>
+</tr>
+<tr>
+<td>位移</td>
+<td>&lt;&lt;  &gt;&gt;</td>
+</tr>
+<tr>
+<td>按位与</td>
+<td>&amp;</td>
+</tr>
+<tr>
+<td>按位或</td>
+<td></td>
+</tr>
+<tr>
+<td>按位异或</td>
+<td>^</td>
+</tr>
+<tr>
+<td>逻辑与</td>
+<td>&amp;&amp;</td>
+</tr>
+<tr>
+<td>逻辑或</td>
+<td></td>
+</tr>
+<tr>
+<td>关系和类型判断</td>
+<td>&gt;=  &gt;  &lt;=  &lt;  as  is  is!</td>
+</tr>
+<tr>
+<td>等</td>
+<td>==  !=</td>
+</tr>
+<tr>
+<td>如果为空</td>
+<td>??</td>
+</tr>
+<tr>
+<td>条件表达式</td>
+<td>expr1 ? expr2 : expr3</td>
+</tr>
+<tr>
+<td>赋值</td>
+<td>= *= /= ~/= %= += -= &lt;&lt;= &gt;&gt;= &amp;= ^= = ??=</td>
+</tr>
+<tr>
+<td>级联</td>
+<td>..</td>
+</tr>
+</tbody>
+</table>
+<h2>流程控制语句（Control flow statements）</h2>
+<ul>
+<li>if...else</li>
+<li>for</li>
+<li>while do-whild</li>
+<li>break continue</li>
+<li>break continue</li>
+<li>assert（仅在checked模式有效）</li>
+</ul>
+<h2>异常（Exceptions）</h2>
+<ol>
+<li>
+<p>throw</p>
+<ul>
+<li>抛出固定类型的异常</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> FormatException(<span class="hljs-string">'Expected at least 1 section'</span>);
+</code></pre>
+<ul>
+<li>抛出任意类型的异常</li>
+</ul>
+<pre><code class="language-dart"> <span class="hljs-keyword">throw</span> <span class="hljs-string">'Out of llamas!'</span>;
+</code></pre>
+<ul>
+<li>因为抛出异常属于表达式，可以将throw语句放在=&gt;语句中，或者其它可以出现表达式的地方</li>
+</ul>
+<pre><code class="language-dart">distanceTo(Point other) =&gt;
+<span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> UnimplementedError();
+</code></pre>
+</li>
+<li>
+<p>catch</p>
+<ul>
+<li>将可能出现异常的代码放置到try语句中，可以通过 on语句来指定需要捕获的异常类型，使用catch来处理异常。</li>
+</ul>
+<pre><code class="language-dart"> <span class="hljs-keyword">try</span> {
+    breedMoreLlamas();
+} on OutOfLlamasException {
+    <span class="hljs-comment">// A specific exception</span>
+    buyMoreLlamas();
+} on Exception <span class="hljs-keyword">catch</span> (e) {
+    <span class="hljs-comment">// Anything else that is an exception</span>
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">'Unknown exception: <span class="hljs-subst">$e</span>'</span>);
+} <span class="hljs-keyword">catch</span> (e, s) {
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">'Exception details:\n <span class="hljs-subst">$e</span>'</span>);
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">'Stack trace:\n <span class="hljs-subst">$s</span>'</span>);
+}
+</code></pre>
+</li>
+<li>
+<p>rethrow</p>
+<ul>
+<li>rethrow语句用来处理一个异常，同时希望这个异常能够被其它调用的部分使用。</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">final</span> foo = <span class="hljs-string">''</span>;
+
+<span class="hljs-keyword">void</span> misbehave() {
+    <span class="hljs-keyword">try</span> {
+    foo = <span class="hljs-string">"1"</span>;
+    } <span class="hljs-keyword">catch</span> (e) {
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">'2'</span>);
+    <span class="hljs-keyword">rethrow</span>;<span class="hljs-comment">// 如果不重新抛出异常，main函数中的catch语句执行不到</span>
+    }
+}
+
+<span class="hljs-keyword">void</span> main() {
+    <span class="hljs-keyword">try</span> {
+    misbehave();
+    } <span class="hljs-keyword">catch</span> (e) {
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">'3'</span>);
+    }
+}
+</code></pre>
+</li>
+<li>
+<p>finally</p>
+<ul>
+<li>Dart的finally用来执行那些无论异常是否发生都执行的操作。</li>
+</ul>
+<pre><code class="language-dart">
+<span class="hljs-keyword">final</span> foo = <span class="hljs-string">''</span>;
+
+<span class="hljs-keyword">void</span> misbehave() {
+    <span class="hljs-keyword">try</span> {
+    foo = <span class="hljs-string">"1"</span>;
+    } <span class="hljs-keyword">catch</span> (e) {
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">'2'</span>);
+    }
+}
+
+<span class="hljs-keyword">void</span> main() {
+    <span class="hljs-keyword">try</span> {
+    misbehave();
+    } <span class="hljs-keyword">catch</span> (e) {
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">'3'</span>);
+    } <span class="hljs-keyword">finally</span> {
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">'4'</span>); <span class="hljs-comment">// 即使没有rethrow最终都会执行到</span>
+    }
+}
+
+</code></pre>
+</li>
+</ol>
+<h2>函数 Function</h2>
+<ul>
+<li>以下是一个实现函数的例子：</li>
+</ul>
+<pre><code class="language-dart"> <span class="hljs-built_in">bool</span> isNoble(<span class="hljs-built_in">int</span> atomicNumber) {
+     <span class="hljs-keyword">return</span> _nobleGases[atomicNumber] != <span class="hljs-keyword">null</span>;
+  }     
+</code></pre>
+<ol>
+<li>
+<p>main()函数</p>
+<ul>
+<li>每个应用程序都必须有一个顶层main()函数，它可以作为应用程序的入口点。该main()函数返回void并具有List<String>参数的可选参数。</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">void</span> main() {
+<span class="hljs-built_in">querySelector</span>(<span class="hljs-string">'#sample_text_id'</span>)
+    ..text = <span class="hljs-string">'Click me!'</span>
+    ..onClick.listen(reverseText);
+}
+
+</code></pre>
+<ul>
+<li>级联符号..允许您在同一个对象上进行一系列操作。除了函数调用之外，还可以访问同一对象上的字段。这通常会为您节省创建临时变量的步骤，并允许您编写更流畅的代码。</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-built_in">querySelector</span>(<span class="hljs-string">'#confirm'</span>) <span class="hljs-comment">// Get an object.</span>
+    ..text = <span class="hljs-string">'Confirm'</span> <span class="hljs-comment">// Use its members.</span>
+    ..classes.add(<span class="hljs-string">'important'</span>)
+    ..onClick.listen((e) =&gt; <span class="hljs-built_in">window</span>.alert(<span class="hljs-string">'Confirmed!'</span>));
+
+</code></pre>
+<ul>
+<li>上述例子相对于：</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">var</span> button = <span class="hljs-built_in">querySelector</span>(<span class="hljs-string">'#confirm'</span>);
+button.text = <span class="hljs-string">'Confirm'</span>;
+button.classes.add(<span class="hljs-string">'important'</span>);
+button.onClick.listen((e) =&gt; <span class="hljs-built_in">window</span>.alert(<span class="hljs-string">'Confirmed!'</span>));
+
+</code></pre>
+<ul>
+<li>级联符号也可以嵌套使用。 例如：</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">final</span> addressBook = (AddressBookBuilder()
+..name = <span class="hljs-string">'jenny'</span>
+..email = <span class="hljs-string">'jenny@example.com'</span>
+..phone = (PhoneNumberBuilder()
+        ..number = <span class="hljs-string">'415-555-0100'</span>
+        ..label = <span class="hljs-string">'home'</span>)
+    .build())
+.build();
+
+</code></pre>
+<ul>
+<li>当返回值是void时不能构建级联。 例如，以下代码失败：</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">var</span> sb = <span class="hljs-built_in">StringBuffer</span>();
+sb.write(<span class="hljs-string">'foo'</span>) <span class="hljs-comment">// 返回void</span>
+    ..write(<span class="hljs-string">'bar'</span>); <span class="hljs-comment">// 这里会报错</span>
+
+</code></pre>
+<ul>
+<li>注意： 严格地说，级联的..符号不是操作符。它只是Dart语法的一部分。</li>
+</ul>
+</li>
+<li>
+<p>可选参数</p>
+<ul>
+<li>可选的命名参数, 定义函数时，使用{param1, param2, …}，用于指定命名参数。例如：</li>
+</ul>
+<pre><code class="language-dart"> <span class="hljs-comment">//设置[bold]和[hidden]标志</span>
+<span class="hljs-keyword">void</span> enableFlags({<span class="hljs-built_in">bool</span> bold, <span class="hljs-built_in">bool</span> hidden}) {
+    <span class="hljs-comment">// ... </span>
+}  
+
+enableFlags(bold: <span class="hljs-keyword">true</span>, hidden: <span class="hljs-keyword">false</span>);
+</code></pre>
+<ul>
+<li>可选的位置参数，用[]它们标记为可选的位置参数：</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-built_in">String</span> say(<span class="hljs-built_in">String</span> from, <span class="hljs-built_in">String</span> msg, [<span class="hljs-built_in">String</span> device]) {
+    <span class="hljs-keyword">var</span> result = <span class="hljs-string">'<span class="hljs-subst">$from</span> says <span class="hljs-subst">$msg</span>'</span>;
+    <span class="hljs-keyword">if</span> (device != <span class="hljs-keyword">null</span>) {
+        result = <span class="hljs-string">'<span class="hljs-subst">$result</span> with a <span class="hljs-subst">$device</span>'</span>;
+    }
+    <span class="hljs-keyword">return</span> result;
+}
+</code></pre>
+<ul>
+<li>下面是一个不带可选参数调用这个函数的例子：</li>
+</ul>
+<pre><code class="language-dart">  say(<span class="hljs-string">'Bob'</span>, <span class="hljs-string">'Howdy'</span>); <span class="hljs-comment">//结果是： Bob says Howdy</span>
+</code></pre>
+<ul>
+<li>下面是用第三个参数调用这个函数的例子：</li>
+</ul>
+<pre><code class="language-dart"> say(<span class="hljs-string">'Bob'</span>, <span class="hljs-string">'Howdy'</span>, <span class="hljs-string">'smoke signal'</span>); <span class="hljs-comment">//结果是：Bob says Howdy with a smoke signal</span>
+</code></pre>
+</li>
+<li>
+<p>默认参数</p>
+<ul>
+<li>函数可以使用=为命名参数和位置参数定义默认值。默认值必须是编译时常量。如果没有提供默认值，则默认值为null。</li>
+<li>下面是为命名参数设置默认值的示例:</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-comment">// 设置 bold 和 hidden 标记的默认值都为false</span>
+<span class="hljs-keyword">void</span> enableFlags2({<span class="hljs-built_in">bool</span> bold = <span class="hljs-keyword">false</span>, <span class="hljs-built_in">bool</span> hidden = <span class="hljs-keyword">false</span>}) {
+    <span class="hljs-comment">// ...</span>
+}
+
+<span class="hljs-comment">// 调用的时候：bold will be true; hidden will be false.</span>
+enableFlags2(bold: <span class="hljs-keyword">true</span>);
+</code></pre>
+<ul>
+<li>下一个示例显示如何为位置参数设置默认值：</li>
+</ul>
+<pre><code class="language-dart"> <span class="hljs-built_in">String</span> say(<span class="hljs-built_in">String</span> from, <span class="hljs-built_in">String</span> msg,
+    [<span class="hljs-built_in">String</span> device = <span class="hljs-string">'carrier pigeon'</span>, <span class="hljs-built_in">String</span> mood]) {
+        <span class="hljs-keyword">var</span> result = <span class="hljs-string">'<span class="hljs-subst">$from</span> says <span class="hljs-subst">$msg</span>'</span>;
+        <span class="hljs-keyword">if</span> (device != <span class="hljs-keyword">null</span>) {
+            result = <span class="hljs-string">'<span class="hljs-subst">$result</span> with a <span class="hljs-subst">$device</span>'</span>;
+        }
+        <span class="hljs-keyword">if</span> (mood != <span class="hljs-keyword">null</span>) {
+            result = <span class="hljs-string">'<span class="hljs-subst">$result</span> (in a <span class="hljs-subst">$mood</span> mood)'</span>;
+        }
+        <span class="hljs-keyword">return</span> result;
+}
+
+<span class="hljs-comment">//调用方式：</span>
+say(<span class="hljs-string">'Bob'</span>, <span class="hljs-string">'Howdy'</span>); <span class="hljs-comment">//结果为：Bob says Howdy with a carrier pigeon;</span>
+</code></pre>
+<ul>
+<li>您还可以将list或map作为默认值传递。下面的示例定义一个函数doStuff()，该函数指定列表参数的默认list和gifts参数的默认map。</li>
+</ul>
+<pre><code class="language-dart"> <span class="hljs-comment">// 使用list 或者map设置默认值</span>
+<span class="hljs-keyword">void</span> doStuff(
+    {<span class="hljs-built_in">List</span>&lt;<span class="hljs-built_in">int</span>&gt; list = <span class="hljs-keyword">const</span> [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>],
+    <span class="hljs-built_in">Map</span>&lt;<span class="hljs-built_in">String</span>, <span class="hljs-built_in">String</span>&gt; gifts = <span class="hljs-keyword">const</span> {<span class="hljs-string">'first'</span>: <span class="hljs-string">'paper'</span>, 
+    <span class="hljs-string">'second'</span>: <span class="hljs-string">'cotton'</span>, <span class="hljs-string">'third'</span>: <span class="hljs-string">'leather'</span>
+    }}) {
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">'list:  <span class="hljs-subst">$list</span>'</span>);
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">'gifts: <span class="hljs-subst">$gifts</span>'</span>);
+}
+</code></pre>
+</li>
+<li>
+<p>作为一个类对象的功能</p>
+<ul>
+<li>您可以将一个函数作为参数传递给另一个函数。</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">void</span> printElement(<span class="hljs-built_in">int</span> element) {
+    <span class="hljs-built_in">print</span>(element);
+}
+
+<span class="hljs-keyword">var</span> list = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];
+
+<span class="hljs-comment">// 把 printElement函数作为一个参数传递进来</span>
+list.forEach(printElement);
+</code></pre>
+<ul>
+<li>您也可以将一个函数分配给一个变量。</li>
+</ul>
+<pre><code class="language-dart"> <span class="hljs-keyword">var</span> loudify = (msg) =&gt; <span class="hljs-string">'!!! <span class="hljs-subst">${msg.toUpperCase()}</span> !!!'</span>;
+<span class="hljs-keyword">assert</span>(loudify(<span class="hljs-string">'hello'</span>) == <span class="hljs-string">'!!! HELLO !!!'</span>);
+</code></pre>
+</li>
+<li>
+<p>匿名函数</p>
+<ul>
+<li>大多数函数都能被命名为匿名函数，如 main() 或 printElement()。您还可以创建一个名为匿名函数的无名函数，有时也可以创建lambda或闭包。您可以为变量分配一个匿名函数，例如，您可以从集合中添加或删除它。</li>
+<li>一个匿名函数看起来类似于一个命名函数 - 0或更多的参数，在括号之间用逗号和可选类型标注分隔。</li>
+<li>下面的代码块包含函数的主体:</li>
+</ul>
+<pre><code class="language-dart">([[<span class="hljs-built_in">Type</span>] param1[, …]]) { 
+    codeBlock; 
+}; 
+</code></pre>
+<ul>
+<li>下面的示例定义了一个具有无类型参数的匿名函数item，该函数被list中的每个item调用，输出一个字符串，该字符串包含指定索引处的值。</li>
+</ul>
+<pre><code class="language-dart"> <span class="hljs-keyword">var</span> list = [<span class="hljs-string">'apples'</span>, <span class="hljs-string">'bananas'</span>, <span class="hljs-string">'oranges'</span>];
+list.forEach((item) {
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">'<span class="hljs-subst">${list.indexOf(item)}</span>: <span class="hljs-subst">$item</span>'</span>);
+});
+</code></pre>
+<ul>
+<li>如果函数只包含一条语句，可以使用箭头符号=&gt;来缩短它, 比如上面的例2可以简写成：</li>
+</ul>
+<pre><code class="language-dart">list.forEach((item) =&gt; <span class="hljs-built_in">print</span>(<span class="hljs-string">'<span class="hljs-subst">${list.indexOf(item)}</span>: <span class="hljs-subst">$item</span>'</span>));
+</code></pre>
+</li>
+<li>
+<p>返回值</p>
+<ul>
+<li>所有函数都返回一个值，如果没有指定返回值，则语句return null，隐式地附加到函数体。</li>
+</ul>
+<pre><code class="language-dart">foo() {}
+<span class="hljs-keyword">assert</span>(foo() == <span class="hljs-keyword">null</span>);
+</code></pre>
+</li>
+</ol>
+<h2>类（Classes）</h2>
+<ol>
+<li>
+<p>对象</p>
+<ul>
+<li>Dart 是一种面向对象的语言，并且支持基于mixin的继承方式。</li>
+<li>Dart 语言中所有的对象都是某一个类的实例,所有的类有同一个基类--Object。</li>
+<li>基于mixin的继承方式具体是指：一个类可以继承自多个父类。</li>
+<li>使用new语句来构造一个类，构造函数的名字可能是ClassName，也可以是ClassName.identifier， 例如：</li>
+</ul>
+<pre><code class="language-dart"> <span class="hljs-keyword">var</span> jsonData = JSON.decode(<span class="hljs-string">'{"x":1, "y":2}'</span>);
+
+<span class="hljs-comment">// Create a Point using Point().</span>
+<span class="hljs-keyword">var</span> p1 = <span class="hljs-keyword">new</span> Point(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>);
+
+<span class="hljs-comment">// Create a Point using Point.fromJson().</span>
+<span class="hljs-keyword">var</span> p2 = <span class="hljs-keyword">new</span> Point.fromJson(jsonData);
+
+</code></pre>
+<ul>
+<li>使用.（dot）来调用实例的变量或者方法。</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">var</span> p = <span class="hljs-keyword">new</span> Point(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>);
+
+<span class="hljs-comment">// Set the value of the instance variable y.</span>
+p.y = <span class="hljs-number">3</span>;
+
+<span class="hljs-comment">// Get the value of y.</span>
+<span class="hljs-keyword">assert</span>(p.y == <span class="hljs-number">3</span>);
+
+<span class="hljs-comment">// Invoke distanceTo() on p.</span>
+<span class="hljs-built_in">num</span> distance = p.distanceTo(<span class="hljs-keyword">new</span> Point(<span class="hljs-number">4</span>, <span class="hljs-number">4</span>));
+</code></pre>
+<ul>
+<li>使用?.来确认前操作数不为空, 常用来替代. , 避免左边操作数为null引发异常。</li>
+</ul>
+<pre><code class="language-dart"> <span class="hljs-comment">// If p is non-null, set its y value to 4.</span>
+p?.y = <span class="hljs-number">4</span>;  
+</code></pre>
+<ul>
+<li>使用const替代new来创建编译时的常量构造函数。</li>
+</ul>
+<pre><code class="language-dart"> <span class="hljs-keyword">var</span> p = <span class="hljs-keyword">const</span> ImmutablePoint(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>);
+</code></pre>
+<ul>
+<li>使用runtimeType方法，在运行中获取对象的类型。该方法将返回Type 类型的变量。</li>
+</ul>
+<pre><code class="language-dart"> <span class="hljs-built_in">print</span>(<span class="hljs-string">'The type of a is <span class="hljs-subst">${a.runtimeType}</span>'</span>);
+</code></pre>
+</li>
+<li>
+<p>实例化变量(Instance variables)</p>
+<ul>
+<li>在类定义中，所有没有初始化的变量都会被初始化为null。</li>
+</ul>
+<pre><code class="language-dart"> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Point</span> </span>{
+    <span class="hljs-built_in">num</span> x; <span class="hljs-comment">// Declare instance variable x, initially null.</span>
+    <span class="hljs-built_in">num</span> y; <span class="hljs-comment">// Declare y, initially null.</span>
+    <span class="hljs-built_in">num</span> z = <span class="hljs-number">0</span>; <span class="hljs-comment">// Declare z, initially 0.</span>
+}
+</code></pre>
+<ul>
+<li>类定义中所有的变量, Dart语言都会隐式的定义 setter 方法，针对非空的变量会额外增加 getter 方法。</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Point</span> </span>{
+<span class="hljs-built_in">num</span> x;
+<span class="hljs-built_in">num</span> y;
+}
+
+main() {
+    <span class="hljs-keyword">var</span> point = <span class="hljs-keyword">new</span> Point();
+    point.x = <span class="hljs-number">4</span>;          <span class="hljs-comment">// Use the setter method for x.</span>
+    <span class="hljs-keyword">assert</span>(point.x == <span class="hljs-number">4</span>); <span class="hljs-comment">// Use the getter method for x.</span>
+    <span class="hljs-keyword">assert</span>(point.y == <span class="hljs-keyword">null</span>); <span class="hljs-comment">// Values default to null.</span>
+}
+</code></pre>
+</li>
+<li>
+<p>构造函数(Constructors)</p>
+<ul>
+<li>声明一个和类名相同的函数，来作为类的构造函数。</li>
+</ul>
+<pre><code class="language-dart">  <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Point</span> </span>{
+    <span class="hljs-built_in">num</span> x;
+    <span class="hljs-built_in">num</span> y;
+
+    Point(<span class="hljs-built_in">num</span> x, <span class="hljs-built_in">num</span> y) {
+        <span class="hljs-comment">// There's a better way to do this, stay tuned.</span>
+        <span class="hljs-keyword">this</span>.x = x;
+        <span class="hljs-keyword">this</span>.y = y;
+    }
+}
+</code></pre>
+<ul>
+<li>this关键字指向了当前类的实例, 上面的代码可以简化为：</li>
+</ul>
+<pre><code class="language-dart"> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Point</span> </span>{
+    <span class="hljs-built_in">num</span> x;
+    <span class="hljs-built_in">num</span> y;
+
+    <span class="hljs-comment">// Syntactic sugar for setting x and y</span>
+    <span class="hljs-comment">// before the constructor body runs.</span>
+    Point(<span class="hljs-keyword">this</span>.x, <span class="hljs-keyword">this</span>.y);
+}
+</code></pre>
+</li>
+<li>
+<p>构造函数不能继承(Constructors aren’t inherited)</p>
+<ul>
+<li>Dart 语言中，子类不会继承父类的命名构造函数。如果不显式提供子类的构造函数，系统就提供默认的构造函数。</li>
+</ul>
+</li>
+<li>
+<p>命名的构造函数(Named constructors)</p>
+<ul>
+<li>使用命名构造函数从另一类或现有的数据中快速实现构造函数。</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Point</span> </span>{
+    <span class="hljs-built_in">num</span> x;
+    <span class="hljs-built_in">num</span> y;
+
+    Point(<span class="hljs-keyword">this</span>.x, <span class="hljs-keyword">this</span>.y);
+
+    <span class="hljs-comment">// 命名构造函数Named constructor</span>
+    Point.fromJson(<span class="hljs-built_in">Map</span> json) {
+        x = json[<span class="hljs-string">'x'</span>];
+        y = json[<span class="hljs-string">'y'</span>];
+    }
+}
+</code></pre>
+<ul>
+<li>构造函数不能被继承，父类中的命名构造函数不能被子类继承。如果想要子类也拥有一个父类一样名字的构造函数，必须在子类是实现这个构造函数。</li>
+</ul>
+</li>
+<li>
+<p>调用父类的非默认构造函数</p>
+<ul>
+<li>
+<p>默认情况下，子类只能调用父类的无名，无参数的构造函数; 父类的无名构造函数会在子类的构造函数前调用; 如果initializer list 也同时定义了，则会先执行initializer list 中的内容，然后在执行父类的无名无参数构造函数，最后调用子类自己的无名无参数构造函数。即下面的顺序：</p>
+<ol>
+<li>initializer list（初始化列表）</li>
+<li>super class’s no-arg constructor（父类无参数构造函数）</li>
+<li>main class’s no-arg constructor （主类无参数构造函数）</li>
+</ol>
+</li>
+<li>
+<p>如果父类不显示提供无名无参数构造函数的构造函数，在子类中必须手打调用父类的一个构造函数。这种情况下，调用父类的构造函数的代码放在子类构造函数名后，子类构造函数体前，中间使用:(colon) 分割。</p>
+</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Person</span> </span>{
+    <span class="hljs-built_in">String</span> firstName;
+
+Person.fromJson(<span class="hljs-built_in">Map</span> data) {
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">'in Person'</span>);
+}
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Employee</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Person</span> </span>{
+<span class="hljs-comment">// 父类没有无参数的非命名构造函数，必须手动调用一个构造函数     </span>
+<span class="hljs-keyword">super</span>.fromJson(data)
+Employee.fromJson(<span class="hljs-built_in">Map</span> data) : <span class="hljs-keyword">super</span>.fromJson(data) {
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">'in Employee'</span>);
+}
+}
+
+main() {
+<span class="hljs-keyword">var</span> emp = <span class="hljs-keyword">new</span> Employee.fromJson({});
+
+<span class="hljs-comment">// Prints:</span>
+<span class="hljs-comment">// in Person</span>
+<span class="hljs-comment">// in Employee</span>
+<span class="hljs-keyword">if</span> (emp <span class="hljs-keyword">is</span> Person) {
+    <span class="hljs-comment">// Type check</span>
+    emp.firstName = <span class="hljs-string">'Bob'</span>;
+}
+(emp <span class="hljs-keyword">as</span> Person).firstName = <span class="hljs-string">'Bob'</span>;
+}
+
+</code></pre>
+</li>
+<li>
+<p>初始化列表</p>
+<ul>
+<li>除了调用父类的构造函数，也可以通过初始化列表在子类的构造函数体前（大括号前）来初始化实例的变量值，使用逗号,分隔。如下所示：</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Point</span> </span>{
+<span class="hljs-built_in">num</span> x;
+<span class="hljs-built_in">num</span> y;
+
+Point(<span class="hljs-keyword">this</span>.x, <span class="hljs-keyword">this</span>.y);
+
+<span class="hljs-comment">// 初始化列表在构造函数运行前设置实例变量。</span>
+Point.fromJson(<span class="hljs-built_in">Map</span> jsonMap)
+: x = jsonMap[<span class="hljs-string">'x'</span>],
+    y = jsonMap[<span class="hljs-string">'y'</span>] {
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">'In Point.fromJson(): (<span class="hljs-subst">$x</span>, <span class="hljs-subst">$y</span>)'</span>);
+}
+}
+</code></pre>
+<p><strong>注意：上述代码，初始化程序无法访问 this 关键字。</strong></p>
+</li>
+<li>
+<p>静态构造函数</p>
+<ul>
+<li>如果你的类产生的对象永远不会改变，你可以让这些对象成为编译时常量。为此，需要定义一个 const 构造函数并确保所有的实例变量都是 final 的。</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ImmutablePoint</span> </span>{
+    <span class="hljs-keyword">final</span> <span class="hljs-built_in">num</span> x;
+    <span class="hljs-keyword">final</span> <span class="hljs-built_in">num</span> y;
+    <span class="hljs-keyword">const</span> ImmutablePoint(<span class="hljs-keyword">this</span>.x, <span class="hljs-keyword">this</span>.y);
+    <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> ImmutablePoint origin = <span class="hljs-keyword">const</span> ImmutablePoint(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>);
+}
+
+</code></pre>
+</li>
+<li>
+<p>重定向构造函数</p>
+<ul>
+<li>有时候构造函数的目的只是重定向到该类的另一个构造函数。重定向构造函数没有函数体，使用冒号:分隔。</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Point</span> </span>{
+    <span class="hljs-built_in">num</span> x;
+    <span class="hljs-built_in">num</span> y;
+
+    <span class="hljs-comment">// 主构造函数</span>
+    Point(<span class="hljs-keyword">this</span>.x, <span class="hljs-keyword">this</span>.y) {
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">"Point(<span class="hljs-subst">$x</span>, <span class="hljs-subst">$y</span>)"</span>);
+    }
+
+    <span class="hljs-comment">// 重定向构造函数，指向主构造函数，函数体为空</span>
+    Point.alongXAxis(<span class="hljs-built_in">num</span> x) : <span class="hljs-keyword">this</span>(x, <span class="hljs-number">0</span>);
+}
+
+<span class="hljs-keyword">void</span> main() {
+    <span class="hljs-keyword">var</span> p1 = <span class="hljs-keyword">new</span> Point(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>);
+    <span class="hljs-keyword">var</span> p2 = <span class="hljs-keyword">new</span> Point.alongXAxis(<span class="hljs-number">4</span>);
+}   
+</code></pre>
+</li>
+<li>
+<p>常量构造函数</p>
+<ul>
+<li>如果类的对象不会发生变化，可以构造一个编译时的常量构造函数。定义格式如下：
+<ul>
+<li>定义所有的实例变量是final。</li>
+<li>使用const声明构造函数。</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ImmutablePoint</span> </span>{
+<span class="hljs-keyword">final</span> <span class="hljs-built_in">num</span> x;
+<span class="hljs-keyword">final</span> <span class="hljs-built_in">num</span> y;
+<span class="hljs-keyword">const</span> ImmutablePoint(<span class="hljs-keyword">this</span>.x, <span class="hljs-keyword">this</span>.y);
+<span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> ImmutablePoint origin = <span class="hljs-keyword">const</span> ImmutablePoint(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>);
+}
+
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p>工厂构造函数</p>
+<ul>
+<li>当实现一个使用 factory 关键词修饰的构造函数时，这个构造函数不必创建类的新实例。例如，工厂构造函数可能从缓存返回实例，或者它可能返回子类型的实例。 下面的示例演示一个工厂构造函数从缓存返回的对象：</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Logger</span> </span>{
+<span class="hljs-keyword">final</span> <span class="hljs-built_in">String</span> name;
+<span class="hljs-built_in">bool</span> mute = <span class="hljs-keyword">false</span>;
+
+<span class="hljs-comment">// _cache 是一个私有库,幸好名字前有个 _ 。 </span>
+<span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-built_in">Map</span>&lt;<span class="hljs-built_in">String</span>, Logger&gt; _cache = &lt;<span class="hljs-built_in">String</span>, Logger&gt;{};
+
+<span class="hljs-keyword">factory</span> Logger(<span class="hljs-built_in">String</span> name) {
+    <span class="hljs-keyword">if</span> (_cache.containsKey(name)) {
+        <span class="hljs-keyword">return</span> _cache[name];
+    } <span class="hljs-keyword">else</span> {
+        <span class="hljs-keyword">final</span> logger = <span class="hljs-keyword">new</span> Logger._internal(name);
+        _cache[name] = logger;
+        <span class="hljs-keyword">return</span> logger;
+    }
+    }
+
+    Logger._internal(<span class="hljs-keyword">this</span>.name);
+
+    <span class="hljs-keyword">void</span> log(<span class="hljs-built_in">String</span> msg) {
+    <span class="hljs-keyword">if</span> (!mute) {
+        <span class="hljs-built_in">print</span>(msg);
+    }
+    }
+    
+}
+</code></pre>
+<p><strong>注意：工厂构造函数不能用 this。</strong></p>
+</li>
+</ol>
+<h2>方法</h2>
+<ul>
+<li>方法就是为对象提供行为的函数。</li>
+</ul>
+<ol>
+<li>
+<p>实例方法</p>
+<ul>
+<li>对象的实例方法可以访问实例变量和 this 。以下示例中的 distanceTo() 方法是实例方法的一个例子：</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">import</span> <span class="hljs-string">'dart:math'</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Point</span> </span>{
+    <span class="hljs-built_in">num</span> x;
+    <span class="hljs-built_in">num</span> y;
+    Point(<span class="hljs-keyword">this</span>.x, <span class="hljs-keyword">this</span>.y);
+
+    <span class="hljs-built_in">num</span> distanceTo(Point other) {
+        <span class="hljs-keyword">var</span> dx = x - other.x;
+        <span class="hljs-keyword">var</span> dy = y - other.y;
+        <span class="hljs-keyword">return</span> sqrt(dx * dx + dy * dy);
+    }
+}
+</code></pre>
+</li>
+<li>
+<p>setters 和 Getters</p>
+<ul>
+<li>是一种提供对方法属性读和写的特殊方法。每个实例变量都有一个隐式的 getter 方法，合适的话可能还会有 setter 方法。你可以通过实现 getters 和 setters 来创建附加属性，也就是直接使用 get 和 set 关键词：</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Rectangle</span> </span>{
+<span class="hljs-built_in">num</span> left;
+<span class="hljs-built_in">num</span> top;
+<span class="hljs-built_in">num</span> width;
+<span class="hljs-built_in">num</span> height;
+
+Rectangle(<span class="hljs-keyword">this</span>.left, <span class="hljs-keyword">this</span>.top, <span class="hljs-keyword">this</span>.width, <span class="hljs-keyword">this</span>.height);
+
+<span class="hljs-comment">// 定义两个计算属性: right and bottom.</span>
+<span class="hljs-built_in">num</span> <span class="hljs-keyword">get</span> right =&gt; left + width;
+<span class="hljs-keyword">set</span> right(<span class="hljs-built_in">num</span> value) =&gt; left = value - width;
+<span class="hljs-built_in">num</span> <span class="hljs-keyword">get</span> bottom =&gt; top + height;
+<span class="hljs-keyword">set</span> bottom(<span class="hljs-built_in">num</span> value) =&gt; top = value - height;
+}
+
+main() {
+<span class="hljs-keyword">var</span> rect = <span class="hljs-keyword">new</span> Rectangle(<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">20</span>, <span class="hljs-number">15</span>);
+<span class="hljs-keyword">assert</span>(rect.left == <span class="hljs-number">3</span>);
+rect.right = <span class="hljs-number">12</span>;
+<span class="hljs-keyword">assert</span>(rect.left == <span class="hljs-number">-8</span>);
+}
+</code></pre>
+<ul>
+<li>借助于 getter 和 setter ，你可以直接使用实例变量，并且在不改变客户代码的情况下把他们包装成方法。</li>
+<li>注： 不论是否显式地定义了一个 getter，类似增量（++）的操作符，都能以预期的方式工作。为了避免产生任何向着不期望的方向的影响，操作符一旦调用 getter ，就会把他的值存在临时变量里。</li>
+</ul>
+</li>
+<li>
+<p>抽象方法</p>
+<ul>
+<li>Instance ， getter 和 setter 方法可以是抽象的，也就是定义一个接口，但是把实现交给其他的类。要创建一个抽象方法，使用分号（；）代替方法体：</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Doer</span> </span>{
+    <span class="hljs-comment">// ...定义实例变量和方法...</span>
+    <span class="hljs-keyword">void</span> doSomething(); <span class="hljs-comment">// 定义一个抽象方法。</span>
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">EffectiveDoer</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Doer</span> </span>{
+    <span class="hljs-keyword">void</span> doSomething() {
+        <span class="hljs-comment">// ...提供一个实现，所以这里的方法不是抽象的...</span>
+    }
+}
+
+</code></pre>
+</li>
+<li>
+<p>枚举类型</p>
+<ul>
+<li>枚举类型，通常被称为 enumerations 或 enums ，是一种用来代表一个固定数量的常量的特殊类。</li>
+<li>声明一个枚举类型需要使用关键字 enum ：</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">enum</span> Color {
+    red,
+    green,
+    blue
+}
+
+</code></pre>
+<ul>
+<li>在枚举中每个值都有一个 index getter 方法，它返回一个在枚举声明中从 0 开始的位置。例如，第一个值索引值为 0 ，第二个值索引值为 1 。</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">assert</span>(Color.red.index == <span class="hljs-number">0</span>);
+<span class="hljs-keyword">assert</span>(Color.green.index == <span class="hljs-number">1</span>);
+<span class="hljs-keyword">assert</span>(Color.blue.index == <span class="hljs-number">2</span>);
+</code></pre>
+<ul>
+<li>要得到枚举列表的所有值，可使用枚举的 values 常量。</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-built_in">List</span>&lt;Color&gt; colors = Color.values;
+<span class="hljs-keyword">assert</span>(colors[<span class="hljs-number">2</span>] == Color.blue);   
+
+</code></pre>
+</li>
+</ol>
+<ul>
+<li>你可以在 switch 语句 中使用枚举。如果 e 在 switch (e) 是显式类型的枚举，那么如果你不处理所有的枚举值将会弹出警告：</li>
+</ul>
+<pre><code class="language-dart"> ***枚举类型有以下限制***
+  * 你不能在子类中混合或实现一个枚举。
+  * 你不能显式实例化一个枚举。
+ <span class="hljs-keyword">enum</span> Color {
+    red,
+    green,
+    blue
+ }
+ <span class="hljs-comment">// ...</span>
+ Color aColor = Color.blue;
+ <span class="hljs-keyword">switch</span> (aColor) {
+     <span class="hljs-keyword">case</span> Color.red:
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">'Red as roses!'</span>);
+        <span class="hljs-keyword">break</span>;
+        
+     <span class="hljs-keyword">case</span> Color.green:
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">'Green as grass!'</span>);
+        <span class="hljs-keyword">break</span>;
+   
+     <span class="hljs-keyword">default</span>: <span class="hljs-comment">// Without this, you see a WARNING.</span>
+        <span class="hljs-built_in">print</span>(aColor);  <span class="hljs-comment">// 'Color.blue'</span>
+  }
+
+</code></pre>
+<ol start="5">
+<li>
+<p>为类添加特征：mixins</p>
+<ul>
+<li>mixins 是一种多类层次结构的类的代码重用。</li>
+<li>要使用 mixins ，在 with 关键字后面跟一个或多个 mixin 的名字。下面的例子显示了两个使用mixins的类：</li>
+</ul>
+<pre><code class="language-dart"> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Musician</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Performer</span> <span class="hljs-title">with</span> <span class="hljs-title">Musical</span> </span>{
+  <span class="hljs-comment">// ...</span>
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Maestro</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Person</span> <span class="hljs-title">with</span> <span class="hljs-title">Musical</span>, 
+    <span class="hljs-title">Aggressive</span>, <span class="hljs-title">Demented</span> </span>{
+
+    Maestro(<span class="hljs-built_in">String</span> maestroName) {
+        name = maestroName;
+        canConduct = <span class="hljs-keyword">true</span>;
+    }
+}
+</code></pre>
+<ul>
+<li>要实现 mixin ，就创建一个继承 Object 类的子类，不声明任何构造函数，不调用 super 。例如：</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Musical</span> </span>{
+<span class="hljs-built_in">bool</span> canPlayPiano = <span class="hljs-keyword">false</span>;
+<span class="hljs-built_in">bool</span> canCompose = <span class="hljs-keyword">false</span>;
+<span class="hljs-built_in">bool</span> canConduct = <span class="hljs-keyword">false</span>;
+
+    <span class="hljs-keyword">void</span> entertainMe() {
+        <span class="hljs-keyword">if</span> (canPlayPiano) {
+            <span class="hljs-built_in">print</span>(<span class="hljs-string">'Playing piano'</span>);
+        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (canConduct) {
+            <span class="hljs-built_in">print</span>(<span class="hljs-string">'Waving hands'</span>);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-built_in">print</span>(<span class="hljs-string">'Humming to self'</span>);
+        }
+    }
+}
+</code></pre>
+</li>
+<li>
+<p>类的变量和方法</p>
+<ul>
+<li>使用 static 关键字来实现类变量和类方法。</li>
+<li>只有当静态变量被使用时才被初始化。</li>
+<li>静态变量, 静态变量（类变量）对于类状态和常数是有用的：</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Color</span> </span>{
+ <span class="hljs-keyword">static</span> <span class="hljs-keyword">const</span> red = <span class="hljs-keyword">const</span> Color(<span class="hljs-string">'red'</span>); <span class="hljs-comment">// 一个恒定的静态变量</span>
+ <span class="hljs-keyword">final</span> <span class="hljs-built_in">String</span> name;      <span class="hljs-comment">// 一个实例变量。 </span>
+ <span class="hljs-keyword">const</span> Color(<span class="hljs-keyword">this</span>.name); <span class="hljs-comment">// 一个恒定的构造函数。</span>
+}
+
+main() {
+    <span class="hljs-keyword">assert</span>(Color.red.name == <span class="hljs-string">'red'</span>);
+}
+</code></pre>
+<ul>
+<li>静态方法, 静态方法（类方法）不在一个实例上进行操作，因而不必访问 this 。例如：</li>
+</ul>
+<pre><code class="language-dart"> <span class="hljs-keyword">import</span> <span class="hljs-string">'dart:math'</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Point</span> </span>{
+    <span class="hljs-built_in">num</span> x;
+    <span class="hljs-built_in">num</span> y;
+    Point(<span class="hljs-keyword">this</span>.x, <span class="hljs-keyword">this</span>.y);
+
+    <span class="hljs-keyword">static</span> <span class="hljs-built_in">num</span> distanceBetween(Point a, Point b) {
+        <span class="hljs-keyword">var</span> dx = a.x - b.x;
+        <span class="hljs-keyword">var</span> dy = a.y - b.y;
+        <span class="hljs-keyword">return</span> sqrt(dx * dx + dy * dy);
+    }
+}
+
+main() {
+    <span class="hljs-keyword">var</span> a = <span class="hljs-keyword">new</span> Point(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>);
+    <span class="hljs-keyword">var</span> b = <span class="hljs-keyword">new</span> Point(<span class="hljs-number">4</span>, <span class="hljs-number">4</span>);
+    <span class="hljs-keyword">var</span> distance = Point.distanceBetween(a, b);
+    <span class="hljs-keyword">assert</span>(distance &lt; <span class="hljs-number">2.9</span> &amp;&amp; distance &gt; <span class="hljs-number">2.8</span>);
+}
+
+</code></pre>
+<ul>
+<li>注：考虑到使用高阶层的方法而不是静态方法，是为了常用或者广泛使用的工具和功能。</li>
+<li>你可以将静态方法作为编译时常量。例如，你可以把静态方法作为一个参数传递给静态构造函数。</li>
+</ul>
+<h2>抽象类</h2>
+<ul>
+<li>使用 abstract 修饰符来定义一个抽象类，该类不能被实例化。抽象类在定义接口的时候非常有用，实际上抽象中也包含一些实现。如果你想让你的抽象类被实例化，请定义一个 工厂构造函数 。</li>
+<li>抽象类通常包含 抽象方法。下面是声明一个含有抽象方法的抽象类的例子：</li>
+</ul>
+<pre><code class="language-dart"> <span class="hljs-comment">// 这个类是抽象类，因此不能被实例化。</span>
+<span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AbstractContainer</span> </span>{
+<span class="hljs-comment">// ...定义构造函数，域，方法...</span>
+
+<span class="hljs-keyword">void</span> updateChildren(); <span class="hljs-comment">// 抽象方法。</span>
+}
+</code></pre>
+<ul>
+<li>下面的类不是抽象类，因此它可以被实例化，即使定义了一个抽象方法：</li>
+</ul>
+<pre><code class="language-dart"> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SpecializedContainer</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AbstractContainer</span> </span>{
+    <span class="hljs-comment">// ...定义更多构造函数，域，方法...</span>
+
+    <span class="hljs-keyword">void</span> updateChildren() {
+    <span class="hljs-comment">// ...实现 updateChildren()...</span>
+    }
+
+<span class="hljs-comment">// 抽象方法造成一个警告，但是不会阻止实例化。</span>
+<span class="hljs-keyword">void</span> doSomething();
+}
+</code></pre>
+<h2>类-隐式接口</h2>
+<ul>
+<li>
+<p>每个类隐式的定义了一个接口，含有类的所有实例和它实现的所有接口。如果你想创建一个支持类 B 的 API 的类 A，但又不想继承类 B ，那么，类 A 应该实现类 B 的接口。</p>
+</li>
+<li>
+<p>一个类实现一个或更多接口通过用 implements 子句声明，然后提供 API 接口要求。例如：</p>
+</li>
+</ul>
+<pre><code class="language-dart">
+<span class="hljs-comment">// 一个 person ，包含 greet() 的隐式接口。</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Person</span> </span>{
+    <span class="hljs-comment">// 在这个接口中，只有库中可见。</span>
+    <span class="hljs-keyword">final</span> _name;
+
+    <span class="hljs-comment">// 不在接口中，因为这是个构造函数。</span>
+    Person(<span class="hljs-keyword">this</span>._name);
+
+    <span class="hljs-comment">// 在这个接口中。</span>
+    <span class="hljs-built_in">String</span> greet(who) =&gt; <span class="hljs-string">'Hello, <span class="hljs-subst">$who</span>. I am <span class="hljs-subst">$_name</span>.'</span>;
+}
+
+<span class="hljs-comment">//  Person 接口的一个实现。</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Imposter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Person</span> </span>{
+    <span class="hljs-comment">// 我们不得不定义它，但不用它。</span>
+    <span class="hljs-keyword">final</span> _name = <span class="hljs-string">""</span>;
+
+    <span class="hljs-built_in">String</span> greet(who) =&gt; <span class="hljs-string">'Hi <span class="hljs-subst">$who</span>. Do you know who I am?'</span>;
+}
+
+greetBob(Person person) =&gt; person.greet(<span class="hljs-string">'bob'</span>);
+
+main() {
+    <span class="hljs-built_in">print</span>(greetBob(<span class="hljs-keyword">new</span> Person(<span class="hljs-string">'kathy'</span>)));
+    <span class="hljs-built_in">print</span>(greetBob(<span class="hljs-keyword">new</span> Imposter()));
+}
+
+</code></pre>
+<ul>
+<li>这里是具体说明一个类实现多个接口的例子：</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Point</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Comparable</span>, <span class="hljs-title">Location</span> </span>{
+<span class="hljs-comment">// ...</span>
+}
+</code></pre>
+</li>
+</ol>
+<h2>类-扩展一个类</h2>
+<ul>
+<li>使用 extends 创建一个子类，同时 supper 将指向父类：</li>
+</ul>
+<pre><code class="language-dart"> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Television</span> </span>{
+    <span class="hljs-keyword">void</span> turnOn() {
+       _illuminateDisplay();
+        _activateIrSensor();
+    }
+    <span class="hljs-comment">// ...</span>
+ }
+
+ <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SmartTelevision</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Television</span> </span>{
+    
+    <span class="hljs-keyword">void</span> turnOn() {
+       <span class="hljs-keyword">super</span>.turnOn();
+       _bootNetworkInterface();
+       _initializeMemory();
+       _upgradeApps();
+    }
+    <span class="hljs-comment">// ...</span>
+ }
+</code></pre>
+<ul>
+<li>子类可以重载实例方法， getters 方法， setters 方法。下面是个关于重写 Object 类的方法 noSuchMethod() 的例子,当代码企图用不存在的方法或实例变量时，这个方法会被调用。</li>
+</ul>
+<pre><code class="language-dart"> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">A</span> </span>{
+    <span class="hljs-comment">// 如果你不重写 noSuchMethod 方法, 就用一个不存在的成员，会导致NoSuchMethodError 错误。</span>
+    <span class="hljs-keyword">void</span> noSuchMethod(Invocation mirror) {
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">'You tried to use a non-existent member:'</span> + 
+            <span class="hljs-string">'<span class="hljs-subst">${mirror.memberName}</span>'</span>);
+     }
+  }
+
+</code></pre>
+<ul>
+<li>你可以使用 @override 注释来表明你重写了一个成员。</li>
+</ul>
+<pre><code class="language-dart"> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">A</span> </span>{
+    <span class="hljs-meta">@override</span>
+    <span class="hljs-keyword">void</span> noSuchMethod(Invocation mirror) {
+       <span class="hljs-comment">// ...</span>
+    }
+ }
+
+</code></pre>
+<ul>
+<li>如果你用 noSuchMethod() 实现每一个可能的 getter 方法，setter 方法和类的方法，那么你可以使用 @proxy 标注来避免警告。</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-meta">@proxy</span>
+ <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">A</span> </span>{
+    <span class="hljs-keyword">void</span> noSuchMethod(Invocation mirror) {
+        <span class="hljs-comment">// ...</span>
+    }
+ }
+</code></pre>
+<h2>库和可见性</h2>
+<ol>
+<li>
+<p>import,part,library指令可以帮助创建一个模块化的，可共享的代码库。库不仅提供了API，还提供隐私单元：以下划线（_）开头的标识符只对内部库可见。每个Dartapp就是一个库，即使它不使用库指令。</p>
+</li>
+<li>
+<p>库可以分布式使用包。见 Pub Package and Asset Manager 中有关pub(SDK中的一个包管理器）。</p>
+</li>
+<li>
+<p>使用库</p>
+<ul>
+<li>使用 import 来指定如何从一个库命名空间用于其他库的范围。</li>
+<li>使用 import 来指定如何从一个库命名空间用于其他库的范围。</li>
+</ul>
+<pre><code class="language-dart"> <span class="hljs-keyword">import</span> <span class="hljs-string">'dart:html'</span>;
+</code></pre>
+<ul>
+<li>唯一需要 import 的参数是一个指向库的 URI。对于内置库，URI中具有特殊dart:scheme。对于其他库，你可以使用文件系统路径或package:scheme。包 package：scheme specifies libraries ，如pub工具提供的软件包管理器库。例如：</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">import</span> <span class="hljs-string">'dart:io'</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-string">'package:mylib/mylib.dart'</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-string">'package:utils/utils.dart'</span>;
+</code></pre>
+</li>
+<li>
+<p>指定库前缀</p>
+<ul>
+<li>如果导入两个库是有冲突的标识符，那么你可以指定一个或两个库的前缀。例如，如果 library1 和 library2 都有一个元素类，那么你可能有这样的代码：</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">import</span> <span class="hljs-string">'package:lib1/lib1.dart'</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-string">'package:lib2/lib2.dart'</span> <span class="hljs-keyword">as</span> lib2;
+<span class="hljs-comment">// ...</span>
+<span class="hljs-keyword">var</span> element1 = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Element</span>(); <span class="hljs-comment">// 使用lib1里的元素</span>
+<span class="hljs-keyword">var</span> element2 =
+<span class="hljs-keyword">new</span> lib2.<span class="hljs-built_in">Element</span>();  <span class="hljs-comment">// 使用lib2里的元素</span>
+</code></pre>
+</li>
+<li>
+<p>导入部分库</p>
+<ul>
+<li>如果想使用的库一部分，你可以选择性导入库。例如：</li>
+</ul>
+<pre><code class="language-dart"> <span class="hljs-comment">// 只导入foo库</span>
+<span class="hljs-keyword">import</span> <span class="hljs-string">'package:lib1/lib1.dart'</span> show foo;
+
+<span class="hljs-comment">//导入所有除了foo</span>
+<span class="hljs-keyword">import</span> <span class="hljs-string">'package:lib2/lib2.dart'</span> hide foo;
+
+</code></pre>
+</li>
+<li>
+<p>延迟加载库</p>
+</li>
+</ol>
+<pre><code>* 延迟(deferred)加载（也称为延迟(lazy)加载）允许应用程序按需加载库。下面是当你可能会使用延迟加载某些情况：
+
+    * 为了减少应用程序的初始启动时间；
+    * 执行A / B测试-尝试的算法的替代实施方式中；
+    * 加载很少使用的功能，例如可选的屏幕和对话框。
+
+
+
+* 为了延迟加载一个库，你必须使用 deferred as 先导入它。
+
+``` dart
+import 'package:deferred/hello.dart' deferred as hello;
+```
+
+* 当需要库时，使用该库的调用标识符调用 LoadLibrary（）。
+``` dart
+greet() async {
+await hello.loadLibrary();
+hello.printGreeting();
+}
+```
+* 在前面的代码，在库加载好之前，await关键字都是暂停执行的。有关 async 和 await 见 asynchrony support 的更多信息。
+您可以在一个库调用 LoadLibrary（） 多次都没有问题。该库也只被加载一次。
+
+* 当您使用延迟加载，请记住以下内容：
+
+    * 延迟库的常量在其作为导入文件时不是常量。记住，这些常量不存在，直到迟库被加载完成。
+    * 你不能在导入文件中使用延迟库常量的类型。相反，考虑将接口类型移到同时由延迟库和导入文件导入的库。
+    * Dart隐含调用LoadLibrary（）插入到定义deferred as namespace。在调用LoadLibrary（）函数返回一个Future。
+</code></pre>
+<ol start="7">
+<li>
+<p>库的实现</p>
+<ul>
+<li>用 library 来来命名库，用part来指定库中的其他文件。 注意：不必在应用程序中（具有顶级main（）函数的文件）使用library，但这样做可以让你在多个文件中执行应用程序。</li>
+</ul>
+</li>
+<li>
+<p>声明库</p>
+<ul>
+<li>利用library identifier（库标识符）指定当前库的名称：</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-comment">// 声明库，名ballgame</span>
+<span class="hljs-keyword">library</span> ballgame;
+
+<span class="hljs-comment">// 导入html库</span>
+<span class="hljs-keyword">import</span> <span class="hljs-string">'dart:html'</span>;
+
+<span class="hljs-comment">// ...代码从这里开始... </span>
+</code></pre>
+</li>
+<li>
+<p>关联文件与库</p>
+<ul>
+<li>
+<p>添加实现文件，把part fileUri放在有库的文件，其中fileURI是实现文件的路径。然后在实现文件中，添加部分标识符（part of identifier），其中标识符是库的名称。下面的示例使用的一部分，在三个文件来实现部分库。</p>
+</li>
+<li>
+<p>第一个文件，ballgame.dart，声明球赛库，导入其他需要的库，并指定ball.dart和util.dart是此库的部分：</p>
+</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">library</span> ballgame;
+
+<span class="hljs-keyword">import</span> <span class="hljs-string">'dart:html'</span>;
+<span class="hljs-comment">// ...其他导入在这里...</span>
+
+<span class="hljs-keyword">part</span> <span class="hljs-string">'ball.dart'</span>;
+<span class="hljs-keyword">part</span> <span class="hljs-string">'util.dart'</span>;
+
+<span class="hljs-comment">// ...代码从这里开始...</span>
+</code></pre>
+<ul>
+<li>第二个文件ball.dart，实现了球赛库的一部分：</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">part</span> of ballgame;
+
+<span class="hljs-comment">// ...代码从这里开始...</span>
+</code></pre>
+<ul>
+<li>第三个文件，util.dart，实现了球赛库的其余部分：</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">part</span> of ballgame;
+
+<span class="hljs-comment">// ...Code goes here...</span>
+</code></pre>
+</li>
+<li>
+<p>重新导出库(Re-exporting libraries)</p>
+<p>*可以通过重新导出部分库或者全部库来组合或重新打包库。例如，你可能有实现为一组较小的库集成为一个较大库。或者你可以创建一个库，提供了从另一个库方法的子集。</p>
+<pre><code class="language-dart"><span class="hljs-comment">// In french.dart:</span>
+<span class="hljs-keyword">library</span> french;
+
+hello() =&gt; <span class="hljs-built_in">print</span>(<span class="hljs-string">'Bonjour!'</span>);
+goodbye() =&gt; <span class="hljs-built_in">print</span>(<span class="hljs-string">'Au Revoir!'</span>);
+
+<span class="hljs-comment">// In togo.dart:</span>
+<span class="hljs-keyword">library</span> togo;
+
+<span class="hljs-keyword">import</span> <span class="hljs-string">'french.dart'</span>;
+<span class="hljs-keyword">export</span> <span class="hljs-string">'french.dart'</span> show hello;
+
+<span class="hljs-comment">// In another .dart file:</span>
+<span class="hljs-keyword">import</span> <span class="hljs-string">'togo.dart'</span>;
+
+<span class="hljs-keyword">void</span> main() {
+    hello();   <span class="hljs-comment">//print bonjour</span>
+    goodbye(); <span class="hljs-comment">//FAIL</span>
+}
+
+</code></pre>
+</li>
+</ol>
+<h2>异步的支持</h2>
+<ol>
+<li>
+<p>Dart 添加了一些新的语言特性用于支持异步编程。最通常使用的特性是 async 方法和 await 表达式。Dart 库大多方法返回 Future 和 Stream 对象。这些方法是异步的：它们在设置一个可能的耗时操作（比如 I/O 操作）之后返回，而无需等待操作完成</p>
+</li>
+<li>
+<p>当你需要使用 Future 来表示一个值时，你有两个选择。</p>
+<ul>
+<li>使用 async 和 await</li>
+<li>使用 Future API</li>
+</ul>
+</li>
+<li>
+<p>同样的，当你需要从 Stream 获取值的时候，你有两个选择。</p>
+</li>
+</ol>
+<p>使用 async 和一个异步的 for 循环 (await for)
+使用 Stream API</p>
+<ol start="4">
+<li>使用 async 和 await 的代码是异步的，不过它看起来很像同步的代码。比如这里有一段使用 await 等待一个异步函数结果的代码：</li>
+</ol>
+<pre><code class="language-dart"><span class="hljs-keyword">await</span> lookUpVersion()
+</code></pre>
+<ol start="5">
+<li>要使用 await，代码必须用 await 标记</li>
+</ol>
+<pre><code class="language-dart"> checkVersion() <span class="hljs-keyword">async</span> {
+    <span class="hljs-keyword">var</span> version = <span class="hljs-keyword">await</span> lookUpVersion();
+    <span class="hljs-keyword">if</span> (version == expectedVersion) {
+       <span class="hljs-comment">// Do something.</span>
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-comment">// Do something else.</span>
+      }
+ }
+</code></pre>
+<ol start="6">
+<li>你可以使用 try, catch, 和 finally 来处理错误并精简使用了 await 的代码。</li>
+</ol>
+<pre><code class="language-dart"> <span class="hljs-keyword">try</span> {
+    server = <span class="hljs-keyword">await</span> HttpServer.bind(InternetAddress.LOOPBACK_IP_V4, <span class="hljs-number">4044</span>);
+ } <span class="hljs-keyword">catch</span> (e) {
+    <span class="hljs-comment">// React to inability to bind to the port...</span>
+ }
+</code></pre>
+<ol start="7">
+<li>
+<p>声明异步函数</p>
+<ul>
+<li>一个异步函数是一个由 async 修饰符标记的函数。虽然一个异步函数可能在操作上比较耗时，但是它可以立即返回-在任何方法体执行之前。</li>
+</ul>
+<pre><code class="language-dart">checkVersion() <span class="hljs-keyword">async</span> {
+    <span class="hljs-comment">// ...</span>
+}
+
+lookUpVersion() <span class="hljs-keyword">async</span> =&gt; <span class="hljs-comment">/* ... */</span>;
+</code></pre>
+<ul>
+<li>在函数中添加关键字 async 使得它返回一个 Future，比如，考虑一下这个同步函数，它将返回一个字符串。</li>
+<li>String lookUpVersionSync() =&gt; '1.0.0';</li>
+<li>如果你想更改它成为异步方法-因为在以后的实现中将会非常耗时-它的返回值是一个 Future 。</li>
+<li>Future<String> lookUpVersion() async =&gt; '1.0.0';</li>
+<li>请注意函数体不需要使用 Future API，如果必要的话 Dart 将会自己创建 Future 对象</li>
+</ul>
+</li>
+<li>
+<p>使用带 future 的 await 表达式</p>
+<ul>
+<li>一个 await表达式具有以下形式</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">await</span> expression
+</code></pre>
+<ul>
+<li>在异步方法中你可以使用 await 多次。比如，下列代码为了得到函数的结果一共等待了三次。</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">var</span> entrypoint = <span class="hljs-keyword">await</span> findEntrypoint();
+<span class="hljs-keyword">var</span> exitCode = <span class="hljs-keyword">await</span> runExecutable(entrypoint, args);
+<span class="hljs-keyword">await</span> flushThenExit(exitCode);
+</code></pre>
+<ul>
+<li>
+<p>在 await 表达式中， 表达式 的值通常是一个 Future 对象；如果不是，那么这个值会自动转为 Future。这个 Future 对象表明了表达式应该返回一个对象。await 表达式 的值就是返回的一个对象。在对象可用之前，await 表达式将会一直处于暂停状态。</p>
+</li>
+<li>
+<p>如果 await 没有起作用，请确认它是一个异步方法。比如，在你的 main() 函数里面使用await，main() 的函数体必须被 async 标记：</p>
+</li>
+</ul>
+<pre><code class="language-dart">main() <span class="hljs-keyword">async</span> {
+    checkVersion();
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">'In main: version is <span class="hljs-subst">${await lookUpVersion()}</span>'</span>);
+}
+
+</code></pre>
+</li>
+<li>
+<p>结合 streams 使用异步循环</p>
+<ul>
+<li>一个异步循环具有以下形式：</li>
+</ul>
+<pre><code class="language-dart"><span class="hljs-keyword">await</span> <span class="hljs-keyword">for</span> (variable declaration <span class="hljs-keyword">in</span> expression) {
+    <span class="hljs-comment">// Executes each time the stream emits a value.</span>
+}
+</code></pre>
+<ul>
+<li>
+<p>表达式 的值必须有Stream 类型（流类型）。执行过程如下：</p>
+<ul>
+<li>在 stream 发出一个值之前等待</li>
+<li>执行 for 循环的主体，把变量设置为发出的值。</li>
+<li>重复 1 和 2，直到 Stream 关闭</li>
+</ul>
+</li>
+<li>
+<p>如果要停止监听 stream ，你可以使用 break 或者 return 语句，跳出循环并取消来自 stream 的订阅 。</p>
+</li>
+<li>
+<p>如果一个异步 for 循环没有正常运行，请确认它是一个异步方法。 比如，在应用的 main() 方法中使用异步的 for 循环时，main() 的方法体必须被 async 标记。</p>
+</li>
+</ul>
+<pre><code class="language-dart">main() <span class="hljs-keyword">async</span> {
+    ...
+    
+    <span class="hljs-keyword">await</span> <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> request <span class="hljs-keyword">in</span> requestServer) {
+        handleRequest(request);
+    }
+
+    ...
+}
+</code></pre>
+</li>
+</ol>
+<p>更多关于异步编程的信息，请看 dart:async 库部分的介绍。你也可以看文章 <a href="https://www.dartlang.org/articles/await-async/">Dart Language Asynchrony Support: Phase 1 </a></p>
+</section><footer class="footer-container"><div class="footer-body"><img src="/img/dubbo_gray.png"/><div class="cols-container"><div class="col col-12"><h3>免责声明</h3><p>免责声明的具体内容</p></div><div class="col col-6"><dl><dt>文档</dt><dd><a href="/zh-cn/docs/introduction.html" target="_self">概览</a></dd><dd><a href="/zh-cn/docs/introduction.html" target="_self">快速开始</a></dd><dd><a href="/zh-cn/docs/dir/introduction.html" target="_self">开发者指南</a></dd></dl></div><div class="col col-6"><dl><dt>资源</dt><dd><a href="/zh-cn/blog/index.html" target="_self">博客</a></dd><dd><a href="/zh-cn/community/index.html" target="_self">社区</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2019 BurningMyself</span></div></div></footer></div></div>
+	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
+	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
+	<script>
+		window.rootPath = '';
+  </script>
+	<script src="/build/blogDetail.js"></script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="keywords" content="c_docker" />
+	<meta name="description" content="c_docker" />
+	<!-- 网页标签标题 -->
+	<title>c_docker</title>
+	<link rel="shortcut icon" href="/img/docsite.ico"/>
+	<link rel="stylesheet" href="/build/blogDetail.css" />
+</head>
+<body>
+	<div id="root"><div class="blog-detail-page" data-reactroot=""><header class="header-container header-container-normal"><div class="header-body"><a href="/zh-cn/index.html"><img class="logo" src="/img/dubbo_colorful.png"/></a><div class="search search-normal"><span class="icon-search"></span></div><span class="language-switch language-switch-normal">En</span><div class="header-menu"><img class="header-menu-toggle" src="/img/system/menu_gray.png"/><ul><li class="menu-item menu-item-normal"><a href="/zh-cn/index.html" target="_self">首页</a></li><li class="menu-item menu-item-normal"><a href="/zh-cn/docs/introduction.html" target="_self">文档</a></li><li class="menu-item menu-item-normal menu-item-normal-active"><a href="/zh-cn/blog/index.html" target="_self">博客</a></li><li class="menu-item menu-item-normal"><a href="/zh-cn/community/index.html" target="_self">社区</a></li></ul></div></div></header><section class="blog-content markdown-body"><h1>.NET Core 微服务架构-Docker部署</h1>
+<p><a href="http://xn--Docker-2y7im2bs77kjpdgsaz06tr0bzv7dmxtia51lja620b.NET">本文主要介绍通过Docker来部署通过.NET</a> Core开发的微服务架构，部署的微服务主要包括统一网关（使用Ocelot开发）、统一认证（IdentityServer4）、应用服务（<a href="http://ASP.NET">ASP.NET</a> Core WebAPI）。</p>
+<p>本文不针对微服务进行说明，后续会针对我对微服务的理解在做记录。</p>
+<h3>一、Docker原理</h3>
+<p>对 Docker 最简单并且带有一定错误的认知就是 “Docker 是一种性能非常好的虚拟机”。</p>
+<p>但是这是有一定错误的说法。Docker 相比于传统虚拟机的技术来说先进了不少，具体表现在 Docker 不是在宿主机上虚拟出一套硬件后再虚拟出一个操作系统，而是让 Docker 容器里面的进程直接运行在宿主机上（Docker 会做文件、网络等的隔离），这样一来 Docker 会 “体积更轻、跑的更快、同宿主机下可创建的个数更多”。</p>
+<ul>
+<li>
+<p>Docker 中有三个核心概念：Image、Container、Repository。</p>
+</li>
+<li>
+<p>Image： 大家对 镜像 的概念不会陌生。但和 windows 的那种 iso 镜像相比，Docker 中的镜像是分层的，可复用的，而非简单的一堆文件迭在一起（类似于一个压缩包的源码和一个 git 仓库的区别）。</p>
+</li>
+<li>
+<p>Container： 容器的存在离不开镜像的支持，他是镜像运行时的一个载体（类似于实例和类的关系）。依托 Docker 的虚拟化技术，给容器创建了独立的端口、进程、文件等“空间”，Container 就是一个与宿机隔离 “容器”。容器可宿主机之间可以进行 port、volumes、network 等的通信。</p>
+</li>
+</ul>
+<p>Repository： Docker 的仓库和 git 的仓库比较相似，拥有仓库名、tag。在本地构建完镜像之后，即可通过仓库进行镜像的分发。</p>
+<p>常用的 Docker hub有：</p>
+<p><a href="https://hub.docker.com/%EF%BC%88docker%E5%AE%98%E6%96%B9%EF%BC%89">https://hub.docker.com/（docker官方）</a></p>
+<p><a href="https://cr.console.aliyun.com/">https://cr.console.aliyun.com/</a></p>
+<h3>二、Windows系统中Docker的安装</h3>
+<h4>1、启用Hyper-V</h4>
+<p>打开控制面板 - 程序和功能 - 启用或关闭Windows功能，勾选Hyper-V，然后点击确定即可，如图：</p>
+<p><img src="./../img/c_docker1.png" alt="cdoecker"></p>
+<h4>2、下载并安装Docker</h4>
+<p>下载地址：<a href="https://hub.docker.com/editions/community/docker-ce-desktop-windows%EF%BC%8C%E9%9C%80%E8%A6%81%E6%B3%A8%E5%86%8C%E4%B8%80%E4%B8%AADocker%E8%B4%A6%E5%8F%B7%E6%89%8D%E8%83%BD%E4%B8%8B%E8%BD%BD">https://hub.docker.com/editions/community/docker-ce-desktop-windows，需要注册一个Docker账号才能下载</a></p>
+<p>下载完成后直接安装</p>
+<p>通过命令查看Docker版本号：</p>
+<p><img src="./../img/c_docker2.png" alt="cdoecker"></p>
+<h4>3、修改镜像地址</h4>
+<p>由于Docker官方镜像会非常慢，我是修改的阿里云的镜像</p>
+<p><img src="./../img/c_docker3.png" alt="cdoecker"></p>
+<h4>4、测试</h4>
+<p>万能的HelloWorld，通过PowerShell运行 Docker run hello-world</p>
+<p><img src="./../img/c_docker4.png" alt="cdoecker"></p>
+<p>docker ps -a //查看运行的容器</p>
+<p><img src="./../img/c_docker5.png" alt="cdoecker"></p>
+<p>以上就是整个Windows中安装Docker环境的过程</p>
+<h3>三、ubuntu中安装Docker环境</h3>
+<p>我是在AWS申请了一台免费的服务器，是用的ubuntu系统。如果需要申请AWS的服务器，可以通过AWS官网注册账号进行申请，需要填写信用卡账号，<a href="https://portal.aws.amazon.com/billing/signup#/start">https://portal.aws.amazon.com/billing/signup#/start</a></p>
+<p>本文ubuntu中安装Docker是直接参考官方教程：<a href="https://docs.docker.com/install/linux/docker-ce/ubuntu/">https://docs.docker.com/install/linux/docker-ce/ubuntu/</a></p>
+<p>安装的时候最好切换到root账号进行安装</p>
+<p>ubuntu的远程是通过putty，具体怎么用可以百度</p>
+<h3>四、发布并部署服务</h3>
+<h4>1、创建Dockerfile、发布应用程序</h4>
+<p><img src="./../img/c_docker6.png" alt="cdoecker"></p>
+<p>这是我的工程目录，构建镜像是通过Dockerfile来构建的。</p>
+<p>VS2017 是支持自动构建Dockerfile文件，工程右键-添加-Docker支持</p>
+<p>下面是我的Dockerfile的内容：</p>
+<pre><code class="language-C#">FROM microsoft/aspnetcore:<span class="hljs-number">2.1</span> 
+<span class="hljs-comment">//基础镜像，这里是.net core的基础运行环境</span>
+WORKDIR /publish <span class="hljs-comment">//创建工程目录</span>
+COPY . /publish <span class="hljs-comment">//将当前目录拷贝到镜像中，注意 COPY . 后面又空格</span>
+EXPOSE <span class="hljs-number">80</span> <span class="hljs-comment">//容器对外暴露80端口</span>
+ENTRYPOINT [<span class="hljs-string">"dotnet"</span>, <span class="hljs-string">"ZY.Gateway.dll"</span>] <span class="hljs-comment">//启动容器内的服务</span>
+<span class="hljs-comment">//这里相当于构建镜像的命令，是逐行执行</span>
+</code></pre>
+<p>需要设置Dockerfile的编译为输出到发布目录
+<img src="./../img/c_docker7.png" alt="cdoecker"></p>
+<p>以上都设置好以后，通过VS发布程序</p>
+<p><img src="./../img/c_docker8.png" alt="cdoecker"></p>
+<p>发布成功后，在工程目录的bin/release目录下找到我们的发布后的文件</p>
+<p><img src="./../img/c_docker9.png" alt="cdoecker"></p>
+<p>其他服务的发布跟以上发布类似</p>
+<h4>2、上传到ubuntu中</h4>
+<p>通过WinScp工具进行上传，将三个服务都上传到服务器，WinScp怎么用，可以百度一下</p>
+<p><img src="./../img/c_docker10.png" alt="cdoecker"></p>
+<h4>3、构建镜像</h4>
+<pre><code class="language-C#">docker build -t apigateway .   <span class="hljs-comment">//构建网关镜像 </span>
+docker build -t identityserver 
+-f /home/ubuntu/dockerapp/identityserver/publish/Dockerfile . 
+<span class="hljs-comment">//构建认证服务镜像</span>
+docker build -t testserver 
+-f /home/ubuntu/dockerapp/testserver/publish/Dockerfile .
+ <span class="hljs-comment">//构建测试服务镜像</span>
+-t <span class="hljs-comment">//镜像名称</span>
+-f <span class="hljs-comment">//dockerfile文件路径</span>
+</code></pre>
+<p><img src="./../img/c_docker11.png" alt="cdoecker"></p>
+<p>docker images //查看镜像</p>
+<p><img src="./../img/c_docker12.png" alt="cdoecker"></p>
+<h4>4、运行容器</h4>
+<p>镜像已经在前面构建完成，这一步会根据构建的镜像来运行容器，将我们的服务跑起来</p>
+<pre><code class="language-C#">docker run -d -p <span class="hljs-number">5000</span>:<span class="hljs-number">80</span> 
+--name apigateway_container apigateway
+docker run -d -p <span class="hljs-number">6000</span>:<span class="hljs-number">80</span> 
+--name identityserver_container identityserver
+docker run -d -p <span class="hljs-number">7000</span>:<span class="hljs-number">80</span> 
+--name testserver_container testserver
+<span class="hljs-comment">//分别将网关服务，认证服务，测试服务容器跑起来</span>
+<span class="hljs-comment">//-d 保持后台进程运行 -p 端口映射，{主机端口}:{容器端口}</span>
+</code></pre>
+<p>通过命令查看容器运行情况
+docker ps -a
+<img src="./../img/c_docker13.png" alt="cdoecker"></p>
+<p>在配置网关服务的时候会涉及到容器与容器之间的网络访问，Docker在安装的时候会创建一个172.17.0.1的IP网关，可以通过172.17.0.1来做端口的转发。</p>
+<p>通过命令可以查看docker0的网关</p>
+<p><img src="./../img/c_docker14.png" alt="cdoecker"></p>
+<p>Api网关的路由转发配置</p>
+<p><img src="./../img/c_docker15.png" alt="cdoecker"></p>
+<h4>5、调用服务</h4>
+<p>通过Postman来调用通过Docker运行的服务，通过API网关访问认证服务获取Token</p>
+<p><img src="./../img/c_docker16.png" alt="cdoecker"></p>
+<h3>总结</h3>
+<p>整个Docker的安装，服务的发布，镜像的打包，容器的运行就全部完成。</p>
+<p>整个过程不是一气呵成的，踩了不少坑，在踩坑的过程中也学到和理解了很多东西。</p>
+<p><a href="https://yeasy.gitbooks.io/docker_practice/content/">Docekr介绍使用</a></p>
+</section><footer class="footer-container"><div class="footer-body"><img src="/img/dubbo_gray.png"/><div class="cols-container"><div class="col col-12"><h3>免责声明</h3><p>免责声明的具体内容</p></div><div class="col col-6"><dl><dt>文档</dt><dd><a href="/zh-cn/docs/introduction.html" target="_self">概览</a></dd><dd><a href="/zh-cn/docs/introduction.html" target="_self">快速开始</a></dd><dd><a href="/zh-cn/docs/dir/introduction.html" target="_self">开发者指南</a></dd></dl></div><div class="col col-6"><dl><dt>资源</dt><dd><a href="/zh-cn/blog/index.html" target="_self">博客</a></dd><dd><a href="/zh-cn/community/index.html" target="_self">社区</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2019 BurningMyself</span></div></div></footer></div></div>
+	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
+	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
+	<script>
+		window.rootPath = '';
+  </script>
+	<script src="/build/blogDetail.js"></script>
+</body>
+</html>

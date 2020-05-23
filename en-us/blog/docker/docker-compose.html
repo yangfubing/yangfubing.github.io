@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="keywords" content="docker-compose" />
+	<meta name="description" content="docker-compose" />
+	<!-- 网页标签标题 -->
+	<title>docker-compose</title>
+	<link rel="shortcut icon" href="/img/docsite.ico"/>
+	<link rel="stylesheet" href="/build/blogDetail.css" />
+</head>
+<body>
+	<div id="root"><div class="blog-detail-page" data-reactroot=""><header class="header-container header-container-normal"><div class="header-body"><a href="/en-us/index.html"><img class="logo" src="/img/dubbo_colorful.png"/></a><div class="search search-normal"><span class="icon-search"></span></div><span class="language-switch language-switch-normal">中</span><div class="header-menu"><img class="header-menu-toggle" src="/img/system/menu_gray.png"/><ul><li class="menu-item menu-item-normal"><a href="/en-us/index.html" target="_self">HOME</a></li><li class="menu-item menu-item-normal"><a href="/en-us/docs/introduction.html" target="_self">DOCS</a></li><li class="menu-item menu-item-normal menu-item-normal-active"><a href="/en-us/blog/index.html" target="_self">BLOG</a></li><li class="menu-item menu-item-normal"><a href="/en-us/community/index.html" target="_self">COMMUNITY</a></li></ul></div></div></header><section class="blog-content markdown-body"><h1>docker和docker-compose 配置 mysql mssql mongodb redis nginx jenkins 环境</h1>
+<h2>磁盘挂载</h2>
+<pre><code class="language-shell">fdisk -l #查看磁盘列表
+mkfs.ext4 /dev/vdb #格式化磁盘
+mount /dev/vdb /data #挂载磁盘在/data
+echo '/dev/vdb /data ext4 defaults,nofail 0 1'&gt;&gt; /etc/fstab # 启动服务器自动挂载
+mount -a #校验自动挂载脚本
+df -h #查看磁盘挂载后信息
+</code></pre>
+<h2>docker</h2>
+<h3>安装 docker</h3>
+<pre><code class="language-shell">yum update #更新系统包
+yum install -y yum-utils device-mapper-persistent-data lvm2 #安装yum-utils
+yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo #为yum源添加docker仓库位置
+yum install docker-ce #安装docker
+systemctl enable docker #设置开机自动启动
+systemctl start docker #启动docker
+systemctl stop docker #暂停docker
+mv /var/lib/docker /data/docker # 修改Docker镜像的存放位置
+ln -s /data/docker /var/lib/docker #建立软连接
+echo '{
+  "registry-mirrors": [
+    "https://dockerhub.azk8s.cn",
+    "https://hub-mirror.c.163.com",
+    "https://registry.docker-cn.com"
+    ]
+}
+'&gt;&gt; /etc/docker/daemon.json # 镜像下载代理
+</code></pre>
+<h3>拉取 Java 镜像</h3>
+<pre><code class="language-shell">docker pull java
+</code></pre>
+<h3>拉取SqlServer镜像</h3>
+<pre><code class="language-shell">docker pull microsoft/mssql-server-linux # 拉取SqlServer镜像
+docker run -p 1433:1433 --name mssql \ # run 运行容器 -p 将容器的1433端口映射到主机的1433端口 --name 容器运行的名字
+--restart=always \ # 挂断自动重新启动
+-v /data/sqlserver:/var/opt/mssql \ # 挂载mssql文件夹到主机
+-e ACCEPT_EULA=Y \ # 同意协议
+-e MSSQL_SA_PASSWORD=mssql-MSSQL \ # 初始化sa密码
+-u root \ # 指定容器为root运行
+-d microsoft/mssql-server-linux # -d 后台运行
+</code></pre>
+<h3>拉取 MySql 镜像</h3>
+<pre><code class="language-shell">docker pull mysql #拉取 MySql
+docker run -p 3306:3306 --name mysql \ # run 运行容器 -p 将容器的3306端口映射到主机的3306端口 --name 容器运行的名字
+--restart=always \ # 挂断自动重新启动
+-v /etc/localtime:/etc/localtime \ # 将主机本地时间夹挂在到容器
+-v /data/mysql/log:/var/log/mysql \ # 将日志文件夹挂载到主机
+-v /data/mysql/data:/var/lib/mysql \ # 将数据文件夹挂载到主机
+-v /data/mysql/mysql-files:/var/lib/mysql-files \ # 将数据文件夹挂载到主机
+-v /data/mysql/conf:/etc/mysql \ # 将配置文件夹挂在到主机
+-e MYSQL_ROOT_PASSWORD=xiujingmysql. \ # 初始化root用户的密码
+-d mysql # -d 后台运行
+docker exec -it mysql /bin/bash # 进入Docker容器内部的bash
+</code></pre>
+<h3>拉取 Mongodb 镜像</h3>
+<pre><code class="language-shell">docker pull mongo #拉取 mongodb
+docker run -p 27017:27017  --name mongo \ # run 运行容器 -p 将容器的27017端口映射到主机的27017端口 --name 容器运行的名字 
+--restart=always \ # 挂断自动重新启动
+-v /etc/localtime:/etc/localtime \ # 将主机本地时间夹挂在到容器
+-v /data/mongodb/db:/data/db \ # 将数据文件夹挂载到主机
+-v /data/mongodb/configdb:/data/configdb \ # 将数据库配置文件挂载到主机
+-v /data/mongodb/initdb:/docker-entrypoint-initdb.d # 通过/docker-entrypoint-initdb.d/将更复杂的用户设置显式留给用户 当容器首次启动时它会执行/docker-entrypoint-initdb.d 目录下的sh 和js脚本 。 以脚本字母顺序执行
+-e MONGO_INITDB_ROOT_USERNAME=admin \ # 设置admin数据库账户名称 如果使用了此项，则不需要 --auth 参数
+-e MONGO_INITDB_ROOT_PASSWORD=admin  \ # 设置admin数据库账户密码 如果使用了此项，则不需要 --auth 参数
+-d mongo \ # -d 后台运行
+--auth # --auth 需要密码才能访问容器服务
+
+docker exec -it mongo mongo admin # 进入mongo
+db.createUser({ user:'admin',pwd:'123456',roles:[ { role:'userAdminAnyDatabase', db: 'admin'}]}); #创建一个名为 admin，密码为 123456 的用户。
+db.auth('admin', '123456') # 尝试使用上面创建的用户信息进行连接。
+</code></pre>
+<h3>拉取 Redis 镜像</h3>
+<pre><code class="language-shell">docker pull redis #拉取 redis
+docker run -p 6379:6379 --name redis \ # run 运行容器 -p 将容器的6379端口映射到主机的6379端口 --name 容器运行的名字
+--restart=always \ # 挂断自动重新启动
+-v /etc/localtime:/etc/localtime \ # 将主机本地时间夹挂在到容器
+-v /data/redis:/data \ # 将数据文件夹挂载到主机
+-d redis \ # -d 后台运行
+redis-server --appendonly yes \ # 在容器执行redis-server启动命令，并打开redis持久化配置
+--requirepass "123456" # 设置密码123456
+</code></pre>
+<h3>拉取 Nginx 镜像</h3>
+<pre><code class="language-shell">docker pull nginx #拉取 nginx
+docker run -p 80:80 -p 443:443 --name nginx -d nginx # 运行容器
+docker container cp nginx:/etc/nginx /data/nginx/ #拷贝容器配置
+docker rm -f nginx # 删除容器
+</code></pre>
+<p>nginx 配置文件</p>
+<pre><code class="language-conf">
+user  nginx;
+worker_processes  1;
+
+error_log  /var/log/nginx/error_log.log warn;
+pid        /var/run/nginx.pid;
+
+
+events {
+    worker_connections  1024;
+}
+
+
+http {
+    include       /etc/nginx/mime.types;
+    default_type  application/octet-stream;
+
+    log_format  main  '$remote_addr - $remote_user [$time_local] &quot;$request&quot; '
+                      '$status $body_bytes_sent &quot;$http_referer&quot; '
+                      '&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;';
+
+    access_log   /var/log/nginx/access.log  main;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    keepalive_timeout  65;
+
+    #gzip  on;
+
+    gzip on; #开启gzip
+    gzip_disable &quot;msie6&quot;; #IE6不使用gzip
+    gzip_vary on; #设置为on会在Header里增加 &quot;Vary: Accept-Encoding&quot;
+    gzip_proxied any; #代理结果数据的压缩
+    gzip_comp_level 6; #gzip压缩比（1~9），越小压缩效果越差，但是越大处理越慢，所以一般取中间值
+    gzip_buffers 16 8k; #获取多少内存用于缓存压缩结果
+    gzip_http_version 1.1; #识别http协议的版本
+    gzip_min_length 1k; #设置允许压缩的页面最小字节数，超过1k的文件会被压缩
+    gzip_types application/javascript text/css; #对特定的MIME类型生效,js和css文件会被压缩
+
+    include /etc/nginx/conf.d/*.conf;
+
+    server {
+      #nginx同时开启http和https
+    	listen 80 default backlog=2048;
+    	listen 443 ssl;
+    	server_name ysf.djtlpay.com;
+    	
+    	ssl_certificate  /ssl/1_ysf.djtlpay.com_bundle.crt;
+    	ssl_certificate_key  /ssl/2_ysf.djtlpay.com.key;
+	
+        location / {
+            root /usr/share/nginx/html;
+            index  index.html index.htm;
+        }
+   }		
+}
+
+</code></pre>
+<p>运行 nginx</p>
+<pre><code class="language-shell">docker run -p 80:80 -p 443:443 --name nginx \ # run 运行容器 -p 将容器的80,443端口映射到主机的80,443端口 --name 容器运行的名字
+--restart=always \ # 挂断自动重新启动
+-v /etc/localtime:/etc/localtime \ # 将主机本地时间夹挂在到容器
+-v /data/nginx/html:/usr/share/nginx/html \ # nginx 静态资源
+-v /data/nginx/logs:/var/log/nginx  \ # 将日志文件夹挂载到主机
+-v /data/nginx/conf:/etc/nginx \ # 将配置文件夹挂在到主机
+-v /data/nginx/conf/ssl:/ssl \ # 将证书文件夹挂在到主机
+-d nginx #
+</code></pre>
+<h3>拉取Jenkins镜像：</h3>
+<pre><code class="language-shell">docker pull jenkins/jenkins:lts # 拉取 jenkins
+docker run -p 8080:8080 -p 50000:50000 --name jenkins \ # run 运行容器 -p 将容器的8080,50000端口映射到主机的8080,50000端口 --name 容器运行的名字
+--restart=always \ # 挂断自动重新启动
+-u root \ # 运行的用户为root
+-v /etc/localtime:/etc/localtime \ # 将主机本地时间夹挂在到容器
+-v /data/jenkins_home:/var/jenkins_home \ # 将jenkins_home文件夹挂在到主机
+-e JAVA_OPTS=-Duser.timezone=Asia/Shanghai \ #设置jenkins运行环境时区
+-d jenkins/jenkins:lts # -d 后台运行
+</code></pre>
+<h3>拉取MinIO镜像</h3>
+<pre><code class="language-shell">docker pull minio/minio # 拉取MinIO镜像
+docker run -p 9000:9000 --name minio \ # run 运行容器 -p 将容器的9000,9000端口映射到主机的9000,9000端口 --name 容器运行的名
+--restart=always \ # 挂断自动重新启动
+-v /etc/localtime:/etc/localtime \ # 将主机本地时间夹挂在到容器
+-v /data/minio/data:/data \ # 将data文件夹挂在到主机
+-v /data/minio/config:/root/.minio \ # 将配置文件夹挂在到主机
+-e "MINIO_ACCESS_KEY=AKIAIOSFODNN7EXAMPLE" \ # 设置MINIO_ACCESS_KEY的值
+-e "MINIO_SECRET_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY" \ # 设置MINIO_SECRET_KEY值
+-d minio/minio server /data # -d 后台运行 server /data 导出/data目录
+
+</code></pre>
+<h3>拉取Portainer镜像</h3>
+<pre><code class="language-shell">docker pull portainer/portainer # 拉取MinIO镜像
+docker run -p 8001:8000 -p 9001:9000 --name portainer \ # run 运行容器 -p 将容器的8000,9000端口映射到主机的8000,9000端口 --name 容器运行的名
+--restart=always \ # 挂断自动重新启动
+-v /etc/localtime:/etc/localtime \ # 将主机本地时间夹挂在到容器
+-v /var/run/docker.sock:/var/run/docker.sock \ # 将docker.sock文件夹挂在到主机
+-v /data/portainer/data:/data \ # 将配置文件夹挂在到主机
+-d portainer/portainer portainer # -d 后台运行
+</code></pre>
+<h3>Docker 开启远程API</h3>
+<ul>
+<li>用vi编辑器修改docker.service文件</li>
+</ul>
+<pre><code class="language-shell">vi /usr/lib/systemd/system/docker.service
+<span class="hljs-meta">#</span><span class="bash">需要修改的部分：</span>
+ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+<span class="hljs-meta">#</span><span class="bash">修改后的部分：</span>
+ExecStart=/usr/bin/dockerd -H tcp://0.0.0.0:2375 -H unix://var/run/docker.sock
+</code></pre>
+<h3>Docker 常用命令</h3>
+<pre><code class="language-shell">systemctl start docker #启动docker
+systemctl enable docker #将docker服务设为开机启动
+systemctl stop docker #停止容器
+systemctl restart docker #重启docker服务
+docker images # 列出镜像
+docker rmi --name # 删除镜像  -f 强制删除
+docker ps # 列出容器 -a 所有
+docker start --name # 启动容器
+docker stop --name # 停止容器
+docker restart --name # 重启docker容器
+docker rm --name # 删除容器  -f 强制删除
+docker stats -a # 查看所有容器情况
+docker system df # 查看Docker磁盘使用情况
+docker exec -it --name  /bin/bash #进入Docker容器内部的bash
+docker cp 主机文件  容器名称:容器路径 #复制文件到docker容器中
+docker logs --name #查看docker镜像日志
+docker rm $(docker ps -a -q) # 删除所有容器 -f 强制删除
+docker rmi $(docker images -a -q) # 删除所有镜像 -f 强制删除
+docker rm -f `docker ps -a | grep -vE 'mysql|nginx|redis|jenkins' | awk '{print $1}'` # 删除mysql|nginx|redis|jenkins非容器 -f 强制删除
+docker rmi -f `docker images | grep none | awk '{print $3}'` # 删除镜像none镜像 -f 强制删除
+</code></pre>
+<h2>docker-compose</h2>
+<h3>安装 docker-compose</h3>
+<pre><code class="language-shell"><span class="hljs-meta">#</span><span class="bash"> 下载Docker Compose</span>
+curl -L https://get.daocloud.io/docker/compose/releases/download/1.24.0/docker-compose-`uname -s`-`uname -m` &gt; /usr/local/bin/docker-compose
+<span class="hljs-meta">#</span><span class="bash"> 修改该文件的权限为可执行</span>
+chmod +x /usr/local/bin/docker-compose
+<span class="hljs-meta">#</span><span class="bash"> 查看是否已经安装成功</span>
+docker-compose --version
+</code></pre>
+<h3>使用Docker Compose的步骤</h3>
+<ul>
+<li>使用Dockerfile定义应用程序环境，一般需要修改初始镜像行为时才需要使用；</li>
+<li>使用docker-compose.yml定义需要部署的应用程序服务，以便执行脚本一次性部署；</li>
+<li>使用docker-compose up命令将所有应用服务一次性部署起来。</li>
+</ul>
+<h3>docker-compose.yml常用命令</h3>
+<pre><code class="language-shell"><span class="hljs-meta">#</span><span class="bash"> 指定运行的镜像名称</span>
+image: name:version
+<span class="hljs-meta">#</span><span class="bash"> 配置容器名称</span>
+container_name: name
+<span class="hljs-meta">#</span><span class="bash"> 指定宿主机和容器的端口映射</span>
+ports:
+  - 3306:3306
+<span class="hljs-meta">#</span><span class="bash"> 将宿主机的文件或目录挂载到容器中</span>
+volumes:
+  - /etc/localtime:/etc/localtime
+  - /data/mysql/log:/var/log/mysql
+  - /data/mysql/data:/var/lib/mysql
+  - /data/mysql/conf:/etc/mysql
+  - /data/mysql/mysql-files:/var/lib/mysql-files
+<span class="hljs-meta">#</span><span class="bash"> 配置环境变量</span>
+environment:
+  - MYSQL_ROOT_PASSWORD=xiujingmysql.
+<span class="hljs-meta">#</span><span class="bash"> 连接其他容器的服务</span>
+links:
+  - db:database #可以以database为域名访问服务名称为db的容器
+<span class="hljs-meta">#</span><span class="bash"> 挂断自动重新启动</span>
+restart: always
+<span class="hljs-meta">#</span><span class="bash"> 指定容器执行命令</span>
+command: redis-server --requirepass xiujingredis.
+</code></pre>
+<h3>Docker Compose常用命令</h3>
+<pre><code class="language-shell"><span class="hljs-meta">#</span><span class="bash"> 构建、创建、启动相关容器</span>
+docker-compose up -d # -d表示在后台运行
+<span class="hljs-meta">#</span><span class="bash"> 停止所有相关容器</span>
+docker-compose stop
+<span class="hljs-meta">#</span><span class="bash"> 删除容器文件</span>
+docker-compose rm -f # -f 强制删除
+<span class="hljs-meta">#</span><span class="bash"> 重启容器</span>
+docker-compose restart
+<span class="hljs-meta">#</span><span class="bash"> 列出所有容器信息</span>
+docker-compose ps
+<span class="hljs-meta">#</span><span class="bash"> 查看容器日志</span>
+docker-compose logs
+</code></pre>
+<h3>使用Docker Compose 部署应用</h3>
+<p>编写docker-compose.yml文件</p>
+<pre><code class="language-yml"><span class="hljs-attr">version:</span> <span class="hljs-string">'3'</span>
+<span class="hljs-attr">services:</span>
+  <span class="hljs-comment"># 指定服务名称</span>
+<span class="hljs-attr">  nginx:</span>
+    <span class="hljs-comment"># 指定服务使用的镜像</span>
+<span class="hljs-attr">    image:</span> <span class="hljs-string">nginx</span>
+    <span class="hljs-comment"># 指定容器名称</span>
+<span class="hljs-attr">    container_name:</span> <span class="hljs-string">nginx</span>
+    <span class="hljs-comment"># 指定服务运行的端口</span>
+<span class="hljs-attr">    ports:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-number">80</span><span class="hljs-string">:80</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-number">443</span><span class="hljs-string">:443</span>
+    <span class="hljs-comment"># 指定容器中需要挂载的文件</span>
+<span class="hljs-attr">    volumes:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">/etc/localtime:/etc/localtime</span>
+    <span class="hljs-comment"># 挂断自动重新启动</span>
+<span class="hljs-attr">    restart:</span> <span class="hljs-string">always</span>
+    <span class="hljs-comment"># 指定容器的环境变量</span>
+<span class="hljs-attr">    environment:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">TZ=Asia/Shanghai</span> <span class="hljs-comment"># 设置容器时区与宿主机保持一致</span>
+  <span class="hljs-comment"># 指定服务名称</span>
+<span class="hljs-attr">  sqlserver:</span>
+    <span class="hljs-comment"># 指定服务使用的镜像</span>
+<span class="hljs-attr">    image:</span> <span class="hljs-string">mcr.microsoft.com/mssql/server</span>
+    <span class="hljs-comment"># 指定容器名称</span>
+<span class="hljs-attr">    container_name:</span> <span class="hljs-string">sqlserver</span>
+    <span class="hljs-comment"># 指定服务运行的端口</span>
+<span class="hljs-attr">    ports:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">"1433"</span>
+    <span class="hljs-comment"># 指定容器中需要挂载的文件  </span>
+<span class="hljs-attr">    volumes:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">/etc/localtime:/etc/localtime</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">/data/sqlserver:/var/opt/mssql</span>
+    <span class="hljs-comment"># 挂断自动重新启动  </span>
+<span class="hljs-attr">    restart:</span> <span class="hljs-string">always</span>
+<span class="hljs-attr">    environment:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">TZ=Asia/Shanghai</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">SA_PASSWORD=mssql-MSSQL</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">ACCEPT_EULA=Y</span> 
+    <span class="hljs-comment"># 指定容器运行的用户为root</span>
+<span class="hljs-attr">    user:</span>
+      <span class="hljs-string">root</span>       
+  <span class="hljs-comment"># 指定服务名称</span>
+<span class="hljs-attr">  mysql:</span>
+    <span class="hljs-comment"># 指定服务使用的镜像</span>
+<span class="hljs-attr">    image:</span> <span class="hljs-string">mysql</span>
+    <span class="hljs-comment"># 指定容器名称</span>
+<span class="hljs-attr">    container_name:</span> <span class="hljs-string">mysql</span>
+    <span class="hljs-comment"># 指定服务运行的端口</span>
+<span class="hljs-attr">    ports:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-number">3306</span><span class="hljs-string">:3306</span>
+    <span class="hljs-comment"># 指定容器中需要挂载的文件</span>
+<span class="hljs-attr">    volumes:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">/etc/localtime:/etc/localtime</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">/data/mysql/log:/var/log/mysql</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">/data/mysql/data:/var/lib/mysql</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">/data/mysql/mysql-files:/var/lib/mysql-files</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">/data/mysql/conf:/etc/mysql</span>
+    <span class="hljs-comment"># 挂断自动重新启动</span>
+<span class="hljs-attr">    restart:</span> <span class="hljs-string">always</span>
+    <span class="hljs-comment"># 指定容器的环境变量</span>
+<span class="hljs-attr">    environment:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">TZ=Asia/Shanghai</span> <span class="hljs-comment"># 设置容器时区与宿主机保持一致</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">MYSQL_ROOT_PASSWORD=xiujingmysql.</span> <span class="hljs-comment"># 设置root密码</span>
+    <span class="hljs-comment"># 指定容器运行的用户为root</span>
+<span class="hljs-attr">    user:</span>
+      <span class="hljs-string">root</span>     
+  <span class="hljs-comment"># 指定服务名称</span>
+<span class="hljs-attr">  redis:</span>
+    <span class="hljs-comment"># 指定服务使用的镜像</span>
+<span class="hljs-attr">    image:</span> <span class="hljs-string">redis</span>
+    <span class="hljs-comment"># 指定容器名称</span>
+<span class="hljs-attr">    container_name:</span> <span class="hljs-string">redis</span>
+    <span class="hljs-comment"># 指定服务运行的端口</span>
+<span class="hljs-attr">    ports:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-number">6379</span><span class="hljs-string">:6379</span>
+    <span class="hljs-comment"># 指定容器中需要挂载的文件</span>
+<span class="hljs-attr">    volumes:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">/etc/localtime:/etc/localtime</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">/data/redis:/data</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">/data/redis/redis.conf:/etc/redis.conf</span>
+    <span class="hljs-comment"># 挂断自动重新启动</span>
+<span class="hljs-attr">    restart:</span> <span class="hljs-string">always</span>
+    <span class="hljs-comment"># 指定容器执行命令</span>
+<span class="hljs-attr">    command:</span> <span class="hljs-string">redis-server</span> <span class="hljs-string">/etc/redis.conf</span> <span class="hljs-bullet">--requirepass</span> <span class="hljs-string">xiujingredis.</span> <span class="hljs-bullet">--appendonly</span> <span class="hljs-literal">yes</span>
+    <span class="hljs-comment"># 指定容器的环境变量</span>
+<span class="hljs-attr">    environment:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">TZ=Asia/Shanghai</span> <span class="hljs-comment"># 设置容器时区与宿主机保持一致</span>
+  <span class="hljs-comment"># 指定服务名称</span>
+<span class="hljs-attr">  mongo:</span>
+    <span class="hljs-comment"># 指定服务使用的镜像</span>
+<span class="hljs-attr">    image:</span> <span class="hljs-string">mongo</span>
+    <span class="hljs-comment"># 指定容器名称</span>
+<span class="hljs-attr">    container_name:</span> <span class="hljs-string">mongo</span>
+    <span class="hljs-comment"># 指定服务运行的端口</span>
+<span class="hljs-attr">    ports:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-number">27017</span><span class="hljs-string">:27017</span>
+    <span class="hljs-comment"># 指定容器中需要挂载的文件</span>
+<span class="hljs-attr">    volumes:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">/etc/localtime:/etc/localtime</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">/data/mongodb/db:/data/db</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">/data/mongodb/configdb:/data/configdb</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">/data/mongodb/initdb:/docker-entrypoint-initdb.d</span>      
+    <span class="hljs-comment"># 挂断自动重新启动</span>
+<span class="hljs-attr">    restart:</span> <span class="hljs-string">always</span>
+    <span class="hljs-comment"># 指定容器的环境变量</span>
+<span class="hljs-attr">    environment:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">TZ=Asia/Shanghai</span> <span class="hljs-comment"># 设置容器时区与宿主机保持一致</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">AUTH=yes</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">MONGO_INITDB_ROOT_USERNAME=admin</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">MONGO_INITDB_ROOT_PASSWORD=admin</span>
+  <span class="hljs-comment"># 指定服务名称</span>
+<span class="hljs-attr">  jenkins:</span>
+    <span class="hljs-comment"># 指定服务使用的镜像</span>
+<span class="hljs-attr">    image:</span> <span class="hljs-string">jenkins</span>
+    <span class="hljs-comment"># 指定容器名称</span>
+<span class="hljs-attr">    container_name:</span> <span class="hljs-string">jenkins</span>
+    <span class="hljs-comment"># 指定服务运行的端口</span>
+<span class="hljs-attr">    ports:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-number">8080</span><span class="hljs-string">:8080</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-number">50000</span><span class="hljs-string">:50000</span>
+    <span class="hljs-comment"># 指定容器中需要挂载的文件</span>
+<span class="hljs-attr">    volumes:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">/etc/localtime:/etc/localtime</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">/data/jenkins_home:/var/jenkins_home</span> 
+    <span class="hljs-comment"># 挂断自动重新启动</span>
+<span class="hljs-attr">    restart:</span> <span class="hljs-string">always</span>
+    <span class="hljs-comment"># 指定容器的环境变量</span>
+<span class="hljs-attr">    environment:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">TZ=Asia/Shanghai</span> <span class="hljs-comment"># 设置容器时区与宿主机保持一致</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">JAVA_OPTS=-Duser.timezone=Asia/Shanghai</span>   
+    <span class="hljs-comment"># 指定容器运行的用户为root</span>
+<span class="hljs-attr">    user:</span>
+      <span class="hljs-string">root</span>    
+  <span class="hljs-comment"># 指定服务名称</span>
+<span class="hljs-attr">  minio:</span>
+    <span class="hljs-comment"># 指定服务使用的镜像</span>
+<span class="hljs-attr">    image:</span> <span class="hljs-string">minio</span>
+    <span class="hljs-comment"># 指定容器名称</span>
+<span class="hljs-attr">    container_name:</span> <span class="hljs-string">minio</span>
+    <span class="hljs-comment"># 指定服务运行的端口</span>
+<span class="hljs-attr">    ports:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-number">9000</span><span class="hljs-string">:9000</span>
+    <span class="hljs-comment"># 指定容器中需要挂载的文件</span>
+<span class="hljs-attr">    volumes:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">/etc/localtime:/etc/localtime</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">/data/minio/data:/data</span> 
+<span class="hljs-bullet">      -</span> <span class="hljs-string">/data/minio/config:/root/.minio</span>
+    <span class="hljs-comment"># 挂断自动重新启动</span>
+<span class="hljs-attr">    restart:</span> <span class="hljs-string">always</span>   
+    <span class="hljs-comment"># 指定容器执行命令</span>
+<span class="hljs-attr">    command:</span> <span class="hljs-string">server</span> <span class="hljs-string">/data</span>    
+  <span class="hljs-comment"># 指定服务名称   </span>
+  <span class="hljs-string">portainer</span> <span class="hljs-string">:</span>
+    <span class="hljs-comment"># 指定服务使用的镜像</span>
+<span class="hljs-attr">    image:</span> <span class="hljs-string">portainer</span> 
+    <span class="hljs-comment"># 指定容器名称</span>
+<span class="hljs-attr">    container_name:</span> <span class="hljs-string">portainer</span> 
+    <span class="hljs-comment"># 指定服务运行的端口</span>
+<span class="hljs-attr">    ports:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-number">8001</span><span class="hljs-string">:8000</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-number">9001</span><span class="hljs-string">:9000</span>
+    <span class="hljs-comment"># 指定容器中需要挂载的文件</span>
+<span class="hljs-attr">    volumes:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">/etc/localtime:/etc/localtime</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">/var/run/docker.sock:/var/run/docker.sock</span> 
+<span class="hljs-bullet">      -</span> <span class="hljs-string">/data/portainer/data:/data</span>
+    <span class="hljs-comment"># 挂断自动重新启动</span>
+<span class="hljs-attr">    restart:</span> <span class="hljs-string">always</span>  
+</code></pre>
+<p>运行Docker Compose命令启动所有服务</p>
+<pre><code class="language-shell">docker-compose up -d
+</code></pre>
+</section><footer class="footer-container"><div class="footer-body"><img src="/img/dubbo_gray.png"/><div class="cols-container"><div class="col col-12"><h3>Disclaimer</h3><p>the disclaimer content</p></div><div class="col col-6"><dl><dt>Documentation</dt><dd><a href="/en-us/docs/introduction.html" target="_self">Overview</a></dd><dd><a href="/en-us/docs/introduction.html" target="_self">Quick start</a></dd><dd><a href="/en-us/docs/dir/introduction.html" target="_self">Developer guide</a></dd></dl></div><div class="col col-6"><dl><dt>Resources</dt><dd><a href="/en-us/blog/index.html" target="_self">Blog</a></dd><dd><a href="/en-us/community/index.html" target="_self">Community</a></dd></dl></div></div><div class="copyright"><span>Copyright © 2019 BurningMyself</span></div></div></footer></div></div>
+	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
+	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
+	<script>
+		window.rootPath = '';
+  </script>
+	<script src="/build/blogDetail.js"></script>
+</body>
+</html>
