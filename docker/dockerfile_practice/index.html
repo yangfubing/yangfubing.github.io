@@ -1,0 +1,2077 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content=".net,java,php,python,docker,web">
+      
+      
+        <meta name="author" content="BurningMyself">
+      
+      
+        <link rel="canonical" href="https://burningmyself.gitee.io/docker/dockerfile_practice/">
+      
+      
+        <link rel="prev" href="../dockerfile_usage/">
+      
+      
+        <link rel="next" href="../../kubernetes_basic/overview/">
+      
+      <link rel="icon" href="../../favicon.ico">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.15">
+    
+    
+      
+        <title>Dockerfile 实践 - BurningMyself</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.113286f1.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.a0c5b2b5.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#dockerfile" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="BurningMyself" class="md-header__button md-logo" aria-label="BurningMyself" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BurningMyself
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Dockerfile 实践
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/burningmyself/burningmyself.github.io" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    burningmyself.github.io
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="BurningMyself" class="md-nav__button md-logo" aria-label="BurningMyself" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    BurningMyself
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/burningmyself/burningmyself.github.io" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    burningmyself.github.io
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        介绍
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          云原生
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          云原生
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+          Docker 基础
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Docker 基础
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../overview/" class="md-nav__link">
+        简介
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../install/" class="md-nav__link">
+        安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../basic/" class="md-nav__link">
+        基本操作
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dockerfile_usage/" class="md-nav__link">
+        Dockerfile
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Dockerfile 实践
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Dockerfile 实践
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#dockerfile" class="md-nav__link">
+    Dockerfile 实践
+  </a>
+  
+    <nav class="md-nav" aria-label="Dockerfile 实践">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    构建缓存
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    使用多阶段构建
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    避免安装不必要的包
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    应用解耦
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    最小化镜像层数
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    对多行参数排序
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dockerfile_1" class="md-nav__link">
+    Dockerfile 指令
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from" class="md-nav__link">
+    FROM 指令
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#label" class="md-nav__link">
+    LABEL 标签
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run" class="md-nav__link">
+    RUN 指令
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#expose" class="md-nav__link">
+    EXPOSE 指令
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#env" class="md-nav__link">
+    ENV 指令
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#volume" class="md-nav__link">
+    VOLUME 指令
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#user" class="md-nav__link">
+    USER 指令
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workdir" class="md-nav__link">
+    WORKDIR 指令
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#copy_add" class="md-nav__link">
+    COPY 和 ADD 指令
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cmd_entrypoint" class="md-nav__link">
+    CMD 与 ENTRYPOINT 指令
+  </a>
+  
+    <nav class="md-nav" aria-label="CMD 与 ENTRYPOINT 指令">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cmd" class="md-nav__link">
+    CMD 指令
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entrypoint" class="md-nav__link">
+    ENTRYPOINT 指令
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    官方仓库示例
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wordpress" class="md-nav__link">
+    Wordpress 示例
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wordpress_1" class="md-nav__link">
+    获取 Wordpress
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sqlite" class="md-nav__link">
+    获取 SQLite 插件
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    安装激活插件
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+          Kubernetes 基础
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 基础
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/overview/" class="md-nav__link">
+        简介
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/install/" class="md-nav__link">
+        安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/yaml/" class="md-nav__link">
+        资源清单
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/pod/" class="md-nav__link">
+        Pod原理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/pod_life/" class="md-nav__link">
+        Pod 的生命周期
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/pod_deep/" class="md-nav__link">
+        Pod 使用进阶
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+          Kubernetes 控制器
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 控制器
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/replicaset/" class="md-nav__link">
+        ReplicaSet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/deployment/" class="md-nav__link">
+        Deployment
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/statefulset/" class="md-nav__link">
+        StatefulSet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/daemonset/" class="md-nav__link">
+        DaemonSet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/job/" class="md-nav__link">
+        Job
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/hpa/" class="md-nav__link">
+        HPA
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+          Kubernetes 配置管理
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 配置管理
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_config/config_map/" class="md-nav__link">
+        ConfigMap
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_config/secret/" class="md-nav__link">
+        Secret
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_config/service_account/" class="md-nav__link">
+        ServiceAccount
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
+          Kubernetes 安全
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_5">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 安全
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_security/rbac/" class="md-nav__link">
+        RBAC
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_security/security_context/" class="md-nav__link">
+        Security Context
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_security/admission/" class="md-nav__link">
+        准入控制器
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_6" id="__nav_2_6_label" tabindex="0">
+          Kubernetes 网络
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_6">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 网络
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/flannel/" class="md-nav__link">
+        网络插件
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/policy/" class="md-nav__link">
+        网络策略
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/service/" class="md-nav__link">
+        Service 服务
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_6_4" id="__nav_2_6_4_label" tabindex="0">
+          Ingress
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_6_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_6_4">
+          <span class="md-nav__icon md-icon"></span>
+          Ingress
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/ingress/nginx/" class="md-nav__link">
+        NGINX Controller
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/ingress/traefik/" class="md-nav__link">
+        Traefik
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_7" id="__nav_2_7_label" tabindex="0">
+          Kubernetes 调度器
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_7">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 调度器
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_scheduler/overview/" class="md-nav__link">
+        调度器介绍
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_scheduler/usage/" class="md-nav__link">
+        Pod 调度
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_8" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_8" id="__nav_2_8_label" tabindex="0">
+          Kubernetes 存储
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_8_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_8">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 存储
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_stroage/local/" class="md-nav__link">
+        Local 本地存储
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_stroage/ceph/" class="md-nav__link">
+        Ceph 存储
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_stroage/csi/" class="md-nav__link">
+        存储原理
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#dockerfile" class="md-nav__link">
+    Dockerfile 实践
+  </a>
+  
+    <nav class="md-nav" aria-label="Dockerfile 实践">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    构建缓存
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    使用多阶段构建
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    避免安装不必要的包
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    应用解耦
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    最小化镜像层数
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    对多行参数排序
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dockerfile_1" class="md-nav__link">
+    Dockerfile 指令
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from" class="md-nav__link">
+    FROM 指令
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#label" class="md-nav__link">
+    LABEL 标签
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run" class="md-nav__link">
+    RUN 指令
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#expose" class="md-nav__link">
+    EXPOSE 指令
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#env" class="md-nav__link">
+    ENV 指令
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#volume" class="md-nav__link">
+    VOLUME 指令
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#user" class="md-nav__link">
+    USER 指令
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workdir" class="md-nav__link">
+    WORKDIR 指令
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#copy_add" class="md-nav__link">
+    COPY 和 ADD 指令
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cmd_entrypoint" class="md-nav__link">
+    CMD 与 ENTRYPOINT 指令
+  </a>
+  
+    <nav class="md-nav" aria-label="CMD 与 ENTRYPOINT 指令">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cmd" class="md-nav__link">
+    CMD 指令
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entrypoint" class="md-nav__link">
+    ENTRYPOINT 指令
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    官方仓库示例
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wordpress" class="md-nav__link">
+    Wordpress 示例
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wordpress_1" class="md-nav__link">
+    获取 Wordpress
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sqlite" class="md-nav__link">
+    获取 SQLite 插件
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    安装激活插件
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+  <h1>Dockerfile 实践</h1>
+
+<h2 id="dockerfile">Dockerfile 实践<a class="headerlink" href="#dockerfile" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>使用 Dockerfile 的一些最佳实践</p>
+<p>在前文中我们了解到了用于构建 Dockerfile 的基本方法，但是由于在编写 Dockerfile 的时候并没有一些强制要求，导致很多构建的镜像不符合一些最佳实践，典型的就是镜像构建的层数非常多，对一些基本指令的区别不是很清楚。本节主要介绍 Dockerfile 在实际使用中的一些最佳的实践方式。</p>
+<p>第一个是前面重点提到的构建上下文，这个一定需要理解，然后是对于一些不需要提交构建的文件用<code>.dockerignore</code>来进行忽略。</p>
+</blockquote>
+<h3 id="_1">构建缓存<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>在镜像的构建过程中，Docker 根据 Dockerfile 指定的顺序执行每个指令。在执行每条指令之前，Docker 都会在缓存中查找是否已经存在可重用的镜像，如果有就使用现存的镜像，不再重复创建。当然如果你不想在构建过程中使用缓存，你可以在 <code>docker build</code> 命令中使用 <code>--no-cache=true</code> 选项。Docker 中构建缓存遵循的基本规则如下：</p>
+</blockquote>
+<ul>
+<li>从一个基础镜像开始（FROM 指令指定），下一条指令将和该基础镜像的所有子镜像进行匹配，检查这些子镜像被创建时使用的指令是否和被检查的指令完全一样。如果不是，则缓存失效。</li>
+<li>对于 ADD 和 COPY 指令，镜像中对应文件的内容也会被检查，每个文件都会计算出一个校验值。在缓存的查找过程中，会将这些校验和已存在镜像中的文件校验值进行对比。如果文件有任何改变，则缓存失效。</li>
+<li>
+<p>除了 ADD 和 COPY 指令，缓存匹配过程不会查看临时容器中的文件来决定缓存是否匹配。例如，当执行完 </p>
+<div class="highlight"><pre><span></span><code>RUN apt-get -y update
+</code></pre></div>
+<p>指令后，容器中一些文件被更新，但 Docker 不会检查这些文件。这种情况下，只有<code>指令字符串本身</code>被用来匹配缓存。
+*   一旦缓存失效，所有后续的 Dockerfile 指令都将产生新的镜像，缓存不会被使用。</p>
+</li>
+</ul>
+<h3 id="_2">使用多阶段构建<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>多阶段构建可以让我们大幅度减小最终的镜像大小，而不需要去想办法减少中间层和文件的数量。因为镜像是在生成过程的最后阶段生成的，所以可以利用生成缓存来最小化镜像层。</p>
+<p>例如，如果你的构建包含多个层，则可以将它们从变化频率较低（以确保生成缓存可重用）到变化频率较高的顺序排序：</p>
+</blockquote>
+<ul>
+<li>安装构建应用程序所需的依赖工具</li>
+<li>安装或更新依赖项</li>
+<li>构建你的应用</li>
+</ul>
+<blockquote>
+<p>比如我们构建一个 Go 应用程序的 Dockerfile 可能类似于这样：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>FROM golang:11-alpine AS build
+
+# 安装项目需要的工具
+# 运行 `docker build --no-cache .` 来更新依赖
+RUN apk add --no-cache git
+RUN go get github.com/golang/dep/cmd/dep
+
+# 通过 Gopkg.toml 和 Gopkg.lock 获取项目的依赖
+# 仅在更新 Gopkg 文件时才重新构建这些层
+COPY Gopkg.lock Gopkg.toml /go/src/project/
+WORKDIR /go/src/project/
+# 安装依赖库
+RUN dep ensure -vendor-only
+
+# 拷贝整个项目进行构建
+# 当项目下面有文件变化的时候该层才会重新构建
+COPY . /go/src/project/
+RUN go build -o /bin/project
+
+# 将打包后的二进制文件拷贝到 scratch 镜像下面，将镜像大小降到最低
+FROM scratch
+COPY --from=build /bin/project /bin/project
+ENTRYPOINT [&quot;/bin/project&quot;]
+CMD [&quot;--help&quot;]
+</code></pre></div>
+<h3 id="_3">避免安装不必要的包<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>为了降低复杂性、减少依赖、减小文件大小和构建时间，应该避免安装额外的或者不必要的软件包。例如，不要在数据库镜像中包含一个文本编辑器。</p>
+</blockquote>
+<h3 id="_4">应用解耦<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>每个容器应用只关心一个方面的事情。将多个应用解耦到不同容器中，可以更轻松地保证容器的横向扩展和复用。例如一个 web 应用程序可能包含三个独立的容器：web应用、数据库、缓存，每个容器都是独立的镜像，分开运行。但这并不是说一个容器就只能跑一个进程，因为有的程序可能会自行产生其他进程，比如 Celery 就可以有很多个工作进程。虽然<code>每个容器跑一个进程</code>是一条很好的法则，但这并不是一条硬性的规定。我们主要是希望一个容器只关注一件事情，尽量保持干净和模块化。</p>
+<p>如果容器互相依赖，你可以使用 Docker 容器网络 来把这些容器连接起来，我们前面已经跟大家讲解过 Docker 的容器网络模式。</p>
+</blockquote>
+<h3 id="_5">最小化镜像层数<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>在很早之前的版本中尽量减少镜像层数是非常重要的，不过现在的版本已经有了一定的改善了：</p>
+</blockquote>
+<ul>
+<li>只有 RUN、COPY 和 ADD 指令会创建层，其他指令会创建临时的中间镜像，但是不会直接增加构建的镜像大小了。</li>
+<li>多阶段构建的支持，允许我们把需要的数据直接复制到最终的镜像中，这就允许我们在中间阶段包含一些工具或者调试信息了，而且不会增加最终的镜像大小。</li>
+</ul>
+<h3 id="_6">对多行参数排序<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>只要有可能，就将多行参数按字母顺序排序。这可以帮助你避免重复包含同一个包，更新包列表时也更容易，也更容易阅读和审查。建议在反斜杠符号 <code>\</code> 之前添加一个空格，可以增加可读性。比如下面的例子：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>RUN apt-get update &amp;&amp; apt-get install -y \\
+  bzr \\
+  cvs \\
+  git \\
+  mercurial \\
+  subversion
+</code></pre></div>
+<h3 id="dockerfile_1">Dockerfile 指令<a class="headerlink" href="#dockerfile_1" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>关于这些指令的使用建议可以帮助我们创建高效且可维护的 Dockerfile。</p>
+</blockquote>
+<h3 id="from">FROM 指令<a class="headerlink" href="#from" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>前面已经介绍过，尽可能使用当前的官方镜像作为基础镜像。我们建议使用<code>Alpine</code>映像，因为它受到严格控制且较小（当前小于5 MB），同时仍是完整的 Linux 发行版。</p>
+</blockquote>
+<h3 id="label">LABEL 标签<a class="headerlink" href="#label" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>你可以给镜像添加标签来帮助组织镜像、记录许可信息、辅助自动化构建等。每个标签一行，由 LABEL 开头加上一个或多个标签对。</p>
+<p>下面的示例展示了各种不同的可能格式。<code>#</code>开头的行是注释内容。</p>
+<p>注意</p>
+<p>如果你的字符串包含空格，那么它必须被引用或者空格必须被转义。如果您的字符串包含内部引号字符（"），则也可以将其转义。</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code># Set one or more individual labels
+LABEL com.example.version=&quot;1-beta&quot;
+LABEL vendor=&quot;ACME Incorporated&quot;
+LABEL com.example.release-date=&quot;2015-02-12&quot;
+LABEL com.example.version.is-production=&quot;&quot;
+</code></pre></div>
+<blockquote>
+<p>一个镜像可以包含多个标签，当然以上内容也可以写成下面这样，但是不是必须的：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code># Set multiple labels at once, using line-continuation characters to break long lines
+LABEL vendor=ACME\\ Incorporated \\
+      com.example.is-production=&quot;&quot; \\
+      com.example.version=&quot;1-beta&quot; \\
+      com.example.release-date=&quot;2015-02-12&quot;
+</code></pre></div>
+<h3 id="run">RUN 指令<a class="headerlink" href="#run" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>为了保持 Dockerfile 文件的可读性，以及可维护性，建议将长的或复杂的 RUN 指令用反斜杠<code>\</code>分割成多行。</p>
+<p>RUN 指令最常见的用法是安装包用的 apt-get。因为<code>RUN apt-get</code>指令会安装包，所以有几个问题需要注意。</p>
+</blockquote>
+<ul>
+<li>不要使用 RUN apt-get upgrade 或 dist-upgrade，如果基础镜像中的某个包过时了，你应该联系它的维护者。如果你确定某个特定的包，比如 foo，需要升级，使用 apt-get install -y foo 就行，该指令会自动升级 foo 包。</li>
+<li>
+<p>永远将 RUN apt-get update 和 apt-get install 组合成一条 RUN 声明，例如：</p>
+<div class="highlight"><pre><span></span><code>RUN apt-get update &amp;&amp; apt-get install -y \\
+      package-bar \\
+      package-baz \\
+      package-foo
+</code></pre></div>
+</li>
+</ul>
+<blockquote>
+<p>将 apt-get update 放在一条单独的 RUN 声明中会导致缓存问题以及后续的 apt-get install 失败。比如，假设你有一个 Dockerfile 文件：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>FROM ubuntu:04
+RUN apt-get update
+RUN apt-get install -y curl
+</code></pre></div>
+<blockquote>
+<p>构建镜像后，所有的层都在 Docker 的缓存中。假设你后来又修改了其中的 apt-get install 添加了一个包：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>FROM ubuntu:04
+RUN apt-get update
+RUN apt-get install -y curl nginx
+</code></pre></div>
+<blockquote>
+<p>Docker 发现修改后的 RUN apt-get update 指令和之前的完全一样。所以，apt-get update 不会执行，而是使用之前的缓存镜像。因为 apt-get update 没有运行，后面的 apt-get install 可能安装的是过时的 curl 和 nginx 版本。</p>
+<p>使用</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>RUN apt-get update &amp;&amp; apt-get install -y
+</code></pre></div>
+<p>可以确保你的 Dockerfiles 每次安装的都是包的最新的版本，而且这个过程不需要进一步的编码或额外干预。这项技术叫作<code>cache busting(缓存破坏)</code>。</p>
+<blockquote>
+<p>下面是一个 RUN 指令的示例模板，展示了所有关于 apt-get 的建议：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>RUN apt-get update &amp;&amp; apt-get install -y \\
+    aufs-tools \\
+    automake \\
+    build-essential \\
+    curl \\
+    dpkg-sig \\
+    libcap-dev \\
+    libsqlite3-dev \\
+    mercurial \\
+    reprepro \\
+    ruby1 \\
+    ruby1-dev \\
+    s3cmd=* \\
+ # 其他操作
+ &amp;&amp; rm -rf /var/lib/apt/lists/*
+</code></pre></div>
+<blockquote>
+<p>其中 s3cmd 指令指定了一个版本号 1.1.*。如果之前的镜像使用的是更旧的版本，指定新的版本会导致 apt-get udpate 缓存失效并确保安装的是新版本。 另外，清理掉 apt 缓存 var/lib/apt/lists 可以减小镜像大小。因为 RUN 指令的开头为 apt-get udpate，包缓存总是会在 apt-get install 之前刷新。</p>
+</blockquote>
+<h3 id="expose">EXPOSE 指令<a class="headerlink" href="#expose" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p><code>EXPOSE</code> 指令用于指定容器将要监听的端口。因此，你应该为你的应用程序使用常见的端口。</p>
+<p>例如，提供 Apache web 服务的镜像应该使用 EXPOSE 80，而提供 MongoDB 服务的镜像使用 EXPOSE 27017。</p>
+<p>对于外部访问，用户可以在执行 docker run 时使用一个 <code>-p</code> 参数来指示如何将指定的端口映射到所选择的端口。</p>
+</blockquote>
+<h3 id="env">ENV 指令<a class="headerlink" href="#env" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>为了方便新程序运行，你可以使用 <code>ENV</code> 指令来为容器中安装的程序更新 PATH 环境变量。例如使用</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>ENV PATH /usr/local/nginx/bin:$PATH
+</code></pre></div>
+<p>来确保<code>CMD ["nginx"]</code>能正确运行。</p>
+<blockquote>
+<p>ENV 指令也可用于为你想要容器化的服务提供必要的环境变量，比如 Postgres 需要的 PGDATA。 最后，ENV 也能用于设置常见的版本号，比如下面的示例：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>ENV PG_MAJOR 3
+ENV PG_VERSION 4
+RUN curl -SL http://example.com/postgres-$PG_VERSION.tar.xz | tar -xJC /usr/src/postgress &amp;&amp; …
+ENV PATH /usr/local/postgres-$PG_MAJOR/bin:$PATH
+</code></pre></div>
+<blockquote>
+<p>类似于程序中的常量，这种方法可以让你只需改变 ENV 指令来自动的改变容器中的软件版本。</p>
+</blockquote>
+<h3 id="volume">VOLUME 指令<a class="headerlink" href="#volume" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p><code>VOLUME</code> 指令用于暴露任何数据库存储文件，配置文件，或容器创建的文件和目录。强烈建议使用 <code>VOLUME</code> 来管理镜像中的可变部分和用户可以改变的部分。</p>
+</blockquote>
+<h3 id="user">USER 指令<a class="headerlink" href="#user" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>如果某个服务不需要特权执行，建议使用 USER 指令切换到非 root 用户。先在 Dockerfile 中使用类似 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>RUN groupadd -r postgres &amp;&amp; useradd -r -g postgres postgres
+</code></pre></div>
+<p>的指令创建用户和用户组。</p>
+<blockquote>
+<p>注意</p>
+<p>在镜像中，用户和用户组每次被分配的 UID/GID 都是不确定的，下次重新构建镜像时被分配到的 UID/GID 可能会不一样。如果要依赖确定的 UID/GID，你应该显示的指定一个 UID/GID。</p>
+<p>你应该避免使用 sudo，因为它不可预期的 TTY 和信号转发行为可能造成的问题比它能解决的问题还多。如果你真的需要和 sudo 类似的功能（例如，以 root 权限初始化某个守护进程，以非 root 权限执行它），你可以使用 <code>gosu</code>。我们可以去查看官方的一些镜像，很多都是使用的 <code>gosu</code>。</p>
+<p>为了减少层数和复杂度，避免频繁地使用 USER 来回切换用户。</p>
+</blockquote>
+<h3 id="workdir">WORKDIR 指令<a class="headerlink" href="#workdir" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>为了清晰性和可靠性，你应该总是在 <code>WORKDIR</code> 中使用绝对路径。另外，你应该使用 WORKDIR 来替代类似于 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>RUN cd ... &amp;&amp; do-something
+</code></pre></div>
+<p>的指令，后者难以阅读、排错和维护。</p>
+<h3 id="copy_add">COPY 和 ADD 指令<a class="headerlink" href="#copy_add" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>虽然 <code>ADD</code> 和 <code>COPY</code> 功能类似，但一般优先使用 <code>COPY</code>。因为它比 <code>ADD</code> 更透明。COPY 只支持简单将本地文件拷贝到容器中，而 ADD 有一些并不明显的功能（比如本地 tar 提取和远程 URL 支持）。因此，ADD 的最佳用例是将本地 tar 文件自动提取到镜像中，例如<code>ADD rootfs.tar.xz</code>。</p>
+<p>如果你的 Dockerfile 有多个步骤需要使用上下文中不同的文件。单独 COPY 每个文件，而不是一次性的 COPY 所有文件，这将保证每个步骤的构建缓存只在特定的文件变化时失效。例如：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>COPY requirements.txt /tmp/
+RUN pip install --requirement /tmp/requirements.txt
+COPY . /tmp/
+</code></pre></div>
+<blockquote>
+<p>如果将COPY . /tmp/放置在 RUN 指令之前，只要 . 目录中任何一个文件变化，都会导致后续指令的缓存失效。</p>
+<p>为了让镜像尽量小，最好不要使用 ADD 指令从远程 URL 获取包，而是使用 curl 和 wget。这样你可以在文件提取完之后删掉不再需要的文件来避免在镜像中额外添加一层。比如尽量避免下面的用法：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>ADD http://example.com/big.tar.xz /usr/src/things/
+RUN tar -xJf /usr/src/things/big.tar.xz -C /usr/src/things
+RUN make -C /usr/src/things all
+</code></pre></div>
+<blockquote>
+<p>而是应该使用下面这种方法：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>RUN mkdir -p /usr/src/things \\
+    &amp;&amp; curl -SL http://example.com/big.tar.xz \\
+    | tar -xJC /usr/src/things \\
+    &amp;&amp; make -C /usr/src/things all
+</code></pre></div>
+<blockquote>
+<p>上面使用的管道操作，所以没有中间文件需要删除。对于其他不需要 ADD 的自动提取功能的文件或目录，你应该使用 COPY。</p>
+</blockquote>
+<h3 id="cmd_entrypoint">CMD 与 ENTRYPOINT 指令<a class="headerlink" href="#cmd_entrypoint" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>尽管 ENTRYPOINT 和 CMD 都是在容器里执行一条命令, 但是他们有一些微妙的区别，在绝大多数情况下, 你只要在这2者之间选择一个调用就可以，但是我们还是非常有必要来认真了解下二者的区别。</p>
+</blockquote>
+<h4 id="cmd">CMD 指令<a class="headerlink" href="#cmd" title="Permanent link">&para;</a></h4>
+<blockquote>
+<p><code>CMD</code> 指令是容器启动以后，<code>默认</code>的执行命令，需要重点理解下这个默认的含义，意思就是如果我们执行 <code>docker run</code> 没有指定任何的执行命令或者 Dockerfile 里面也没有指定 ENTRYPOINT，那么就会使用 CMD 指定的执行命令执行了。这也说明了 ENTRYPOINT 才是容器启动以后真正要执行的命令。</p>
+<p>所以我们经常遇到 <code>CMD 会被覆盖</code> 的情况，为什么会被覆盖呢？主要还是因为 CMD 的定位就是默认，如果不额外指定，那么才会执行 CMD 命令，但是如果我们指定了的话那就不会执行 CMD 命令了，也就是说 CMD 会被覆盖。</p>
+<p>CMD 总共有三种用法：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>CMD [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;]  # exec 形式
+CMD [&quot;param1&quot;, &quot;param2&quot;] # 作为 ENTRYPOINT 的默认参数
+CMD command param1 param2  # shell 形式
+</code></pre></div>
+<blockquote>
+<p>其中 shell 形式，就是没有中括号的形式，命令 command 默认是在<code>/bin/sh -c</code>下执行的，比如：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>FROM busybox
+
+CMD echo &quot;hello cmd shell form!&quot;
+</code></pre></div>
+<blockquote>
+<p>我们将上面的 Dockerfile 打包成 cmdshell 镜像，然后直接启动一个容器：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ docker build -t cmdshell .
+Sending build context to Docker daemon  048kB
+Step 1/2 : FROM busybox
+ ---&gt; 020584afccce
+Step 2/2 : CMD echo &quot;hello cmd shell form!&quot;
+ ---&gt; Running in 651afaddb83d
+Removing intermediate container 651afaddb83d
+ ---&gt; d26e4d6d9cdf
+Successfully built d26e4d6d9cdf
+Successfully tagged cmdshell:latest
+$ docker run cmdshell
+hello cmd shell form!
+</code></pre></div>
+<blockquote>
+<p>对于带有中括号的 exec 形式，命令没有在任何 shell 终端环境下，如果我们要执行 shell，必须把 shell 加入到中括号的参数中。将上面的例子修改为：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>FROM busybox
+
+CMD [&quot;/bin/sh&quot;, &quot;-c&quot;, &quot;echo &#39;hello cmd exec form!&#39;&quot;]
+</code></pre></div>
+<blockquote>
+<p>同样将上面的 Dockerfile 打包成 cmdexec 镜像，然后直接启动一个容器：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ docker build -t cmdexec .
+Sending build context to Docker daemon  048kB
+Step 1/2 : FROM busybox
+ ---&gt; 020584afccce
+Step 2/2 : CMD [&quot;/bin/sh&quot;, &quot;-c&quot;, &quot;echo &#39;hello cmd exec form!&#39;&quot;]
+ ---&gt; Running in 8c72d5e2ce35
+Removing intermediate container 8c72d5e2ce35
+ ---&gt; c393bd1ab3c1
+Successfully built c393bd1ab3c1
+Successfully tagged cmdexec:latest
+$ docker run cmdexec
+hello cmd exec form!
+</code></pre></div>
+<blockquote>
+<p>需要注意，采用 exec 形式，第一个参数必须是命令的<code>全路径</code>才行。一个 Dockerfile 如果有多个 CMD，只有最后一个生效，官网推荐采用这种方式。</p>
+<p>当然，以上都是体现了 CMD 的 <code>默认</code> 行为。如果我们在 run 时指定了命令或者有 ENTRYPOINT CMD 就会被覆盖。比如同样用上面两个镜像，在运行的时候指定一个命令：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ docker run cmdexec echo &#39;hello docker&#39;
+hello docker
+$ docker run cmdshell echo &#39;hello docker&#39;
+hello docker
+</code></pre></div>
+<blockquote>
+<p>可以看到，最终容器里面执行的是 run 命令后面的命令，而不是 CMD 里面定义的。</p>
+</blockquote>
+<h4 id="entrypoint">ENTRYPOINT 指令<a class="headerlink" href="#entrypoint" title="Permanent link">&para;</a></h4>
+<blockquote>
+<p>根据官方定义来说 <code>ENTRYPOINT</code> 才是用于定义容器启动以后的执行程序的，允许将镜像当成命令本身来运行（用 CMD 提供默认选项），从名字也可以理解，是容器的<code>入口</code>。ENTRYPOINT 一共有两种用法：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>ENTRYPOINT [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;] (exec 形式)
+ENTRYPOINT command param1 param2 (shell 形式)
+</code></pre></div>
+<blockquote>
+<p>对应命令行 exec 模式，也就是带中括号的。和 CMD 的中括号形式是一致的，但是这里貌似是在shell的环境下执行的，与cmd有区别。如果 run 命令后面有执行命令，那么后面的全部都会作为 ENTRYPOINT 的参数。如果 run 后面没有额外的命令，但是定义了 CMD，那么 CMD 的全部内容就会作为 ENTRYPOINT 的参数，这同时是上面我们提到的 CMD 的第二种用法。所以说 ENTRYPOINT 不会被覆盖。当然如果要在 run 里面覆盖，也是有办法的，使用<code>--entrypoint</code>参数即可。</p>
+<p>比如我们定义如下的 Dockerfile：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>FROM busybox
+
+CMD [&quot;I am in cmd exec form&quot;]
+ENTRYPOINT [&quot;echo&quot;]
+</code></pre></div>
+<blockquote>
+<p>将上面的 Dockerfile 打包成镜像 entrypointest，然后直接运行，不带任何参数：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ docker build -t entrypointest .
+Sending build context to Docker daemon  048kB
+Step 1/3 : FROM busybox
+ ---&gt; 020584afccce
+Step 2/3 : CMD [&quot;I am in cmd exec form&quot;]
+ ---&gt; Running in 2d7b13b0dfe7
+Removing intermediate container 2d7b13b0dfe7
+ ---&gt; 903d739ead9a
+Step 3/3 : ENTRYPOINT [&quot;echo&quot;]
+ ---&gt; Running in c61682ea476e
+Removing intermediate container c61682ea476e
+ ---&gt; 00b09a578d48
+Successfully built 00b09a578d48
+Successfully tagged entrypointest:latest
+$ docker run entrypointest
+I am in cmd exec form
+</code></pre></div>
+<blockquote>
+<p>我们可以看到打印的结果是 CMD 里面指定的内容，也就是默认情况将 CMD 部分作为 ENTRYPOINT 的参数了。但是如果我们在运行容器的时候如果指定了运行参数呢：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ docker run entrypointest I am in run section
+I am in run section
+</code></pre></div>
+<blockquote>
+<p>我们可以看到运行时指定的参数会覆盖掉 CMD 提供的默认参数，但是默认都是执行的 ENTRYPOINT 里面的命令。</p>
+<p>对于 shell 模式的，任何 run 和 CMD 的参数都无法被传入到 ENTRYPOINT 里。官网推荐用上面一种用法。比如我们我们这里定义一个 Dockerfile 如下：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>FROM busybox
+
+CMD [&quot;I am in cmd exec form and entrypoint shell form&quot;]
+ENTRYPOINT echo
+</code></pre></div>
+<blockquote>
+<p>将上面 Dockerfile 打包成镜像 entrypointshell，然后直接运行：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ docker build -t entrypointshell .
+Sending build context to Docker daemon  048kB
+Step 1/3 : FROM busybox
+ ---&gt; 020584afccce
+Step 2/3 : CMD [&quot;I am in cmd exec form and entrypoint shell form&quot;]
+ ---&gt; Running in 2aee7326f4cd
+Removing intermediate container 2aee7326f4cd
+ ---&gt; e89cadeeecd3
+Step 3/3 : ENTRYPOINT echo
+ ---&gt; Running in f359c8bb5025
+Removing intermediate container f359c8bb5025
+ ---&gt; f9d4e1d1b0a0
+Successfully built f9d4e1d1b0a0
+Successfully tagged entrypointshell:latest
+$ docker run entrypointshell
+</code></pre></div>
+<blockquote>
+<p>我们可以发现 CMD 的参数并没有被打印出来，如果在运行的时候添加上参数呢：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ docker run entrypointshell I am in run section
+$
+</code></pre></div>
+<blockquote>
+<p>我们可以发现也没有将 run 命令后面的参数打印出来。所以一般情况下对于 ENTRYPOINT 来说使用中括号的 exec 形式更好。</p>
+<p>总结</p>
+<p>一般会用 ENTRYPOINT 的中括号形式作为 Docker 容器启动以后的默认执行命令，里面放的是不变的部分，可变部分比如命令参数可以使用 CMD 的形式提供默认版本，也就是 run 里面没有任何参数时使用的默认参数。如果我们想用默认参数，就直接 run，否则想用其他参数，就 run 里面加上参数。</p>
+</blockquote>
+<h3 id="_7">官方仓库示例<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>这些官方仓库的 Dockerfile 都是参考典范：<a href="https://github.com/docker-library/docs">https://github.com/docker-library/docs</a>。</p>
+</blockquote>
+<h3 id="wordpress">Wordpress 示例<a class="headerlink" href="#wordpress" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>这里我们以创建一个 Wordpress 镜像为例，我们知道默认情况下 Wordpress 是使用 MySQL 数据库的，如果使用 MySQL 数据库的不利于我们这里的演示，所以我们这里用 Sqlite 来作为 Wordpress 的存储数据库，要编写一个使用 Sqlite 数据库的 Wordpress 镜像，首先我们需要明白如果不使用镜像应该怎么来部署这样的一个程序，否则是不可能编写出 Dockerfile 的。</p>
+</blockquote>
+<h3 id="wordpress_1">获取 Wordpress<a class="headerlink" href="#wordpress_1" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>首先，我们需要获取到 Wordpress 的程序安装包，地址：<a href="https://wordpress.org/download/">https://wordpress.org/download/</a>，下载最新的 Wordpress 安装包。</p>
+</blockquote>
+<h3 id="sqlite">获取 SQLite 插件<a class="headerlink" href="#sqlite" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>由于 Wordpress 默认使用的是 MySQL 数据库，如果要使用 SQLite 数据库的话需要使用 SQLite 插件，地址：<a href="https://wordpress.org/plugins/sqlite-integration/">https://wordpress.org/plugins/sqlite-integration/</a></p>
+</blockquote>
+<h3 id="_8">安装激活插件<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>将 SQLite 插件解压放置到 Wordpress 源码目录 <code>wp-content/plugins</code> 目录下面，然后拷贝 sqlite-integration 目录下面的 <code>db.php</code> 文件到 Wordpress 的 <code>wordpress/wp-content</code> 目录下面。</p>
+<p>然后重新将 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>wordpress/wp-config-sample.php
+</code></pre></div>
+<p>重命名为 </p>
+<div class="highlight"><pre><span></span><code>wordpress/wp-config.php
+</code></pre></div>
+<p>，可以通过该文件里面的一些参数来配置数据库的名称和位置，默认情况下，数据库名为<code>.ht.sqlite</code>，存储在 <code>wp-content/database/</code> 目录中。</p>
+<blockquote>
+<p>然后安装上 Wordpress 运行的一些环境比较 PHP、Nginx 就可以运行了，最终的 Dockerfile 如下所示：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>FROM nginx:latest
+
+LABEL version=&quot;0&quot;
+LABEL author=&quot;阳明 &lt;icnych@gmail.com&gt;&quot;
+
+# 设置成非交互式的
+ENV DEBIAN_FRONTEND noninteractive
+ENV DOCUMENT_ROOT /usr/share/nginx/html
+
+# 安装 nginx php-fpm php-pdo unzip curl
+RUN apt-get update &amp;&amp; apt-get -y install \\
+    apt-utils \\
+    curl \\
+    php-fpm \\
+    php-sqlite3 \\
+    unzip
+
+COPY wordpress-tar.gz .
+
+RUN rm -rf ${DOCUMENT_ROOT}/* &amp;&amp; \\
+    tar -xzvf wordpress-tar.gz --strip-components=1 --directory ${DOCUMENT_ROOT} &amp;&amp; \\
+    rm -rf wordpress-tar.gz
+# RUN rm -rf ${DOCUMENT_ROOT}/* &amp;&amp; \\
+#     curl -o wordpress.tar.gz https://wordpress.org/latest.tar.gz &amp;&amp; \\
+#     tar -xzvf /wordpress.tar.gz --strip-components=1 --directory ${DOCUMENT_ROOT}
+
+COPY sqlite-integration.zip .
+RUN unzip sqlite-integration.zip -d ${DOCUMENT_ROOT}/wp-content/plugins/ &amp;&amp; \\
+    rm -rf sqlite-integration.zip
+# RUN curl -o sqlite-plugin.zip https://downloads.wordpress.org/plugin/sqlite-integration.zip &amp;&amp; \\
+    # unzip sqlite-plugin.zip -d ${DOCUMENT_ROOT}/wp-content/plugins/ &amp;&amp; \\
+    # rm sqlite-plugin.zip &amp;&amp; \\
+
+RUN cp ${DOCUMENT_ROOT}/wp-content/plugins/sqlite-integration/db.php ${DOCUMENT_ROOT}/wp-content &amp;&amp; \\
+    cp ${DOCUMENT_ROOT}/wp-config-sample.php ${DOCUMENT_ROOT}/wp-config.php
+
+# nginx 配置
+RUN sed -i -e&quot;s/keepalive_timeout\\s*65/keepalive_timeout 2/&quot; /etc/nginx/nginx.conf \\
+    &amp;&amp; sed -i -e&quot;s/keepalive_timeout 2/keepalive_timeout 2;\\n\\tclient_max_body_size 10m/&quot; /etc/nginx/nginx.conf \\
+    &amp;&amp; sed -i -e &quot;s|include /etc/nginx/conf.d/\\*.conf|include /etc/nginx/sites-enabled/\\*|g&quot; /etc/nginx/nginx.conf \\
+    &amp;&amp; echo &quot;daemon off;&quot; &gt;&gt; /etc/nginx/nginx.conf
+
+# php-fpm 配置
+# RUN php --ini  # 找到fpm配置
+RUN sed -i -e &quot;s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g&quot; /etc/php/3/fpm/php.ini \\
+    &amp;&amp; sed -i -e &quot;s/upload_max_filesize\\s*=\\s*2M/upload_max_filesize = 10M/g&quot; /etc/php/3/fpm/php.ini \\
+    &amp;&amp; sed -i -e &quot;s/post_max_size\\s*=\\s*8M/post_max_size = 10M/g&quot; /etc/php/3/fpm/php.ini \\
+    &amp;&amp; sed -i -e &quot;s/;catch_workers_output\\s*=\\s*yes/catch_workers_output = yes/g&quot; /etc/php/3/fpm/pool.d/www.conf \\
+    &amp;&amp; sed -i -e &quot;s/;listen.mode = 0660/listen.mode = 0666/g&quot; /etc/php/3/fpm/pool.d/www.conf
+
+COPY nginx.conf /etc/nginx/sites-available/default
+RUN chown -R www-data.www-data ${DOCUMENT_ROOT} \\
+    &amp;&amp; mkdir -p /etc/nginx/sites-enabled \\
+    &amp;&amp; ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default \\
+    &amp;&amp; apt-get purge -y --auto-remove curl unzip
+
+EXPOSE 80
+EXPOSE 443
+
+CMD service php3-fpm start &amp;&amp; nginx
+</code></pre></div>
+<blockquote>
+<p>由于一些网络原因，我们这里将安装包都放置到了 Dockerfile 目录下面，然后我们就可以来构建镜像：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ docker build -t cnych/wordpress:sqlite .
+</code></pre></div>
+<blockquote>
+<p>然后用该镜像来运行一个 Wordpress 容器：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ docker run -d --name wordpress -p 8888:80 cnych/wordpress:sqlite
+</code></pre></div>
+<blockquote>
+<p>运行成功后我们就可以通过 8888 端口来访问 Wordpress 应用了，而且我们没有 MySQL 相关的配置，通过一些配置就可以访问到应用了。</p>
+<p><img alt="Dockerfile Wordpress Demo" src="../../assets/img/docker/dockerfile_practice.png" /></p>
+</blockquote>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      BurningMyself<a href='https://beian.miit.gov.cn/' target='_blank'>  蜀ICP备15033200号-1</a>
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/burningmyself" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://gitee.com/burningmyself" target="_blank" rel="noopener" title="gitee.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.2a6f1dda.min.js"></script>
+      
+        <script src="../../js/extra.js"></script>
+      
+        <script src="../../js/baidu-tongji.js"></script>
+      
+        <script src="https://www.googletagmanager.com/gtag/js?id=UA-155084439-1"></script>
+      
+        <script src="https://www.googletagmanager.com/gtag/js?id=UA-155132293-1"></script>
+      
+        <script src="../../js/google.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+      
+    
+  </body>
+</html>

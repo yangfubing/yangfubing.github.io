@@ -1,0 +1,1825 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content=".net,java,php,python,docker,web">
+      
+      
+        <meta name="author" content="BurningMyself">
+      
+      
+        <link rel="canonical" href="https://burningmyself.gitee.io/kubernetes_stroage/csi/">
+      
+      
+        <link rel="prev" href="../ceph/">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.15">
+    
+    
+      
+        <title>存储原理 - BurningMyself</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.113286f1.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.a0c5b2b5.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="BurningMyself" class="md-header__button md-logo" aria-label="BurningMyself" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BurningMyself
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              存储原理
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/burningmyself/burningmyself.github.io" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    burningmyself.github.io
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="BurningMyself" class="md-nav__button md-logo" aria-label="BurningMyself" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    BurningMyself
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/burningmyself/burningmyself.github.io" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    burningmyself.github.io
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        介绍
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          云原生
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          云原生
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+          Docker 基础
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Docker 基础
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/overview/" class="md-nav__link">
+        简介
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/install/" class="md-nav__link">
+        安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/basic/" class="md-nav__link">
+        基本操作
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/dockerfile_usage/" class="md-nav__link">
+        Dockerfile
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/dockerfile_practice/" class="md-nav__link">
+        Dockerfile 实践
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+          Kubernetes 基础
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 基础
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/overview/" class="md-nav__link">
+        简介
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/install/" class="md-nav__link">
+        安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/yaml/" class="md-nav__link">
+        资源清单
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/pod/" class="md-nav__link">
+        Pod原理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/pod_life/" class="md-nav__link">
+        Pod 的生命周期
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/pod_deep/" class="md-nav__link">
+        Pod 使用进阶
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+          Kubernetes 控制器
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 控制器
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/replicaset/" class="md-nav__link">
+        ReplicaSet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/deployment/" class="md-nav__link">
+        Deployment
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/statefulset/" class="md-nav__link">
+        StatefulSet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/daemonset/" class="md-nav__link">
+        DaemonSet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/job/" class="md-nav__link">
+        Job
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/hpa/" class="md-nav__link">
+        HPA
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+          Kubernetes 配置管理
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 配置管理
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_config/config_map/" class="md-nav__link">
+        ConfigMap
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_config/secret/" class="md-nav__link">
+        Secret
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_config/service_account/" class="md-nav__link">
+        ServiceAccount
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
+          Kubernetes 安全
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_5">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 安全
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_security/rbac/" class="md-nav__link">
+        RBAC
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_security/security_context/" class="md-nav__link">
+        Security Context
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_security/admission/" class="md-nav__link">
+        准入控制器
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_6" id="__nav_2_6_label" tabindex="0">
+          Kubernetes 网络
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_6">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 网络
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/flannel/" class="md-nav__link">
+        网络插件
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/policy/" class="md-nav__link">
+        网络策略
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/service/" class="md-nav__link">
+        Service 服务
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_6_4" id="__nav_2_6_4_label" tabindex="0">
+          Ingress
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_6_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_6_4">
+          <span class="md-nav__icon md-icon"></span>
+          Ingress
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/ingress/nginx/" class="md-nav__link">
+        NGINX Controller
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/ingress/traefik/" class="md-nav__link">
+        Traefik
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_7" id="__nav_2_7_label" tabindex="0">
+          Kubernetes 调度器
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_7">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 调度器
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_scheduler/overview/" class="md-nav__link">
+        调度器介绍
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_scheduler/usage/" class="md-nav__link">
+        Pod 调度
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_8" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_8" id="__nav_2_8_label" tabindex="0">
+          Kubernetes 存储
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_8_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2_8">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 存储
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../local/" class="md-nav__link">
+        Local 本地存储
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ceph/" class="md-nav__link">
+        Ceph 存储
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          存储原理
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        存储原理
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    存储原理
+  </a>
+  
+    <nav class="md-nav" aria-label="存储原理">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    存储架构
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flexvolume" class="md-nav__link">
+    FlexVolume
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#csi" class="md-nav__link">
+    CSI
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    存储原理
+  </a>
+  
+    <nav class="md-nav" aria-label="存储原理">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    存储架构
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flexvolume" class="md-nav__link">
+    FlexVolume
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#csi" class="md-nav__link">
+    CSI
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+  <h1>存储原理</h1>
+
+<p></p>
+<h2 id="_1">存储原理<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>前面的章节中我们介绍了在 Kubernetes 中的持久化存储的使用，了解了 PV、PVC 以及 StorageClass 的使用方法，从本地存储到 Ceph 共享存储都有学习，到这里我们其实已经可以完成应用各种场景的数据持久化了，但是难免在实际的使用过程中会遇到各种各样的问题，要解决这些问题最好的方式就是来了解下 Kubernetes 中存储的实现原理。</p>
+<p>Kubernetes 默认情况下就提供了主流的存储卷接入方案，我们可以执行命令 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>kubectl explain pod.spec.volumes
+</code></pre></div>
+<p>查看到支持的各种存储卷，另外也提供了插件机制，允许其他类型的存储服务接入到 Kubernetes 系统中来，在 Kubernetes 中就对应 <code>In-Tree</code> 和 <code>Out-Of-Tree</code> 两种方式，<code>In-Tree</code> 就是在 Kubernetes 源码内部实现的，和 Kubernetes 一起发布、管理的，但是更新迭代慢、灵活性比较差，<code>Out-Of-Tree</code> 是独立于 Kubernetes 的，目前主要有 <code>CSI</code> 和 <code>FlexVolume</code> 两种机制，开发者可以根据自己的存储类型实现不同的存储插件接入到 Kubernetes 中去，其中 <code>CSI</code> 是现在也是以后主流的方式，所以当然我们的重点也会是 <code>CSI</code> 的使用介绍。</p>
+<h3 id="_2">存储架构<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>前面我们了解到了 PV、PVC、StorgeClass 的使用，但是他们是如何和我们的 Pod 关联起来使用的呢？这就需要从 Volume 的处理流程和原理说起了。</p>
+<p>如下所示，我们创建了一个 nfs 类型的 PV 资源对象：（volume.yaml）</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-pv
+spec:
+  storageClassName: manual
+  capacity: 
+    storage: 1Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    path: /data/k8s  # 指定nfs的挂载点
+    server: 111  # 指定nfs服务地址
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-pvc
+spec:
+  storageClassName: manual
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+</code></pre></div>
+<blockquote>
+<p>我们知道用户真正使用的是 PVC，而要使用 PVC 的前提就是必须要先和某个符合条件的 PV 进行一一绑定，比如存储容器、访问模式，以及 PV 和 PVC 的 storageClassName 字段必须一样，这样才能够进行绑定，当 PVC 和 PV 绑定成功后就可以直接使用这个 PVC 对象了：(pod.yaml)</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: test-volumes
+spec:
+  volumes:
+  - name: nfs
+    persistentVolumeClaim:
+      claimName: nfs-pvc
+  containers:
+  - name: web
+    image: nginx
+    ports:
+    - name: web
+      containerPort: 80
+    volumeMounts:
+    - name: nfs
+      subPath: test-volumes
+      mountPath: &quot;/usr/share/nginx/html&quot;
+</code></pre></div>
+<blockquote>
+<p>直接创建上面的资源对象即可：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl apply -f volume.yaml
+$ kubectl apply -f pod.yaml
+</code></pre></div>
+<blockquote>
+<p>我们只是在 volumes 中指定了我们上面创建的 PVC 对象，当这个 Pod 被创建之后， kubelet 就会把这个 PVC 对应的这个 NFS 类型的 Volume（PV）挂载到这个 Pod 容器中的目录中去。前面我们也提到了这样的话对于普通用户来说完全就不用关心后面的具体存储在 NFS 还是 Ceph 或者其他了，只需要直接使用 PVC 就可以了，因为真正的存储是需要很多相关的专业知识的，这样就完全职责分离解耦了。</p>
+<p>普通用户直接使用 PVC 没有问题，但是也会出现一个问题，那就是当普通用户创建一个 PVC 对象的时候，这个时候系统里面并没有合适的 PV 来和它进行绑定，因为 PV 大多数情况下是管理员给我们创建的，这个时候启动 Pod 肯定就会失败了，如果现在管理员如果去创建一个对应的 PV 的话，PVC 和 PV 当然就可以绑定了，然后 Pod 也会自动的启动成功，这是因为在 Kubernetes 中有一个专门处理持久化存储的控制器 Volume Controller，这个控制器下面有很多个控制循环，其中一个就是用于 PV 和 PVC 绑定的 PersistentVolumeController。</p>
+<p>PersistentVolumeController 会不断地循环去查看每一个 PVC，是不是已经处于 Bound（已绑定）状态。如果不是，那它就会遍历所有的、可用的 PV，并尝试将其与未绑定的 PVC 进行绑定，这样，Kubernetes 就可以保证用户提交的每一个 PVC，只要有合适的 PV 出现，它就能够很快进入绑定状态。而所谓将一个 PV 与 PVC 进行<code>绑定</code>，其实就是将这个 PV 对象的名字，填在了 PVC 对象的 <code>spec.volumeName</code> 字段上。</p>
+<p>PV 和 PVC 绑定上了，那么又是如何将容器里面的数据进行持久化的呢，前面我们学习过 Docker 的 Volume 挂载，其实就是<code>将一个宿主机上的目录和一个容器里的目录绑定挂载在了一起</code>，具有持久化功能当然就是指的宿主机上面的这个目录了，当容器被删除或者在其他节点上重建出来以后，这个目录里面的内容依然存在，所以一般情况下实现持久化是需要一个远程存储的，比如 NFS、Ceph 或者云厂商提供的磁盘等等。所以接下来需要做的就是持久化宿主机目录这个过程。</p>
+<p>当 Pod 被调度到一个节点上后，节点上的 kubelet 组件就会为这个 Pod 创建它的 Volume 目录，默认情况下 kubelet 为 Volume 创建的目录在 kubelet 工作目录下面：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>/var/lib/kubelet/pods/&lt;Pod的ID&gt;/volumes/kubernetes.io~&lt;Volume类型&gt;/&lt;Volume名字&gt;
+</code></pre></div>
+<blockquote>
+<p>比如上面我们创建的 Pod 对应的 Volume 目录完整路径为：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>/var/lib/kubelet/pods/d4fcdb11-baf7-43d9-8d7d-3ede24118e08/volumes/kubernetes.io~nfs/nfs-pv
+</code></pre></div>
+<blockquote>
+<p>提示</p>
+<p>要获取 Pod 的唯一标识 uid，可通过命令 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>kubectl get pod pod名 -o jsonpath={.metadata.uid}
+</code></pre></div>
+<p>获取。</p>
+<blockquote>
+<p>然后就需要根据我们的 Volume 类型来决定需要做什么操作了，比如上节课我们用的 Ceph RBD，那么 kubelet 就需要先将 Ceph 提供的 RBD 挂载到 Pod 所在的宿主机上面，这个阶段在 Kubernetes 中被称为 Attach 阶段。Attach 阶段完成后，为了能够使用这个块设备，kubelet 还要进行第二个操作，即：格式化这个块设备，然后将它挂载到宿主机指定的挂载点上。这个挂载点，也就是上面我们提到的 Volume 的宿主机的目录。将块设备格式化并挂载到 Volume 宿主机目录的操作，在 Kubernetes 中被称为 Mount 阶段。上节课我们使用 Ceph RBD 持久化的 Wordpress 的 MySQL 数据，我们可以查看对应的 Volume 信息：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl get pods -o wide -l app=wordpress
+NAME                              READY   STATUS    RESTARTS   AGE   IP             NODE         NOMINATED NODE   READINESS GATES
+wordpress-5b886cf59b-dv2zt        1/1     Running   0          20d   2158   ydzs-node1   &lt;none&gt;           &lt;none&gt;
+wordpress-mysql-b9ddd6d4c-pjhbt   1/1     Running   0          20d   270    ydzs-node4   &lt;none&gt;           &lt;none&gt;
+</code></pre></div>
+<blockquote>
+<p>我们可以看到 MySQL 运行在 node4 节点上，然后可以在该节点上查看 Volume 信息，Pod 对应的 uid 可以通过如下命令获取：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl get pod wordpress-mysql-b9ddd6d4c-pjhbt -o jsonpath={.metadata.uid}
+3f84af87-9f58-4c69-9e38-5ef234498133
+$ ls /var/lib/kubelet/pods/3f84af87-9f58-4c69-9e38-5ef234498133/volumes/kubernetes.io~csi/pvc-c8861c23-c03d-47aa-96f6-73c4d4093109/
+mount  vol_data.json
+</code></pre></div>
+<blockquote>
+<p>然后通过如下命令可以查看 Volume 的持久化信息：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ findmnt /var/lib/kubelet/pods/3f84af87-9f58-4c69-9e38-5ef234498133/volumes/kubernetes.io~csi/pvc-c8861c23-c03d-47aa-96f6-73c4d4093109/mount
+TARGET                                                                                            SOURCE    FSTYPE OPTIONS
+/var/lib/kubelet/pods/3f84af87-9f58-4c69-9e38-5ef234498133/volumes/kubernetes.io~csi/pvc-c8861c23-c03d-47aa-96f6-73c4d4093109/mount    /dev/rbd0 ext4   rw,relatime,
+</code></pre></div>
+<blockquote>
+<p>可以看到这里的 Volume 是挂载到 <code>/dev/rbd0</code> 这个设备上面的，通过 <code>df</code> 命令也是可以看到的：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ df -h |grep dev
+devtmpfs        9G     0  9G   0% /dev
+tmpfs           9G     0  9G   0% /dev/shm
+/dev/vda3        18G  7G   13G  27% /
+/dev/vda1       497M  158M  340M  32% /boot
+/dev/vdb1       197G   24G  164G  13% /data
+/dev/rbd0        20G  160M   20G   1% /var/lib/kubelet/pods/3f84af87-9f58-4c69-9e38-5ef234498133/volumes/kubernetes.io~csi/pvc-c8861c23-c03d-47aa-96f6-73c4d4093109/mount
+</code></pre></div>
+<blockquote>
+<p>这里我们就经过了 <code>Attach</code> 和 <code>Mount</code> 两个阶段完成了 Volume 的持久化。但是对于上面我们使用的 NFS 就更加简单了， 因为 NFS 存储并没有一个设备需要挂载到宿主机上面，所以这个时候 kubelet 就会直接进入第二个 <code>Mount</code> 阶段，相当于直接在宿主机上面执行如下的命令：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ mount -t nfs 111:/data/k8s /var/lib/kubelet/pods/d4fcdb11-baf7-43d9-8d7d-3ede24118e08/volumes/kubernetes.io~nfs/nfs-pv
+</code></pre></div>
+<blockquote>
+<p>同样可以在测试的 Pod 所在节点查看 Volume 的挂载信息：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ findmnt /var/lib/kubelet/pods/d4fcdb11-baf7-43d9-8d7d-3ede24118e08/volumes/kubernetes.io~nfs/nfs-pv
+TARGET                                                                               SOURCE                 FSTYPE OPTIONS
+/var/lib/kubelet/pods/d4fcdb11-baf7-43d9-8d7d-3ede24118e08/volumes/kubernetes.io~nfs/nfs-pv
+                                                                                     111:/data/k8s nfs4   rw,relatime,
+</code></pre></div>
+<blockquote>
+<p>我们可以看到这个 Volume 被挂载到了 NFS（10.151.30.11:/data/k8s）下面，以后我们在这个目录里写入的所有文件，都会被保存在远程 NFS 服务器上。</p>
+<p>这样在经过了上面的两个阶段过后，我们就得到了一个持久化的宿主机上面的 Volume 目录了，接下来 kubelet 只需要把这个 Volume 目录挂载到容器中对应的目录即可，这样就可以为 Pod 里的容器挂载这个持久化的 Volume 了，这一步其实也就相当于执行了如下所示的命令：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ docker run -v /var/lib/kubelet/pods/&lt;Pod的ID&gt;/volumes/kubernetes.io~&lt;Volume类型&gt;/&lt;Volume名字&gt;:/&lt;容器内的目标目录&gt; 我的镜像 ...
+</code></pre></div>
+<blockquote>
+<p>整个存储的架构可以用下图来说明： <img alt="存储架构" src="../../assets/img/kubernetes_stroage/k8s-storage-structrue.png" /></p>
+</blockquote>
+<ul>
+<li>PV Controller：负责 PV/PVC 的绑定，并根据需求进行数据卷的 Provision/Delete 操作</li>
+<li>AD Controller：负责存储设备的 Attach/Detach 操作，将设备挂载到目标节点</li>
+<li>Volume Manager：管理卷的 Mount/Unmount 操作、卷设备的格式化等操作</li>
+<li>Volume Plugin：扩展各种存储类型的卷管理能力，实现第三方存储的各种操作能力和 Kubernetes 存储系统结合</li>
+</ul>
+<blockquote>
+<p>我们上面使用的 NFS 就属于 In-Tree 这种方式，而上节课使用的 Ceph RBD 就是 Out-Of-Tree 的方式，而且是使用的是 CSI 插件。下面我们再来了解下 <code>FlexVolume</code> 和 <code>CSI</code> 两种插件方式。</p>
+</blockquote>
+<h3 id="flexvolume">FlexVolume<a class="headerlink" href="#flexvolume" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>FlexVolume 提供了一种扩展 Kubernetes 存储插件的方式，用户可以自定义自己的存储插件。要使用 FlexVolume 需要在每个节点上安装存储插件二进制文件，该二进制需要实现 FlexVolume 的相关接口，默认存储插件的存放路径为</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>/usr/libexec/kubernetes/kubelet-plugins/volume/exec/&lt;vendor~driver&gt;/&lt;driver&gt;
+</code></pre></div>
+<p>，<code>VolumePlugins</code> 组件会不断 watch 这个目录来实现插件的添加、删除等功能。</p>
+<blockquote>
+<p>其中 <code>vendor~driver</code> 的名字需要和 Pod 中<code>flexVolume.driver</code> 的字段名字匹配，例如：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>/usr/libexec/kubernetes/kubelet-plugins/volume/exec/foo~cifs/cifs
+</code></pre></div>
+<blockquote>
+<p>对应的 Pod 中的 <code>flexVolume.driver</code> 属性为：<code>foo/cifs</code>。</p>
+<p>在我们实现自定义存储插件的时候，需要实现 FlexVolume 的部分接口，因为要看实际需求，并不一定所有接口都需要实现。比如对于类似于 NFS 这样的存储就没必要实现 <code>attach/detach</code> 这些接口了，因为不需要，只需要实现 <code>init/mount/umount</code> 3个接口即可。</p>
+</blockquote>
+<ul>
+<li>
+<p>init: </p>
+<div class="highlight"><pre><span></span><code>&lt;driver executable&gt; init
+</code></pre></div>
+<ul>
+<li>kubelet/kube-controller-manager 初始化存储插件时调用，插件需要返回是否需要要 attach 和 detach 操作</li>
+<li>attach: </li>
+</ul>
+<div class="highlight"><pre><span></span><code>&lt;driver executable&gt; attach &lt;json options&gt; &lt;node name&gt;
+</code></pre></div>
+<ul>
+<li>将存储卷挂载到 Node 节点上</li>
+<li>detach: </li>
+</ul>
+<div class="highlight"><pre><span></span><code>&lt;driver executable&gt; detach &lt;mount device&gt; &lt;node name&gt;
+</code></pre></div>
+<ul>
+<li>将存储卷从 Node 上卸载</li>
+<li>waitforattach: </li>
+</ul>
+<div class="highlight"><pre><span></span><code>&lt;driver executable&gt; waitforattach &lt;mount device&gt; &lt;json options&gt;
+</code></pre></div>
+<ul>
+<li>等待 attach 操作成功（超时时间为 10 分钟）</li>
+<li>isattached: </li>
+</ul>
+<div class="highlight"><pre><span></span><code>&lt;driver executable&gt; isattached &lt;json options&gt; &lt;node name&gt;
+</code></pre></div>
+<ul>
+<li>检查存储卷是否已经挂载</li>
+<li>mountdevice: </li>
+</ul>
+<div class="highlight"><pre><span></span><code>&lt;driver executable&gt; mountdevice &lt;mount dir&gt; &lt;mount device&gt; &lt;json options&gt;
+</code></pre></div>
+<ul>
+<li>将设备挂载到指定目录中以便后续 bind mount 使用</li>
+<li>unmountdevice: </li>
+</ul>
+<div class="highlight"><pre><span></span><code>&lt;driver executable&gt; unmountdevice &lt;mount device&gt;
+</code></pre></div>
+<ul>
+<li>将设备取消挂载</li>
+<li>mount: </li>
+</ul>
+<div class="highlight"><pre><span></span><code>&lt;driver executable&gt; mount &lt;mount dir&gt; &lt;json options&gt;
+</code></pre></div>
+<ul>
+<li>将存储卷挂载到指定目录中</li>
+<li>unmount: </li>
+</ul>
+<div class="highlight"><pre><span></span><code>&lt;driver executable&gt; unmount &lt;mount dir&gt;
+</code></pre></div>
+<ul>
+<li>将存储卷取消挂载</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>实现上面的这些接口需要返回如下所示的 JSON 格式的数据：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>{
+    &quot;status&quot;: &quot;&lt;Success/Failure/Not supported&gt;&quot;,
+    &quot;message&quot;: &quot;&lt;Reason for success/failure&gt;&quot;,
+    &quot;device&quot;: &quot;&lt;Path to the device attached. This field is valid only for attach &amp; waitforattach call-outs&gt;&quot;
+    &quot;volumeName&quot;: &quot;&lt;Cluster wide unique name of the volume. Valid only for getvolumename call-out&gt;&quot;
+    &quot;attached&quot;: &lt;True/False (Return true if volume is attached on the node. Valid only for isattached call-out)&gt;
+    &quot;capabilities&quot;: &lt;Only included as part of the Init response&gt;
+    {
+        &quot;attach&quot;: &lt;True/False (Return true if the driver implements attach and detach)&gt;
+    }
+}
+</code></pre></div>
+<blockquote>
+<p>比如我们来实现一个 NFS 的 FlexVolume 插件，最简单的方式就是写一个脚本，然后实现 init、mount、unmount 3个命令即可，然后按照上面的 JSON 格式返回数据，最后把这个脚本放在节点的 FlexVolume 插件目录下面即可。</p>
+<p>下面就是官方给出的一个 NFS 的 FlexVolume 插件示例，可以从 <a href="https://github.com/kubernetes/examples/blob/master/staging/volumes/flexvolume/nfs">https://github.com/kubernetes/examples/blob/master/staging/volumes/flexvolume/nfs</a> 获取脚本：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>#!/bin/bash
+# 注意:
+#  - 在使用插件之前需要先安装 jq。
+usage() {
+    err &quot;Invalid usage. Usage: &quot;
+    err &quot;\\t$0 init&quot;
+    err &quot;\\t$0 mount &lt;mount dir&gt; &lt;json params&gt;&quot;
+    err &quot;\\t$0 unmount &lt;mount dir&gt;&quot;
+    exit 1
+}
+
+err() {
+    echo -ne $* 1&gt;&amp;2
+}
+
+log() {
+    echo -ne $* &gt;&amp;1
+}
+
+ismounted() {
+    MOUNT=`findmnt -n ${MNTPATH} 2&gt;/dev/null | cut -d&#39; &#39; -f1`
+    if [ &quot;${MOUNT}&quot; == &quot;${MNTPATH}&quot; ]; then
+        echo &quot;1&quot;
+    else
+        echo &quot;0&quot;
+    fi
+}
+
+domount() {
+    MNTPATH=$1
+
+    NFS_SERVER=$(echo $2 | jq -r &#39;.server&#39;)
+    SHARE=$(echo $2 | jq -r &#39;.share&#39;)
+
+    if [ $(ismounted) -eq 1 ] ; then
+        log &#39;{&quot;status&quot;: &quot;Success&quot;}&#39;
+        exit 0
+    fi
+
+    mkdir -p ${MNTPATH} &amp;&gt; /dev/null
+
+    mount -t nfs ${NFS_SERVER}:/${SHARE} ${MNTPATH} &amp;&gt; /dev/null
+    if [ $? -ne 0 ]; then
+        err &quot;{ \\&quot;status\\&quot;: \\&quot;Failure\\&quot;, \\&quot;message\\&quot;: \\&quot;Failed to mount ${NFS_SERVER}:${SHARE} at ${MNTPATH}\\&quot;}&quot;
+        exit 1
+    fi
+    log &#39;{&quot;status&quot;: &quot;Success&quot;}&#39;
+    exit 0
+}
+
+unmount() {
+    MNTPATH=$1
+    if [ $(ismounted) -eq 0 ] ; then
+        log &#39;{&quot;status&quot;: &quot;Success&quot;}&#39;
+        exit 0
+    fi
+
+    umount ${MNTPATH} &amp;&gt; /dev/null
+    if [ $? -ne 0 ]; then
+        err &quot;{ \\&quot;status\\&quot;: \\&quot;Failed\\&quot;, \\&quot;message\\&quot;: \\&quot;Failed to unmount volume at ${MNTPATH}\\&quot;}&quot;
+        exit 1
+    fi
+
+    log &#39;{&quot;status&quot;: &quot;Success&quot;}&#39;
+    exit 0
+}
+
+op=$1
+
+if ! command -v jq &gt;/dev/null 2&gt;&amp;1; then
+    err &quot;{ \\&quot;status\\&quot;: \\&quot;Failure\\&quot;, \\&quot;message\\&quot;: \\&quot;&#39;jq&#39; binary not found. Please install jq package before using this driver\\&quot;}&quot;
+    exit 1
+fi
+
+if [ &quot;$op&quot; = &quot;init&quot; ]; then
+    log &#39;{&quot;status&quot;: &quot;Success&quot;, &quot;capabilities&quot;: {&quot;attach&quot;: false}}&#39;
+    exit 0
+fi
+
+if [ $# -lt 2 ]; then
+    usage
+fi
+
+shift
+
+case &quot;$op&quot; in
+    mount)
+        domount $*
+        ;;
+    unmount)
+        unmount $*
+        ;;
+    *)
+        log &#39;{&quot;status&quot;: &quot;Not supported&quot;}&#39;
+        exit 0
+esac
+
+exit 1
+</code></pre></div>
+<blockquote>
+<p>将上面脚本命名成 nfs，放置到 node1 节点对应的插件下面： </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ydzs~nfs/nfs
+</code></pre></div>
+<p>，并设置权限为 700：</p>
+<div class="highlight"><pre><span></span><code>$ chmod 700 /usr/libexec/kubernetes/kubelet-plugins/volume/exec/ydzs~nfs/nfs
+# 安装 jq 工具
+$ yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-noarch.rpm
+$ yum install jq -y
+</code></pre></div>
+<blockquote>
+<p>这个时候我们部署一个应用到 node1 节点上，并用 <code>flexVolume</code> 来持久化容器中的数据（当然也可以通过定义 flexvolume 类型的 PV、PVC 来使用），如下所示：(test-flexvolume.yaml)</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: test-flexvolume
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: ydzs-node1
+  volumes:
+  - name: test
+    flexVolume:
+      driver: &quot;ydzs/nfs&quot;  # 定义插件类型，根据这个参数在对应的目录下面找到插件的可执行文件
+      fsType: &quot;nfs&quot;  # 定义存储卷文件系统类型
+      options:  # 定义所有与存储相关的一些具体参数
+        server: &quot;111&quot;
+        share: &quot;data/k8s&quot;
+  containers:
+  - name: web
+    image: nginx
+    ports:
+    - containerPort: 80
+    volumeMounts:
+    - name: test
+      subPath: testflexvolume
+      mountPath: /usr/share/nginx/html
+</code></pre></div>
+<blockquote>
+<p>其中 <code>flexVolume.driver</code> 就是插件目录 <code>ydzs~nfs</code> 对应的 <code>ydzs/nfs</code> 名称，<code>flexVolume.options</code> 中根据上面的 nfs 脚本可以得知里面配置的是 NFS 的 Server 地址和挂载目录路径，直接创建上面的资源对象：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl apply -f test-flexvolume.yaml
+$ kubectl get pods 
+NAME                                      READY   STATUS    RESTARTS   AGE
+test-flexvolume                           1/1     Running   0          13h
+......
+$ kubectl exec -it test-flexvolume mount |grep test
+111:/data/k8s/testflexvolume on /usr/share/nginx/html type nfs4 (rw,relatime,vers=1,rsize=524288,wsize=524288,namlen=255,hard,proto=tcp,timeo=600,retrans=2,sec=sys,clientaddr=122,local_lock=none,addr=111)
+$ mount |grep test
+111:/data/k8s on /var/lib/kubelet/pods/a376832a-7638-4faf-b1a0-404956e8e60a/volumes/ydzs~nfs/test type nfs4 (rw,relatime,vers=1,rsize=524288,wsize=524288,namlen=255,hard,proto=tcp,timeo=600,retrans=2,sec=sys,clientaddr=122,local_lock=none,addr=111)
+111:/data/k8s/testflexvolume on /var/lib/kubelet/pods/a376832a-7638-4faf-b1a0-404956e8e60a/volume-subpaths/test/web/0 type nfs4 (rw,relatime,vers=1,rsize=524288,wsize=524288,namlen=255,hard,proto=tcp,timeo=600,retrans=2,sec=sys,clientaddr=122,local_lock=none,addr=111)
+</code></pre></div>
+<blockquote>
+<p>同样我们可以查看到 Pod 的本地持久化目录是被 mount 到了 NFS 上面，证明上面我们的 FlexVolume 插件是正常的。</p>
+<p>调用</p>
+<p>当我们要去真正的 mount NFS 的时候，就是通过 kubelet 调用 VolumePlugin，然后直接执行命令</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ydzs~nfs/nfs mount &lt;mount dir&gt; &lt;json param&gt;
+</code></pre></div>
+<p>来完成的，就相当于平时我们在宿主机上面手动挂载 NFS 的方式一样的，所以存储插件 nfs 是一个可执行的二进制文件或者 shell 脚本都是可以的。</p>
+<h3 id="csi">CSI<a class="headerlink" href="#csi" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>既然已经有了 FlexVolume 插件了，为什么还需要 CSI 插件呢？上面我们使用 FlexVolume 插件的时候可以看出 FlexVolume 插件实际上相当于就是一个普通的 shell 命令，类似于平时我们在 Linux 下面执行的 <code>ls</code> 命令一样，只是返回的信息是 JSON 格式的数据，并不是我们通常认为的一个常驻内存的进程，而 CSI 是一个更加完善、编码更加方便友好的一种存储插件扩展方式。</p>
+<p>CSI 是由来自 Kubernetes、Mesos、 Cloud Foundry 等社区成员联合制定的一个行业标准接口规范，旨在将任意存储系统暴露给容器化应用程序。CSI 规范定义了存储提供商实现 CSI 兼容插件的最小操作集合和部署建议，CSI 规范的主要焦点是声明插件必须实现的接口。</p>
+<p>在 Kubernetes 上整合 CSI 插件的整体架构如下图所示： <img alt="kubernetes csi structrue" src="../../assets/img/kubernetes_stroage/k8s-csi-structrue.png" /></p>
+<p>Kubernetes CSI 存储体系主要由两部分组成：</p>
+</blockquote>
+<ul>
+<li>
+<blockquote>
+<p>Kubernetes 外部组件：包含 Driver registrar、External provisioner、External attacher 三部分，这三个组件是从 Kubernetes 原本的 in-tree 存储体系中剥离出来的存储管理功能，实际上是 Kubernetes 中的一种外部 controller ，它们 watch kubernetes 的 API 资源对象，根据 watch 到的状态来调用下面提到的第二部分的 CSI 插件来实现存储的管理和操作。这部分是 Kubernetes 团队维护的，插件开发者完全不必关心其实现细节。</p>
+</blockquote>
+<ul>
+<li>Driver registra：用于将插件注册到 kubelet 的 sidecar 容器，并将驱动程序自定义的 NodeId 添加到节点的 Annotations 上，通过与 CSI 上面的 Identity 服务进行通信调用 CSI 的 GetNodeId 方法来完成该操作。</li>
+<li>External provisioner：用于 watch Kubernetes 的 PVC 对象并调用 CSI 的 CreateVolume 和 DeleteVolume 操作。</li>
+<li>External attacher：用于 Attach/Detach 阶段，通过 watch Kubernetes 的 VolumeAttachment 对象并调用 CSI 的 ControllerPublish 和 ControllerUnpublish 操作来完成对应的 Volume 的 Attach/Detach。而 Volume 的 Mount/Unmount 阶段并不属于外部组件，当真正需要执行 Mount 操作的时候，kubelet 会去直接调用下面的 CSI Node 服务来完成 Volume 的 Mount/UnMount 操作。</li>
+<li>
+<blockquote>
+<p>CSI 存储插件: 这部分正是开发者需要实现的 CSI 插件部分，都是通过 gRPC 实现的服务，一般会用一个二进制文件对外提供服务，主要包含三部分：CSI Identity、CSI Controller、CSI Node。</p>
+</blockquote>
+</li>
+<li>
+<p>CSI Identity — 主要用于负责对外暴露这个插件本身的信息，确保插件的健康状态。</p>
+<div class="highlight"><pre><span></span><code>service Identity {
+    // 返回插件的名称和版本
+    rpc GetPluginInfo(GetPluginInfoRequest)
+        returns (GetPluginInfoResponse) {}
+    // 返回这个插件的包含的功能，比如非块存储类型的 CSI 插件不需要实现 Attach 功能，GetPluginCapabilities 就可以在返回中标注这个 CSI 插件不包含 Attach 功能
+    rpc GetPluginCapabilities(GetPluginCapabilitiesRequest)
+        returns (GetPluginCapabilitiesResponse) {}
+    // 插件插件是否正在运行
+    rpc Probe (ProbeRequest)
+        returns (ProbeResponse) {}
+}
+</code></pre></div>
+</li>
+<li>
+<p>CSI Controller - 主要实现 Volume 管理流程当中的 Provision 和 Attach 阶段，Provision 阶段是指创建和删除 Volume 的流程，而 Attach 阶段是指把存储卷附着在某个节点或脱离某个节点的流程，另外只有块存储类型的 CSI 插件才需要 Attach 功能。</p>
+<div class="highlight"><pre><span></span><code>service Controller {
+    // 创建存储卷，包括云端存储介质以及PV对象
+    rpc CreateVolume (CreateVolumeRequest)
+        returns (CreateVolumeResponse) {}
+
+    //  删除存储卷
+    rpc DeleteVolume (DeleteVolumeRequest)
+        returns (DeleteVolumeResponse) {}
+
+    // 挂载存储卷，将存储介质挂载到目标节点
+    rpc ControllerPublishVolume (ControllerPublishVolumeRequest)
+        returns (ControllerPublishVolumeResponse) {}
+
+    // 卸载存储卷
+    rpc ControllerUnpublishVolume (ControllerUnpublishVolumeRequest)
+        returns (ControllerUnpublishVolumeResponse) {}
+
+    // 例如：是否可以同时用于多个节点的读/写
+    rpc ValidateVolumeCapabilities (ValidateVolumeCapabilitiesRequest)
+        returns (ValidateVolumeCapabilitiesResponse) {}
+
+    // 返回所有可用的 volumes
+    rpc ListVolumes (ListVolumesRequest)
+        returns (ListVolumesResponse) {}
+
+    // 可用存储池的总容量
+    rpc GetCapacity (GetCapacityRequest)
+        returns (GetCapacityResponse) {}
+
+    // 例如. 插件可能未实现 GetCapacity、Snapshotting
+    rpc ControllerGetCapabilities (ControllerGetCapabilitiesRequest)
+        returns (ControllerGetCapabilitiesResponse) {}
+
+    // 创建快照
+    rpc CreateSnapshot (CreateSnapshotRequest)
+        returns (CreateSnapshotResponse) {}
+
+    // 删除指定的快照
+    rpc DeleteSnapshot (DeleteSnapshotRequest)
+        returns (DeleteSnapshotResponse) {}
+
+    // 获取所有的快照
+    rpc ListSnapshots (ListSnapshotsRequest)
+        returns (ListSnapshotsResponse) {}
+}
+</code></pre></div>
+</li>
+<li>
+<p>CSI Node — 负责控制 Kubernetes 节点上的 Volume 操作。其中 Volume 的挂载被分成了 NodeStageVolume 和 NodePublishVolume 两个阶段。NodeStageVolume 接口主要是针对块存储类型的 CSI 插件而提供的，块设备在 "Attach" 阶段被附着在 Node 上后，需要挂载至 Pod 对应目录上，但因为块设备在 linux 上只能 mount 一次，而在 kubernetes volume 的使用场景中，一个 volume 可能被挂载进同一个 Node 上的多个 Pod 实例中，所以这里提供了 NodeStageVolume 这个接口，使用这个接口把块设备格式化后先挂载至 Node 上的一个临时全局目录，然后再调用 NodePublishVolume 使用 linux 中的 <code>bind mount</code> 技术把这个全局目录挂载进 Pod 中对应的目录上。</p>
+<div class="highlight"><pre><span></span><code>service Node {
+    // 在节点上初始化存储卷（格式化），并执行挂载到Global目录
+    rpc NodeStageVolume (NodeStageVolumeRequest)
+        returns (NodeStageVolumeResponse) {}
+
+    // umount 存储卷在节点上的 Global 目录
+    rpc NodeUnstageVolume (NodeUnstageVolumeRequest)
+        returns (NodeUnstageVolumeResponse) {}
+
+    // 在节点上将存储卷的 Global 目录挂载到 Pod 的实际挂载目录
+    rpc NodePublishVolume (NodePublishVolumeRequest)
+        returns (NodePublishVolumeResponse) {}
+
+    // unmount 存储卷在节点上的 Pod 挂载目录
+    rpc NodeUnpublishVolume (NodeUnpublishVolumeRequest)
+        returns (NodeUnpublishVolumeResponse) {}
+
+    // 获取节点上Volume挂载文件系统统计信息（总空间、可用空间等）
+    rpc NodeGetVolumeStats (NodeGetVolumeStatsRequest)
+        returns (NodeGetVolumeStatsResponse) {}
+
+    // 获取节点的唯一 ID
+    rpc NodeGetId (NodeGetIdRequest)
+        returns (NodeGetIdResponse) {
+        option deprecated = true;
+    }
+
+    // 返回节点插件的能力
+    rpc NodeGetCapabilities (NodeGetCapabilitiesRequest)
+        returns (NodeGetCapabilitiesResponse) {}
+
+    // 获取节点的一些信息
+    rpc NodeGetInfo (NodeGetInfoRequest)
+        returns (NodeGetInfoResponse) {}
+}
+</code></pre></div>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>只需要实现上面的接口就可以实现一个 CSI 插件了。虽然 Kubernetes 并未规定 CSI 插件的打包安装，但是提供了以下建议来简化我们在 Kubernetes 上容器化 CSI Volume 驱动程序的部署方案，具体的方案介绍可以查看 CSI 规范介绍文档 <a href="https://github.com/kubernetes/community">https://github.com/kubernetes/community</a></p>
+<p><img alt="container storage interface deploy" src="../../assets/img/kubernetes_stroage/container-storage-interface_diagram1.png" /></p>
+<p>按照上图的推荐方案，CSI Controller 部分以 StatefulSet 或者 Deployment 方式部署，CSI Node 部分以 DaemonSet 方式部署。因为这两部分实现在同一个 CSI 插件程序中，因此只需要把这个 CSI 插件与 External Components 以容器方式部署在同一个 Pod中，把这个 CSI 插件与 Driver registrar 以容器方式部署在 DaemonSet 的 Pod 中，即可完成 CSI 的部署。</p>
+<p>前面我们使用的 Rook 部署的 Ceph 集群就是实现了 CSI 插件的:</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl get pods -n rook-ceph |grep plugin
+csi-cephfsplugin-2s9d5                                 3/3     Running     0          21d
+csi-cephfsplugin-fgp4v                                 3/3     Running     0          17d
+csi-cephfsplugin-fv5nx                                 3/3     Running     0          21d
+csi-cephfsplugin-mn8q4                                 3/3     Running     0          17d
+csi-cephfsplugin-nf6h8                                 3/3     Running     0          21d
+csi-cephfsplugin-provisioner-56c8b7ddf4-68h6d          4/4     Running     0          21d
+csi-cephfsplugin-provisioner-56c8b7ddf4-rq4t6          4/4     Running     0          21d
+csi-cephfsplugin-xwnl4                                 3/3     Running     0          21d
+csi-rbdplugin-7r88w                                    3/3     Running     0          21d
+csi-rbdplugin-95g5j                                    3/3     Running     0          21d
+csi-rbdplugin-bnzpr                                    3/3     Running     0          21d
+csi-rbdplugin-dvftb                                    3/3     Running     0          21d
+csi-rbdplugin-jzmj2                                    3/3     Running     0          17d
+csi-rbdplugin-provisioner-6ff4dd4b94-bvtss             5/5     Running     0          21d
+csi-rbdplugin-provisioner-6ff4dd4b94-lfn68             5/5     Running     0          21d
+csi-rbdplugin-trxb4                                    3/3     Running     0          17d
+</code></pre></div>
+<blockquote>
+<p>这里其实是实现了 RBD 和 CephFS 两种 CSI，用 DaemonSet 在每个节点上运行了一个包含 <code>Driver registra</code> 容器的 Pod，当然和节点相关的操作比如 Mount/Unmount 也是在这个 Pod 里面执行的，其他的比如 Provision、Attach 都是在另外的 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>csi-rbdplugin-provisioner-xxx
+</code></pre></div>
+<p>Pod 中执行的。</p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      BurningMyself<a href='https://beian.miit.gov.cn/' target='_blank'>  蜀ICP备15033200号-1</a>
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/burningmyself" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://gitee.com/burningmyself" target="_blank" rel="noopener" title="gitee.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.2a6f1dda.min.js"></script>
+      
+        <script src="../../js/extra.js"></script>
+      
+        <script src="../../js/baidu-tongji.js"></script>
+      
+        <script src="https://www.googletagmanager.com/gtag/js?id=UA-155084439-1"></script>
+      
+        <script src="https://www.googletagmanager.com/gtag/js?id=UA-155132293-1"></script>
+      
+        <script src="../../js/google.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+      
+    
+  </body>
+</html>

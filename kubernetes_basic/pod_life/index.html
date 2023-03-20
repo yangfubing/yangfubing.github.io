@@ -1,0 +1,1917 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content=".net,java,php,python,docker,web">
+      
+      
+        <meta name="author" content="BurningMyself">
+      
+      
+        <link rel="canonical" href="https://burningmyself.gitee.io/kubernetes_basic/pod_life/">
+      
+      
+        <link rel="prev" href="../pod/">
+      
+      
+        <link rel="next" href="../pod_deep/">
+      
+      <link rel="icon" href="../../favicon.ico">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.15">
+    
+    
+      
+        <title>Pod 的生命周期 - BurningMyself</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.113286f1.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.a0c5b2b5.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#pod" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="BurningMyself" class="md-header__button md-logo" aria-label="BurningMyself" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BurningMyself
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Pod 的生命周期
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/burningmyself/burningmyself.github.io" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    burningmyself.github.io
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="BurningMyself" class="md-nav__button md-logo" aria-label="BurningMyself" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    BurningMyself
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/burningmyself/burningmyself.github.io" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    burningmyself.github.io
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        介绍
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          云原生
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          云原生
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+          Docker 基础
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Docker 基础
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/overview/" class="md-nav__link">
+        简介
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/install/" class="md-nav__link">
+        安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/basic/" class="md-nav__link">
+        基本操作
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/dockerfile_usage/" class="md-nav__link">
+        Dockerfile
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/dockerfile_practice/" class="md-nav__link">
+        Dockerfile 实践
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+          Kubernetes 基础
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 基础
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../overview/" class="md-nav__link">
+        简介
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../install/" class="md-nav__link">
+        安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../yaml/" class="md-nav__link">
+        资源清单
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pod/" class="md-nav__link">
+        Pod原理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Pod 的生命周期
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Pod 的生命周期
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pod" class="md-nav__link">
+    Pod 的生命周期
+  </a>
+  
+    <nav class="md-nav" aria-label="Pod 的生命周期">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pod_1" class="md-nav__link">
+    Pod 状态
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    重启策略
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    初始化容器
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pod_hook" class="md-nav__link">
+    Pod Hook
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pod_2" class="md-nav__link">
+    Pod 健康检查
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pod_3" class="md-nav__link">
+    Pod 资源配置
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pod_deep/" class="md-nav__link">
+        Pod 使用进阶
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+          Kubernetes 控制器
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 控制器
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/replicaset/" class="md-nav__link">
+        ReplicaSet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/deployment/" class="md-nav__link">
+        Deployment
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/statefulset/" class="md-nav__link">
+        StatefulSet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/daemonset/" class="md-nav__link">
+        DaemonSet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/job/" class="md-nav__link">
+        Job
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/hpa/" class="md-nav__link">
+        HPA
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+          Kubernetes 配置管理
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 配置管理
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_config/config_map/" class="md-nav__link">
+        ConfigMap
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_config/secret/" class="md-nav__link">
+        Secret
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_config/service_account/" class="md-nav__link">
+        ServiceAccount
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
+          Kubernetes 安全
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_5">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 安全
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_security/rbac/" class="md-nav__link">
+        RBAC
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_security/security_context/" class="md-nav__link">
+        Security Context
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_security/admission/" class="md-nav__link">
+        准入控制器
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_6" id="__nav_2_6_label" tabindex="0">
+          Kubernetes 网络
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_6">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 网络
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/flannel/" class="md-nav__link">
+        网络插件
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/policy/" class="md-nav__link">
+        网络策略
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/service/" class="md-nav__link">
+        Service 服务
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_6_4" id="__nav_2_6_4_label" tabindex="0">
+          Ingress
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_6_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_6_4">
+          <span class="md-nav__icon md-icon"></span>
+          Ingress
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/ingress/nginx/" class="md-nav__link">
+        NGINX Controller
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/ingress/traefik/" class="md-nav__link">
+        Traefik
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_7" id="__nav_2_7_label" tabindex="0">
+          Kubernetes 调度器
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_7">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 调度器
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_scheduler/overview/" class="md-nav__link">
+        调度器介绍
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_scheduler/usage/" class="md-nav__link">
+        Pod 调度
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_8" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_8" id="__nav_2_8_label" tabindex="0">
+          Kubernetes 存储
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_8_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_8">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 存储
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_stroage/local/" class="md-nav__link">
+        Local 本地存储
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_stroage/ceph/" class="md-nav__link">
+        Ceph 存储
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_stroage/csi/" class="md-nav__link">
+        存储原理
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pod" class="md-nav__link">
+    Pod 的生命周期
+  </a>
+  
+    <nav class="md-nav" aria-label="Pod 的生命周期">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pod_1" class="md-nav__link">
+    Pod 状态
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    重启策略
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    初始化容器
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pod_hook" class="md-nav__link">
+    Pod Hook
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pod_2" class="md-nav__link">
+    Pod 健康检查
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pod_3" class="md-nav__link">
+    Pod 资源配置
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+  <h1>Pod 的生命周期</h1>
+
+<p></p>
+<h2 id="pod">Pod 的生命周期<a class="headerlink" href="#pod" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><img alt="pod loap" src="../../assets/img/kubernetes_basci/pod-loap.jpg" /></p>
+<p>前面我们已经了解了 Pod 的设计原理，接下来我们来了解下 Pod 的生命周期。下图展示了一个 Pod 的完整生命周期过程，其中包含 <code>Init Container</code>、<code>Pod Hook</code>、<code>健康检查</code> 三个主要部分，接下来我们就来分别介绍影响 Pod 生命周期的部分：</p>
+<p>首先在介绍 Pod 的生命周期之前，我们先了解下 Pod 的状态，因为 Pod 状态可以反应出当前我们的 Pod 的具体状态信息，也是我们分析排错的一个必备的方式。</p>
+</blockquote>
+<h3 id="pod_1">Pod 状态<a class="headerlink" href="#pod_1" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>首先先了解下 Pod 的状态值，我们可以通过 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>kubectl explain pod.status
+</code></pre></div>
+<p>命令来了解关于 Pod 状态的一些信息，Pod 的状态定义在 <code>PodStatus</code> 对象中，其中有一个 <code>phase</code> 字段，下面是 <code>phase</code> 的可能取值：</p>
+<ul>
+<li>挂起（Pending）：Pod 信息已经提交给了集群，但是还没有被调度器调度到合适的节点或者 Pod 里的镜像正在下载</li>
+<li>运行中（Running）：该 Pod 已经绑定到了一个节点上，Pod 中所有的容器都已被创建。至少有一个容器正在运行，或者正处于启动或重启状态</li>
+<li>成功（Succeeded）：Pod 中的所有容器都被成功终止，并且不会再重启</li>
+<li>失败（Failed）：Pod 中的所有容器都已终止了，并且至少有一个容器是因为失败终止。也就是说，容器以非<code>0</code>状态退出或者被系统终止</li>
+<li>未知（Unknown）：因为某些原因无法取得 Pod 的状态，通常是因为与 Pod 所在主机通信失败导致的</li>
+</ul>
+<blockquote>
+<p>除此之外，<code>PodStatus</code> 对象中还包含一个 <code>PodCondition</code> 的数组，里面包含的属性有：</p>
+</blockquote>
+<ul>
+<li>lastProbeTime：最后一次探测 Pod Condition 的时间戳。</li>
+<li>lastTransitionTime：上次 Condition 从一种状态转换到另一种状态的时间。</li>
+<li>message：上次 Condition 状态转换的详细描述。</li>
+<li>reason：Condition 最后一次转换的原因。</li>
+<li>status：Condition 状态类型，可以为 “True”, “False”, and “Unknown”.</li>
+<li>type：Condition 类型，包括以下方面：<ul>
+<li>PodScheduled（Pod 已经被调度到其他 node 里）</li>
+<li>Ready（Pod 能够提供服务请求，可以被添加到所有可匹配服务的负载平衡池中）</li>
+<li>Initialized（所有的<code>init containers</code>已经启动成功）</li>
+<li>Unschedulable（调度程序现在无法调度 Pod，例如由于缺乏资源或其他限制）</li>
+<li>ContainersReady（Pod 里的所有容器都是 ready 状态）</li>
+</ul>
+</li>
+</ul>
+<h3 id="_1">重启策略<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>我们可以通过配置<code>restartPolicy</code>字段来设置 Pod 中所有容器的重启策略，其可能值为</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>Always，OnFailure 和 Never
+</code></pre></div>
+<p>，默认值为 <code>Always</code>。restartPolicy 仅指通过 kubelet 在同一节点上重新启动容器。通过 kubelet 重新启动的退出容器将以指数增加延迟（10s，20s，40s…）重新启动，上限为 5 分钟，并在成功执行 10 分钟后重置。不同类型的的控制器可以控制 Pod 的重启策略：</p>
+<ul>
+<li>Job：适用于一次性任务如批量计算，任务结束后 Pod 会被此类控制器清除。Job 的重启策略只能是<code>"OnFailure"</code>或者<code>"Never"</code>。</li>
+<li>Replication Controller, ReplicaSet, or Deployment，此类控制器希望 Pod 一直运行下去，它们的重启策略只能是<code>"Always"</code>。</li>
+<li>DaemonSet：每个节点上启动一个 Pod，很明显此类控制器的重启策略也应该是<code>"Always"</code>。</li>
+</ul>
+<h3 id="_2">初始化容器<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>了解了 Pod 状态后，首先来了解下 Pod 中最新启动的 <code>Init Container</code>，也就是我们平时常说的<code>初始化容器</code>。<code>Init Container</code>就是用来做初始化工作的容器，可以是一个或者多个，如果有多个的话，这些容器会按定义的顺序依次执行。我们知道一个 Pod 里面的所有容器是共享数据卷和Network Namespace 的，所以<code>Init Container</code>里面产生的数据可以被主容器使用到。从上面的 Pod 生命周期的图中可以看出初始化容器是独立与主容器之外的，只有所有的`初始化容器执行完之后，主容器才会被启动。那么初始化容器有哪些应用场景呢：</p>
+</blockquote>
+<ul>
+<li>等待其他模块 Ready：这个可以用来解决服务之间的依赖问题，比如我们有一个 Web 服务，该服务又依赖于另外一个数据库服务，但是在我们启动这个 Web 服务的时候我们并不能保证依赖的这个数据库服务就已经启动起来了，所以可能会出现一段时间内 Web 服务连接数据库异常。要解决这个问题的话我们就可以在 Web 服务的 Pod 中使用一个 <code>InitContainer</code>，在这个初始化容器中去检查数据库是否已经准备好了，准备好了过后初始化容器就结束退出，然后我们主容器的 Web 服务才被启动起来，这个时候去连接数据库就不会有问题了。</li>
+<li>做初始化配置：比如集群里检测所有已经存在的成员节点，为主容器准备好集群的配置信息，这样主容器起来后就能用这个配置信息加入集群。</li>
+<li>其它场景：如将 Pod 注册到一个中央数据库、配置中心等。</li>
+</ul>
+<blockquote>
+<p>比如现在我们来实现一个功能，在 Nginx Pod 启动之前去重新初始化首页内容，如下所示的资源清单：（init-pod.yaml）</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: init-demo
+spec:
+  volumes:
+  - name: workdir
+    emptyDir: {}
+  initContainers:
+  - name: install
+    image: busybox
+    command:
+    - wget
+    - &quot;-O&quot;
+    - &quot;/work-dir/index.html&quot;
+    - http://www.baidu.com
+    volumeMounts:
+    - name: workdir
+      mountPath: &quot;/work-dir&quot;
+  containers:
+  - name: nginx
+    image: nginx
+    ports:
+    - containerPort: 80
+    volumeMounts:
+    - name: workdir
+      mountPath: /usr/share/nginx/html
+</code></pre></div>
+<blockquote>
+<p>上面的资源清单中我们首先在 Pod 顶层声明了一个名为 workdir 的 <code>Volume</code>，前面我们用了 hostPath 的模式，这里我们使用的是 <code>emptyDir{}</code>，这个是一个临时的目录，数据会保存在 kubelet 的工作目录下面，生命周期等同于 Pod 的生命周期。</p>
+<p>然后我们定义了一个初始化容器，该容器会下载一个 html 文件到 <code>/work-dir</code> 目录下面，但是由于我们又将该目录声明挂载到了全局的 Volume，同样的主容器 nginx 也将目录 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>/usr/share/nginx/html
+</code></pre></div>
+<p>声明挂载到了全局的 Volume，所以在主容器的该目录下面会同步初始化容器中创建的 <code>index.html</code> 文件。</p>
+<blockquote>
+<p>直接创建上面的 Pod：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl apply -f init-pod.yaml
+</code></pre></div>
+<blockquote>
+<p>创建完成后可以查看该 Pod 的状态：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl get pods
+NAME                            READY   STATUS     RESTARTS   AGE
+init-demo                       0/1     Init:0/1   0          4s
+</code></pre></div>
+<blockquote>
+<p>可以发现 Pod 现在的状态处于 <code>Init:0/1</code> 状态，意思就是现在第一个初始化容器还在执行过程中，此时我们可以查看 Pod 的详细信息：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl describe pod init-demo
+Name:         init-demo
+Namespace:    default
+Priority:     0
+Node:         ydzs-node3/157
+Start Time:   Mon, 11 Nov 2019 20:10:54 +0800
+Labels:       &lt;none&gt;
+Annotations:  kubectl.kubernetes.io/last-applied-configuration:
+                {&quot;apiVersion&quot;:&quot;v1&quot;,&quot;kind&quot;:&quot;Pod&quot;,&quot;metadata&quot;:{&quot;annotations&quot;:{},&quot;name&quot;:&quot;init-demo&quot;,&quot;namespace&quot;:&quot;default&quot;},&quot;spec&quot;:{&quot;containers&quot;:[{&quot;image&quot;:&quot;ngi...
+Status:       Pending
+IP:           254
+IPs:
+  IP:  254
+Init Containers:
+  install:
+    Container ID:  docker://762f64641abb913804bc8a3b71b553744afeb1169547ef35d9f6ef0e09a458e0
+    Image:         busybox
+    Image ID:      docker-pullable://busybox@sha256:1303dbf110c57f3edf68d9f5a16c082ec06c4cf7604831669faf2c712260b5a0
+    Port:          &lt;none&gt;
+    Host Port:     &lt;none&gt;
+    Command:
+      wget
+      -O
+      /work-dir/index.html
+      http://www.baidu.com
+    State:          Running
+      Started:      Mon, 11 Nov 2019 20:10:59 +0800
+    Ready:          False
+    Restart Count:  0
+    Environment:    &lt;none&gt;
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-5tsh4 (ro)
+      /work-dir from workdir (rw)
+Containers:
+  nginx:
+    Container ID:
+    Image:          nginx
+    Image ID:
+    Port:           80/TCP
+    Host Port:      0/TCP
+    State:          Waiting
+      Reason:       PodInitializing
+    Ready:          False
+    Restart Count:  0
+    Environment:    &lt;none&gt;
+    Mounts:
+      /usr/share/nginx/html from workdir (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-5tsh4 (ro)
+Conditions:
+  Type              Status
+  Initialized       False
+  Ready             False
+  ContainersReady   False
+  PodScheduled      True
+Volumes:
+  workdir:
+    Type:       EmptyDir (a temporary directory that shares a pod&#39;s lifetime)
+    Medium:
+    SizeLimit:  &lt;unset&gt;
+  default-token-5tsh4:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  default-token-5tsh4
+    Optional:    false
+QoS Class:       BestEffort
+Node-Selectors:  &lt;none&gt;
+Tolerations:     node.kubernetes.io/not-ready:NoExecute for 300s
+                 node.kubernetes.io/unreachable:NoExecute for 300s
+Events:
+  Type    Reason     Age        From                 Message
+  ----    ------     ----       ----                 -------
+  Normal  Scheduled  &lt;unknown&gt;  default-scheduler    Successfully assigned default/init-demo to ydzs-node3
+  Normal  Pulling    20s        kubelet, ydzs-node3  Pulling image &quot;busybox&quot;
+  Normal  Pulled     17s        kubelet, ydzs-node3  Successfully pulled image &quot;busybox&quot;
+  Normal  Created    17s        kubelet, ydzs-node3  Created container install
+  Normal  Started    16s        kubelet, ydzs-node3  Started container install
+</code></pre></div>
+<blockquote>
+<p>从上面的描述信息里面可以看到初始化容器已经启动了，现在处于 <code>Running</code> 状态，所以还需要稍等，到初始化容器执行完成后退出初始化容器会变成 <code>Completed</code> 状态，然后才会启动主容器。待到主容器也启动完成后，Pod 就会变成<code>Running</code> 状态，然后我们去访问下 Pod 主页，验证下是否有我们初始化容器中下载的页面信息：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl get pods -o wide
+NAME                            READY   STATUS    RESTARTS   AGE     IP             NODE         NOMINATED NODE   READINESS GATES
+init-demo                       1/1     Running   0          3m39s   254    ydzs-node3   &lt;none&gt;           &lt;none&gt;
+$ curl 254
+&lt;!DOCTYPE html&gt;
+&lt;!--STATUS OK--&gt;&lt;html&gt; &lt;head&gt;&lt;meta http-equiv=content-type content=text/html;charset=utf-8&gt;&lt;meta http-equiv=X-UA-Compatible content=IE=Edge&gt;&lt;meta content=always name=referrer&gt;&lt;link rel=stylesheet type=text/css href=http://sbdstatic.com/r/www/cache/bdorz/baidu.min.css&gt;&lt;title&gt;百度一下，你就知道&lt;/title&gt;&lt;/head&gt; &lt;body link=#0000cc&gt; &lt;div id=wrapper&gt; &lt;div id=head&gt; &lt;div class=head_wrapper&gt; &lt;div class=s_form&gt; &lt;div class=s_form_wrapper&gt; &lt;div id=lg&gt; &lt;img hidefocus=true src=//www.baidu.com/img/bd_logopng width=270 height=129&gt; &lt;/div&gt; &lt;form id=form name=f action=//www.baidu.com/s class=fm&gt; &lt;input type=hidden name=bdorz_come value=1&gt; &lt;input type=hidden name=ie value=utf-8&gt; &lt;input type=hidden name=f value=8&gt; &lt;input type=hidden name=rsv_bp value=1&gt; &lt;input type=hidden name=rsv_idx value=1&gt; &lt;input type=hidden name=tn value=baidu&gt;&lt;span class=&quot;bg s_ipt_wr&quot;&gt;&lt;input id=kw name=wd class=s_ipt value maxlength=255 autocomplete=off autofocus&gt;&lt;/span&gt;&lt;span class=&quot;bg s_btn_wr&quot;&gt;&lt;input type=submit id=su value=百度一下 class=&quot;bg s_btn&quot;&gt;&lt;/span&gt; &lt;/form&gt; &lt;/div&gt; &lt;/div&gt; &lt;div id=u1&gt; &lt;a href=http://news.baidu.com name=tj_trnews class=mnav&gt;新闻&lt;/a&gt; &lt;a href=http://www.hao1com name=tj_trhao123 class=mnav&gt;hao123&lt;/a&gt; &lt;a href=http://map.baidu.com name=tj_trmap class=mnav&gt;地图&lt;/a&gt; &lt;a href=http://v.baidu.com name=tj_trvideo class=mnav&gt;视频&lt;/a&gt; &lt;a href=http://tieba.baidu.com name=tj_trtieba class=mnav&gt;贴吧&lt;/a&gt; &lt;noscript&gt; &lt;a href=http://www.baidu.com/bdorz/login.gif?login&amp;amp;tpl=mn&amp;amp;u=http%3A%2F%2Fwww.baidu.com%2f%3fbdorz_come%3d1 name=tj_login class=lb&gt;登录&lt;/a&gt; &lt;/noscript&gt; &lt;script&gt;document.write(&#39;&lt;a href=&quot;http://www.baidu.com/bdorz/login.gif?login&amp;tpl=mn&amp;u=&#39;+ encodeURIComponent(window.location.href+ (window.location.search === &quot;&quot; ? &quot;?&quot; : &quot;&amp;&quot;)+ &quot;bdorz_come=1&quot;)+ &#39;&quot; name=&quot;tj_login&quot; class=&quot;lb&quot;&gt;登录&lt;/a&gt;&#39;);&lt;/script&gt; &lt;a href=//www.baidu.com/more/ name=tj_briicon class=bri style=&quot;display: block;&quot;&gt;更多产品&lt;/a&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; &lt;div id=ftCon&gt; &lt;div id=ftConw&gt; &lt;p id=lh&gt; &lt;a href=http://home.baidu.com&gt;关于百度&lt;/a&gt; &lt;a href=http://ir.baidu.com&gt;About Baidu&lt;/a&gt; &lt;/p&gt; &lt;p id=cp&gt;&amp;copy;2017&amp;nbsp;Baidu&amp;nbsp;&lt;a href=http://www.baidu.com/duty/&gt;使用百度前必读&lt;/a&gt;&amp;nbsp; &lt;a href=http://jianyi.baidu.com/ class=cp-feedback&gt;意见反馈&lt;/a&gt;&amp;nbsp;京ICP证030173号&amp;nbsp; &lt;img src=//www.baidu.com/img/gs.gif&gt; &lt;/p&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; &lt;/body&gt; &lt;/html&gt;
+</code></pre></div>
+<h3 id="pod_hook">Pod Hook<a class="headerlink" href="#pod_hook" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>我们知道 Pod 是 Kubernetes 集群中的最小单元，而 Pod 是由容器组成的，所以在讨论 Pod 的生命周期的时候我们可以先来讨论下容器的生命周期。实际上 Kubernetes 为我们的容器提供了生命周期的钩子，就是我们说的<code>Pod Hook</code>，Pod Hook 是由 kubelet 发起的，当容器中的进程启动前或者容器中的进程终止之前运行，这是包含在容器的生命周期之中。我们可以同时为 Pod 中的所有容器都配置 hook。</p>
+<p>Kubernetes 为我们提供了两种钩子函数：</p>
+</blockquote>
+<ul>
+<li><code>PostStart</code>：这个钩子在容器创建后立即执行。但是，并不能保证钩子将在容器 ENTRYPOINT 之前运行，因为没有参数传递给处理程序。主要用于资源部署、环境准备等。不过需要注意的是如果钩子花费太长时间以至于不能运行或者挂起，容器将不能达到 running 状态。</li>
+<li><code>PreStop</code>：这个钩子在容器终止之前立即被调用。它是阻塞的，意味着它是同步的，所以它必须在删除容器的调用发出之前完成。主要用于优雅关闭应用程序、通知其他系统等。如果钩子在执行期间挂起，Pod 阶段将停留在 running 状态并且永不会达到 failed 状态。</li>
+</ul>
+<blockquote>
+<p>如果 PostStart 或者 PreStop 钩子失败， 它会杀死容器。所以我们应该让钩子函数尽可能的轻量。当然有些情况下，长时间运行命令是合理的， 比如在停止容器之前预先保存状态。</p>
+<p>另外我们有两种方式来实现上面的钩子函数：</p>
+</blockquote>
+<ul>
+<li><code>Exec</code> - 用于执行一段特定的命令，不过要注意的是该命令消耗的资源会被计入容器。</li>
+<li><code>HTTP</code> - 对容器上的特定的端点执行 HTTP 请求。</li>
+</ul>
+<blockquote>
+<p>以下示例中，定义了一个 Nginx Pod，其中设置了 PostStart 钩子函数，即在容器创建成功后，写入一句话到 /usr/share/message 文件中：（pod-poststart.yaml)</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: hook-demo1
+spec:
+  containers:
+  - name: hook-demo1
+    image: nginx
+    lifecycle:
+      postStart:
+        exec:
+          command: [&quot;/bin/sh&quot;, &quot;-c&quot;, &quot;echo Hello from the postStart handler &gt; /usr/share/message&quot;]
+</code></pre></div>
+<blockquote>
+<p>直接创建上面的 Pod：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl apply -f pod-poststart.yaml
+$ kubectl get pods
+NAME                            READY   STATUS    RESTARTS   AGE
+hook-demo1                      1/1     Running   0          43s
+</code></pre></div>
+<blockquote>
+<p>创建成功后可以查看容器中 <code>/usr/share/message</code> 文件是否内容正确：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl exec -it hook-demo1 cat /usr/share/message
+Hello from the postStart handler
+</code></pre></div>
+<blockquote>
+<p>当用户请求删除含有 Pod 的资源对象时（如 Deployment 等），K8S 为了让应用程序优雅关闭（即让应用程序完成正在处理的请求后，再关闭软件），K8S 提供两种信息通知：</p>
+</blockquote>
+<ul>
+<li>默认：K8S 通知 node 执行<code>docker stop</code>命令，docker 会先向容器中 PID 为 1 的进程发送系统信号<code>SIGTERM</code>，然后等待容器中的应用程序终止执行，如果等待时间达到设定的超时时间，或者默认超时时间（30s），会继续发送<code>SIGKILL</code>的系统信号强行 kill 掉进程</li>
+<li>使用 Pod 生命周期（利用<code>PreStop</code>回调函数），它在发送终止信号之前执行</li>
+</ul>
+<blockquote>
+<p>默认所有的优雅退出时间都在30秒内。kubectl delete 命令支持 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>--grace-period=&lt;seconds&gt;
+</code></pre></div>
+<p>选项，这个选项允许用户用他们自己指定的值覆盖默认值。值0代表强制删除 pod。 在 kubectl 1.5 及以上的版本里，执行强制删除时必须同时指定 </p>
+<div class="highlight"><pre><span></span><code>--force --grace-period=0
+</code></pre></div>
+<p>。</p>
+<blockquote>
+<p>强制删除一个 pod 是从集群状态还有 etcd 里立刻删除这个 pod，只是当 Pod 被强制删除时， APIServer 不会等待来自 Pod 所在节点上的 kubelet 的确认信息：pod 已经被终止。在 API 里 pod 会被立刻删除，在节点上， pods 被设置成立刻终止后，在强行杀掉前还会有一个很小的宽限期。</p>
+<p>以下示例中，定义了一个 Nginx Pod，其中设置了<code>PreStop</code>钩子函数，即在容器退出之前，优雅的关闭 Nginx：（pod-prestop.yaml）</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: hook-demo2
+spec:
+  containers:
+  - name: hook-demo2
+    image: nginx
+    lifecycle:
+      preStop:
+        exec:
+          command: [&quot;/usr/sbin/nginx&quot;,&quot;-s&quot;,&quot;quit&quot;]  # 优雅退出
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hook-demo3
+spec:
+  volumes:
+  - name: message
+    hostPath:
+      path: /tmp
+  containers:
+  - name: hook-demo2
+    image: nginx
+    ports:
+    - containerPort: 80
+    volumeMounts:
+    - name: message
+      mountPath: /usr/share/
+    lifecycle:
+      preStop:
+        exec:
+          command: [&#39;/bin/sh&#39;, &#39;-c&#39;, &#39;echo Hello from the preStop Handler &gt; /usr/share/message&#39;]
+</code></pre></div>
+<blockquote>
+<p>上面定义的两个 Pod，一个是利用 <code>preStop</code> 来进行优雅删除，另外一个是利用 <code>preStop</code> 来做一些信息记录的事情，同样直接创建上面的 Pod：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl apply -f pod-prestop.yaml
+$ kubectl get pods
+NAME                            READY   STATUS    RESTARTS   AGE
+hook-demo2                      1/1     Running   0          67s
+hook-demo3                      1/1     Running   0          67s
+</code></pre></div>
+<blockquote>
+<p>创建完成后，我们可以直接删除 hook-demo2 这个 Pod，在容器删除之前会执行 preStop 里面的优雅关闭命令，这个用法在后面我们的滚动更新的时候用来保证我们的应用零宕机非常有用。第二个 Pod 我们声明了一个 hostPath 类型的 Volume，在容器里面声明挂载到了这个 Volume，所以当我们删除 Pod，退出容器之前，在容器里面输出的信息也会同样的保存到宿主机（一定要是 Pod 被调度到的目标节点）的 <code>/tmp</code> 目录下面，我们可以查看 hook-demo3 这个 Pod 被调度的节点：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl describe pod hook-demo3
+Name:         hook-demo3
+Namespace:    default
+Priority:     0
+Node:         ydzs-node1/122
+Start Time:   Tue, 12 Nov 2019 14:33:54 +0800
+......
+</code></pre></div>
+<blockquote>
+<p>可以看到这个 Pod 被调度到了 <code>ydzs-node1</code> 这个节点上，我们可以先到该节点上查看 <code>/tmp</code> 目录下面目前没有任何内容：</p>
+</blockquote>
+<p><code>$ ls /tmp/</code></p>
+<blockquote>
+<p>现在我们来删除 hook-demo3 这个 Pod，安装我们的设定在容器退出之前会执行 <code>preStop</code> 里面的命令，也就是会往 message 文件中输出一些信息：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl delete pod hook-demo3
+pod &quot;hook-demo3&quot; deleted
+$ ls /tmp/
+message
+$ cat /tmp/message
+Hello from the preStop Handler
+</code></pre></div>
+<blockquote>
+<p>另外 Hook 调用的日志没有暴露个给 Pod，所以只能通过 describe 命令来获取，如果有错误将可以看到 <code>FailedPostStartHook</code> 或 <code>FailedPreStopHook</code> 这样的 event。</p>
+</blockquote>
+<h3 id="pod_2">Pod 健康检查<a class="headerlink" href="#pod_2" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>现在在 Pod 的整个生命周期中，能影响到 Pod 的就只剩下健康检查这一部分了。在 Kubernetes 集群当中，我们可以通过配置<code>liveness probe（存活探针</code>）和</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>readiness probe（可读性探针）
+</code></pre></div>
+<p>来影响容器的生命周期：</p>
+<ul>
+<li>kubelet 通过使用 <code>liveness probe</code> 来确定你的应用程序是否正在运行，通俗点将就是<code>是否还活着</code>。一般来说，如果你的程序一旦崩溃了， Kubernetes 就会立刻知道这个程序已经终止了，然后就会重启这个程序。而我们的 liveness probe 的目的就是来捕获到当前应用程序还没有终止，还没有崩溃，如果出现了这些情况，那么就重启处于该状态下的容器，使应用程序在存在 bug 的情况下依然能够继续运行下去。</li>
+<li>kubelet 使用 <code>readiness probe</code> 来确定容器是否已经就绪可以接收流量过来了。这个探针通俗点讲就是说<code>是否准备好了</code>，现在可以开始工作了。只有当 Pod 中的容器都处于就绪状态的时候 kubelet 才会认定该 Pod 处于就绪状态，因为一个 Pod 下面可能会有多个容器。当然 Pod 如果处于非就绪状态，那么我们就会将他从 Service 的 Endpoints 列表中移除出来，这样我们的流量就不会被路由到这个 Pod 里面来了。</li>
+</ul>
+<blockquote>
+<p>和前面的钩子函数一样的，我们这两个探针的支持下面几种配置方式：</p>
+</blockquote>
+<ul>
+<li>exec：执行一段命令</li>
+<li>http：检测某个 http 请求</li>
+<li>tcpSocket：使用此配置，kubelet 将尝试在指定端口上打开容器的套接字。如果可以建立连接，容器被认为是健康的，如果不能就认为是失败的。实际上就是检查端口。</li>
+</ul>
+<blockquote>
+<p>我们先来给大家演示下存活探针的使用方法，首先我们用 exec 执行命令的方式来检测容器的存活，如下：（liveness-exec.yaml）</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: liveness-exec
+spec:
+  containers:
+  - name: liveness
+    image: busybox
+    args:
+    - /bin/sh
+    - -c
+    - touch /tmp/healthy; sleep 30; rm -rf /tmp/healthy; sleep 600
+    livenessProbe:
+      exec:
+        command:
+        - cat
+        - /tmp/healthy
+      initialDelaySeconds: 5
+      periodSeconds: 5
+</code></pre></div>
+<blockquote>
+<p>我们这里需要用到一个新的属性：<code>livenessProbe</code>，下面通过 exec 执行一段命令:</p>
+</blockquote>
+<ul>
+<li><code>periodSeconds</code>：表示让 kubelet 每隔5秒执行一次存活探针，也就是每5秒执行一次上面的<code>cat /tmp/healthy</code>命令，如果命令执行成功了，将返回0，那么 kubelet 就会认为当前这个容器是存活的，如果返回的是非0值，那么 kubelet 就会把该容器杀掉然后重启它。默认是10秒，最小1秒。</li>
+<li><code>initialDelaySeconds</code>：表示在第一次执行探针的时候要等待5秒，这样能够确保我们的容器能够有足够的时间启动起来。大家可以想象下，如果你的第一次执行探针等候的时间太短，是不是很有可能容器还没正常启动起来，所以存活探针很可能始终都是失败的，这样就会无休止的重启下去了，对吧？</li>
+</ul>
+<blockquote>
+<p>我们在容器启动的时候，执行了如下命令：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ /bin/sh -c &quot;touch /tmp/healthy; sleep 30; rm -rf /tmp/healthy; sleep 600&quot;
+</code></pre></div>
+<blockquote>
+<p>意思是说在容器最开始的30秒内创建了一个<code>/tmp/healthy</code>文件，在这30秒内执行<code>cat /tmp/healthy</code>命令都会返回一个成功的返回码。30 秒后，我们删除这个文件，现在执行<code>cat /tmp/healthy</code>是不是就会失败了（默认检测失败3次才认为失败），所以这个时候就会重启容器了。</p>
+<p>我们来创建下该 Pod，然后在 30 秒内，查看 Pod 的 Event：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl apply -f liveness-exec.yaml
+$ kubectl describe pod liveness-exec
+......
+  Normal  Started    20s        kubelet, ydzs-node4  Started container liveness
+......
+ Normal   Started    46s               kubelet, ydzs-node4  Started container liveness
+  Warning  Unhealthy  3s (x3 over 13s)  kubelet, ydzs-node4  Liveness probe failed: cat: can&#39;t open &#39;/tmp/healthy&#39;: No such file or directory
+  Normal   Killing    3s                kubelet, ydzs-node4  Container liveness failed liveness probe, will be restarted
+</code></pre></div>
+<blockquote>
+<p>我们可以观察到容器是正常启动的，在隔一会儿，比如 40s 后，再查看下 Pod 的 Event，在最下面有一条信息显示 liveness probe 失败了，容器将要重启。然后可以查看到 Pod 的 <code>RESTARTS</code> 值加 1 了：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl get pods
+NAME            READY   STATUS    RESTARTS   AGE
+liveness-exec   1/1     Running   1          1m
+</code></pre></div>
+<blockquote>
+<p>同样的，我们还可以使用<code>HTTP GET</code>请求来配置我们的存活探针，我们这里使用一个 liveness 镜像来验证演示下：（liveness-http.yaml）</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: liveness-http
+spec:
+  containers:
+  - name: liveness
+    image: cnych/liveness
+    args:
+    - /server
+    livenessProbe:
+      httpGet:
+        path: /healthz
+        port: 8080
+        httpHeaders:
+        - name: X-Custom-Header
+          value: Awesome
+      initialDelaySeconds: 3
+      periodSeconds: 3
+</code></pre></div>
+<blockquote>
+<p>同样的，根据 periodSeconds 属性我们可以知道 kubelet 需要每隔3秒执行一次 liveness Probe，该探针将向容器中的 server 的 8080 端口发送一个 HTTP GET 请求。如果 server 的 /healthz 路径的 handler 返回一个成功的返回码，kubelet 就会认定该容器是活着的并且很健康，如果返回失败的返回码，kubelet 将杀掉该容器并重启它。initialDelaySeconds 指定kubelet 在该执行第一次探测之前需要等待3秒钟。</p>
+<p>返回码</p>
+<p>通常来说，任何大于<code>200</code>小于<code>400</code>的状态码都会认定是成功的返回码。其他返回码都会被认为是失败的返回码。</p>
+<p>我们可以来查看下上面的 healthz 的实现：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>http.HandleFunc(&quot;/healthz&quot;, func(w http.ResponseWriter, r *http.Request) {
+    duration := time.Now().Sub(started)
+    if duration.Seconds() &gt; 10 {
+        w.WriteHeader(500)
+        w.Write([]byte(fmt.Sprintf(&quot;error: %v&quot;, duration.Seconds())))
+    } else {
+        w.WriteHeader(200)
+        w.Write([]byte(&quot;ok&quot;))
+    }
+})
+</code></pre></div>
+<blockquote>
+<p>大概意思就是最开始前 10s 返回状态码200，10s 过后就返回状态码500。所以当容器启动3秒后，kubelet 开始执行健康检查。第一次健康检查会成功，因为是在 10s 之内，但是 10 秒后，健康检查将失败，因为现在返回的是一个错误的状态码了，所以 kubelet 将会杀掉和重启容器。</p>
+<p>同样的，我们来创建下该 Pod 测试下效果，10 秒后，查看 Pod 的 event，确认 liveness probe 失败并重启了容器：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl apply -f liveness-http.yaml
+$ kubectl describe pod liveness-http
+......
+ Normal   Pulled     12s (x3 over 76s)  kubelet, ydzs-node1  Successfully pulled image &quot;cnych/liveness&quot;
+  Normal   Created    12s (x3 over 76s)  kubelet, ydzs-node1  Created container liveness
+  Normal   Started    11s (x3 over 76s)  kubelet, ydzs-node1  Started container liveness
+......
+ Normal   Pulling    15s (x4 over 102s)  kubelet, ydzs-node1  Pulling image &quot;cnych/liveness&quot;
+  Warning  Unhealthy  15s (x9 over 87s)   kubelet, ydzs-node1  Liveness probe failed: HTTP probe failed with statuscode: 500
+  Normal   Killing    15s (x3 over 81s)   kubelet, ydzs-node1  Container liveness failed liveness probe, will be restarted
+......
+$ kubectl get pods
+NAME            READY   STATUS             RESTARTS   AGE
+liveness-http   1/1     Running            3          2m2s
+</code></pre></div>
+<blockquote>
+<p>除了上面的 <code>exec</code> 和 <code>httpGet</code> 两种检测方式之外，还可以通过 <code>tcpSocket</code> 方式来检测端口是否正常，大家可以按照上面的方式结合<code>kubectl explain</code>命令自己来验证下这种方式。</p>
+<p>另外前面我们提到了探针里面有一个<code>initialDelaySeconds</code>的属性，可以来配置第一次执行探针的等待时间，对于启动非常慢的应用这个参数非常有用，比如 <code>Jenkins</code>、<code>Gitlab</code> 这类应用，但是如何设置一个合适的初始延迟时间呢？这个就和应用具体的环境有关系了，所以这个值往往不是通用的，这样的话可能就会导致一个问题，我们的资源清单在别的环境下可能就会健康检查失败了，为解决这个问题，在 Kubernetes v1.16 版本官方特地新增了一个 <code>startupProbe（启动探针）</code>，该探针将推迟所有其他探针，直到 Pod 完成启动为止，使用方法和存活探针一样：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>startupProbe:
+  httpGet:
+    path: /healthz
+    port: 8080
+  failureThreshold: 30  # 尽量设置大点
+  periodSeconds: 10
+</code></pre></div>
+<blockquote>
+<p>比如上面这里的配置表示我们的慢速容器最多可以有5分钟（30个检查 * 10秒= 300s）来完成启动。</p>
+<p>有的时候，应用程序可能暂时无法对外提供服务，例如，应用程序可能需要在启动期间加载大量数据或配置文件。在这种情况下，您不想杀死应用程序，也不想对外提供服务。那么这个时候我们就可以使用<code>readiness probe</code>来检测和减轻这些情况。 Pod 中的容器可以报告自己还没有准备，不能处理 Kubernetes 服务发送过来的流量。<code>readiness probe</code>的配置跟<code>liveness probe</code>基本上一致的。唯一的不同是使用<code>readinessProbe</code>而不是<code>livenessProbe</code>。两者如果同时使用的话就可以确保流量不会到达还未准备好的容器，准备好过后，如果应用程序出现了错误，则会重新启动容器。对于就绪探针我们会在后面 Service 的章节和大家继续介绍。</p>
+<p>另外除了上面的<code>initialDelaySeconds</code>和<code>periodSeconds</code>属性外，探针还可以配置如下几个参数：</p>
+</blockquote>
+<ul>
+<li>timeoutSeconds：探测超时时间，默认1秒，最小1秒。</li>
+<li>successThreshold：探测失败后，最少连续探测成功多少次才被认定为成功。默认是 1，但是如果是<code>liveness</code>则必须是 1。最小值是 1。</li>
+<li>failureThreshold：探测成功后，最少连续探测失败多少次才被认定为失败。默认是 3，最小值是 1。</li>
+</ul>
+<h3 id="pod_3">Pod 资源配置<a class="headerlink" href="#pod_3" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>实际上上面几个步骤就是影响一个 Pod 生命周期的大的部分，但是还有一些细节也会在 Pod 的启动过程进行设置，比如在容器启动之前还会为当前的容器设置分配的 CPU、内存等资源，我们知道我们可以通过 CGroup 来对容器的资源进行限制，同样的，在 Pod 中我们也可以直接配置某个容器的使用的 CPU 或者内存的上限。那么 Pod 是如何来使用和控制这些资源的分配的呢？</p>
+<p>首先对于 CPU，我们知道计算机里 CPU 的资源是按<code>时间片</code>的方式来进行分配的，系统里的每一个操作都需要 CPU 的处理，所以，哪个任务要是申请的 CPU 时间片越多，那么它得到的 CPU 资源就越多，这个很容器理解。</p>
+<p>然后还需要了解下 CGroup 里面对于 CPU 资源的单位换算：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>1 CPU =  1000 millicpu（1 Core = 1000m）
+
+5 CPU = 500 millicpu （5 Core = 500m）
+</code></pre></div>
+<blockquote>
+<p>这里的 <code>m</code> 就是毫、毫核的意思，Kubernetes 集群中的每一个节点可以通过操作系统的命令来确认本节点的 CPU 内核数量，然后将这个数量乘以1000，得到的就是节点总 CPU 总毫数。比如一个节点有四核，那么该节点的 CPU 总毫量为 4000m，如果你要使用0.5 core，则你要求的是 4000*0.5 = 2000m。在 Pod 里面我们可以通过下面的两个参数来现在和请求 CPU 资源：</p>
+</blockquote>
+<ul>
+<li>
+<p><code>spec.containers[].resources.limits.cpu</code></p>
+<p>：CPU 上限值，可以短暂超过，容器也不会被停止
+*   <code>spec.containers[].resources.requests.cpu</code></p>
+<p>：CPU请求值，Kubernetes 调度算法里的依据值，可以超过</p>
+</li>
+</ul>
+<blockquote>
+<p>这里需要明白的是，如果</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>resources.requests.cpu
+</code></pre></div>
+<p>设置的值大于集群里每个节点的最大 CPU 核心数，那么这个 Pod 将无法调度，因为没有节点能满足它。</p>
+<blockquote>
+<p>到这里应该明白了，<code>requests</code> 是用于集群调度使用的资源，而 <code>limits</code> 才是真正的用于资源限制的配置，如果你需要保证的你应用优先级很高，也就是资源吃紧的情况下最后再杀掉你的 Pod，那么你就把你的 requests 和 limits 的值设置成一致，在后面应用的 <code>Qos</code> 中会具体讲解。</p>
+<p>比如，现在我们定义一个 Pod，给容器的配置如下的资源：（pod-resource-demo1.yaml）</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: resource-demo1
+spec:
+  containers:
+  - name: resource-demo1
+    image: nginx
+    ports:
+    - containerPort: 80
+    resources:
+      requests:
+        memory: 50Mi
+        cpu: 50m
+      limits:
+        memory: 100Mi
+        cpu: 100m
+</code></pre></div>
+<blockquote>
+<p>这里，CPU 我们给的是 50m，也就是 0.05core，这 0.05 core 也就是占了 1 CPU 里的 5% 的资源时间。而限制资源是给的是 100m，但是需要注意的是 CPU 资源是可压缩资源，也就是容器达到了这个设定的上限后，容器性能会下降，但是不会终止或退出。比如我们直接创建上面这个 Pod：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl apply -f pod-resource-demoyaml
+</code></pre></div>
+<blockquote>
+<p>创建完成后，我们可以看到 Pod 被调度到 node3 这个节点上：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl get pods -o wide
+NAME             READY   STATUS    RESTARTS   AGE   IP             NODE         NOMINATED NODE   READINESS GATES
+resource-demo1   1/1     Running   0          12m   258    ydzs-node3   &lt;none&gt;           &lt;none&gt;
+</code></pre></div>
+<blockquote>
+<p>然后我们到 node3 节点上去查看 Pod 里面启动的 <code>resource-demo1</code> 这个容器：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ docker ps |grep resource-demo1
+c9e654d573fd        nginx                                      &quot;nginx -g &#39;daemon of…&quot;   14 minutes ago      Up 14 minutes                           k8s_resource-demo1_resource-demo1_default_020bc461-170a-4936-9c22-7c8516972d39_0
+37ab54a2490a        gcr.azk8s.cn/google_containers/pause:1   &quot;/pause&quot;                 14 minutes ago      Up 14 minutes                           k8s_POD_resource-demo1_default_020bc461-170a-4936-9c22-7c8516972d39_0
+</code></pre></div>
+<blockquote>
+<p>其中第一个容器就是我们的主容器，第二容器是 Infra 容器，我们可以去查看下主容器的信息：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ docker inspect c9e654d573fd
+......
+&quot;CpuShares&quot;: 51,
+&quot;Memory&quot;: 104857600,
+&quot;NanoCpus&quot;: 0,
+&quot;CgroupParent&quot;: &quot;kubepods-burstable-pod020bc461_170a_4936_9c22_7c8516972dslice&quot;,
+&quot;BlkioWeight&quot;: 0,
+&quot;BlkioWeightDevice&quot;: null,
+&quot;BlkioDeviceReadBps&quot;: null,
+&quot;BlkioDeviceWriteBps&quot;: null,
+&quot;BlkioDeviceReadIOps&quot;: null,
+&quot;BlkioDeviceWriteIOps&quot;: null,
+&quot;CpuPeriod&quot;: 100000,
+&quot;CpuQuota&quot;: 10000,
+&quot;CpuRealtimePeriod&quot;: 0,
+&quot;CpuRealtimeRuntime&quot;: 0,
+&quot;CpusetCpus&quot;: &quot;&quot;,
+&quot;CpusetMems&quot;: &quot;&quot;,
+&quot;Devices&quot;: [],
+&quot;DeviceCgroupRules&quot;: null,
+&quot;DiskQuota&quot;: 0,
+&quot;KernelMemory&quot;: 0,
+&quot;MemoryReservation&quot;: 0,
+&quot;MemorySwap&quot;: 104857600,
+&quot;MemorySwappiness&quot;: null,
+&quot;OomKillDisable&quot;: false,
+......
+</code></pre></div>
+<blockquote>
+<p>实际上我们就可以看到这个容器的一些资源情况，Pod 上的资源配置最终也还是通过底层的容器运行时去控制 CGroup 来实现的，我们可以进入如下目录查看 CGroup 的配置，该目录就是 CGroup 父级目录，而 CGroup 是通过文件系统来进行资源限制的，所以我们上面限制容器的资源就可以在该目录下面反映出来：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ cd /sys/fs/cgroup/cpu/kubepods.slice/kubepods-burstable.slice/kubepods-burstable-pod020bc461_170a_4936_9c22_7c8516972dslice
+$ ls
+cgroup.clone_children  cpu.cfs_period_us  docker-37ab54a2490a48c88918f53572e053784238bf3720cb1ae5bf01052040aba9ascope
+cgroup.event_control   cpu.cfs_quota_us   docker-c9e654d573fd3e3e9a8bb78f3f904e60a59aa3384b344117fd401529e982aescope
+cgroup.procs           cpu.rt_period_us   notify_on_release
+cpuacct.stat           cpu.rt_runtime_us  tasks
+cpuacct.usage          cpu.shares
+cpuacct.usage_percpu   cpu.stat
+$ cat cpu.cfs_quota_us
+10000
+</code></pre></div>
+<blockquote>
+<p>其中 <code>cpu.cfs_quota_us</code> 就是 CPU 的限制值，如果要查看具体的容器的资源，我们也可以进入到容器目录下面去查看即可。</p>
+<p>最后我们了解下内存这块的资源控制，内存的单位换算比较简单：</p>
+<p><code>1 MiB = 1024 KiB</code>，内存这块在 Kubernetes 里一般用的是<code>Mi</code>单位，当然你也可以使用<code>Ki、Gi</code>甚至<code>Pi</code>，看具体的业务需求和资源容量。</p>
+<p>单位换算</p>
+<p>这里注意的是<code>MiB ≠ MB</code>，MB 是十进制单位，MiB 是二进制，平时我们以为 MB 等于 1024KB，其实<code>1MB=1000KB</code>，<code>1MiB</code>才等于<code>1024KiB</code>。中间带字母 i 的是国际电工协会（IEC）定的，走1024乘积；KB、MB、GB是国际单位制，走1000乘积。</p>
+<p>这里要注意的是，内存是可压缩性资源，如果容器使用内存资源到达了上限，那么会<code>OOM</code>，造成内存溢出，容器就会终止和退出。我们也可以通过上面的方式去通过查看 CGroup 文件的值来验证资源限制。</p>
+</blockquote>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      BurningMyself<a href='https://beian.miit.gov.cn/' target='_blank'>  蜀ICP备15033200号-1</a>
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/burningmyself" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://gitee.com/burningmyself" target="_blank" rel="noopener" title="gitee.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.2a6f1dda.min.js"></script>
+      
+        <script src="../../js/extra.js"></script>
+      
+        <script src="../../js/baidu-tongji.js"></script>
+      
+        <script src="https://www.googletagmanager.com/gtag/js?id=UA-155084439-1"></script>
+      
+        <script src="https://www.googletagmanager.com/gtag/js?id=UA-155132293-1"></script>
+      
+        <script src="../../js/google.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1839 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content=".net,java,php,python,docker,web">
+      
+      
+        <meta name="author" content="BurningMyself">
+      
+      
+        <link rel="canonical" href="https://burningmyself.gitee.io/kubernetes_security/rbac/">
+      
+      
+        <link rel="prev" href="../../kubernetes_config/service_account/">
+      
+      
+        <link rel="next" href="../security_context/">
+      
+      <link rel="icon" href="../../favicon.ico">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.15">
+    
+    
+      
+        <title>RBAC - BurningMyself</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.113286f1.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.a0c5b2b5.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#rbac" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="BurningMyself" class="md-header__button md-logo" aria-label="BurningMyself" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BurningMyself
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              RBAC
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/burningmyself/burningmyself.github.io" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    burningmyself.github.io
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="BurningMyself" class="md-nav__button md-logo" aria-label="BurningMyself" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    BurningMyself
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/burningmyself/burningmyself.github.io" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    burningmyself.github.io
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        介绍
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          云原生
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          云原生
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+          Docker 基础
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Docker 基础
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/overview/" class="md-nav__link">
+        简介
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/install/" class="md-nav__link">
+        安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/basic/" class="md-nav__link">
+        基本操作
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/dockerfile_usage/" class="md-nav__link">
+        Dockerfile
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/dockerfile_practice/" class="md-nav__link">
+        Dockerfile 实践
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+          Kubernetes 基础
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 基础
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/overview/" class="md-nav__link">
+        简介
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/install/" class="md-nav__link">
+        安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/yaml/" class="md-nav__link">
+        资源清单
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/pod/" class="md-nav__link">
+        Pod原理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/pod_life/" class="md-nav__link">
+        Pod 的生命周期
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/pod_deep/" class="md-nav__link">
+        Pod 使用进阶
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+          Kubernetes 控制器
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 控制器
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/replicaset/" class="md-nav__link">
+        ReplicaSet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/deployment/" class="md-nav__link">
+        Deployment
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/statefulset/" class="md-nav__link">
+        StatefulSet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/daemonset/" class="md-nav__link">
+        DaemonSet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/job/" class="md-nav__link">
+        Job
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/hpa/" class="md-nav__link">
+        HPA
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+          Kubernetes 配置管理
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 配置管理
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_config/config_map/" class="md-nav__link">
+        ConfigMap
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_config/secret/" class="md-nav__link">
+        Secret
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_config/service_account/" class="md-nav__link">
+        ServiceAccount
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
+          Kubernetes 安全
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2_5">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 安全
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          RBAC
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        RBAC
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#rbac" class="md-nav__link">
+    RBAC 权限控制
+  </a>
+  
+    <nav class="md-nav" aria-label="RBAC 权限控制">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#api" class="md-nav__link">
+    API 对象
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rbac_1" class="md-nav__link">
+    RBAC
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#namespace" class="md-nav__link">
+    只能访问某个 namespace 的普通用户
+  </a>
+  
+    <nav class="md-nav" aria-label="只能访问某个 namespace 的普通用户">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    创建用户凭证
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    创建角色
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    创建角色权限绑定
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    测试
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#namespace_serviceaccount" class="md-nav__link">
+    只能访问某个 namespace 的 ServiceAccount
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#serviceaccount" class="md-nav__link">
+    可以全局访问的 ServiceAccount
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../security_context/" class="md-nav__link">
+        Security Context
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../admission/" class="md-nav__link">
+        准入控制器
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_6" id="__nav_2_6_label" tabindex="0">
+          Kubernetes 网络
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_6">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 网络
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/flannel/" class="md-nav__link">
+        网络插件
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/policy/" class="md-nav__link">
+        网络策略
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/service/" class="md-nav__link">
+        Service 服务
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_6_4" id="__nav_2_6_4_label" tabindex="0">
+          Ingress
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_6_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_6_4">
+          <span class="md-nav__icon md-icon"></span>
+          Ingress
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/ingress/nginx/" class="md-nav__link">
+        NGINX Controller
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/ingress/traefik/" class="md-nav__link">
+        Traefik
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_7" id="__nav_2_7_label" tabindex="0">
+          Kubernetes 调度器
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_7">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 调度器
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_scheduler/overview/" class="md-nav__link">
+        调度器介绍
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_scheduler/usage/" class="md-nav__link">
+        Pod 调度
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_8" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_8" id="__nav_2_8_label" tabindex="0">
+          Kubernetes 存储
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_8_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_8">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 存储
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_stroage/local/" class="md-nav__link">
+        Local 本地存储
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_stroage/ceph/" class="md-nav__link">
+        Ceph 存储
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_stroage/csi/" class="md-nav__link">
+        存储原理
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#rbac" class="md-nav__link">
+    RBAC 权限控制
+  </a>
+  
+    <nav class="md-nav" aria-label="RBAC 权限控制">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#api" class="md-nav__link">
+    API 对象
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rbac_1" class="md-nav__link">
+    RBAC
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#namespace" class="md-nav__link">
+    只能访问某个 namespace 的普通用户
+  </a>
+  
+    <nav class="md-nav" aria-label="只能访问某个 namespace 的普通用户">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    创建用户凭证
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    创建角色
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    创建角色权限绑定
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    测试
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#namespace_serviceaccount" class="md-nav__link">
+    只能访问某个 namespace 的 ServiceAccount
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#serviceaccount" class="md-nav__link">
+    可以全局访问的 ServiceAccount
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+  <h1>RBAC</h1>
+
+<p></p>
+<h2 id="rbac">RBAC 权限控制<a class="headerlink" href="#rbac" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>前面我们已经学习一些常用的资源对象的使用，我们知道对于资源对象的操作都是通过 APIServer 进行的，那么集群是怎样知道我们的请求就是合法的请求呢？这个就需要了解 Kubernetes 中另外一个非常重要的知识点了：<code>RBAC</code>（基于角色的权限控制）。</p>
+<p>管理员可以通过 Kubernetes API 动态配置策略来启用<code>RBAC</code>，需要在 kube-apiserver 中添加参数</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>--authorization-mode=RBAC
+</code></pre></div>
+<p>，如果使用的kubeadm 安装的集群那么是默认开启了 <code>RBAC</code> 的，可以通过查看 Master 节点上 apiserver 的静态 Pod 定义文件：</p>
+<div class="highlight"><pre><span></span><code>$ cat /etc/kubernetes/manifests/kube-apiserver.yaml 
+...
+    - --authorization-mode=Node,RBAC
+...
+</code></pre></div>
+<blockquote>
+<p>如果是二进制的方式搭建的集群，添加这个参数过后，记得要重启 kube-apiserver 服务。</p>
+</blockquote>
+<h3 id="api">API 对象<a class="headerlink" href="#api" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>在学习 <code>RBAC</code> 之前，我们还需要再去理解下 Kubernetes 集群中的对象，我们知道，在 Kubernetes 集群中，Kubernetes 对象是我们持久化的实体，就是最终存入 etcd 中的数据，集群中通过这些实体来表示整个集群的状态。前面我们都直接编写的 YAML 文件，通过 kubectl 来提交的资源清单文件，然后创建的对应的资源对象，那么它究竟是如何将我们的 YAML 文件转换成集群中的一个 API 对象的呢？</p>
+<p>这个就需要去了解下<code>声明式 API</code>的设计，Kubernetes API 是一个以 JSON 为主要序列化方式的 HTTP 服务，除此之外也支持 Protocol Buffers 序列化方式，主要用于集群内部组件间的通信。为了可扩展性，Kubernetes 在不同的 API 路径（比如<code>/api/v1</code> 或者 <code>/apis/batch</code>）下面支持了多个 API 版本，不同的 API 版本意味着不同级别的稳定性和支持：</p>
+</blockquote>
+<ul>
+<li>Alpha 级别，例如 <code>v1alpha1</code> 默认情况下是被禁用的，可以随时删除对功能的支持，所以要慎用</li>
+<li>Beta 级别，例如 <code>v2beta1</code> 默认情况下是启用的，表示代码已经经过了很好的测试，但是对象的语义可能会在随后的版本中以不兼容的方式更改</li>
+<li>稳定级别，比如 <code>v1</code> 表示已经是稳定版本了，也会出现在后续的很多版本中。</li>
+</ul>
+<blockquote>
+<p>在 Kubernetes 集群中，一个 API 对象在 Etcd 里的完整资源路径，是由：<code>Group（API 组）</code>、<code>Version（API 版本）</code>和 <code>Resource（API 资源类型）</code>三个部分组成的。通过这样的结构，整个 Kubernetes 里的所有 API 对象，实际上就可以用如下的树形结构表示出来：</p>
+<p><img alt="apiserver tree" src="../../assets/img/kubernetes_security/api-server-space.png" /></p>
+<p>从上图中我们也可以看出 Kubernetes 的 API 对象的组织方式，在顶层，我们可以看到有一个核心组（由于历史原因，是 <code>/api/v1</code> 下的所有内容而不是在 <code>/apis/core/v1</code> 下面）和命名组（路径 <code>/apis/$NAME/$VERSION</code>）和系统范围内的实体，比如 <code>/metrics</code>。我们也可以用下面的命令来查看集群中的 API 组织形式：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl get --raw /
+{
+  &quot;paths&quot;: [
+    &quot;/api&quot;,
+    &quot;/api/v1&quot;,
+    &quot;/apis&quot;,
+    &quot;/apis/&quot;,
+    ......
+    &quot;/version&quot;
+  ]
+}
+</code></pre></div>
+<blockquote>
+<p>比如我们来查看批处理这个操作，在我们当前这个版本中存在两个版本的操作：<code>/apis/batch/v1</code> 和 <code>/apis/batch/v1beta1</code>，分别暴露了可以查询和操作的不同实体集合，同样我们还是可以通过 kubectl 来查询对应对象下面的数据：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl get --raw /apis/batch/v1 | python -m json.tool
+{
+    &quot;apiVersion&quot;: &quot;v1&quot;,
+    &quot;groupVersion&quot;: &quot;batch/v1&quot;,
+    &quot;kind&quot;: &quot;APIResourceList&quot;,
+    &quot;resources&quot;: [
+        {
+            &quot;categories&quot;: [
+                &quot;all&quot;
+            ],
+            &quot;kind&quot;: &quot;Job&quot;,
+            &quot;name&quot;: &quot;jobs&quot;,
+            &quot;namespaced&quot;: true,
+            &quot;singularName&quot;: &quot;&quot;,
+            &quot;storageVersionHash&quot;: &quot;mudhfqk/qZY=&quot;,
+            &quot;verbs&quot;: [
+                &quot;create&quot;,
+                &quot;delete&quot;,
+                &quot;deletecollection&quot;,
+                &quot;get&quot;,
+                &quot;list&quot;,
+                &quot;patch&quot;,
+                &quot;update&quot;,
+                &quot;watch&quot;
+            ]
+        },
+        {
+            &quot;kind&quot;: &quot;Job&quot;,
+            &quot;name&quot;: &quot;jobs/status&quot;,
+            &quot;namespaced&quot;: true,
+            &quot;singularName&quot;: &quot;&quot;,
+            &quot;verbs&quot;: [
+                &quot;get&quot;,
+                &quot;patch&quot;,
+                &quot;update&quot;
+            ]
+        }
+    ]
+}
+</code></pre></div>
+<blockquote>
+<p>但是这个操作和我们平时操作 HTTP 服务的方式不太一样，这里我们可以通过 <code>kubectl proxy</code> 命令来开启对 apiserver 的访问：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl proxy
+Starting to serve on 11:8001
+</code></pre></div>
+<blockquote>
+<p>然后重新开启一个新的终端，我们可以通过如下方式来访问批处理的 API 服务：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ curl http://11:8001/apis/batch/v1
+{
+  &quot;kind&quot;: &quot;APIResourceList&quot;,
+  &quot;apiVersion&quot;: &quot;v1&quot;,
+  &quot;groupVersion&quot;: &quot;batch/v1&quot;,
+  &quot;resources&quot;: [
+    {
+      &quot;name&quot;: &quot;jobs&quot;,
+      &quot;singularName&quot;: &quot;&quot;,
+      &quot;namespaced&quot;: true,
+      &quot;kind&quot;: &quot;Job&quot;,
+      &quot;verbs&quot;: [
+        &quot;create&quot;,
+        &quot;delete&quot;,
+        &quot;deletecollection&quot;,
+        &quot;get&quot;,
+        &quot;list&quot;,
+        &quot;patch&quot;,
+        &quot;update&quot;,
+        &quot;watch&quot;
+      ],
+      &quot;categories&quot;: [
+        &quot;all&quot;
+      ],
+      &quot;storageVersionHash&quot;: &quot;mudhfqk/qZY=&quot;
+    },
+    {
+      &quot;name&quot;: &quot;jobs/status&quot;,
+      &quot;singularName&quot;: &quot;&quot;,
+      &quot;namespaced&quot;: true,
+      &quot;kind&quot;: &quot;Job&quot;,
+      &quot;verbs&quot;: [
+        &quot;get&quot;,
+        &quot;patch&quot;,
+        &quot;update&quot;
+      ]
+    }
+  ]
+}
+</code></pre></div>
+<blockquote>
+<p>同样也可以去访问另外一个版本的对象数据：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ curl http://11:8001/apis/batch/v1beta1
+......
+</code></pre></div>
+<blockquote>
+<p>通常，Kubernetes API 支持通过标准 HTTP <code>POST</code>、<code>PUT</code>、<code>DELETE</code> 和 <code>GET</code> 在指定 PATH 路径上创建、更新、删除和检索操作，并使用 JSON 作为默认的数据交互格式。</p>
+<p>比如现在我们要创建一个 Deployment 对象，那么我们的 YAML 文件的声明就需要怎么写：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: apps/v1
+kind: Deployment
+</code></pre></div>
+<blockquote>
+<p>其中 <code>Deployment</code> 就是这个 API 对象的资源类型（Resource），<code>apps</code> 就是它的组（Group），<code>v1</code> 就是它的版本（Version）。API Group、Version 和 资源就唯一定义了一个 HTTP 路径，然后在 kube-apiserver 端对这个 url 进行了监听，然后把对应的请求传递给了对应的控制器进行处理而已，当然在 Kuberentes 中的实现过程是非常复杂的。</p>
+</blockquote>
+<h3 id="rbac_1">RBAC<a class="headerlink" href="#rbac_1" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>上面我们介绍了 Kubernetes 所有资源对象都是模型化的 API 对象，允许执行 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>CRUD(Create、Read、Update、Delete)
+</code></pre></div>
+<p>操作(也就是我们常说的增、删、改、查操作)，比如下面的这些资源：</p>
+<ul>
+<li>Pods</li>
+<li>ConfigMaps</li>
+<li>Deployments</li>
+<li>Nodes</li>
+<li>Secrets</li>
+<li>Namespaces</li>
+<li>......</li>
+</ul>
+<blockquote>
+<p>对于上面这些资源对象的可能存在的操作有：</p>
+</blockquote>
+<ul>
+<li>create</li>
+<li>get</li>
+<li>delete</li>
+<li>list</li>
+<li>update</li>
+<li>edit</li>
+<li>watch</li>
+<li>exec</li>
+<li>patch</li>
+</ul>
+<blockquote>
+<p>在更上层，这些资源和 API Group 进行关联，比如 Pods 属于 Core API Group，而 Deployements 属于 apps API Group，现在我们要在 Kubernetes 中通过 RBAC 来对资源进行权限管理，除了上面的这些资源和操作以外，我们还需要了解另外几个概念：</p>
+</blockquote>
+<ul>
+<li><code>Rule</code>：规则，规则是一组属于不同 API Group 资源上的一组操作的集合</li>
+<li><code>Role</code> 和 <code>ClusterRole</code>：角色和集群角色，这两个对象都包含上面的 Rules 元素，二者的区别在于，在 Role 中，定义的规则只适用于单个命名空间，也就是和 namespace 关联的，而 ClusterRole 是集群范围内的，因此定义的规则不受命名空间的约束。另外 Role 和 ClusterRole 在Kubernetes 中都被定义为集群内部的 API 资源，和我们前面学习过的 Pod、Deployment 这些对象类似，都是我们集群的资源对象，所以同样的可以使用 YAML 文件来描述，用 kubectl 工具来管理</li>
+<li>
+<blockquote>
+<p><code>Subject</code>：主题，对应集群中尝试操作的对象，集群中定义了3种类型的主题资源：</p>
+</blockquote>
+<ul>
+<li><code>User Account</code>：用户，这是有外部独立服务进行管理的，管理员进行私钥的分配，用户可以使用 KeyStone 或者 Goolge 帐号，甚至一个用户名和密码的文件列表也可以。对于用户的管理集群内部没有一个关联的资源对象，所以用户不能通过集群内部的 API 来进行管理</li>
+<li><code>Group</code>：组，这是用来关联多个账户的，集群中有一些默认创建的组，比如 cluster-admin</li>
+<li><code>Service Account</code>：服务帐号，通过 Kubernetes API 来管理的一些用户帐号，和 namespace 进行关联的，适用于集群内部运行的应用程序，需要通过 API 来完成权限认证，所以在集群内部进行权限操作，我们都需要使用到 ServiceAccount，这也是我们这节课的重点</li>
+<li>
+<blockquote>
+<p><code>RoleBinding</code> 和 <code>ClusterRoleBinding</code>：角色绑定和集群角色绑定，简单来说就是把声明的 Subject 和我们的 Role 进行绑定的过程（给某个用户绑定上操作的权限），二者的区别也是作用范围的区别：RoleBinding 只会影响到当前 namespace 下面的资源操作权限，而 ClusterRoleBinding 会影响到所有的 namespace。</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>接下来我们来通过几个简单的示例，来学习下在 Kubernetes 集群中如何使用 <code>RBAC</code>。</p>
+</blockquote>
+<h3 id="namespace">只能访问某个 namespace 的普通用户<a class="headerlink" href="#namespace" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>我们想要创建一个 User Account，只能访问 kube-system 这个命名空间，对应的用户信息如下所示：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>username: cnych
+group: youdianzhishi
+</code></pre></div>
+<h4 id="_1">创建用户凭证<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h4>
+<blockquote>
+<p>我们前面已经提到过，Kubernetes 没有 User Account 的 API 对象，不过要创建一个用户帐号的话也是挺简单的，利用管理员分配给你的一个私钥就可以创建了，这个我们可以参考官方文档中的方法，这里我们来使用 <code>OpenSSL</code> 证书来创建一个 User，当然我们也可以使用更简单的 <code>cfssl</code>工具来创建：</p>
+<p>给用户 cnych 创建一个私钥，命名成 <code>cnych.key</code>：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ openssl genrsa -out cnych.key 2048
+Generating RSA private key, 2048 bit long modulus
+..............................................................................+++
+..............................................................................................................................................+++
+e is 65537 (0x10001)
+</code></pre></div>
+<blockquote>
+<p>使用我们刚刚创建的私钥创建一个证书签名请求文件：<code>cnych.csr</code>，要注意需要确保在<code>-subj</code>参数中指定用户名和组(CN表示用户名，O表示组)：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ openssl req -new -key cnych.key -out cnych.csr -subj &quot;/CN=cnych/O=youdianzhishi&quot;
+</code></pre></div>
+<blockquote>
+<p>然后找到我们的 Kubernetes 集群的 <code>CA</code> 证书，我们使用的是 kubeadm 安装的集群，CA 相关证书位于 <code>/etc/kubernetes/pki/</code> 目录下面，如果你是二进制方式搭建的，你应该在最开始搭建集群的时候就已经指定好了 CA 的目录，我们会利用该目录下面的 <code>ca.crt</code> 和 <code>ca.key</code>两个文件来批准上面的证书请求。生成最终的证书文件，我们这里设置证书的有效期为 500 天：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ openssl x509 -req -in cnych.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -CAcreateserial -out cnych.crt -days 500
+Signature ok
+subject=/CN=cnych/O=youdianzhishi
+Getting CA Private Key
+</code></pre></div>
+<blockquote>
+<p>现在查看我们当前文件夹下面是否生成了一个证书文件：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ ls
+cnych.crt  cnych.csr  cnych.key
+</code></pre></div>
+<blockquote>
+<p>现在我们可以使用刚刚创建的证书文件和私钥文件在集群中创建新的凭证和上下文(Context):</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl config set-credentials cnych --client-certificate=cnych.crt --client-key=cnych.key
+User &quot;cnych&quot; set.
+</code></pre></div>
+<blockquote>
+<p>我们可以看到一个用户 <code>cnych</code> 创建了，然后为这个用户设置新的 Context，我们这里指定特定的一个 namespace：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl config set-context cnych-context --cluster=kubernetes --namespace=kube-system --user=cnych
+Context &quot;cnych-context&quot; created.
+</code></pre></div>
+<blockquote>
+<p>到这里，我们的用户 <code>cnych</code> 就已经创建成功了，现在我们使用当前的这个配置文件来操作 kubectl 命令的时候，应该会出现错误，因为我们还没有为该用户定义任何操作的权限呢：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl get pods --context=cnych-context
+Error from server (Forbidden): pods is forbidden: User &quot;cnych&quot; cannot list resource &quot;pods&quot; in API group &quot;&quot; in the namespace &quot;kube-system&quot;
+</code></pre></div>
+<h4 id="_2">创建角色<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h4>
+<blockquote>
+<p>用户创建完成后，接下来就需要给该用户添加操作权限，我们来定义一个 YAML 文件，创建一个允许用户操作 Deployment、Pod、ReplicaSets 的角色，如下定义：(cnych-role.yaml)</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: cnych-role
+  namespace: kube-system
+rules:
+- apiGroups: [&quot;&quot;, &quot;apps&quot;]
+  resources: [&quot;deployments&quot;, &quot;replicasets&quot;, &quot;pods&quot;]
+  verbs: [&quot;get&quot;, &quot;list&quot;, &quot;watch&quot;, &quot;create&quot;, &quot;update&quot;, &quot;patch&quot;, &quot;delete&quot;] # 也可以使用[&#39;*&#39;]
+</code></pre></div>
+<blockquote>
+<p>其中 Pod 属于 <code>core</code> 这个 API Group，在 YAML 中用空字符就可以，而 Deployment 和 ReplicaSet 现在都属于 <code>apps</code> 这个 API Group（如果不知道则可以用 <code>kubectl explain</code> 命令查看），所以 <code>rules</code> 下面的 <code>apiGroups</code> 就综合了这几个资源的 API Group：["", "apps"]，其中<code>verbs</code> 就是我们上面提到的可以对这些资源对象执行的操作，我们这里需要所有的操作方法，所以我们也可以使用[*]来代替。然后直接创建这个 Role：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl create -f cnych-role.yaml
+role.rbac.authorization.k8s.io/cnych-role created
+</code></pre></div>
+<blockquote>
+<p>注意这里我们没有使用上面的 <code>cnych-context</code> 这个上下文，因为暂时还木有权限。</p>
+</blockquote>
+<h4 id="_3">创建角色权限绑定<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h4>
+<blockquote>
+<p>Role 创建完成了，但是很明显现在我们这个 <code>Role</code> 和我们的用户 <code>cnych</code> 还没有任何关系，对吧？这里就需要创建一个 <code>RoleBinding</code> 对象，在 kube-system 这个命名空间下面将上面的 <code>cnych-role</code> 角色和用户 <code>cnych</code> 进行绑定：（cnych-rolebinding.yaml）</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: cnych-rolebinding
+  namespace: kube-system
+subjects:
+- kind: User
+  name: cnych
+  apiGroup: &quot;&quot;
+roleRef:
+  kind: Role
+  name: cnych-role
+  apiGroup: rbac.authorization.k8s.io  # 留空字符串也可以，则使用当前的apiGroup
+</code></pre></div>
+<blockquote>
+<p>上面的 YAML 文件中我们看到了 <code>subjects</code> 字段，这里就是我们上面提到的用来尝试操作集群的对象，这里对应上面的 <code>User</code> 帐号 <code>cnych</code>，使用kubectl 创建上面的资源对象：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl create -f cnych-rolebinding.yaml
+rolebinding.rbac.authorization.k8s.io/cnych-rolebinding created
+</code></pre></div>
+<h4 id="_4">测试<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h4>
+<blockquote>
+<p>现在我们应该可以上面的 <code>cnych-context</code> 上下文来操作集群了：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl get pods --context=cnych-context
+kubectl get pods --context=cnych-context
+NAME                                         READY   STATUS    RESTARTS   AGE
+coredns-667f964f9b-pr44s                     1/1     Running   0          13d
+coredns-667f964f9b-vh55b                     1/1     Running   1          13d
+etcd-ydzs-master                             1/1     Running   0          13d
+kube-apiserver-ydzs-master                   1/1     Running   1          6d5h
+kube-controller-manager-ydzs-master          1/1     Running   3          13d
+......
+$ kubectl --context=cnych-context get rs,deploy
+NAME                                                    DESIRED   CURRENT   READY   AGE
+replicaset.apps/coredns-667f964f9b                      2         2         2       13d
+replicaset.apps/metrics-server-5d4dbb78bb               1         1         1       2d21h
+replicaset.apps/metrics-server-6886856d7c               0         0         0       2d21h
+replicaset.apps/metrics-server-6dcfdf89b5               0         0         0       2d21h
+replicaset.apps/traefik-ingress-controller-54f665bb97   0         0         0       47h
+
+NAME                                         READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/coredns                      2/2     2            2           13d
+deployment.apps/metrics-server               1/1     1            1           2d21h
+deployment.apps/traefik-ingress-controller   1/1     1            1           2d6h
+</code></pre></div>
+<blockquote>
+<p>我们可以看到我们使用 kubectl 的使用并没有指定 namespace，这是因为我们我们上面创建这个 Context 的时候就绑定在了 kube-system 这个命名空间下面，如果我们在后面加上一个<code>-n default</code>试看看呢？</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl --context=cnych-context get pods --namespace=default
+Error from server (Forbidden): pods is forbidden: User &quot;cnych&quot; cannot list resource &quot;pods&quot; in API group &quot;&quot; in the namespace &quot;default&quot;
+</code></pre></div>
+<blockquote>
+<p>如果去获取其他的资源对象呢：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl --context=cnych-context get svc
+Error from server (Forbidden): services is forbidden: User &quot;cnych&quot; cannot list resource &quot;services&quot; in API group &quot;&quot; in the namespace &quot;kube-system&quot;
+</code></pre></div>
+<blockquote>
+<p>我们可以看到没有权限获取，因为我们并没有为当前操作用户指定其他对象资源的访问权限，是符合我们的预期的。这样我们就创建了一个只有单个命名空间访问权限的普通 User 。</p>
+</blockquote>
+<h3 id="namespace_serviceaccount">只能访问某个 namespace 的 ServiceAccount<a class="headerlink" href="#namespace_serviceaccount" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>上面我们创建了一个只能访问某个命名空间下面的<code>普通用户</code>，我们前面也提到过 <code>subjects</code> 下面还有一种类型的主题资源：<code>ServiceAccount</code>，现在我们来创建一个集群内部的用户只能操作 kube-system 这个命名空间下面的 pods 和 deployments，首先来创建一个 <code>ServiceAccount</code> 对象：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl create sa cnych-sa -n kube-system
+</code></pre></div>
+<blockquote>
+<p>当然我们也可以定义成 YAML 文件的形式来创建：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cnych-sa
+  namespace: kube-system
+</code></pre></div>
+<blockquote>
+<p>然后新建一个 Role 对象：(cnych-sa-role.yaml)</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: cnych-sa-role
+  namespace: kube-system
+rules:
+- apiGroups: [&quot;&quot;]
+  resources: [&quot;pods&quot;]
+  verbs: [&quot;get&quot;, &quot;watch&quot;, &quot;list&quot;]
+- apiGroups: [&quot;apps&quot;]
+  resources: [&quot;deployments&quot;]
+  verbs: [&quot;get&quot;, &quot;list&quot;, &quot;watch&quot;, &quot;create&quot;, &quot;update&quot;, &quot;patch&quot;, &quot;delete&quot;]
+</code></pre></div>
+<blockquote>
+<p>可以看到我们这里定义的角色没有<code>创建、删除、更新</code> Pod 的权限，待会我们可以重点测试一下，创建该 Role 对象：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl create -f cnych-sa-role.yaml
+</code></pre></div>
+<blockquote>
+<p>然后创建一个 <code>RoleBinding</code> 对象，将上面的 <code>cnych-sa</code> 和角色 haimaxy-sa-role 进行绑定：(haimaxy-sa-rolebinding.yaml)</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: cnych-sa-rolebinding
+  namespace: kube-system
+subjects:
+- kind: ServiceAccount
+  name: cnych-sa
+  namespace: kube-system
+roleRef:
+  kind: Role
+  name: cnych-sa-role
+  apiGroup: rbac.authorization.k8s.io
+</code></pre></div>
+<blockquote>
+<p>添加这个资源对象：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl create -f cnych-sa-rolebinding.yaml
+</code></pre></div>
+<blockquote>
+<p>然后我们怎么去验证这个 ServiceAccount 呢？我们前面的课程中是不是提到过一个 ServiceAccount 会生成一个 Secret 对象和它进行映射，这个 Secret 里面包含一个 token，我们可以利用这个 token 去登录 Dashboard，然后我们就可以在 Dashboard 中来验证我们的功能是否符合预期了：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl get secret -n kube-system |grep cnych-sa
+cnych-sa-token-nxgqx                  kubernetes.io/service-account-token   3         47m
+$ kubectl get secret cnych-sa-token-nxgqx -o jsonpath={.data.token} -n kube-system |base64 -d
+# 会生成一串很长的base64后的字符串
+</code></pre></div>
+<blockquote>
+<p>使用这里的 token 去 Dashboard 页面进行登录：</p>
+<p><img alt="kubernetes dashboard permission" src="../../assets/img/kubernetes_security/k8s-dashboard-permission.png" /></p>
+<p>我们可以看到上面的提示信息说我们现在使用的这个 ServiceAccount 没有权限获取当前命名空间下面的资源对象，这是因为我们登录进来后默认跳转到 default 命名空间，我们切换到 kube-system 命名空间下面就可以了：</p>
+<p><img alt="kubernetes dashboard" src="../../assets/img/kubernetes_security/k8s-dashboard-ok.png" /></p>
+<p>我们可以看到可以访问 pod 列表了，但是也会有一些其他额外的提示：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>events is forbidden: User system:serviceaccount:kube-system:cnych-sa cannot list events in the namespace kube-system
+</code></pre></div>
+<p>，这是因为当前登录用只被授权了访问 pod 和 deployment 的权限，同样的，访问下deployment看看可以了吗？</p>
+<blockquote>
+<p>同样的，你可以根据自己的需求来对访问用户的权限进行限制，可以自己通过 Role 定义更加细粒度的权限，也可以使用系统内置的一些权限……</p>
+</blockquote>
+<h3 id="serviceaccount">可以全局访问的 ServiceAccount<a class="headerlink" href="#serviceaccount" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>刚刚我们创建的 cnych-sa 这个 <code>ServiceAccount</code> 和一个 <code>Role</code> 角色进行绑定的，如果我们现在创建一个新的 ServiceAccount，需要他操作的权限作用于所有的 namespace，这个时候我们就需要使用到 <code>ClusterRole</code> 和 <code>ClusterRoleBinding</code> 这两种资源对象了。同样，首先新建一个 ServiceAcount 对象：(cnych-sa2.yaml)</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cnych-sa2
+  namespace: kube-system
+</code></pre></div>
+<blockquote>
+<p>创建：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl create -f cnych-sayaml
+</code></pre></div>
+<blockquote>
+<p>然后创建一个 ClusterRoleBinding 对象（cnych-clusterolebinding.yaml）:</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: cnych-sa2-clusterrolebinding
+subjects:
+- kind: ServiceAccount
+  name: cnych-sa2
+  namespace: kube-system
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io
+</code></pre></div>
+<blockquote>
+<p>从上面我们可以看到我们没有为这个资源对象声明 namespace，因为这是一个 ClusterRoleBinding 资源对象，是作用于整个集群的，我们也没有单独新建一个 ClusterRole 对象，而是使用的 <code>cluster-admin</code> 这个对象，这是 Kubernetes 集群内置的 ClusterRole 对象，我们可以使用 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>kubectl get clusterrole
+</code></pre></div>
+<p>和 </p>
+<div class="highlight"><pre><span></span><code>kubectl get clusterrolebinding
+</code></pre></div>
+<p>查看系统内置的一些集群角色和集群角色绑定，这里我们使用的 <code>cluster-admin</code> 这个集群角色是拥有最高权限的集群角色，所以一般需要谨慎使用该集群角色。</p>
+<blockquote>
+<p>创建上面集群角色绑定资源对象，创建完成后同样使用 ServiceAccount 对应的 token 去登录 Dashboard 验证下：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl create -f cnych-clusterolebinding.yaml
+$ kubectl get secret -n kube-system |grep cnych-sa2
+cnych-sa2-token-nxgqx                  kubernetes.io/service-account-token   3         47m
+$ kubectl get secret cnych-sa2-token-nxgqx -o jsonpath={.data.token} -n kube-system |base64 -d
+# 会生成一串很长的base64后的字符串
+</code></pre></div>
+<blockquote>
+<p><img alt="kubernetes dashboard" src="../../assets/img/kubernetes_security/k8s-dashboard-all.png" /></p>
+<p>我们在最开始接触到 RBAC 认证的时候，可能不太熟悉，特别是不知道应该怎么去编写 rules 规则，大家可以去分析系统自带的 <code>clusterrole</code>、<code>clusterrolebinding</code> 这些资源对象的编写方法，怎么分析？还是利用 kubectl 的 get、describe、 <code>-o yaml</code> 这些操作，所以 kubectl 最基本的操作用户一定要掌握好。</p>
+</blockquote>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      BurningMyself<a href='https://beian.miit.gov.cn/' target='_blank'>  蜀ICP备15033200号-1</a>
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/burningmyself" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://gitee.com/burningmyself" target="_blank" rel="noopener" title="gitee.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.2a6f1dda.min.js"></script>
+      
+        <script src="../../js/extra.js"></script>
+      
+        <script src="../../js/baidu-tongji.js"></script>
+      
+        <script src="https://www.googletagmanager.com/gtag/js?id=UA-155084439-1"></script>
+      
+        <script src="https://www.googletagmanager.com/gtag/js?id=UA-155132293-1"></script>
+      
+        <script src="../../js/google.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+      
+    
+  </body>
+</html>
