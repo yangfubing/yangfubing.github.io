@@ -1,0 +1,2 @@
+# yangfubing.github.io
+blog
