@@ -1,5 +1,5 @@
 
-## RBAC 权限控制¶
+## RBAC 权限控制 
 
 > 前面我们已经学习一些常用的资源对象的使用，我们知道对于资源对象的操作都是通过 APIServer 进行的，那么集群是怎样知道我们的请求就是合法的请求呢？这个就需要了解 Kubernetes 中另外一个非常重要的知识点了：`RBAC`（基于角色的权限控制）。
 
@@ -20,7 +20,7 @@ $ cat /etc/kubernetes/manifests/kube-apiserver.yaml
 
 > 如果是二进制的方式搭建的集群，添加这个参数过后，记得要重启 kube-apiserver 服务。
 
-### API 对象¶
+### API 对象 
 
 > 在学习 `RBAC` 之前，我们还需要再去理解下 Kubernetes 集群中的对象，我们知道，在 Kubernetes 集群中，Kubernetes 对象是我们持久化的实体，就是最终存入 etcd 中的数据，集群中通过这些实体来表示整个集群的状态。前面我们都直接编写的 YAML 文件，通过 kubectl 来提交的资源清单文件，然后创建的对应的资源对象，那么它究竟是如何将我们的 YAML 文件转换成集群中的一个 API 对象的呢？
 
@@ -163,7 +163,7 @@ kind: Deployment
 
 > 其中 `Deployment` 就是这个 API 对象的资源类型（Resource），`apps` 就是它的组（Group），`v1` 就是它的版本（Version）。API Group、Version 和 资源就唯一定义了一个 HTTP 路径，然后在 kube-apiserver 端对这个 url 进行了监听，然后把对应的请求传递给了对应的控制器进行处理而已，当然在 Kuberentes 中的实现过程是非常复杂的。
 
-### RBAC¶
+### RBAC 
 
 > 上面我们介绍了 Kubernetes 所有资源对象都是模型化的 API 对象，允许执行 
 
@@ -206,7 +206,7 @@ CRUD(Create、Read、Update、Delete)
 
 > 接下来我们来通过几个简单的示例，来学习下在 Kubernetes 集群中如何使用 `RBAC`。
 
-### 只能访问某个 namespace 的普通用户¶
+### 只能访问某个 namespace 的普通用户 
 
 > 我们想要创建一个 User Account，只能访问 kube-system 这个命名空间，对应的用户信息如下所示：
 
@@ -215,7 +215,7 @@ username: cnych
 group: youdianzhishi
 ```
 
-#### 创建用户凭证¶
+#### 创建用户凭证 
 
 > 我们前面已经提到过，Kubernetes 没有 User Account 的 API 对象，不过要创建一个用户帐号的话也是挺简单的，利用管理员分配给你的一个私钥就可以创建了，这个我们可以参考官方文档中的方法，这里我们来使用 `OpenSSL` 证书来创建一个 User，当然我们也可以使用更简单的 `cfssl`工具来创建：
 
@@ -272,7 +272,7 @@ $ kubectl get pods --context=cnych-context
 Error from server (Forbidden): pods is forbidden: User "cnych" cannot list resource "pods" in API group "" in the namespace "kube-system"
 ```
 
-#### 创建角色¶
+#### 创建角色 
 
 > 用户创建完成后，接下来就需要给该用户添加操作权限，我们来定义一个 YAML 文件，创建一个允许用户操作 Deployment、Pod、ReplicaSets 的角色，如下定义：(cnych-role.yaml)
 
@@ -297,7 +297,7 @@ role.rbac.authorization.k8s.io/cnych-role created
 
 > 注意这里我们没有使用上面的 `cnych-context` 这个上下文，因为暂时还木有权限。
 
-#### 创建角色权限绑定¶
+#### 创建角色权限绑定 
 
 > Role 创建完成了，但是很明显现在我们这个 `Role` 和我们的用户 `cnych` 还没有任何关系，对吧？这里就需要创建一个 `RoleBinding` 对象，在 kube-system 这个命名空间下面将上面的 `cnych-role` 角色和用户 `cnych` 进行绑定：（cnych-rolebinding.yaml）
 
@@ -324,7 +324,7 @@ $ kubectl create -f cnych-rolebinding.yaml
 rolebinding.rbac.authorization.k8s.io/cnych-rolebinding created
 ```
 
-#### 测试¶
+#### 测试 
 
 > 现在我们应该可以上面的 `cnych-context` 上下文来操作集群了：
 
@@ -368,7 +368,7 @@ Error from server (Forbidden): services is forbidden: User "cnych" cannot list r
 
 > 我们可以看到没有权限获取，因为我们并没有为当前操作用户指定其他对象资源的访问权限，是符合我们的预期的。这样我们就创建了一个只有单个命名空间访问权限的普通 User 。
 
-### 只能访问某个 namespace 的 ServiceAccount¶
+### 只能访问某个 namespace 的 ServiceAccount 
 
 > 上面我们创建了一个只能访问某个命名空间下面的`普通用户`，我们前面也提到过 `subjects` 下面还有一种类型的主题资源：`ServiceAccount`，现在我们来创建一个集群内部的用户只能操作 kube-system 这个命名空间下面的 pods 和 deployments，首先来创建一个 `ServiceAccount` 对象：
 
@@ -460,7 +460,7 @@ events is forbidden: User system:serviceaccount:kube-system:cnych-sa cannot list
 
 > 同样的，你可以根据自己的需求来对访问用户的权限进行限制，可以自己通过 Role 定义更加细粒度的权限，也可以使用系统内置的一些权限……
 
-### 可以全局访问的 ServiceAccount¶
+### 可以全局访问的 ServiceAccount 
 
 > 刚刚我们创建的 cnych-sa 这个 `ServiceAccount` 和一个 `Role` 角色进行绑定的，如果我们现在创建一个新的 ServiceAccount，需要他操作的权限作用于所有的 namespace，这个时候我们就需要使用到 `ClusterRole` 和 `ClusterRoleBinding` 这两种资源对象了。同样，首先新建一个 ServiceAcount 对象：(cnych-sa2.yaml)
 

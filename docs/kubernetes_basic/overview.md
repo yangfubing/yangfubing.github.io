@@ -8,7 +8,7 @@
 
 > Kubernetes 是 Google 团队发起的一个开源项目，它的目标是管理跨多个主机的容器，用于自动部署、扩展和管理容器化的应用程序，主要实现语言为 Go 语言，他的理论基础来源与 Google 内部的 Borg 项目，所以 Kubernetes 项目的理论基础就比其他开源项目要先进很多，因为 Borg 系统一直依赖就被称为 Google 公司内部最强大的私密武器。
 
-### 架构¶
+### 架构 
 
 > Kubernetes 项目依托着 Borg 项目的理论优势，确定了一个如下图所示的全局架构图：
 
@@ -32,18 +32,18 @@ kube-controller-manager
 
 > ![kubernetes high level component archtecture](https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200510122959.png)
 
-### 组件¶
+### 组件 
 
 > 上面我介绍了 Kubernetes 集群的整体架构，下面我们再来更加详细的了解下这些组件的功能。
 
-### kube-apiserver¶
+### kube-apiserver 
 
 > API Server 提供了资源对象的唯一操作入口，其它所有组件都必须通过它提供的 API 来操作资源数据。`只有 API Server 会与 etcd 进行通信，其它模块都必须通过 API Server 访问集群状态`。API Server 作为 Kubernetes 系统的入口，封装了核心对象的增删改查操作。API Server 以 RESTFul 接口方式提供给外部客户端和内部组件调用，API Server 再对相关的资源数据（`全量查询 + 变化监听`）进行操作，以达到实时完成相关的业务功能。以 API Server 为 Kubernetes 入口的设计主要有以下好处：
 
 *   保证了集群状态访问的安全
 *   API Server 隔离了集群状态访问和后端存储实现，这样 API Server 状态访问的方式不会因为后端存储技术 Etcd 的改变而改变，让后端存储方式选择更加灵活，方便了整个架构的扩展
 
-### kube-controller-manager¶
+### kube-controller-manager 
 
 > ![kube-controller-manager](https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200510123033.png)
 
@@ -58,7 +58,7 @@ kube-controller-manager
 *   Service Controller：服务控制器主要用作监听 Service 的变化。比如：创建的是一个 LoadBalancer 类型的 Service，Service Controller 则要确保外部的云平台上对该 Service 对应的 LoadBalancer 实例被创建、删除以及相应的路由转发表被更新。
 *   Endpoint Controller：Endpoints 表示了一个 Service 对应的所有 Pod 副本的访问地址，而 Endpoints Controller 是负责生成和维护所有 Endpoints 对象的控制器。Endpoint Controller 负责监听 Service 和对应的 Pod 副本的变化。定期关联 Service 和 Pod (关联信息由 Endpoint 对象维护)，以保证 Service 到 Pod 的映射总是最新的。
 
-### kube-scheduler¶
+### kube-scheduler 
 
 > Scheduler 是负责整个集群的资源调度的，主要的职责如下所示：
 
@@ -67,7 +67,7 @@ kube-controller-manager
 *   实时监测 Node 节点信息，由于会频繁查找 Node 节点，所以 Scheduler 同时会缓存一份最新的信息在本地
 *   在分发 Pod 到指定的 Node 节点后，会把 Pod 相关的 Binding 信息写回 API Server，以方便其它组件使用
 
-### kubelet¶
+### kubelet 
 
 > kubelet 是负责容器真正运行的核心组件，主要的职责如下所示：
 
@@ -84,7 +84,7 @@ kube-controller-manager
 
 > 对源码感兴趣的可以查看 Kubelet 源码部分的解析：kubelet 源码浅析
 
-### kube-proxy¶
+### kube-proxy 
 
 > kube-proxy 是为了解决外部网络能够访问集群中容器提供的应用服务而设计的，Proxy 运行在每个Node 上。
 
@@ -96,15 +96,15 @@ kube-controller-manager
 
 > kube-proxy 后端使用`随机、轮循`等负载均衡算法进行调度。
 
-### kubectl¶
+### kubectl 
 
 > Kubectl 是 Kubernetes 的集群管理命令行客户端工具集。通过 Kubectl 命令对 API Server 进行操作，API Server 响应并返回对应的命令结果，从而达到对 Kubernetes 集群的管理
 
-### 核心资源对象¶
+### 核心资源对象 
 
 > 上面我们都是在架构层面了解 Kubernetes，但是似乎没有发现关于容器的说明，Kubernetes 作为容器编排引擎，那么他是怎么去对容器进行编排的呢？在 Kubernetes 集群中抽象了很多集群内部的资源对象，我们可以通过这些资源对象去操作容器的编排工作。
 
-### Pod¶
+### Pod 
 
 > Pod 是一组紧密关联的`容器集合`，它们共享 PID、IPC、Network 和 UTS namespace，是Kubernetes 调度的`基本单位`。Pod 的设计理念是支持多个容器在一个 Pod 中共享网络和文件系统，可以通过进程间通信和文件共享这种简单高效的方式组合完成服务。我们知道容器本质上就是进程，那么 Pod 实际上就是进程组了，只是这一组进程是作为一个整体来进行调度的。
 
@@ -143,7 +143,7 @@ $ kubectl apply -f nginx-pod.yaml
 *   kubelet 检测到有新的 Pod 调度过来，通过 container runtime 运行该 Pod
 *   kubelet 通过 container runtime 取到 Pod 状态，并更新到 apiserver 中
 
-### Label¶
+### Label 
 
 > Label 标签在 Kubernetes 资源对象中使用很多，也是非常重要的一个属性，Label 是识别 Kubernetes 对象的标签，以 `key/value` 的方式附加到对象上（key最长不能超过63字节，value 可以为空，也可以是不超过253字节的字符串）上面我们定义的 Nginx 的 Pod 就添加了一个 `app=nginx` 的 Label 标签。Label 不提供唯一性，并且实际上经常是很多对象（如Pods）都使用相同的 Label 来标志具体的应用。Label 定义好后其他对象可以使用 `Label Selector` 来选择一组相同 Label 的对象（比如 Service 用 Label 来选择一组 Pod）。Label Selector 支持以下几种方式：
 
@@ -156,13 +156,13 @@ $ kubectl apply -f nginx-pod.yaml
 
 *   多个 Label（它们之间是`AND`关系），如`app=nginx,env=test`
 
-### Namespace¶
+### Namespace 
 
 > Namespace（命名空间）是对一组资源和对象的抽象集合，比如可以用来将系统内部的对象划分为不同的项目组或用户组。常见的 Pods、Services、Deployments 等都是属于某一个 Namespace 的（默认是default），比如上面我们的 Nginx Pod 没有指定 namespace，则默认就在 default 命名空间下面，而 Node, PersistentVolumes 等资源则不属于任何 Namespace，是全局的。
 
 > > 注意它并不是 Linux Namespace，二者没有任何关系，它只是 Kubernetes 划分不同工作空间的一个逻辑单位。
 
-### Deployment¶
+### Deployment 
 
 > 我们说了 Pod 是 Kubernetes 集群中的最基本的调度单元，但是如果想要创建同一个容器的多份拷贝，需要一个一个分别创建出来么，那么能否将 Pods 划到一个逻辑组里面呢？Deployment 就是来管理 Pod 的资源对象。
 
@@ -177,7 +177,7 @@ $ kubectl apply -f nginx-pod.yaml
 
 > 现在已经创建了 Pod 的一些副本，那么这些副本上如何进行负载呢？如何把这些 Pod 暴露出去呢？这个时候我们就需要用到 Service 这种资源对象了。
 
-### Service¶
+### Service 
 
 > Service 是应用服务的抽象，通过 Labels 为应用提供`负载均衡和服务发现`。匹配 Labels 的 Pod IP 和端口列表组成 Endpoints，由 kube-proxy 负责将服务 IP 负载均衡到这些 Endpoints 上。
 

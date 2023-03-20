@@ -1,5 +1,5 @@
 
-## 准入控制器¶
+## 准入控制器 
 
 > Kubernetes 提供了需要扩展其内置功能的方法，最常用的可能是自定义资源类型和自定义控制器了，除此之外，Kubernetes 还有一些其他非常有趣的功能，比如 `admission webhooks` 就可以用于扩展 API，用于修改某些 Kubernetes 资源的基本行为。
 
@@ -9,7 +9,7 @@
 
 > 由于上面的控制器的限制，我们就需要用到`动态`的概念了，而不是和 apiserver 耦合在一起，`Admission webhooks` 就通过一种动态配置方法解决了这个限制问题。
 
-### admission webhook 是什么?¶
+### admission webhook 是什么? 
 
 > 在 Kubernetes apiserver 中包含两个特殊的准入控制器：
 
@@ -49,7 +49,7 @@ ValidatingAdmissionWebhook
 
 > 现在非常火热的的 Service Mesh 应用 `istio` 就是通过 mutating webhooks 来自动将 `Envoy` 这个 sidecar 容器注入到 Pod 中去的：https://istio.io/docs/setup/kubernetes/sidecar-injection/。
 
-### 创建配置一个 Admission Webhook¶
+### 创建配置一个 Admission Webhook 
 
 > 上面我们介绍了 Admission Webhook 的理论知识，接下来我们在一个真实的 Kubernetes 集群中来实际测试使用下，我们将创建一个 webhook 的 webserver，将其部署到集群中，然后创建 webhook 配置查看是否生效。
 
@@ -118,7 +118,7 @@ $ kubectl api-versions |grep admission
 admissionregistration.k8s.io/v1beta1
 ```
 
-### 编写 webhook¶
+### 编写 webhook 
 
 > 满足了前面的先决条件后，接下来我们就来实现一个 webhook 示例，通过监听两个不同的 HTTP 端点（validate 和 mutate）来进行 `validating` 和 `mutating webhook` 验证。
 
@@ -375,7 +375,7 @@ func (whsvr *WebhookServer) mutate(ar *v1betaAdmissionReview) *v1betaAdmissionRe
 }
 ```
 
-### 构建¶
+### 构建 
 
 > 其实我们已经将代码打包成一个 docker 镜像了，你可以直接使用，镜像仓库地址为：
 
@@ -399,7 +399,7 @@ $ export DOCKER_USER=cnych
 $ ./build
 ```
 
-### 部署¶
+### 部署 
 
 > 为了部署 webhook server，我们需要在我们的 Kubernetes 集群中创建一个 service 和 deployment 资源对象，部署是非常简单的，只是需要配置服务的 TLS 配置。我们可以在代码根目录下面的 deployment 文件夹下面查看`deployment.yaml` 文件中关于证书的配置声明，会发现从命令行参数中读取的证书和私钥文件是通过一个 secret 对象挂载进来的：
 
@@ -451,7 +451,7 @@ $ kubectl apply -f deployment/service.yaml
 service "admission-webhook-example-svc" created
 ```
 
-### 配置 webhook¶
+### 配置 webhook 
 
 > 现在我们的 webhook 服务运行起来了，它可以接收来自 apiserver 的请求。但是我们还需要在 kubernetes 上创建一些配置资源。首先来配置 validating 这个 webhook，查看 webhook 配置，我们会注意到它里面包含一个 `CA_BUNDLE` 的占位符：
 
@@ -510,7 +510,7 @@ $ kubectl apply -f deployment/validatingwebhook-ca-bundle.yaml
 validatingwebhookconfiguration.admissionregistration.k8s.io "validation-webhook-example-cfg" created
 ```
 
-### 测试¶
+### 测试 
 
 > 现在让我们创建一个 deployment 资源来验证下是否有效，代码仓库下有一个 `sleep.yaml` 的资源清单文件，直接创建即可：
 
@@ -552,7 +552,7 @@ $ kubectl apply -f deployment/sleep-no-validation.yaml
 deployment.apps "sleep" created
 ```
 
-### 部署 mutating webhook¶
+### 部署 mutating webhook 
 
 > 首先，我们将上面的 `validating webhook` 删除，防止对 mutating 产生干扰，然后部署新的配置。 `mutating webhook` 与 `validating webhook` 配置基本相同，但是 webook server 的路径是 `/mutate`，同样的我们也需要先填充上 `CA_BUNDLE` 这个占位符。
 

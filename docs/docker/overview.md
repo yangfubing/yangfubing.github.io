@@ -6,7 +6,7 @@
 
 > ![docker](../assets/img/docker/docker-logo.png)
 
-### LXC 介绍¶
+### LXC 介绍 
 
 > LXC 可以提供轻量级的虚拟化，用来隔离进程和资源，和我们传统观念中的全虚拟化完全不一样，非常轻量级。LXC 可以将单个操作系统管理的资源划分到独立的组中，和传统的虚拟化技术相比，LXC 有如下一些优势：
 
@@ -25,7 +25,7 @@
 
 > 更多关于 chroot 的介绍，可以查看 理解 chroot 一文。
 
-### 什么是 Docker¶
+### 什么是 Docker 
 
 > Docker 并不是 LXC 替代品，Docker 底层就是使用的 LXC 来实现，LXC 将 Linux 进程沙盒化，使得进程之间相互隔离，还可以共享宿主机的资源。在 LXC 的基础上，Docker 提供了一系列更加强大方便的功能，使得 Docker 成为了现在最火的虚拟化技术。
 
@@ -42,7 +42,7 @@
 *   可扩展：您可以增加并自动分发容器副本
 *   可堆叠：您可以垂直和即时堆叠服务
 
-### Docker 几个重要概念¶
+### Docker 几个重要概念 
 
 > 在了解了 Docker 是什么之后，我们需要先了解下 Docker 中最重要的3个概念：镜像、容器和仓库。
 
@@ -52,7 +52,7 @@
 
 > `registry` 是用来存储 Docker 镜像的仓库，Docker Hub 是 Docker 官方提供的一个公共仓库，而且 Docker 默认也是从 Docker Hub 上查找镜像的，当然你也可以很方便的运行一个私有仓库，当我们使用 `docker pull` 或者 `docker run` 命令时，就会从我们配置的 Docker 镜像仓库中去拉取镜像，使用 `docker push` 命令时，会将我们构建的镜像推送到对应的镜像仓库中，registry 可以理解为用于镜像的 github 这样的托管服务。
 
-### 容器和虚拟机¶
+### 容器和虚拟机 
 
 > 上面我们说到了容器是在 Linux 上本机运行，并与其他容器共享主机的内核，它运行一个独立的进程，不占用其他任何可执行文件的内存，非常轻量。
 
@@ -60,11 +60,11 @@
 
 > ![docker container vs vm](../assets/img/docker/container--vs-vm.png)
 
-### 支持 Docker 的底层技术¶
+### 支持 Docker 的底层技术 
 
 > `Docker 本质就是宿主机的一个特殊进程`，Docker 是通过 `namespace` 实现资源隔离，通过`cgroup` 实现资源限制，通过写时复制技术（copy-on-write）实现了高效的文件操作（类似虚拟机的磁盘比如分配 500g 并不是实际占用物理磁盘 500g）
 
-#### Namespaces¶
+#### Namespaces 
 
 > 命名空间 (namespaces) 是 Linux 为我们提供的用于分离进程树、网络接口、挂载点以及进程间通信等资源的方法。在日常使用个人 PC 时，我们并没有运行多个完全分离的服务器的需求，但是如果我们在服务器上启动了多个服务，这些服务其实会相互影响的，每一个服务都能看到其他服务的进程，也可以访问宿主机器上的任意文件，一旦服务器上的某一个服务被入侵，那么入侵者就能够访问当前机器上的所有服务和文件，这是我们不愿意看到的，我们更希望运行在同一台机器上的不同服务能做到完全隔离，就像运行在多台不同的机器上一样。而 Docker 其实就通过 Linux 的 Namespaces 技术来实现的对不同的容器进行隔离。
 
@@ -79,7 +79,7 @@
 *   uts namespace：隔离主机名和域名
 *   user namespace：隔离用户和用户组（3.8以后的内核才支持）
 
-#### CGroups¶
+#### CGroups 
 
 > 我们通过 Linux 的 namespaces 技术为新创建的进程隔离了文件系统、网络、进程等资源，但是 namespaces 并不能够为我们提供物理资源上的隔离，比如 CPU、内存、IO 或者网络带宽等，所以如果我们运行多个容器的话，则容器之间就会抢占资源互相影响了，所以对容器资源的使用进行限制就非常重要了，而 Control Groups（CGroups）技术就能够隔离宿主机上的物理资源。CGroups 由 7 个主要的子系统组成：分别是 cpuset、cpu、cpuacct、blkio、devices、freezer、memory，不同类型资源的分配和管理是由各个 CGroup 子系统负责完成的。
 
@@ -104,7 +104,7 @@
 *   资源统计：可以统计系统的资源使用量，如 cpu 时长，内存用量等
 *   任务控制：cgroup 可以对任务执行挂起、恢复等操作
 
-#### UnionFS¶
+#### UnionFS 
 
 > Linux 的命名空间和控制组分别解决了不同资源隔离的问题，前者解决了进程、网络以及文件系统的隔离，后者实现了 CPU、内存等资源的隔离，但是在 Docker 中还有另一个非常重要的问题需要解决 - 也就是镜像。
 
@@ -145,7 +145,7 @@ CMD python /app/app.py
 
 > 对于 Docker 如何选择一个合适的存储驱动程序，可以查看官方文档 Docker storage drivers。
 
-### Docker 架构¶
+### Docker 架构 
 
 > Docker 使用 C/S （客户端/服务器）体系的架构，Docker 客户端与 Docker 守护进程（Dockerd）通信，Docker 守护进程负责构建，运行和分发 Docker 容器。Docker 客户端和守护进程可以在同一个系统上运行，也可以将 Docker 客户端连接到远程 Docker 守护进程。Docker 客户端和守护进程使用 REST API 通过 UNIX 套接字或网络接口进行通信。
 

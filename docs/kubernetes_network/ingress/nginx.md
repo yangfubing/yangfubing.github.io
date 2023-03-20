@@ -1,5 +1,5 @@
 
-## Ingress¶
+## Ingress 
 
 > 对外暴露集群服务
 
@@ -13,7 +13,7 @@
 
 > 现在可以供大家使用的 Ingress Controller 有很多，比如 traefik、nginx-controller、Kubernetes Ingress Controller for Kong、HAProxy Ingress controller，当然你也可以自己实现一个 Ingress Controller，现在普遍用得较多的是 traefik 和 nginx-controller，traefik 的性能较 nginx-controller 差，但是配置使用要简单许多，我们这里会重点给大家介绍 nginx-controller 以及 traefik 的使用。
 
-### NGINX Ingress Controller¶
+### NGINX Ingress Controller 
 
 > NGINX Ingress Controller 是使用 Kubernetes Ingress 资源对象构建的，用 ConfigMap 来存储 Nginx 配置的一种 Ingress Controller 实现。
 
@@ -95,7 +95,7 @@ $ curl 11
 
 > 出现了上面的信息证明 Ingress Controller 已经安装成功。
 
-### Ingress¶
+### Ingress 
 
 > 安装成功后，现在我们来为一个 nginx 应用创建一个 Ingress 资源，如下所示：
 
@@ -176,7 +176,7 @@ kubernetes.io/ingress.class: "nginx"
 
 > ![ingress controller workflow](../../assets/img/kubernetes_network/ingress-controller-workflow.png)
 
-### URL Rewrite¶
+### URL Rewrite 
 
 > NGINX Ingress Controller 很多高级的用法可以通过 Ingress 对象的 `annotation` 进行配置，比如常用的 URL Rewrite 功能，比如我们有一个 todo 的前端应用，对应的 Ingress 资源对象如下所示：
 
@@ -355,7 +355,7 @@ spec:
 
 > 更新后我们的应用就都会以 `/` 这样的 slash 结尾了。这样就完成了我们的需求，如果你原本对 nginx 的配置就非常熟悉的话应该可以很快就能理解这种配置方式了。
 
-### Basic Auth¶
+### Basic Auth 
 
 > 同样我们还可以在 Ingress Controller 上面配置一些基本的 Auth 认证，比如 Basic Auth，可以用 htpasswd 生成一个密码文件来验证身份验证。
 
@@ -496,7 +496,7 @@ Commercial support is available at
 
 > 可以看到已经认证成功了。当然出来 Basic Auth 这一种简单的认证方式之外，NGINX Ingress Controller 还支持一些其他高级的认证，比如 OAUTH 认证之类的。
 
-### HTTPS¶
+### HTTPS 
 
 > 如果我们需要用 HTTPS 来访问我们这个应用的话，就需要监听 443 端口了，同样用 HTTPS 访问应用必然就需要证书，这里我们用 `openssl` 来创建一个自签名的证书：
 

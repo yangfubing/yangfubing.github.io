@@ -1,9 +1,9 @@
 
-## ReplicaSet 控制器¶
+## ReplicaSet 控制器 
 
 > 前面我们一起学习了 Pod 的原理和一些基本使用，但是在实际使用的时候并不会直接使用 Pod，而是会使用各种控制器来满足我们的需求，Kubernetes 中运行了一系列控制器来确保集群的当前状态与期望状态保持一致，它们就是 Kubernetes 的大脑。例如，ReplicaSet 控制器负责维护集群中运行的 Pod 数量；Node 控制器负责监控节点的状态，并在节点出现故障时及时做出响应。总而言之，在 Kubernetes 中，每个控制器只负责某种类型的特定资源。
 
-### 控制器¶
+### 控制器 
 
 > Kubernetes 控制器会监听资源的 `创建/更新/删除` 事件，并触发 `Reconcile` 函数作为响应。整个调整过程被称作 
 
@@ -27,7 +27,7 @@ for {
 
 > 这个编排模型就是 Kubernetes 项目中的一个通用编排模式，即：`控制循环（control loop）`。
 
-### ReplicaSet¶
+### ReplicaSet 
 
 > 假如我们现在有一个 Pod 正在提供线上的服务，我们来想想一下我们可能会遇到的一些场景：
 
@@ -260,7 +260,7 @@ $ kubectl delete rs nginx-rs
 
 > 这就是 ReplicaSet 对象的基本使用。
 
-### Replication Controller¶
+### Replication Controller 
 
 > Replication Controller 简称 RC，实际上 RC 和 RS 的功能几乎一致，RS 算是对 RC 的改进，目前唯一的一个区别就是 RC 只支持基于等式的 selector（env=dev或environment!=qa），但 RS 还支持基于集合的 selector（version in (v1.0, v2.0)），这对复杂的运维管理就非常方便了。
 

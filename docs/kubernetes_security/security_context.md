@@ -1,5 +1,5 @@
 
-## Security Context¶
+## Security Context 
 
 > Kubernetes Pod/容器的安全管控
 
@@ -26,7 +26,7 @@
     *   容器以 `privileged` 模式运行
     *   容器拥有 `CAP_SYS_ADMIN` 的 Linux Capability
 
-### 为 Pod 设置 Security Context¶
+### 为 Pod 设置 Security Context 
 
 > 我们只需要在 Pod 定义的资源清单文件中添加 `securityContext` 字段，就可以为 Pod 指定安全上下文相关的设定，通过该字段指定的内容将会对当前 Pod 中的所有容器生效。
 
@@ -119,7 +119,7 @@ $ kubectl exec security-context-pod-demo -- rm -rf /tmp
 rm: can't remove '/tmp': Permission denied
 ```
 
-### 为容器设置 Security Context¶
+### 为容器设置 Security Context 
 
 > 除了在 Pod 中可以设置安全上下文之外，我们还可以单独为某个容器设置安全上下文，同样也是通过 `securityContext` 字段设置，当该字段的配置与 Pod 级别的 securityContext 配置相冲突时，容器级别的配置将覆盖 Pod 级别的配置。容器级别的 securityContext 不影响 Pod 中的数据卷。如下资源清单所示：
 
@@ -175,11 +175,11 @@ spec.securityContext.runAsUser
 
  取值 1000 被覆盖。
 
-### 设置 Linux Capabilities¶
+### 设置 Linux Capabilities 
 
 > 我们使用 `docker run` 的时候可以通过 `--cap-add` 和 `--cap-drop` 命令来给容器添加 `Linux Capabilities`。那么在 Kubernetes 下面如何来设置呢？要了解如何设置，首先我们还是需要了解下 `Linux Capabilities` 是什么？
 
-### Linux Capabilities¶
+### Linux Capabilities 
 
 > 要了解 `Linux Capabilities`，这就得从 Linux 的权限控制发展来说明。在 Linux 2.2 版本之前，当内核对进程进行权限验证的时候，Linux 将进程划分为两类：特权进程（UID=0，也就是超级用户）和非特权进程（UID!=0），特权进程拥有所有的内核权限，而非特权进程则根据进程凭证（effective UID, effective GID，supplementary group 等）进行权限检查。
 
@@ -189,13 +189,13 @@ spec.securityContext.runAsUser
 
 > 为此 Linux 引入了 `Capabilities` 机制来对 root 权限进行了更加细粒度的控制，实现按需进行授权，这样就大大减小了系统的安全隐患。
 
-#### 什么是 Capabilities¶
+#### 什么是 Capabilities 
 
 > 从内核 2.2 开始，Linux 将传统上与超级用户 root 关联的特权划分为不同的单元，称为 `capabilites`。`Capabilites` 每个单元都可以独立启用和禁用。这样当系统在作权限检查的时候就变成了：`在执行特权操作时，如果进程的有效身份不是 root，就去检查是否具有该特权操作所对应的 capabilites，并以此决定是否可以进行该特权操作`。比如如果我们要设置系统时间，就得具有 `CAP_SYS_TIME` 这个 capabilites。下面是从 capabilities man page 中摘取的 capabilites 列表：
 
 > ![linux capabilities list](../assets/img/kubernetes_security/linux-capabilites.png)
 
-#### 如何使用 Capabilities¶
+#### 如何使用 Capabilities 
 
 > 我们可以通过 `getcap` 和 `setcap` 两条命令来分别查看和设置程序文件的 `capabilities` 属性。比如当前我们是`zuiapp` 这个用户，使用 `getcap` 命令查看 `ping` 命令目前具有的 `capabilities`：
 
@@ -269,7 +269,7 @@ $ capsh --decode=0000001fffffffff
 0x0000001fffffffff=cap_chown,cap_dac_override,cap_dac_read_search,cap_fowner,cap_fsetid,cap_kill,cap_setgid,cap_setuid,cap_setpcap,cap_linux_immutable,cap_net_bind_service,cap_net_broadcast,cap_net_admin,cap_net_raw,cap_ipc_lock,cap_ipc_owner,cap_sys_module,cap_sys_rawio,cap_sys_chroot,cap_sys_ptrace,cap_sys_pacct,cap_sys_admin,cap_sys_boot,cap_sys_nice,cap_sys_resource,cap_sys_time,cap_sys_tty_config,cap_mknod,cap_lease,cap_audit_write,cap_audit_control,cap_setfcap,cap_mac_override,cap_mac_admin,cap_syslog,35,36
 ```
 
-### Docker Container Capabilities¶
+### Docker Container Capabilities 
 
 > 我们说 Docker 容器本质上就是一个进程，所以理论上容器就会和进程一样会有一些默认的开放权限，默认情况下 Docker 会删除必须的 `capabilities` 之外的所有 `capabilities`，因为在容器中我们经常会以 root 用户来运行，使用 `capabilities` 现在后，容器中的使用的 root 用户权限就比我们平时在宿主机上使用的 root 用户权限要少很多了，这样即使出现了安全漏洞，也很难破坏或者获取宿主机的 root 权限，所以 Docker 支持 `Capabilities` 对于容器的安全性来说是非常有必要的。
 
@@ -308,7 +308,7 @@ $ docker run -it --rm --cap-add=NET_ADMIN busybox /bin/sh
 
 > 可以看到已经 OK 了。
 
-### Kubernetes 配置 Capabilities¶
+### Kubernetes 配置 Capabilities 
 
 > 上面我介绍了在 Docker 容器下如何来配置 `Capabilities`，在 Kubernetes 中也可以很方便的来定义，我们只需要添加到 Pod 定义的 
 
@@ -364,7 +364,7 @@ Linux kernel capabilities
 
  实现的权限管理。
 
-### 为容器设置 `SELinux` 标签¶
+### 为容器设置 `SELinux` 标签 
 
 > `SELinux` (Security-Enhanced Linux) 是一种强制访问控制（mandatory access control）的实现。它的作法是以最小权限原则（principle of least privilege）为基础，在 Linux 核心中使用 Linux 安全模块（Linux Security Modules）。Pod 或容器定义的 securityContext 中 `seLinuxOptions` 字段是一个 SELinuxOptions 对象，该字段可用于为容器指定 `SELinux` 标签。
 
@@ -374,11 +374,11 @@ securityContext:
     level: "s0:c123,c456"
 ```
 
-### AppArmor¶
+### AppArmor 
 
 > > TODO
 
-### Seccomp¶
+### Seccomp 
 
 > > TODO
 

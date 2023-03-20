@@ -3,7 +3,7 @@
 
 > 要安装 Docker CE（社区）版本，推荐使用 CentOS 7，使用 `overlay2` 存储驱动程序。
 
-### 卸载旧版本¶
+### 卸载旧版本 
 
 > 旧版本的 Docker 叫 `docker` 或者 `docker-engine`，现在的版本被称为`docker-ce`，如果之前安装过，则先卸载掉之前的版本：
 
@@ -18,7 +18,7 @@ $ sudo yum remove docker \\
                   docker-engine
 ```
 
-### 安装 Docker-CE¶
+### 安装 Docker-CE 
 
 > 要安装 Docker 有多种方法，大多数用户会设置 Docker 的存储仓库来进行安装，这种方式可以简化我们的安装和升级，当然也推荐使用这种方式。
 
@@ -150,7 +150,7 @@ Product License: Community Engine
 
 > 可以看到安装的版本是 18.09.9，默认的存储驱动程序是 `overlay2`，而且 `Root Dir` 也已经是我们更改后的目录了。
 
-### 测试¶
+### 测试 
 
 > Docker 启动成功后，我们可以使用下面的命令来运行一个测试容器：
 

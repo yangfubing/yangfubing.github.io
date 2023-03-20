@@ -1,9 +1,9 @@
 
-## Pod 使用进阶¶
+## Pod 使用进阶 
 
 > 深入理解 Pod 对象
 
-### 静态 Pod¶
+### 静态 Pod 
 
 > 在 Kubernetes 集群中除了我们经常使用到的普通的 Pod 外，还有一种特殊的 Pod，叫做Static Pod，也就是我们说的静态 Pod，静态 Pod 有什么特殊的地方呢？
 
@@ -11,7 +11,7 @@
 
 > 创建静态 Pod 有两种方式：`配置文件`和 `HTTP` 两种方式
 
-#### 配置文件¶
+#### 配置文件 
 
 > 配置文件就是放在特定目录下的标准的 JSON 或 YAML 格式的 pod 定义文件。用 
 
@@ -61,7 +61,7 @@ spec:
 EOF
 ```
 
-#### 通过 HTTP 创建静态 Pods¶
+#### 通过 HTTP 创建静态 Pods 
 
 > kubelet 周期地从–manifest-url=参数指定的地址下载文件，并且把它翻译成 JSON/YAML 格式的 pod 定义。此后的操作方式与–pod-manifest-path=相同，kubelet 会不时地重新下载该文件，当文件变化时对应地终止或启动静态 pod。
 
@@ -98,7 +98,7 @@ CONTAINER ID        IMAGE         COMMAND                CREATED       ...
 5b920cbaf8b1        nginx:latest  "nginx -g 'daemon of   2 seconds ago ...
 ```
 
-#### 静态 Pod 的动态增加和删除¶
+#### 静态 Pod 的动态增加和删除 
 
 > 运行中的 kubelet 周期扫描配置的目录（我们这个例子中就是 /etc/kubernetes/manifests）下文件的变化，当这个目录中有文件出现或消失时创建或删除 pods：
 
@@ -129,7 +129,7 @@ etcd.yaml  kube-apiserver.yaml  kube-controller-manager.yaml  kube-scheduler.yam
 
 > 现在明白了吧，这种方式也为我们将集群的一些组件容器化提供了可能，因为这些 Pod 都不会受到 apiserver 的控制，不然我们这里kube-apiserver怎么自己去控制自己呢？万一不小心把这个 Pod 删掉了呢？所以只能有kubelet自己来进行控制，这就是我们所说的静态 Pod。
 
-### Downward API¶
+### Downward API 
 
 > 前面我们从 Pod 的原理到生命周期介绍了 Pod 的一些使用，作为 Kubernetes 中最核心的资源对象、最基本的调度单元，我们可以发现 Pod 中的属性还是非常繁多的，前面我们使用过一个 `volumes` 的属性，表示声明一个数据卷，我们可以通过命令
 
@@ -144,7 +144,7 @@ kubectl explain pod.spec.volumes
 *   环境变量：用于单个变量，可以将 Pod 信息和容器信息直接注入容器内部
 *   Volume 挂载：将 Pod 信息生成为文件，直接挂载到容器内部中去
 
-### 环境变量¶
+### 环境变量 
 
 > 我们通过 `Downward API` 来将 Pod 的 IP、名称以及所对应的 namespace 注入到容器的环境变量中去，然后在容器中打印全部的环境变量来进行验证，对应资源清单文件如下：(env-pod.yaml)
 
@@ -236,7 +236,7 @@ NAME       TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)                  AGE
 kube-dns   ClusterIP   10   <none>        53/UDP,53/TCP,9153/TCP   4d21h
 ```
 
-### Volume 挂载¶
+### Volume 挂载 
 
 > `Downward API`除了提供环境变量的方式外，还提供了通过 Volume 挂载的方式去获取 Pod 的基本信息。接下来我们通过`Downward API`将 Pod 的 Label、Annotation 等信息通过 Volume 挂载到容器的某个文件中去，然后在容器中打印出该文件的值来验证，对应的资源清单文件如下所示：(volume-pod.yaml)
 
@@ -332,7 +332,7 @@ metadata.annotations - Pod的所有Annotation
 
 > 除了通过 Downward API 可以获取到 Pod 本身的信息之外，其实我们还可以通过映射其他资源对象来获取对应的信息，比如 Secret、ConfigMap 资源对象，同样我们可以通过环境变量和挂载 Volume 的方式来获取他们的信息，但是，通过环境变量获取这些信息的方式，不具备自动更新的能力。所以，一般情况下，都建议使用 Volume 文件的方式获取这些信息，因为通过 Volume 的方式挂载的文件在 Pod 中会进行热更新。
 
-### PodPreset¶
+### PodPreset 
 
 > 我们已经学习了很多 Pod 的知识点，但是可能有部分同学还是觉得 Pod 的字段属性太多了，很多记不住，查询文档效率不高，你是不是希望 Kubernetes 能够提供一个功能为 Pod 自动填充一些字段呢？这个需求还是很实际的，比如我们按照命名空间来划分不同的环境，然后我们在不同的环境上部署 Pod 后自动为我们加上环境相关的 Labels、Annotations 等等信息，这样就大大提高了编写 YAML 的效率，为此，在 Kubernetes v1.11 版本后就提供了一个叫做 `PodPreset（Pod 预设值）`的功能可以来解决这个问题。
 
@@ -358,7 +358,7 @@ podpreset.admission.kubernetes.io/exclude："true"
 
 。
 
-### 启用 PodPreset¶
+### 启用 PodPreset 
 
 > 要启用`PodPreset`功能，需要确保你使用的是 kubernetes 1.8版本以上，然后需要在准入控制中加入`PodPreset`，另外为了定义 PodPreset 对象，还需要其中 PodPreset 的 API 版本，在 APIServer 启动参数中添加如下配置：
 
@@ -384,7 +384,7 @@ No resources found in default namespace.
 
 > 出现如上的提示证明已经开启成功。
 
-### 示例¶
+### 示例 
 
 > 我们经常有一个需求就是需要同步 Pod 和宿主机的时间，一般情况下，我们是通过挂载宿主机的 localtime 来完成的，如下 Pod：（time-demo.yaml）
 

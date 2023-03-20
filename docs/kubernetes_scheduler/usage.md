@@ -1,9 +1,9 @@
 
-## 调度¶
+## 调度 
 
 > 一般情况下我们部署的 Pod 是通过集群的自动调度策略来选择节点的，默认情况下调度器考虑的是资源足够，并且负载尽量平均，但是有的时候我们需要能够更加细粒度的去控制 Pod 的调度，比如我们希望一些机器学习的应用只跑在有 GPU 的节点上；但是有的时候我们的服务之间交流比较频繁，又希望能够将这服务的 Pod 都调度到同一个的节点上。这就需要使用一些调度方式来控制 Pod 的调度了，主要有两个概念：`亲和性和反亲和性`，亲和性又分成节点亲和性(nodeAffinity)和 Pod 亲和性(podAffinity)。
 
-### nodeSelector¶
+### nodeSelector 
 
 > 在了解亲和性之前，我们先来了解一个非常常用的调度方式：`nodeSelector`。我们知道 label 标签是 kubernetes 中一个非常重要的概念，用户可以非常灵活的利用 label 来管理集群中的资源，比如最常见的 Service 对象通过 label 去匹配 Pod 资源，而 Pod 的调度也可以根据节点的 label 来进行调度。
 
@@ -75,7 +75,7 @@ Events:
 
 > 通过上面的例子我们可以感受到 `nodeSelector` 的方式比较直观，但是还够灵活，控制粒度偏大，接下来我们再和大家了解下更加灵活的方式：节点亲和性(nodeAffinity)。
 
-### 亲和性和反亲和性调度¶
+### 亲和性和反亲和性调度 
 
 > 前面我们了解了 kubernetes 调度器的调度流程，我们知道默认的调度器在使用的时候，经过了 `predicates` 和 `priorities` 两个阶段，但是在实际的生产环境中，往往我们需要根据自己的一些实际需求来控制 Pod 的调度，这就需要用到 `nodeAffinity(节点亲和性)`、`podAffinity(pod 亲和性)` 以及 
 
@@ -104,7 +104,7 @@ requiredDuringSchedulingIgnoredDuringExecution
 
 ，前面的就是软策略，后面的就是硬策略。
 
-### 节点亲和性¶
+### 节点亲和性 
 
 > 节点亲和性（nodeAffinity）主要是用来控制 Pod 要部署在哪些节点上，以及不能部署在哪些节点上的，它可以进行一些简单的逻辑组合了，不只是简单的相等匹配。
 
@@ -182,7 +182,7 @@ node-affinity-cdd9d54d9-t5mff   1/1     Running   0          2m28s   2117   ydzs
 
 > 但是需要注意的是如果 `nodeSelectorTerms` 下面有多个选项的话，满足任何一个条件就可以了；如果 `matchExpressions`有多个选项的话，则必须同时满足这些条件才能正常调度 Pod。
 
-### Pod 亲和性¶
+### Pod 亲和性 
 
 > Pod 亲和性（podAffinity）主要解决 Pod 可以和哪些 Pod 部署在同一个拓扑域中的问题（其中拓扑域用主机标签实现，可以是单个主机，也可以是多个主机组成的 cluster、zone 等等），而 Pod 反亲和性主要是解决 Pod 不能和哪些 Pod 部署在同一个拓扑域中的问题，它们都是处理的 Pod 与 Pod 之间的关系，比如一个 Pod 在一个节点上了，那么我这个也得在这个节点，或者你这个 Pod 在节点上了，那么我就不想和你待在同一个节点上。
 
@@ -309,7 +309,7 @@ beta.kubernetes.io/os
 
  这个拓扑域。
 
-### Pod 反亲和性¶
+### Pod 反亲和性 
 
 > Pod 反亲和性（podAntiAffinity）则是反着来的，比如一个节点上运行了某个 Pod，那么我们的模板 Pod 则不希望被调度到这个节点上面去了。我们把上面的 `podAffinity` 直接改成 `podAntiAffinity`：(pod-antiaffinity-demo.yaml)
 
@@ -368,7 +368,7 @@ beta.kubernetes.io/os
 
  会怎么样呢？可以自己去测试下看看。
 
-### 污点与容忍¶
+### 污点与容忍 
 
 > 对于 `nodeAffinity` 无论是硬策略还是软策略方式，都是调度 Pod 到预期节点上，而污点（Taints）恰好与之相反，如果一个节点标记为 Taints ，除非 Pod 也被标识为可以容忍污点节点，否则该 Taints 节点不会被调度 Pod。
 

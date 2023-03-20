@@ -6,7 +6,7 @@
 
 > ![docker engine](../assets/img/docker/docker-engine.png)
 
-### 镜像操作¶
+### 镜像操作 
 
 > 之前我们提到过 Docker 官方提供了一个公共的镜像仓库：Docker Hub，我们就可以从这上面获取镜像，获取镜像的命令：`docker pull`，格式为：
 
@@ -72,7 +72,7 @@ $ ls -la /tmp/nginx.tar.gz
 $ docker load </tmp/nginx.tar.gz
 ```
 
-### 运行容器¶
+### 运行容器 
 
 > 有了镜像后，我们就能够以这个镜像为基础运行一个容器。以上面的 ubuntu:18.04 为例，如果我们打算启动里面的 bash 并且进行交互式操作的话，可以执行下面的命令：
 
@@ -134,7 +134,7 @@ boot  etc  lib   media  opt  root  sbin  sys  usr
 
 > 我们可以看到运行后就容器就直接退出了，这点非常重要，所以如果要在容器中执行 nginx 程序的话要记住不要用 daemon 模式了，因为执行后就退出到后台去了，Docker 就没办法管理了，就会退出容器了。
 
-### 列出容器¶
+### 列出容器 
 
 > 如果要查看当前系统中已经运行的容器，可以用如下命令：
 
@@ -149,7 +149,7 @@ CONTAINER ID        IMAGE               COMMAND             CREATED             
 6e4a54862340        fce289e99eb9        "/hello"            About an hour ago   Exited (0) About an hour ago                       jovial_khayyam
 ```
 
-### 删除容器¶
+### 删除容器 
 
 > 如果要删除或强制删除一个容器（包括已退出的）则可以使用如下命令：
 
@@ -158,7 +158,7 @@ CONTAINER ID        IMAGE               COMMAND             CREATED             
 $ docker rm -f 2275424275b6
 ```
 
-### 后台运行¶
+### 后台运行 
 
 > 更多的时候，我们需要让 Docker 在后台运行而不是直接把执行命令的结果输出在当前宿主机下。此时，可以通过添加`-d`参数来实现。如果不使用`-d`参数运行容器：
 
@@ -191,7 +191,7 @@ hello world
 
 > 使用 `-d` 参数启动后会返回一个唯一的容器 id，当然也可以通过`docker ps`命令来查看容器信息。
 
-### 终止容器¶
+### 终止容器 
 
 > 另外我们可以使用
 
@@ -227,8 +227,8 @@ CONTAINER ID        IMAGE               COMMAND                  CREATED        
 501f4d9538a0        ubuntu:04        "/bin/sh -c 'while t…"   5 minutes ago       Up 2 seconds                            nervous_ganguly
 ```
 
-### 网络¶
-### 端口暴露¶
+### 网络 
+### 端口暴露 
 
 > Docker 容器更多情况下是用来运行 Web 应用的，所以要如何访问到容器中的 Web 服务呢？比如我们现在运行一个 nginx 容器服务：
 
@@ -333,7 +333,7 @@ Commercial support is available at
 </html>
 ```
 
-### Bridge 模式¶
+### Bridge 模式 
 
 > 当 Docker 进程启动时，会在主机上创建一个名为`docker0`的虚拟网桥，此主机上启动的 Docker 容器会连接到这个虚拟网桥上。虚拟网桥的工作方式和物理交换机类似，这样主机上的所有容器就通过交换机连在了一个二层网络中。从 docker0 子网中分配一个 IP 给容器使用，并设置 docker0 的 IP 地址为容器的默认网关。在主机上创建一对虚拟网卡`veth pair`设备，Docker 将 veth pair 设备的一端放在新创建的容器中，并命名为 eth0（容器的网卡），另一端放在主机中，以`vethxxx`这样类似的名字命名，并将这个网络设备加入到 docker0 网桥中。可以通过`brctl show`命令查看：
 
@@ -394,7 +394,7 @@ Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 
 > 通过上面的命令可以验证我们前面提到的 bridge 模式原理。
 
-#### 自定义网络¶
+#### 自定义网络 
 
 > 另外我们可以通过自定义的 Docker 网络来连接多个容器，而不是使用`--link`命令，比如现在我们有一个新的容器想要和上面的 docker_bri 容器建立互连关系，之前我们可以使用 `--link` 命令：
 
@@ -455,7 +455,7 @@ PING busybox1 (12): 56 data bytes
 
 > 这样，busybox1 容器和 busybox2 容器建立了互联关系，如果你有多个容器之间需要互相连接，推荐使用后面的 Docker Compose。
 
-### Host 模式¶
+### Host 模式 
 
 > 如果启动容器的时候使用 host 模式，那么这个容器将不会获得一个独立的`Network Namespace`，而是和宿主机共用一个 Network Namespace。容器将不会虚拟出自己的网卡，配置自己的 IP 等，而是使用宿主机的 IP 和端口。但是，容器的其他方面，如文件系统、进程列表等还是和宿主机隔离的。 Host模式如下图所示：
 
@@ -463,7 +463,7 @@ PING busybox1 (12): 56 data bytes
 
 > 使用 host 模式也很简单，只需要在运行容器的时候指定 `--net=host` 即可。
 
-### Container 模式¶
+### Container 模式 
 
 > 这个模式指定新创建的容器和已经存在的一个容器共享一个 Network Namespace，而不是和宿主机共享。新创建的容器不会创建自己的网卡，配置自己的 IP，而是和一个指定的容器共享 IP、端口范围等。同样，两个容器除了网络方面，其他的如文件系统、进程列表等还是隔离的。两个容器的进程可以通过 lo 网卡设备通信。 Container 模式如下图所示：
 
@@ -477,7 +477,7 @@ PING busybox1 (12): 56 data bytes
 
  即可。实际上我们后面要学习的 Kubernetes 里面的 Pod 中容器之间就是通过 Container 模式链接到 pause 容器上面的，所以容器直接可以通过 localhost 来进行访问。
 
-### None 模式¶
+### None 模式 
 
 > 使用 non e模式，Docker 容器拥有自己的 Network Namespace，但是并不为Docker 容器进行任何网络配置。也就是说这个 Docker 容器没有网卡、IP、路由等信息。需要我们自己为 Docker 容器添加网卡、配置 IP 等。 None模式示意图如下所示：
 
@@ -485,14 +485,14 @@ PING busybox1 (12): 56 data bytes
 
 > 选择这种模式，一般是用户对网络有自己特殊的需求，不希望 docker 预设置太多的东西。
 
-### 数据共享与持久化¶
+### 数据共享与持久化 
 
 > 接下来介绍如何在 Docker 内部以及容器之间管理数据，在容器中管理数据主要有两种方式：
 
 *   数据卷（Data Volumes）
 *   挂载主机目录 (Bind mounts)
 
-### 数据卷¶
+### 数据卷 
 
 > `数据卷`是一个可供一个或多个容器使用的特殊目录，它绕过 UFS，可以提供很多有用的特性：
 
@@ -600,7 +600,7 @@ Hello Docker
 $ docker volume prune
 ```
 
-### 挂载主机目录¶
+### 挂载主机目录 
 
 > Docker 同样支持把宿主机上的目录挂载到容器中，同样可以使用 `-v` 或者 `--mount` 参数来进行挂载，如下所示，把宿主机的 `/tmp` 目录挂载到一个容器中：
 

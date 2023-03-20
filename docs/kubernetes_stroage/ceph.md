@@ -1,9 +1,9 @@
 
-## Ceph¶
+## Ceph 
 
 > Ceph 是一个统一的分布式存储系统，提供较好的性能、可靠性和可扩展性。最早起源于 Sage 博士期间的工作，随后贡献给开源社区。
 
-### 简介¶
+### 简介 
 
 > `高性能`
 
@@ -16,7 +16,7 @@
 *   副本数可以灵活控制
 *   支持故障域分离，数据强一致性
 *   多种故障场景自动进行修复自愈
-*   没有单点故障，自动管理
+*   没有单点故障，自动管理~~~~
 
 > `高可扩展性`
 
@@ -29,7 +29,7 @@
 *   支持三种存储接口：块存储、文件存储、对象存储
 *   支持自定义接口，支持多种语言驱动
 
-### 架构¶
+### 架构 
 
 > `支持三种接口`
 
@@ -39,7 +39,7 @@
 
 > ![ceph rados](../assets/img/kubernetes_stroage/ceph-rados.png)
 
-### 组件¶
+### 组件 
 
 > `Monitor`：一个 Ceph 集群需要多个 Monitor 组成的小集群，它们通过 Paxos 同步数据，用来保存 OSD 的元数据。
 
@@ -86,7 +86,7 @@ Reliable Autonomic Distributed Object Store
 
 > `CephFS`：全称 `Ceph File System`，是 Ceph 对外提供的文件系统服务。
 
-### 块存储¶
+### 块存储 
 
 > `典型设备`
 
@@ -110,7 +110,7 @@ Reliable Autonomic Distributed Object Store
 *   文件存储
 *   ...
 
-### 文件存储¶
+### 文件存储 
 
 > `典型设备` FTP、NFS 服务器，为了克服块存储文件无法共享的问题，所以有了文件存储，在服务器上架设 FTP 与 NFS 服务器，就是文件存储。
 
@@ -130,7 +130,7 @@ Reliable Autonomic Distributed Object Store
 *   有目录结构的文件存储
 *   ...
 
-### 对象存储¶
+### 对象存储 
 
 > `典型设备`
 
@@ -147,7 +147,7 @@ Reliable Autonomic Distributed Object Store
 *   视频存储
 *   ...
 
-### 部署¶
+### 部署 
 
 > 由于我们这里在 Kubernetes 集群中使用，也为了方便管理，我们这里使用 Rook 来部署 Ceph 集群，Rook 是一个开源的云原生存储编排工具，提供平台、框架和对各种存储解决方案的支持，以和云原生环境进行本地集成。
 
@@ -168,7 +168,7 @@ Reliable Autonomic Distributed Object Store
 *   Object Store：用 S3 兼容接口开放存储服务。
 *   File System：为多个 Kubernetes Pod 提供共享存储。
 
-### 环境¶
+### 环境 
 
 > Rook Ceph 需要使用 RBD 内核模块，我们可以通过运行 `modprobe rbd` 来测试 Kubernetes 节点是否有该模块，如果没有，则需要更新下内核版本。
 
@@ -181,7 +181,7 @@ sudo yum install -y lvm2
 sudo apt-get install -y lvm2
 ```
 
-### 安装¶
+### 安装 
 
 > 我们这里部署最新的 release-1.2 版本的 Rook，部署清单文件地址：https://github.com/rook/rook/tree/release-1.2/cluster/examples/kubernetes/ceph。
 
@@ -251,7 +251,7 @@ cephcluster.ceph.rook.io/rook-ceph created
 
 > 创建完成后，Rook Operator 就会根据我们的描述信息去自动创建 Ceph 集群了。
 
-### 验证¶
+### 验证 
 
 > 要验证集群是否处于正常状态，我们可以使用 Rook 工具箱 来运行 `ceph status` 命令查看。
 
@@ -369,7 +369,7 @@ ceph status
 
 > 如果群集运行不正常，可以查看 Ceph 常见问题以了解更多详细信息和可能的解决方案。
 
-### Dashboard¶
+### Dashboard 
 
 > Ceph 有一个 Dashboard 工具，我们可以在上面查看集群的状态，包括总体运行状态，mgr、osd 和其他 Ceph 进程的状态，查看池和 PG 状态，以及显示守护进程的日志等等。
 
@@ -466,7 +466,7 @@ xxxx（登录密码）
 
 > ![ceph dashboard](../assets/img/kubernetes_stroage/ceph-dashboard.jpg)
 
-### 使用¶
+### 使用 
 
 > 现在我们的 Ceph 集群搭建成功了，我们就可以来使用存储了。首先我们需要创建存储池，可以用 CRD 来定义 Pool。Rook 提供了两种机制来维持 OSD：
 

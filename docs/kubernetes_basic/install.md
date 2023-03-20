@@ -6,7 +6,7 @@
 
 > ![kubernetes install on centos](../assets/img/kubernetes_basci/install-k8s.png)
 
-### 环境准备¶
+### 环境准备 
 
 > 3个节点，都是 Centos 7.6 系统，内核版本：3.10.0-957.12.2.el7.x86_64，在每个节点上添加 hosts 信息：
 
@@ -267,7 +267,7 @@ $ systemctl enable --now kubelet
 
 > > 到这里为止上面所有的操作都需要在所有节点执行配置。
 
-### 初始化集群¶
+### 初始化集群 
 
 > 然后接下来在 master 节点配置 kubeadm 初始化文件，可以通过如下命令导出默认的初始化配置：
 
@@ -413,7 +413,7 @@ $ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 > ![kubeadm init](../assets/img/kubernetes_basci/kubeadm-init.jpeg)
 
-### 添加节点¶
+### 添加节点 
 
 > 记住初始化集群上面的配置和操作要提前做好，将 master 节点上面的 $HOME/.kube/config 文件拷贝到 node 节点对应的文件中，安装 kubeadm、kubelet、kubectl（可选），然后执行上面初始化完成后提示的 join 命令即可：
 
@@ -512,7 +512,7 @@ ydzs-node1    Ready    <none>   18m   v2
 
 > 用同样的方法添加另外一个节点即可。
 
-### Dashboard¶
+### Dashboard 
 
 > v1.16.2 版本的集群需要安装最新的 2.0+ 版本的 Dashboard：
 
@@ -610,7 +610,7 @@ $ kubectl get secret admin-token-lwmmx -o jsonpath={.data.token} -n kubernetes-d
 
 > 最终我们就完成了使用 kubeadm 搭建 v1.16.2 版本的 kubernetes 集群、coredns、ipvs、flannel。
 
-### 清理¶
+### 清理 
 
 > 如果你的集群安装过程中遇到了其他问题，我们可以使用下面的命令来进行重置：
 

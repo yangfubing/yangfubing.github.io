@@ -1,5 +1,5 @@
 
-## Secret¶
+## Secret 
 
 > 敏感信息配置管理
 
@@ -30,7 +30,7 @@
 
     ：用于节点接入集群的校验的 Secret
 
-### Opaque Secret¶
+### Opaque Secret 
 
 > `Opaque` 类型的数据是一个 map 类型，要求 value 必须是 `base64` 编码格式，比如我们来创建一个用户名为 admin，密码为 admin321 的 `Secret` 对象，首先我们需要先把用户名和密码做 `base64` 编码：
 
@@ -117,7 +117,7 @@ type: Opaque
 *   以环境变量的形式
 *   以Volume的形式挂载
 
-### 环境变量¶
+### 环境变量 
 
 > 首先我们来测试下环境变量的方式，同样的，我们来使用一个简单的 busybox 镜像来测试下:(secret1-pod.yaml)
 
@@ -163,7 +163,7 @@ PASSWORD=admin321
 
 > 可以看到有 USERNAME 和 PASSWORD 两个环境变量输出出来。
 
-### Volume 挂载¶
+### Volume 挂载 
 
 > 同样的我们用一个 Pod 来验证下 `Volume` 挂载，创建一个 Pod 文件：(secret2-pod.yaml)
 
@@ -198,7 +198,7 @@ username
 
 > 可以看到 Secret 把两个 key 挂载成了两个对应的文件。当然如果想要挂载到指定的文件上面，是不是也可以使用上一节课的方法：在 `secretName` 下面添加 `items` 指定 `key` 和 `path`，这个大家可以参考上节课 `ConfigMap` 中的方法去测试下。
 
-### kubernetes.io/dockerconfigjson¶
+### kubernetes.io/dockerconfigjson 
 
 > 除了上面的 `Opaque` 这种类型外，我们还可以来创建用户 `docker registry` 认证的 `Secret`，直接使用``kubectl create` 命令创建即可，如下：
 
@@ -327,7 +327,7 @@ imagePullSecrets:
 - name: myregistry
 ```
 
-### kubernetes.io/service-account-token¶
+### kubernetes.io/service-account-token 
 
 > 另外一种 `Secret` 类型就是 
 
@@ -378,11 +378,11 @@ volumeMounts:
 
  的目录中，对于该目录的作用我们会在后面的安全章节中继续和大家学习。
 
-### Secret vs ConfigMap¶
+### Secret vs ConfigMap 
 
 > 最后我们来对比下 `Secret` 和 `ConfigMap`这两种资源对象的异同点：
 
-### 相同点¶
+### 相同点 
 
 *   key/value的形式
 *   属于某个特定的命名空间
@@ -390,7 +390,7 @@ volumeMounts:
 *   可以通过目录/文件形式挂载
 *   通过 volume 挂载的配置信息均可热更新
 
-### 不同点¶
+### 不同点 
 
 *   Secret 可以被 ServerAccount 关联
 *   Secret 可以存储 `docker register` 的鉴权信息，用在 `ImagePullSecret` 参数中，用于拉取私有仓库的镜像

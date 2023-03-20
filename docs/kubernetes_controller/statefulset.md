@@ -1,5 +1,5 @@
 
-## StatefulSet 控制器¶
+## StatefulSet 控制器 
 
 > 前面我们学习了 Deployment 和 ReplicaSet 两种资源对象得使用，在实际使用的过程中，Deployment 并不能编排所有类型的应用，对`无状态服务`编排是非常容易的，但是对于`有状态服务`就无能为力了。我们需要先明白一个概念：什么是有状态服务，什么是无状态服务。
 
@@ -24,7 +24,7 @@
 *   有序的、优雅的删除和终止
 *   有序的、自动滚动更新
 
-### Headless Service¶
+### Headless Service 
 
 > 在我们学习 StatefulSet 对象之前，我们还必须了解一个新的概念：`Headless Service`。`Service` 其实在之前我们和大家提到过，Service 是应用服务的抽象，通过 Labels 为应用提供负载均衡和服务发现，每个 Service 都会自动分配一个 cluster IP 和 DNS 名，在集群内部我们可以通过该地址或者通过 FDQN 的形式来访问服务。比如，一个 Deployment 有 3 个 Pod，那么我就可以定义一个 Service，有如下两种方式来访问这个 Service：
 
@@ -81,7 +81,7 @@ spec:
 
 > 这个 DNS 记录正是 Kubernetes 集群为 Pod 分配的一个唯一标识，只要我们知道 Pod 的名字，以及它对应的 Service 名字，就可以组装出这样一条 DNS 记录访问到 Pod 的 IP 地址，这个能力是非常重要的，接下来我们就来看下 StatefulSet 资源对象是如何结合 Headless Service 提供服务的。
 
-### StatefulSet¶
+### StatefulSet 
 
 > 在开始之前，我们先准备两个 1G 的存储卷（PV），在后面的课程中我们也会和大家详细讲解 PV 和 PVC 的使用方法的，这里我们先不深究：（pv.yaml）
 
@@ -128,7 +128,7 @@ pv002     1Gi        RWO            Recycle          Available                  
 
 > 可以看到成功创建了两个 PV 对象，状态是：`Available`。
 
-### 特性¶
+### 特性 
 
 > 然后接下来声明一个如下所示的 StatefulSet 资源清单：（nginx-sts.yaml）
 
@@ -362,7 +362,7 @@ web-1   1/1   Terminating   0     3h/31m
 web-0   1/1   Terminating   0     3h/31m
 ```
 
-### 管理策略¶
+### 管理策略 
 
 > 对于某些分布式系统来说，StatefulSet 的顺序性保证是不必要和/或者不应该的，这些系统仅仅要求唯一性和身份标志。为了解决这个问题，我们只需要在声明 StatefulSet 的时候重新设置 
 
@@ -374,7 +374,7 @@ spec.podManagementPolicy
 
 > 默认的管理策略是 `OrderedReady`，表示让 StatefulSet 控制器遵循上文演示的顺序性保证。除此之外，还可以设置为 `Parallel` 管理模式，表示让 StatefulSet 控制器并行的终止所有 Pod，在启动或终止另一个 Pod 前，不必等待这些 Pod 变成 Running 和 Ready 或者完全终止状态。
 
-### 更新策略¶
+### 更新策略 
 
 > 前面课程中我们学习了 Deployment 的升级策略，在 StatefulSet 中同样也支持两种升级策略：`onDelete` 和 `RollingUpdate`，同样可以通过设置 
 

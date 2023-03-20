@@ -1,9 +1,9 @@
 
-## NetworkPolicy¶
+## NetworkPolicy 
 
 > 在 Kubernetes 中要实现容器之间网络的隔离，是通过一个专门的 API 对象 `NetworkPolicy`（网络策略）来实现的，要让网络策略生效，就需要特定的网络插件支持，目前已经实现了 `NetworkPolicy` 的网络插件包括 Calico、Weave 和 kube-router 等项目，但是并不包括 Flannel 项目。所以说，如果想要在使用 Flannel 的同时还使用 NetworkPolicy 的话，你就需要再额外安装一个网络插件，比如 Calico 项目，来负责执行 NetworkPolicy。由于我们这里使用的是 Flannel 网络插件，所以首先需要安装 Calico 来负责网络策略。
 
-### 安装 Calico¶
+### 安装 Calico 
 
 > 首先确定 kube-controller-manager 配置了如下的两个参数：
 
@@ -37,7 +37,7 @@ $ sed -i -e "s?20/16?$POD_CIDR?g" canal.yaml
 $ kubectl apply -f canal.yaml
 ```
 
-### 网络策略¶
+### 网络策略 
 
 > 默认情况下 Pod 是可以接收来自任何发送方的请求，也可以向任何接收方发送请求。而如果我们要对这个情况作出限制，就必须通过 `NetworkPolicy` 对象来指定。
 
@@ -137,7 +137,7 @@ egress:
 
 > 表示 Kubernetes 会拒绝被隔离 Pod 对外发起任何请求，除非请求的目的地址属于 `10.0.0.0/24` 网段，并且访问的是该网段地址的 `5978` 端口。
 
-### 测试¶
+### 测试 
 
 > 比如现在我们创建一个 Pod，带有 `role=db` 的 Label 标签：(test-networkpolicy-pod.yaml)
 

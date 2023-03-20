@@ -56,7 +56,7 @@ nav:
         - Security Context: kubernetes_security/security_context.md
         - 准入控制器: kubernetes_security/admission.md
     - Kubernetes 网络:    
-        - 网络插件: kubernetes_network/flanel.md
+        - 网络插件: kubernetes_network/flannel.md
         - 网络策略: kubernetes_network/policy.md
         - Service 服务: kubernetes_network/service.md
         - Ingress:

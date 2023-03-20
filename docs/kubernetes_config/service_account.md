@@ -1,5 +1,5 @@
 
-## ServiceAccount¶
+## ServiceAccount 
 
 > `ServiceAccount` 主要是用于解决 Pod 在集群中的身份认证问题的。认证使用的授权信息其实就是利用前面我们讲到的一个类型为 
 
@@ -9,7 +9,7 @@ kubernetes.io/service-account-token
 
  进行管理的。
 
-### 介绍¶
+### 介绍 
 
 > `ServiceAccount` 是命名空间级别的，每一个命名空间创建的时候就会自动创建一个名为 `default` 的 `ServiceAccount` 对象:
 
@@ -78,7 +78,7 @@ type: kubernetes.io/service-account-token
 
  目录中，这样我们就可以在 Pod 里面获取到用于身份认证的信息了。
 
-### 实现原理¶
+### 实现原理 
 
 > 实际上这个自动挂载过程是在 Pod 创建的时候通过 
 

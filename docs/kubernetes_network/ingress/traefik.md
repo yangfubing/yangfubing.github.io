@@ -1,5 +1,5 @@
 
-## Traefik¶
+## Traefik 
 
 > Traefik 是一个开源的可以使服务发布变得轻松有趣的边缘路由器。它负责接收你系统的请求，然后使用合适的组件来对这些请求进行处理。
 
@@ -11,7 +11,7 @@
 
 > 使用 Traefik，不需要维护或者同步一个独立的配置文件：因为一切都会自动配置，实时操作的（无需重新启动，不会中断连接）。使用 Traefik，你可以花更多的时间在系统的开发和新功能上面，而不是在配置和维护工作状态上面花费大量时间。
 
-### 核心概念¶
+### 核心概念 
 
 > Traefik 是一个边缘路由器，是你整个平台的大门，拦截并路由每个传入的请求：它知道所有的逻辑和规则，这些规则确定哪些服务处理哪些请求；传统的反向代理需要一个配置文件，其中包含路由到你服务的所有可能路由，而 Traefik 会实时检测服务并自动更新路由规则，可以自动服务发现。
 
@@ -25,7 +25,7 @@
 *   `Services` 将请求转发给你的应用（load balancing, …），负责配置如何获取最终将处理传入请求的实际服务。
 *   `Middlewares` 中间件，用来修改请求或者根据请求来做出一些判断（authentication, rate limiting, headers, ...），中间件被附件到路由上，是一种在请求发送到你的`服务`之前（或者在服务的响应发送到客户端之前）调整请求的一种方法。
 
-### 安装¶
+### 安装 
 
 > 由于 Traefik 2.X 版本和之前的 1.X 版本不兼容，我们这里选择功能更加强大的 2.X 版本来和大家进行讲解，我们这里使用的镜像是 `traefik:2.1.1`。
 
@@ -82,7 +82,7 @@ traefik-dashboard    30m
 
 > ![traefik dashboard demo](../../assets/img/kubernetes_network/traefik-2.1.1-dashboard-demo.jpg)
 
-### ACME¶
+### ACME 
 
 > Traefik 通过扩展 CRD 的方式来扩展 Ingress 的功能，除了默认的用 Secret 的方式可以支持应用的 HTTPS 之外，还支持自动生成 HTTPS 证书。
 
@@ -344,7 +344,7 @@ spec:
 
 > 我们可以看到访问应用已经是受浏览器信任的证书了，查看证书我们还可以发现该证书是一个通配符的证书。
 
-### 中间件¶
+### 中间件 
 
 > 中间件是 Traefik2.0 中一个非常有特色的功能，我们可以根据自己的各种需求去选择不同的中间件来满足服务，Traefik 官方已经内置了许多不同功能的中间件，其中一些可以修改请求，头信息，一些负责重定向，一些添加身份验证等等，而且中间件还可以通过链式组合的方式来适用各种情况。
 
@@ -411,7 +411,7 @@ spec:
 
 > 这个时候我们再去访问 http 服务可以发现就会自动跳转到 https 去了。关于更多中间件的用法可以查看文档 Traefik Docs。
 
-### 灰度发布¶
+### 灰度发布 
 
 > Traefik2.0 的一个更强大的功能就是灰度发布，灰度发布我们有时候也会称为金丝雀发布（Canary），主要就是让一部分测试的服务也参与到线上去，经过测试观察看是否符号上线要求。
 
@@ -547,7 +547,7 @@ spec:
 
 > ![traefik wrr demo](../../assets/img/kubernetes_network/traefik-wrr-demo.png)
 
-### 流量复制¶
+### 流量复制 
 
 > 除了灰度发布之外，Traefik 2.0 还引入了流量镜像服务，是一种可以将流入流量复制并同时将其发送给其他服务的方法，镜像服务可以获得给定百分比的请求同时也会忽略这部分请求的响应。
 
@@ -681,11 +681,11 @@ traefikservice.traefik.containo.us/mirroring-example created
 
 > 这个时候我们在浏览器中去连续访问4次 `mirror.qikqiak.com` 可以发现有一半的请求也出现在了 `v2` 这个服务中： ![traefik mirror demo](../../assets/img/kubernetes_network/traefik-mirror-demo.png)
 
-### TCP¶
+### TCP 
 
 > 另外 Traefik2.0 已经支持了 TCP 服务的，下面我们以 mongo 为例来了解下 Traefik 是如何支持 TCP 服务得。
 
-### 简单 TCP 服务¶
+### 简单 TCP 服务 
 
 > 首先部署一个普通的 mongo 服务，资源清单文件如下所示：（mongo.yaml）
 
@@ -798,7 +798,7 @@ local   000GB
 
 > 到这里我们就完成了将 mongo（TCP）服务暴露给外部用户了。
 
-### 带 TLS 证书的 TCP¶
+### 带 TLS 证书的 TCP 
 
 > 上面我们部署的 mongo 是一个普通的服务，然后用 Traefik 代理的，但是有时候为了安全 mongo 服务本身还会使用 TLS 证书的形式提供服务，下面是用来生成 mongo tls 证书的脚本文件：（generate-certificates.sh）
 

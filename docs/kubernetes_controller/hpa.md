@@ -4,16 +4,16 @@
                   <a href="https://github.com/cnych/qikqiak.com/edit/master/docs/controller/hpa.md" title="编辑此页" class="md-icon md-content__icon"></a>
                 
                 
-                <h1 id="hpa">HPA 控制器<a class="headerlink" href="#hpa" title="Permanent link">¶</a></h1>
+                <h1 id="hpa">HPA 控制器<a class="headerlink" href="#hpa" title="Permanent link"> </a></h1>
 <p>在前面的学习中我们使用用一个 <code>kubectl scale</code> 命令可以来实现 Pod 的扩缩容功能，但是这个毕竟是完全手动操作的，要应对线上的各种复杂情况，我们需要能够做到自动化去感知业务，来自动进行扩缩容。为此，Kubernetes 也为我们提供了这样的一个资源对象：<code>Horizontal Pod Autoscaling（Pod 水平自动伸缩）</code>，简称<code>HPA</code>，HPA 通过监控分析一些控制器控制的所有 Pod 的负载变化情况来确定是否需要调整 Pod 的副本数量，这是 HPA 最基本的原理：</p>
 <p><img alt="HPA" src="../assets/img/kubernetes_controller/horizontal-pod-autoscaler.svg"></p>
 <p>我们可以简单的通过 <code>kubectl autoscale</code> 命令来创建一个 HPA 资源对象，<code>HPA Controller</code>默认<code>30s</code>轮询一次（可通过 <code>kube-controller-manager</code> 的<code>--horizontal-pod-autoscaler-sync-period</code> 参数进行设置），查询指定的资源中的 Pod 资源使用率，并且与创建时设定的值和指标做对比，从而实现自动伸缩的功能。</p>
-<h2 id="metrics-server">Metrics Server<a class="headerlink" href="#metrics-server" title="Permanent link">¶</a></h2>
+<h2 id="metrics-server">Metrics Server<a class="headerlink" href="#metrics-server" title="Permanent link"> </a></h2>
 <p>在 HPA 的第一个版本中，我们需要 <code>Heapster</code> 提供 CPU 和内存指标，在 HPA v2 过后就需要安装 Metrcis Server 了，<code>Metrics Server</code> 可以通过标准的 Kubernetes API 把监控数据暴露出来，有了 <code>Metrics Server</code> 之后，我们就完全可以通过标准的 Kubernetes API 来访问我们想要获取的监控数据了：
 </p><pre class="highlight" id="__code_0"><button class="md-clipboard" title="复制" data-clipboard-target="#__code_0 pre, #__code_0 code"><span class="md-clipboard__message"></span></button><code class="language-shell hljs">https://10.96.0.1/apis/metrics.k8s.io/v1beta1/namespaces/&lt;namespace-name&gt;/pods/&lt;pod-name&gt;</code></pre><p></p>
 <p>比如当我们访问上面的 API 的时候，我们就可以获取到该 Pod 的资源数据，这些数据其实是来自于 kubelet 的 <code>Summary API</code> 采集而来的。不过需要说明的是我们这里可以通过标准的 API 来获取资源监控数据，并不是因为 <code>Metrics Server</code> 就是 APIServer 的一部分，而是通过 Kubernetes 提供的 <code>Aggregator</code> 汇聚插件来实现的，是独立于 APIServer 之外运行的。</p>
 <p><img alt="HAP Metrics Server" src="../assets/img/kubernetes_controller/k8s-hpa-ms.png"></p>
-<h3 id="api">聚合 API<a class="headerlink" href="#api" title="Permanent link">¶</a></h3>
+<h3 id="api">聚合 API<a class="headerlink" href="#api" title="Permanent link"> </a></h3>
 <p><code>Aggregator</code> 允许开发人员编写一个自己的服务，把这个服务注册到 Kubernetes 的 APIServer 里面去，这样我们就可以像原生的 APIServer 提供的 API 使用自己的 API 了，我们把自己的服务运行在 Kubernetes 集群里面，然后 Kubernetes 的 <code>Aggregator</code> 通过 Service 名称就可以转发到我们自己写的 Service 里面去了。这样这个聚合层就带来了很多好处：</p>
 <ul>
 <li>增加了 API 的扩展性，开发人员可以编写自己的 API 服务来暴露他们想要的 API。</li>
@@ -21,7 +21,7 @@
 <li>开发分阶段实验性 API，新的 API 可以在单独的聚合服务中开发，当它稳定之后，在合并会 APIServer 就很容易了。</li>
 <li>确保新 API 遵循 Kubernetes 约定，如果没有这里提出的机制，社区成员可能会被迫推出自己的东西，这样很可能造成社区成员和社区约定不一致。</li>
 </ul>
-<h3 id="_1">安装<a class="headerlink" href="#_1" title="Permanent link">¶</a></h3>
+<h3 id="_1">安装<a class="headerlink" href="#_1" title="Permanent link"> </a></h3>
 <p>所以现在我们要使用 HPA，就需要在集群中安装 <code>Metrics Server</code> 服务，要安装 <code>Metrics Server</code> 就需要开启 <code>Aggregator</code>，因为 <code>Metrics Server</code> 就是通过该代理进行扩展的，不过我们集群是通过 Kubeadm 搭建的，默认已经开启了，如果是二进制方式安装的集群，需要单独配置 kube-apsierver 添加如下所示的参数：
 </p><pre class="highlight" id="__code_1"><button class="md-clipboard" title="复制" data-clipboard-target="#__code_1 pre, #__code_1 code"><span class="md-clipboard__message"></span></button><code class="language-yaml hljs"><span class="hljs-bullet">-</span><span class="hljs-bullet">-requestheader-client-ca-file=&lt;path</span> <span class="hljs-string">to</span> <span class="hljs-string">aggregator</span> <span class="hljs-string">CA</span> <span class="hljs-string">cert&gt;</span>
 <span class="hljs-bullet">-</span><span class="hljs-bullet">-requestheader-allowed-names=aggregator</span>
@@ -119,7 +119,7 @@ ydzs-node2    321m         8%     3193Mi          41%
 ydzs-node3    241m         6%     2933Mi          37%       
 ydzs-node4    168m         4%     2514Mi          32% </span></code></pre><p></p>
 <p>现在我们可以通过 <code>kubectl top</code> 命令来获取到资源数据了，证明 <code>Metrics Server</code> 已经安装成功了。</p>
-<h2 id="hpa_1">HPA<a class="headerlink" href="#hpa_1" title="Permanent link">¶</a></h2>
+<h2 id="hpa_1">HPA<a class="headerlink" href="#hpa_1" title="Permanent link"> </a></h2>
 <p>现在我们用 Deployment 来创建一个 Nginx Pod，然后利用 <code>HPA</code> 来进行自动扩缩容。资源清单如下所示：（hpa-demo.yaml）
 </p><pre class="highlight" id="__code_11"><button class="md-clipboard" title="复制" data-clipboard-target="#__code_11 pre, #__code_11 code"><span class="md-clipboard__message"></span></button><code class="language-yaml hljs"><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">apps/v1</span>
 <span class="hljs-attr">kind:</span> <span class="hljs-string">Deployment</span>
