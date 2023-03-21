@@ -25,50 +25,49 @@ theme:
         search: 83   # s    
            
 nav: 
-  - 介绍: index.md 
-  - 云原生: 
-    - Docker 基础: 
-        - 简介: docker/overview.md
-        - 安装: docker/install.md
-        - 基本操作: docker/basic.md
-        - Dockerfile: docker/dockerfile_usage.md
-        - Dockerfile 实践: docker/dockerfile_practice.md
-    - Kubernetes 基础:     
-        - 简介: kubernetes_basic/overview.md
-        - 安装: kubernetes_basic/install.md
-        - 资源清单: kubernetes_basic/yaml.md
-        - Pod原理: kubernetes_basic/pod.md
-        - Pod 的生命周期: kubernetes_basic/pod_life.md
-        - Pod 使用进阶: kubernetes_basic/pod_deep.md
-    - Kubernetes 控制器:    
-        - ReplicaSet: kubernetes_controller/replicaset.md
-        - Deployment: kubernetes_controller/deployment.md
-        - StatefulSet: kubernetes_controller/statefulset.md
-        - DaemonSet: kubernetes_controller/daemonset.md
-        - Job: kubernetes_controller/job.md
-        - HPA: kubernetes_controller/hpa.md
-    - Kubernetes 配置管理:    
-        - ConfigMap: kubernetes_config/config_map.md
-        - Secret: kubernetes_config/secret.md
-        - ServiceAccount: kubernetes_config/service_account.md
-    - Kubernetes 安全:    
-        - RBAC: kubernetes_security/rbac.md
-        - Security Context: kubernetes_security/security_context.md
-        - 准入控制器: kubernetes_security/admission.md
-    - Kubernetes 网络:    
-        - 网络插件: kubernetes_network/flannel.md
-        - 网络策略: kubernetes_network/policy.md
-        - Service 服务: kubernetes_network/service.md
-        - Ingress:
-          - NGINX Controller: kubernetes_network/ingress/nginx.md
-          - Traefik: kubernetes_network/ingress/traefik.md
-    - Kubernetes 调度器:    
-        - 调度器介绍: kubernetes_scheduler/overview.md
-        - Pod 调度: kubernetes_scheduler/usage.md
-    - Kubernetes 存储:    
-        - Local 本地存储: kubernetes_stroage/local.md
-        - Ceph 存储: kubernetes_stroage/ceph.md
-        - 存储原理: kubernetes_stroage/csi.md
+- 云原生: index.md 
+- Docker 基础: 
+    - 简介: docker/overview.md
+    - 安装: docker/install.md
+    - 基本操作: docker/basic.md
+    - Dockerfile: docker/dockerfile_usage.md
+    - Dockerfile实践: docker/dockerfile_practice.md
+- Kubernetes 基础:     
+    - 简介: kubernetes_basic/overview.md
+    - 安装: kubernetes_basic/install.md
+    - 资源清单: kubernetes_basic/yaml.md
+    - Pod原理: kubernetes_basic/pod.md
+    - Pod的生命周期: kubernetes_basic/pod_life.md
+    - Pod使用进阶: kubernetes_basic/pod_deep.md
+- Kubernetes 控制器:    
+    - ReplicaSet: kubernetes_controller/replicaset.md
+    - Deployment: kubernetes_controller/deployment.md
+    - StatefulSet: kubernetes_controller/statefulset.md
+    - DaemonSet: kubernetes_controller/daemonset.md
+    - Job: kubernetes_controller/job.md
+    - HPA: kubernetes_controller/hpa.md
+- Kubernetes 配置管理:    
+    - ConfigMap: kubernetes_config/config_map.md
+    - Secret: kubernetes_config/secret.md
+    - ServiceAccount: kubernetes_config/service_account.md
+- Kubernetes 安全:    
+    - RBAC: kubernetes_security/rbac.md
+    - Security Context: kubernetes_security/security_context.md
+    - 准入控制器: kubernetes_security/admission.md
+- Kubernetes 网络:    
+    - 网络插件: kubernetes_network/flannel.md
+    - 网络策略: kubernetes_network/policy.md
+    - Service 服务: kubernetes_network/service.md
+    - Ingress:
+        - NGINX Controller: kubernetes_network/ingress/nginx.md
+        - Traefik: kubernetes_network/ingress/traefik.md
+- Kubernetes 调度器:    
+    - 调度器介绍: kubernetes_scheduler/overview.md
+    - Pod 调度: kubernetes_scheduler/usage.md
+- Kubernetes 存储:    
+    - Local 本地存储: kubernetes_stroage/local.md
+    - Ceph 存储: kubernetes_stroage/ceph.md
+    - 存储原理: kubernetes_stroage/csi.md
 markdown_extensions:
   - admonition
   - codehilite:
