@@ -1,0 +1,2673 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content=".net,java,php,python,docker,web">
+      
+      
+        <meta name="author" content="BurningMyself">
+      
+      
+        <link rel="canonical" href="https://burningmyself.gitee.io/kubernetes_service_mesh/observability/">
+      
+      
+        <link rel="prev" href="../traffic/">
+      
+      
+        <link rel="next" href="../security/">
+      
+      <link rel="icon" href="../../favicon.ico">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.15">
+    
+    
+      
+        <title>可观测性 - BurningMyself</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.113286f1.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.a0c5b2b5.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="BurningMyself" class="md-header__button md-logo" aria-label="BurningMyself" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BurningMyself
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              可观测性
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/burningmyself/burningmyself.github.io" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    burningmyself.github.io
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="BurningMyself" class="md-nav__button md-logo" aria-label="BurningMyself" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    BurningMyself
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/burningmyself/burningmyself.github.io" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    burningmyself.github.io
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        云原生
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          Docker 基础
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Docker 基础
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/overview/" class="md-nav__link">
+        简介
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/install/" class="md-nav__link">
+        安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/basic/" class="md-nav__link">
+        基本操作
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/dockerfile_usage/" class="md-nav__link">
+        Dockerfile
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/dockerfile_practice/" class="md-nav__link">
+        Dockerfile实践
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          Kubernetes 基础
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 基础
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/overview/" class="md-nav__link">
+        简介
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/install/" class="md-nav__link">
+        安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/yaml/" class="md-nav__link">
+        资源清单
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/pod/" class="md-nav__link">
+        Pod原理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/pod_life/" class="md-nav__link">
+        Pod的生命周期
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/pod_deep/" class="md-nav__link">
+        Pod使用进阶
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          Kubernetes 控制器
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 控制器
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/replicaset/" class="md-nav__link">
+        ReplicaSet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/deployment/" class="md-nav__link">
+        Deployment
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/statefulset/" class="md-nav__link">
+        StatefulSet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/daemonset/" class="md-nav__link">
+        DaemonSet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/job/" class="md-nav__link">
+        Job
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/hpa/" class="md-nav__link">
+        HPA
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          Kubernetes 配置管理
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 配置管理
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_config/config_map/" class="md-nav__link">
+        ConfigMap
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_config/secret/" class="md-nav__link">
+        Secret
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_config/service_account/" class="md-nav__link">
+        ServiceAccount
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+          Kubernetes 安全
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 安全
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_security/rbac/" class="md-nav__link">
+        RBAC
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_security/security_context/" class="md-nav__link">
+        Security Context
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_security/admission/" class="md-nav__link">
+        准入控制器
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+          Kubernetes 网络
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 网络
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/flannel/" class="md-nav__link">
+        网络插件
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/policy/" class="md-nav__link">
+        网络策略
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/service/" class="md-nav__link">
+        Service 服务
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_4" id="__nav_7_4_label" tabindex="0">
+          Ingress
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_7_4">
+          <span class="md-nav__icon md-icon"></span>
+          Ingress
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/ingress/nginx/" class="md-nav__link">
+        NGINX Controller
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/ingress/traefik/" class="md-nav__link">
+        Traefik
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+          Kubernetes 调度器
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 调度器
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_scheduler/overview/" class="md-nav__link">
+        调度器介绍
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_scheduler/usage/" class="md-nav__link">
+        Pod 调度
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+          Kubernetes 存储
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 存储
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_stroage/local/" class="md-nav__link">
+        Local 本地存储
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_stroage/ceph/" class="md-nav__link">
+        Ceph 存储
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_stroage/csi/" class="md-nav__link">
+        存储原理
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+          Helm 包管理
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_10">
+          <span class="md-nav__icon md-icon"></span>
+          Helm 包管理
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/helm/" class="md-nav__link">
+        Helm
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/charts/" class="md-nav__link">
+        Charts
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_10_3" id="__nav_10_3_label" tabindex="0">
+          模板开发
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_10_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_10_3">
+          <span class="md-nav__icon md-icon"></span>
+          模板开发
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/objects/" class="md-nav__link">
+        内置对象
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/values/" class="md-nav__link">
+        Values
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/function/" class="md-nav__link">
+        函数和管道
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/flow/" class="md-nav__link">
+        流程控制
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/variables/" class="md-nav__link">
+        变量
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/named_templates/" class="md-nav__link">
+        命名模板
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/access_files/" class="md-nav__link">
+        访问文件
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/notes_files/" class="md-nav__link">
+        NOTES.txt 文件
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/subcharts_and_globals/" class="md-nav__link">
+        子chart与全局值
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/debug/" class="md-nav__link">
+        模板调试
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/chart_hooks/" class="md-nav__link">
+        Chart Hooks
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/example/" class="md-nav__link">
+        示例
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+          Kubernetes 监控
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 监控
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/prometheus/" class="md-nav__link">
+        Prometheus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/grafana/" class="md-nav__link">
+        Grafana
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/promql/" class="md-nav__link">
+        Promql
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/alertmanager/" class="md-nav__link">
+        Alertmanager
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/thanos/" class="md-nav__link">
+        Prometheus Thanos
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/adapter/" class="md-nav__link">
+        Prometheus Adpater
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_11_7" id="__nav_11_7_label" tabindex="0">
+          Prometheus Operator
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_7">
+          <span class="md-nav__icon md-icon"></span>
+          Prometheus Operator
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/operator/install/" class="md-nav__link">
+        安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/operator/custom/" class="md-nav__link">
+        自定义监控报警
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/operator/advance/" class="md-nav__link">
+        高级配置
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+          Kubernetes 日志
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_12">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 日志
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_logs/architec/" class="md-nav__link">
+        Grafana
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_logs/efk/" class="md-nav__link">
+        efk
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+          Kubernetes DevOps
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_13">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes DevOps
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_devops/jenkins/" class="md-nav__link">
+        Jenins
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_devops/gitlab/" class="md-nav__link">
+        Gitlab
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_devops/harbor/" class="md-nav__link">
+        Harbor
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_devops/jenkins_pipeline/" class="md-nav__link">
+        Jenkins Pipeline
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_devops/token/" class="md-nav__link">
+        Tekton
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="0">
+          Service Mesh 实践
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_14">
+          <span class="md-nav__icon md-icon"></span>
+          Service Mesh 实践
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../istio/" class="md-nav__link">
+        Istio
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../traffic/" class="md-nav__link">
+        流量管理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          可观测性
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        可观测性
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    可观测性
+  </a>
+  
+    <nav class="md-nav" aria-label="可观测性">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#kiali" class="md-nav__link">
+    使用 Kiali 观测微服务
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    监控指标
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#grafana" class="md-nav__link">
+    使用 Grafana 可视化系统监控
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    访问日志
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    分布式追踪
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../security/" class="md-nav__link">
+        安全管控
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cert_manager/" class="md-nav__link">
+        CertManager
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="0">
+          Kubernetes 多租户
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_15">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 多租户
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_tenant/tenant/" class="md-nav__link">
+        多租户介绍
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_tenant/quota/" class="md-nav__link">
+        多租户介绍
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_tenant/psp/" class="md-nav__link">
+        多租户介绍
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_16" id="__nav_16_label" tabindex="0">
+          Operator
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_16_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_16">
+          <span class="md-nav__icon md-icon"></span>
+          Operator
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_operator/crd/" class="md-nav__link">
+        CRD
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_operator/operator/" class="md-nav__link">
+        Operator
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_17" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_17" id="__nav_17_label" tabindex="0">
+          实践技巧
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_17_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_17">
+          <span class="md-nav__icon md-icon"></span>
+          实践技巧
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_maintain/skill/" class="md-nav__link">
+        技巧
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_maintain/update/" class="md-nav__link">
+        技巧
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_maintain/update_cluster/" class="md-nav__link">
+        技巧
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_maintain/reserved/" class="md-nav__link">
+        技巧
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_18" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_18" id="__nav_18_label" tabindex="0">
+          源码
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_18_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_18">
+          <span class="md-nav__icon md-icon"></span>
+          源码
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_code/kubelet/" class="md-nav__link">
+        kubelet源码
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_18_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_18_2" id="__nav_18_2_label" tabindex="0">
+          client-go
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_18_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_18_2">
+          <span class="md-nav__icon md-icon"></span>
+          client-go
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_code/client_go/workqueue/" class="md-nav__link">
+        workqueue
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_code/client_go/indexer/" class="md-nav__link">
+        indexer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_code/client_go/deltafifo/" class="md-nav__link">
+        workqueue
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_19" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_19" id="__nav_19_label" tabindex="0">
+          应用示例
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_19_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_19">
+          <span class="md-nav__icon md-icon"></span>
+          应用示例
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_example/wordpress/" class="md-nav__link">
+        应用部署
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    可观测性
+  </a>
+  
+    <nav class="md-nav" aria-label="可观测性">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#kiali" class="md-nav__link">
+    使用 Kiali 观测微服务
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    监控指标
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#grafana" class="md-nav__link">
+    使用 Grafana 可视化系统监控
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    访问日志
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    分布式追踪
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+  <h1>可观测性</h1>
+
+<h2 id="_1">可观测性<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>前面我们学习了 Istio 中的流量管理功能，本节我们来学习如何配置 Istio 来自动收集网格中的服务遥测，通过监控指标、日志、分布式追踪等方式来实现应用的可观测性。</p>
+<p><img alt="可观测性" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200626091556.png" /></p>
+</blockquote>
+<h3 id="kiali">使用 Kiali 观测微服务<a class="headerlink" href="#kiali" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>由于微服务之间的调用关系错综复杂，排查问题就更加困难了，为了使服务之间的关系更加清晰明了，了解应用的行为和状态，我们有必要使用一些可视化的方案来观测我们的微服务应用，其中 Kiali 就是这样的一个工具。</p>
+<p>Kiali 是 Istio 的一个可观测工具，提供服务拓扑展示服务网格的结构，提供网格的健康状态视图，配置信息验证功能，此外还具有服务网格配置的功能。</p>
+<p>默认情况下，Kiali 服务已经安装了，可以通过 istioctl 命令来访问，比如我们可以使用如下命令来打开 kiali 的 web UI：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ istioctl dashboard kiali --address=0
+http://localhost:44759/kiali
+</code></pre></div>
+<blockquote>
+<p>然后就可以通过 <code>44759</code> 端口访问到 kiali 服务了。此外我们也可以通过修改 Kiali 的服务为 NodePort 类型来访问：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl get pods -n istio-system -l app=kiali
+NAME                     READY   STATUS    RESTARTS   AGE
+kiali-6f457f5964-8p8gr   1/1     Running   0          32d
+$ kubectl get svc -n istio-system -l app=kiali
+NAME    TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)     AGE
+kiali   ClusterIP   178   &lt;none&gt;        20001/TCP   32d
+$ kubectl edit svc kiali -n istio-system
+......
+spec:
+  clusterIP: 178
+  ports:
+  - name: http-kiali
+    port: 20001
+    protocol: TCP
+    targetPort: 20001
+  selector:
+    app: kiali
+  sessionAffinity: None
+  type: NodePort
+......
+$ kubectl get svc -n istio-system -l app=kiali
+NAME    TYPE       CLUSTER-IP     EXTERNAL-IP   PORT(S)           AGE
+kiali   NodePort   178   &lt;none&gt;        20001:31098/TCP   32d
+</code></pre></div>
+<blockquote>
+<p><img alt="" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200711121832.png" /></p>
+<p>默认的用户名和密码存储在名为 kiali 的 Secret 对象之中，需要将其中的 username 与 passphrase 做 base64 解码获得用户名和密码：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl get secret -n istio-system kiali -o yaml
+apiVersion: v1
+data:
+  passphrase: YWRtaW4=
+  username: YWRtaW4=
+kind: Secret
+......
+</code></pre></div>
+<blockquote>
+<p><img alt="" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200711122104.png" /></p>
+<p>默认会安装命名空间进行分类，我们的 BookInfo 应用部署在 default 命名空间之下的，我们可以点击 default 命名空间之下的应用：</p>
+<p><img alt="" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200711122733.png" /></p>
+<p>还切换到 Graph 页面下面查看微服务应用的整个调用链：</p>
+<p><img alt="" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200711122921.png" /></p>
+<p>我们可以看到上图非常清晰的把 BookInfo 应用的调用链给展示出来了，这对于我们了解我们的应用是非常有帮助的。还可以查看服务的详细信息：</p>
+<p><img alt="" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200711145119.png" /></p>
+<p>在该页面之中还可以查看应用的指标、链路追踪等信息。此外在 <code>Istio Config</code> 路径下面还可以查看整个网格中的配置校验情况：</p>
+<p><img alt="" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200711145702.png" /></p>
+<p>红色标记的表示验证未通过的配置，可以点击进去编辑错误的配置，此外还可以在页面上新建 Istio 的配置：</p>
+<p><img alt="" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200711145955.png" /></p>
+</blockquote>
+<h3 id="_2">监控指标<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>默认情况下 Istio 就部署了用于收集监控指标的 Prometheus 应用:</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl get pods -n istio-system -l app=prometheus
+NAME                          READY   STATUS    RESTARTS   AGE
+prometheus-6dd77d88cf-nmsl7   2/2     Running   0          32d
+$ kubectl get svc -n istio-system -l app=prometheus
+NAME         TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+prometheus   ClusterIP   1202   &lt;none&gt;        9090/TCP   32d
+</code></pre></div>
+<blockquote>
+<p>为了测试方便我们可以将 Prometheus 的 Service 更改为 NodePort 类型：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl edit svc prometheus -n istio-system
+......
+spec:
+  type: NodePort
+......
+$ kubectl get svc -n istio-system -l app=prometheus
+NAME         TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+prometheus   NodePort   1202   &lt;none&gt;        9090:31128/TCP   32d
+</code></pre></div>
+<blockquote>
+<p>然后我们就可以通过 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>http://&lt;NodeIP&gt;:31128
+</code></pre></div>
+<p>访问 Prometheus 页面，默认情况下就已经有了很多抓取任务了：</p>
+<blockquote>
+<p><img alt="" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200711102255.png" /></p>
+<p>默认就已经收集了很多网格的指标，包括服务级别和代理级别（sidecar）的数据，自 Istio 1.5 起，Istio 标准指标由 Envoy 代理直接获取，之前是通过 Mixer 组件生成的。</p>
+<p><img alt="" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200711152018.png" /></p>
+<p>从上图可以看出现在的架构不需要 Mixer 这样的组件来完成了，在性能上得到了大幅度的提升，但是数据都需要通过 Envoy 代理来自己上传，扩展起来不是很方便，现在是通过 <code>STATS</code> 和 <code>METADATA EXCHANGE</code> 这两个插件来完成的，但是扩展性没有以前的 Mixer 组件强大了，后续或许会使用 WebAssembly 这样的技术来解决这个问题。</p>
+<p>对于 HTTP，HTTP/2 和 GRPC 流量，Istio 生成以下指标：</p>
+</blockquote>
+<ul>
+<li>请求数（istio_requests_total）：这是一个用于累加每个由 Istio 代理所处理请求的 COUNTER 指标。</li>
+<li>请求时长（istio_request_duration_seconds）：这是一个用于测量请求的持续时间的指标。</li>
+<li>请求大小（istio_request_bytes）：这是一个用于测量 HTTP 请求 body 大小的指标。</li>
+<li>响应大小（istio_response_bytes）：这是一个用于测量 HTTP 响应 body 大小的指标。</li>
+</ul>
+<blockquote>
+<p>对于 TCP 流量，Istio 生成以下指标： * TCP 发送字节数（istio_tcp_sent_bytes_total）：这是一个用于测量在 TCP 连接下响应期间发送的总字节数的 COUNTER 指标。 * TCP 接收字节数（istio_tcp_received_bytes_total）：这是一个用于测量在 TCP 连接下请求期间接收的总字节数的 COUNTER 指标。 * TCP 打开连接数（istio_tcp_connections_opened_total）：这是一个用于累加每个打开连接的 COUNTER 指标。 * TCP 关闭连接数 (istio_tcp_connections_closed_total) : 这是一个用于累加每个关闭连接的 COUNTER 指标。</p>
+</blockquote>
+<h3 id="grafana">使用 Grafana 可视化系统监控<a class="headerlink" href="#grafana" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>上面我们了解到了 Istio 网格中默认通过 Prometheus 收集了很多服务和代理相关的指标数据，此外 Istio 还默认开启了 Grafana 工具，我们可以通过 Grafana 来可视化查看网格的监控状态。</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl get pods -n istio-system -l app=grafana
+NAME                       READY   STATUS    RESTARTS   AGE
+grafana-74dc798895-mns2v   1/1     Running   0          32d
+$ kubectl get svc -n istio-system -l app=grafana
+NAME      TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+grafana   ClusterIP   254   &lt;none&gt;        3000/TCP   32d
+</code></pre></div>
+<blockquote>
+<p>同样我们这里将 grafana 的 Service 对象修改为 NodePort 类型的服务：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl edit svc grafana -n istio-system
+......
+spec:
+  type: NodePort
+......
+$ kubectl get svc -n istio-system -l app=grafana
+NAME      TYPE       CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
+grafana   NodePort   254   &lt;none&gt;        3000:30692/TCP   32d
+</code></pre></div>
+<blockquote>
+<p>然后就可以通过 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>http://&lt;NodeIP&gt;:30692
+</code></pre></div>
+<p>访问 Grafana 应用了：</p>
+<blockquote>
+<p><img alt="" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200711153433.png" /></p>
+<p>默认情况下 Grafana 中就已经导入了 Istio 的几个 Dashboard： * Mesh Dashboard：主要是查看应用的数据，包括网格数据总览、服务视图、工作负载视图等 * Performance Dashboard：主要是用于查看 Istio 本身的监控数据。</p>
+<p><img alt="" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200711153944.png" /></p>
+</blockquote>
+<h3 id="_3">访问日志<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>日志也是应用可观测性中一个非常重要的方式，也是我们传统调试应用非常重要的手段，在 Istio 中使用 Sidecar 容器对请求进行了拦截，无疑也增大了调试难度，但是同时 Istio 也可以监测到网格内的服务通信的流转情况，并生成详细的遥测日志数据，任何请求与事件的元信息都可以获取到，所以我们也非常有必要来查看下 Istio 中的代理日志数据。Istio 最简单的日志类型是 <code>Envoy 的访问日志</code>，Envoy 代理打印访问日志信息到标准输出，然后我们就可以通过 <code>kubectl logs</code> 命令打印出来查看了。</p>
+<p>默认情况下 Istio 已经开启了 Envoy 访问日志，我们也可以通过 Istio 的 ConfigMap 配置来修改日志的格式：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl edit cm istio -n istio-system 
+apiVersion: v1
+data:
+  mesh: |-
+    accessLogEncoding: JSON
+    accessLogFile: /dev/stdout
+    accessLogFormat: &quot;&quot;
+    outboundTrafficPolicy:  
+      mode: REGISTRY_ONLY
+    defaultConfig:
+......
+</code></pre></div>
+<blockquote>
+<p>默认情况下日志就是输出到 stdout 上的 TEXT 文本格式，为了方便显示，这里我们将其设置为 JSON 格式，如果要想修改访问日志的格式可以设置 <code>accessLogFormat</code> 属性，具体的访问日志格式可以查看 Envoy 官方文档了解配置规则。</p>
+<p><img alt="istio log config" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200719152344.png" /></p>
+<p>现在我们去访问 BookInfo 服务，同时来查看 productpage 的 sidecar 日志：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl get pods -l app=productpage
+NAME                              READY   STATUS    RESTARTS   AGE
+productpage-v1-5f96867467-nsclh   2/2     Running   0          8d
+$ kubectl logs -f productpage-v1-5f96867467-nsclh -c istio-proxy
+{&quot;user_agent&quot;:&quot;Mozilla/0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/536 (KHTML, like Gecko) Chrome/41116 Safari/536&quot;,&quot;response_code&quot;:&quot;200&quot;,&quot;response_flags&quot;:&quot;-&quot;,&quot;start_time&quot;:&quot;2020-07-19T06:48:074Z&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;request_id&quot;:&quot;6df02877-0e8d-99f4-a9ee-0f9479d648dd&quot;,&quot;upstream_host&quot;:&quot;2180:9080&quot;,&quot;x_forwarded_for&quot;:&quot;-&quot;,&quot;requested_server_name&quot;:&quot;-&quot;,&quot;bytes_received&quot;:&quot;0&quot;,&quot;istio_policy_status&quot;:&quot;-&quot;,&quot;bytes_sent&quot;:&quot;178&quot;,&quot;upstream_cluster&quot;:&quot;outbound|9080||details.default.svc.cluster.local&quot;,&quot;downstream_remote_address&quot;:&quot;2227:47244&quot;,&quot;authority&quot;:&quot;details:9080&quot;,&quot;path&quot;:&quot;/details/0&quot;,&quot;protocol&quot;:&quot;HTTP/1&quot;,&quot;upstream_service_time&quot;:&quot;17&quot;,&quot;upstream_local_address&quot;:&quot;2227:42248&quot;,&quot;duration&quot;:&quot;18&quot;,&quot;upstream_transport_failure_reason&quot;:&quot;-&quot;,&quot;route_name&quot;:&quot;default&quot;,&quot;downstream_local_address&quot;:&quot;11166:9080&quot;}
+{&quot;user_agent&quot;:&quot;Mozilla/0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/536 (KHTML, like Gecko) Chrome/41116 Safari/536&quot;,&quot;response_code&quot;:&quot;200&quot;,&quot;response_flags&quot;:&quot;-&quot;,&quot;start_time&quot;:&quot;2020-07-19T06:48:104Z&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;request_id&quot;:&quot;6df02877-0e8d-99f4-a9ee-0f9479d648dd&quot;,&quot;upstream_host&quot;:&quot;2182:9080&quot;,&quot;x_forwarded_for&quot;:&quot;-&quot;,&quot;requested_server_name&quot;:&quot;-&quot;,&quot;bytes_received&quot;:&quot;0&quot;,&quot;istio_policy_status&quot;:&quot;-&quot;,&quot;bytes_sent&quot;:&quot;295&quot;,&quot;upstream_cluster&quot;:&quot;outbound|9080||reviews.default.svc.cluster.local&quot;,&quot;downstream_remote_address&quot;:&quot;2227:36718&quot;,&quot;authority&quot;:&quot;reviews:9080&quot;,&quot;path&quot;:&quot;/reviews/0&quot;,&quot;protocol&quot;:&quot;HTTP/1&quot;,&quot;upstream_service_time&quot;:&quot;20&quot;,&quot;upstream_local_address&quot;:&quot;2227:42884&quot;,&quot;duration&quot;:&quot;21&quot;,&quot;upstream_transport_failure_reason&quot;:&quot;-&quot;,&quot;route_name&quot;:&quot;default&quot;,&quot;downstream_local_address&quot;:&quot;144:9080&quot;}
+{&quot;bytes_sent&quot;:&quot;4183&quot;,&quot;upstream_cluster&quot;:&quot;inbound|9080|http|productpage.default.svc.cluster.local&quot;,&quot;downstream_remote_address&quot;:&quot;20:0&quot;,&quot;authority&quot;:&quot;k8s.qikqiak.com:32193&quot;,&quot;path&quot;:&quot;/productpage&quot;,&quot;protocol&quot;:&quot;HTTP/1&quot;,&quot;upstream_service_time&quot;:&quot;70&quot;,&quot;upstream_local_address&quot;:&quot;11:36436&quot;,&quot;duration&quot;:&quot;71&quot;,&quot;upstream_transport_failure_reason&quot;:&quot;-&quot;,&quot;route_name&quot;:&quot;default&quot;,&quot;downstream_local_address&quot;:&quot;2227:9080&quot;,&quot;user_agent&quot;:&quot;Mozilla/0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/536 (KHTML, like Gecko) Chrome/41116 Safari/536&quot;,&quot;response_code&quot;:&quot;200&quot;,&quot;response_flags&quot;:&quot;-&quot;,&quot;start_time&quot;:&quot;2020-07-19T06:48:061Z&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;request_id&quot;:&quot;6df02877-0e8d-99f4-a9ee-0f9479d648dd&quot;,&quot;upstream_host&quot;:&quot;11:9080&quot;,&quot;x_forwarded_for&quot;:&quot;20&quot;,&quot;requested_server_name&quot;:&quot;outbound_.9080_._.productpage.default.svc.cluster.local&quot;,&quot;bytes_received&quot;:&quot;0&quot;,&quot;istio_policy_status&quot;:&quot;-&quot;}
+</code></pre></div>
+<blockquote>
+<blockquote>
+<p>这里我们查询的容器名 <code>istio-proxy</code> 其实就是 Envoy sidecar 代理，Envoy 将请求和响应日志都进行了打印并输出至 stdout ，所以可以通过 <code>kubectl logs</code> 查询。</p>
+</blockquote>
+<p>正常就会收到3条 JSON 格式的日志，productpage 服务会调用 details 与 reviews 服务，所以我们可以看到一条访问 <code>/reviews/0</code> 与 <code>/details/0</code> 的 <code>outbound</code> 请求，和最终的 <code>/productpage</code> 的 <code>inbound</code> 请求记录。</p>
+<p>为了方便查看，这里我们将第一条日志进行格式化，如下所示： <img alt="json format" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200719150158.png" /></p>
+<p>这里面的日志信息其实是一个标准的 Envoy 流量模型，所以如果我们要深入研究 Istio，对应 Envoy 的了解是必不可少的，其中最重要的几个字段就是 Envoy 流量五元组中的几个信息。</p>
+<p>在 Envoy 中接受请求流量叫做 <code>Downstream（下游）</code>，Envoy 发出请求流量叫做 <code>Upstream（上游）</code>，在处理 <code>Downstream</code> 和 <code>Upstream</code> 过程中，分别会涉及2个流量端点，即请求的发起端和接收端：</p>
+<p><img alt="envoy request model" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200719150602.png" /></p>
+<p>在这个过程中，Envoy 会根据用户规则，计算出符合条件的转发目的主机集合，这个集合叫做 <code>UPSTREAM_CLUSTER</code>, 并根据负载均衡规则，从这个集合中选择一个 host 作为流量转发的接收端点，这个 host 就是 <code>UPSTREAM_HOST</code>。这就是 Envoy 请求处理的<code>流量五元组</code>信息，这是 Envoy 日志里最重要的部分，通过这个五元组我们可以准确的观测流量<code>「从哪里来」和「到哪里去」</code>：</p>
+</blockquote>
+<ul>
+<li>downstream_remote_address</li>
+<li>downstream_local_address</li>
+<li>upstream_local_address</li>
+<li>upstream_host</li>
+<li>upstream_cluster</li>
+</ul>
+<blockquote>
+<p>除了五元组信息之外，还有 <code>request_id</code> 属性，该属性主要用于链路追踪，可以将一条请求在不同的服务中的调用串联起来。</p>
+<p>还有一个非常重要的属性 <code>response_flags</code>，可以通过该属性来查看当前请求的状态，用于调试请求的时候非常有用： <img alt="response flag" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200719151232.png" /></p>
+<p>不过需要注意的是，当 Pod 被销毁后，旧的日志将不复存在，也无法通过 <code>kubectl logs</code> 就行查看了。所以如果要查看历史的的日志数据，我们可以使用 <code>EFK</code> 方案将日志进行收集，前面我们已经仔细讲解过了，这里就不再赘述了。</p>
+</blockquote>
+<h3 id="_4">分布式追踪<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>相比传统的单体应用，微服务的一个主要变化是将应用中的不同模块拆分为了独立的服务，在微服务架构下，原来进程内的方法调用成为了跨进程的远程方法调用。相对于单一进程内的方法调用而言，跨进程调用的调试和故障分析是非常困难的，难以使用传统的代码调试程序或者日志打印来对分布式的调用过程进行查看和分析。一个来自客户端的请求在其业务处理过程中很有可能需要经过多个微服务，我们如果想要对该请求的端到端调用过程进行完整的分析，则必须将该请求经过的所有进程的相关信息都收集起来并关联在一起，这就是<code>分布式追踪</code>，也是应用可观测性中非常重要的手段。</p>
+<p>在 Istio 中通过分布式追踪我们可以让用户对跨多个分布式服务网格的一个请求进行追踪分析，进而可以通过可视化的方式更加深入地了解请求的<code>延迟、序列化和并行度</code>等。</p>
+<p>Istio 利用 Envoy 的分布式追踪功能提供了开箱即用的追踪集成，默认 Istio 提供了集成各种追踪后端服务的选项，并且可以通过配置代理来自动发送追踪 <code>span</code> 到追踪后端服务。</p>
+<p>在使用 Istio 的分布式追踪之前，我们需要先了解两个重要的概念：<code>Span</code> 与 <code>Trace</code>。</p>
+<p><img alt="tracing" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200719154443.png" /></p>
+</blockquote>
+<ul>
+<li>Span：分布式追踪的基本组成单元，表示一个分布式系统中的单独的工作单元，每一个 Span 可以包含其它 Span 的引用。多个 Span 在一起构成了 Trace。</li>
+<li>Trace：微服务中记录的完整的请求执行过程，一个完整的 Trace 由一个或多个 Span 组成。</li>
+</ul>
+<blockquote>
+<p>随着分布式追踪技术的发展，社区推出了 OpenTracing 这个规范，提供了标准的 API 规范、框架以及一些公共的库。目前比较知名的追踪工具基本上都通过 OpenTracing 进行实现，比如 Jaeger、Zipkin 等。</p>
+<p>我们这里主要来给大家介绍比较流行的 Jaeger。 <code>Jaeger</code> 是由 Uber 开源的分布式追踪系统，采用 Go 语言编写，主要借鉴了 <code>Google Dapper</code> 论文和 <code>Zipkin</code> 的设计，兼容 OpenTracing 以及 Zipkin 追踪格式，目前已成为 CNCF 基金会的开源项目。</p>
+<p><img alt="jaeger logo" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200719155511.png" /></p>
+<p>我们这里安装 Istio 的时候使用的是 demo 这个 profile，默认情况下已经安装了 Jaeger，如果没有安装可以在使用 istioctl 命令初始化的时候添加 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>--set values.tracing.enabled=true
+</code></pre></div>
+<p>参数进行开启：</p>
+<div class="highlight"><pre><span></span><code>$ istioctl manifest apply --set values.tracing.enabled=true
+</code></pre></div>
+<blockquote>
+<p>如果集群中已经有一个可以使用的 Jaeger 服务的话，这可以使用下面的命令进行关联：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ istioctl manifest apply --set values.global.tracer.zipkin.address=&lt;jaeger-collector-service&gt;.&lt;jaeger-collector-namespace&gt;:9411
+</code></pre></div>
+<blockquote>
+<p>我们可以查看默认已经安装的 Jaeger 服务：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>kubectl get pods -l app=jaeger -n istio-system
+NAME                             READY   STATUS    RESTARTS   AGE
+istio-tracing-8584b4d7f9-vmcdx   1/1     Running   0          40d
+$ kubectl get svc -l app=jaeger -n istio-system
+NAME                        TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                         AGE
+jaeger-agent                ClusterIP   None             &lt;none&gt;        5775/UDP,6831/UDP,6832/UDP      40d
+jaeger-collector            ClusterIP   74       &lt;none&gt;        14267/TCP,14268/TCP,14250/TCP   40d
+jaeger-collector-headless   ClusterIP   None             &lt;none&gt;        14250/TCP                       40d
+jaeger-query                ClusterIP   1127    &lt;none&gt;        16686/TCP                       40d
+tracing                     ClusterIP   11125   &lt;none&gt;        80/TCP                          40d
+zipkin                      ClusterIP   1119    &lt;none&gt;        9411/TCP                        40d
+</code></pre></div>
+<blockquote>
+<p>我们可以通过 <code>tracing</code> 这个 Service 来访问 Jaeger 的 Dashboard 页面，同样为了方便测试将其修改为 NodePort 类型：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl edit svc tracing -n istio-system
+......
+spec:
+  type: NodePort
+......
+service/tracing edited
+$ kubectl get svc tracing -n istio-system
+NAME      TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+tracing   NodePort   11125   &lt;none&gt;        80:31755/TCP   40d
+</code></pre></div>
+<blockquote>
+<p>修改完成后就可以在浏览器中通过 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>http://&lt;NodeIP&gt;:31755
+</code></pre></div>
+<p>访问 Jaeger 的 Dashboard 页面了：</p>
+<blockquote>
+<p><img alt="Jaeger Dashboard" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200719161244.png" /></p>
+<p>接下来我们重新访问 BookInfo 应用产生流量请求生成追踪数据。请求完成后回到 Jaeger 页面，在左侧 Servcie 区域选择一个我们要追踪的服务，比如 <code>details.default</code>，点击 <code>"Find Traces"</code> 按钮查看追踪结果。</p>
+<p><img alt="Find Traces" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200719161645.png" /></p>
+<p>点击列表项目还可以查看追踪详细信息，记录了一次请求涉及到的 Services、深度、Span 总数、请求总时长等信息，也可以对下方的单项服务展开，观察每一个服务的请求耗时和详情。</p>
+<p><img alt="Trace Detail" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200719161848.png" /></p>
+<p>此外我们还可以切换 Trace 的显示方式为 Graph，在右上角点击 <code>Trace Timeline</code> 切换为 <code>Trace Graph</code> 模式，该模式下可以更加清晰查看到每一个调用详细信息：</p>
+<p><img alt="Trace Graph" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200719163141.png" /></p>
+<p>此外，Jaeger 还可以展示服务依赖，点击顶部的 <code>Dependencies</code> 菜单查看，该页面可以查看服务的完整依赖调用关系：</p>
+<p><img alt="Jeager 依赖" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200719162121.png" /></p>
+<p>此外还可以对比两个 Trace，在顶部 <code>Compare</code> 菜单中，输入两个不同的 <code>Trace ID</code> 即可进行对比，这可以帮助我们发现不同 Trace 之间的差异：</p>
+<p><img alt="Trace Compare" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200719162545.png" /></p>
+<p>这就是 Jaeger 的基本使用，不过需要注意的是 Istio 默认提供的 Jaeger 采用内存的存储方式，Pod 被销毁后数据也就丢失了。在生产环境中需要单独配置持久化存储数据库，具体可查看 Jaeger 官方文档。</p>
+<p>到这里我们就完成了 Istio 中可观测性的实验：指标、日志、追踪，对于微服务应用可观测性对于我们监控和调试应用是非常重要的手段，我们非常有必要掌握这些方式。</p>
+</blockquote>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      BurningMyself<a href='https://beian.miit.gov.cn/' target='_blank'>  蜀ICP备15033200号-1</a>
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/burningmyself" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://gitee.com/burningmyself" target="_blank" rel="noopener" title="gitee.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.2a6f1dda.min.js"></script>
+      
+        <script src="../../js/extra.js"></script>
+      
+        <script src="../../js/baidu-tongji.js"></script>
+      
+        <script src="https://www.googletagmanager.com/gtag/js?id=UA-155084439-1"></script>
+      
+        <script src="https://www.googletagmanager.com/gtag/js?id=UA-155132293-1"></script>
+      
+        <script src="../../js/google.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+      
+    
+  </body>
+</html>

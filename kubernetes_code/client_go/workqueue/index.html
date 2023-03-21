@@ -1,0 +1,3039 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content=".net,java,php,python,docker,web">
+      
+      
+        <meta name="author" content="BurningMyself">
+      
+      
+        <link rel="canonical" href="https://burningmyself.gitee.io/kubernetes_code/client_go/workqueue/">
+      
+      
+        <link rel="prev" href="../../kubelet/">
+      
+      
+        <link rel="next" href="../indexer/">
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.15">
+    
+    
+      
+        <title>workqueue - BurningMyself</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.113286f1.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.a0c5b2b5.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#workqueue" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="BurningMyself" class="md-header__button md-logo" aria-label="BurningMyself" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BurningMyself
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              workqueue
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/burningmyself/burningmyself.github.io" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    burningmyself.github.io
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BurningMyself" class="md-nav__button md-logo" aria-label="BurningMyself" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    BurningMyself
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/burningmyself/burningmyself.github.io" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    burningmyself.github.io
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        云原生
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          Docker 基础
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Docker 基础
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../docker/overview/" class="md-nav__link">
+        简介
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../docker/install/" class="md-nav__link">
+        安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../docker/basic/" class="md-nav__link">
+        基本操作
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../docker/dockerfile_usage/" class="md-nav__link">
+        Dockerfile
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../docker/dockerfile_practice/" class="md-nav__link">
+        Dockerfile实践
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          Kubernetes 基础
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 基础
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_basic/overview/" class="md-nav__link">
+        简介
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_basic/install/" class="md-nav__link">
+        安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_basic/yaml/" class="md-nav__link">
+        资源清单
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_basic/pod/" class="md-nav__link">
+        Pod原理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_basic/pod_life/" class="md-nav__link">
+        Pod的生命周期
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_basic/pod_deep/" class="md-nav__link">
+        Pod使用进阶
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          Kubernetes 控制器
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 控制器
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_controller/replicaset/" class="md-nav__link">
+        ReplicaSet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_controller/deployment/" class="md-nav__link">
+        Deployment
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_controller/statefulset/" class="md-nav__link">
+        StatefulSet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_controller/daemonset/" class="md-nav__link">
+        DaemonSet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_controller/job/" class="md-nav__link">
+        Job
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_controller/hpa/" class="md-nav__link">
+        HPA
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          Kubernetes 配置管理
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 配置管理
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_config/config_map/" class="md-nav__link">
+        ConfigMap
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_config/secret/" class="md-nav__link">
+        Secret
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_config/service_account/" class="md-nav__link">
+        ServiceAccount
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+          Kubernetes 安全
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 安全
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_security/rbac/" class="md-nav__link">
+        RBAC
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_security/security_context/" class="md-nav__link">
+        Security Context
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_security/admission/" class="md-nav__link">
+        准入控制器
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+          Kubernetes 网络
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 网络
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_network/flannel/" class="md-nav__link">
+        网络插件
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_network/policy/" class="md-nav__link">
+        网络策略
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_network/service/" class="md-nav__link">
+        Service 服务
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_4" id="__nav_7_4_label" tabindex="0">
+          Ingress
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_7_4">
+          <span class="md-nav__icon md-icon"></span>
+          Ingress
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_network/ingress/nginx/" class="md-nav__link">
+        NGINX Controller
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_network/ingress/traefik/" class="md-nav__link">
+        Traefik
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+          Kubernetes 调度器
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 调度器
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_scheduler/overview/" class="md-nav__link">
+        调度器介绍
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_scheduler/usage/" class="md-nav__link">
+        Pod 调度
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+          Kubernetes 存储
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 存储
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_stroage/local/" class="md-nav__link">
+        Local 本地存储
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_stroage/ceph/" class="md-nav__link">
+        Ceph 存储
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_stroage/csi/" class="md-nav__link">
+        存储原理
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+          Helm 包管理
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_10">
+          <span class="md-nav__icon md-icon"></span>
+          Helm 包管理
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_package/helm/" class="md-nav__link">
+        Helm
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_package/charts/" class="md-nav__link">
+        Charts
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_10_3" id="__nav_10_3_label" tabindex="0">
+          模板开发
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_10_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_10_3">
+          <span class="md-nav__icon md-icon"></span>
+          模板开发
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_package/templates/objects/" class="md-nav__link">
+        内置对象
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_package/templates/values/" class="md-nav__link">
+        Values
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_package/templates/function/" class="md-nav__link">
+        函数和管道
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_package/templates/flow/" class="md-nav__link">
+        流程控制
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_package/templates/variables/" class="md-nav__link">
+        变量
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_package/templates/named_templates/" class="md-nav__link">
+        命名模板
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_package/templates/access_files/" class="md-nav__link">
+        访问文件
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_package/templates/notes_files/" class="md-nav__link">
+        NOTES.txt 文件
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_package/templates/subcharts_and_globals/" class="md-nav__link">
+        子chart与全局值
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_package/templates/debug/" class="md-nav__link">
+        模板调试
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_package/chart_hooks/" class="md-nav__link">
+        Chart Hooks
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_package/example/" class="md-nav__link">
+        示例
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+          Kubernetes 监控
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 监控
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_monitor/prometheus/" class="md-nav__link">
+        Prometheus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_monitor/grafana/" class="md-nav__link">
+        Grafana
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_monitor/promql/" class="md-nav__link">
+        Promql
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_monitor/alertmanager/" class="md-nav__link">
+        Alertmanager
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_monitor/thanos/" class="md-nav__link">
+        Prometheus Thanos
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_monitor/adapter/" class="md-nav__link">
+        Prometheus Adpater
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_11_7" id="__nav_11_7_label" tabindex="0">
+          Prometheus Operator
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_7">
+          <span class="md-nav__icon md-icon"></span>
+          Prometheus Operator
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_monitor/operator/install/" class="md-nav__link">
+        安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_monitor/operator/custom/" class="md-nav__link">
+        自定义监控报警
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_monitor/operator/advance/" class="md-nav__link">
+        高级配置
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+          Kubernetes 日志
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_12">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 日志
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_logs/architec/" class="md-nav__link">
+        Grafana
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_logs/efk/" class="md-nav__link">
+        efk
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+          Kubernetes DevOps
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_13">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes DevOps
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_devops/jenkins/" class="md-nav__link">
+        Jenins
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_devops/gitlab/" class="md-nav__link">
+        Gitlab
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_devops/harbor/" class="md-nav__link">
+        Harbor
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_devops/jenkins_pipeline/" class="md-nav__link">
+        Jenkins Pipeline
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_devops/token/" class="md-nav__link">
+        Tekton
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="0">
+          Service Mesh 实践
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_14">
+          <span class="md-nav__icon md-icon"></span>
+          Service Mesh 实践
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_service_mesh/istio/" class="md-nav__link">
+        Istio
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_service_mesh/traffic/" class="md-nav__link">
+        流量管理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_service_mesh/observability/" class="md-nav__link">
+        可观测性
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_service_mesh/security/" class="md-nav__link">
+        安全管控
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_service_mesh/cert_manager/" class="md-nav__link">
+        CertManager
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="0">
+          Kubernetes 多租户
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_15">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 多租户
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_tenant/tenant/" class="md-nav__link">
+        多租户介绍
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_tenant/quota/" class="md-nav__link">
+        多租户介绍
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_tenant/psp/" class="md-nav__link">
+        多租户介绍
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_16" id="__nav_16_label" tabindex="0">
+          Operator
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_16_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_16">
+          <span class="md-nav__icon md-icon"></span>
+          Operator
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_operator/crd/" class="md-nav__link">
+        CRD
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_operator/operator/" class="md-nav__link">
+        Operator
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_17" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_17" id="__nav_17_label" tabindex="0">
+          实践技巧
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_17_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_17">
+          <span class="md-nav__icon md-icon"></span>
+          实践技巧
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_maintain/skill/" class="md-nav__link">
+        技巧
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_maintain/update/" class="md-nav__link">
+        技巧
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_maintain/update_cluster/" class="md-nav__link">
+        技巧
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_maintain/reserved/" class="md-nav__link">
+        技巧
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_18" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_18" id="__nav_18_label" tabindex="0">
+          源码
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_18_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_18">
+          <span class="md-nav__icon md-icon"></span>
+          源码
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubelet/" class="md-nav__link">
+        kubelet源码
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_18_2" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_18_2" id="__nav_18_2_label" tabindex="0">
+          client-go
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_18_2_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_18_2">
+          <span class="md-nav__icon md-icon"></span>
+          client-go
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          workqueue
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        workqueue
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#workqueue" class="md-nav__link">
+    WorkQueue
+  </a>
+  
+    <nav class="md-nav" aria-label="WorkQueue">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    通用队列
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    延时队列
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    限速队列
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    限速器
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    实现
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../indexer/" class="md-nav__link">
+        indexer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deltafifo/" class="md-nav__link">
+        workqueue
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_19" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_19" id="__nav_19_label" tabindex="0">
+          应用示例
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_19_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_19">
+          <span class="md-nav__icon md-icon"></span>
+          应用示例
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../kubernetes_example/wordpress/" class="md-nav__link">
+        应用部署
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#workqueue" class="md-nav__link">
+    WorkQueue
+  </a>
+  
+    <nav class="md-nav" aria-label="WorkQueue">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    通用队列
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    延时队列
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    限速队列
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    限速器
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    实现
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+  <h1>workqueue</h1>
+
+<h2 id="workqueue">WorkQueue<a class="headerlink" href="#workqueue" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>workqueue 是 client-go 的重要组成部分，下图可以看到 workqueue 在 client-go 中的位置，后面用<code>队列</code>代替 workqueue。</p>
+<p><img alt="general pattern of k8s controller" src="../../../assets/img/kubernetes_code/general-pattern-k8s-controller.png" /></p>
+<p>client-go 为什么要实现队列呢？队列有点类似于 golang 中的 channel，主要用于并发程序间的数据同步。比如各种 Controller 通过 client-go 的 informer 监听对象变化，当有资源变化时通过回调函数将资源写入队列中，再由其他的协程完成处理。不直接使用 channel 主要是因为 channel 功能过于单一，无法满足各类场景的需求，比如限制数据队列的写入速度。</p>
+<p>因为 Kubernetes 中很多模块都有队列的需求，而且很多需求都一样，所以统一在 client-go 中实现了。client-go 中抽象了几种队列，包括<code>通用队列、限速队列、延时队列</code>等。源码统一都在 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>staging/src/k8s.io/client-go
+</code></pre></div>
+<p>包下面。</p>
+<h3 id="_1">通用队列<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>源码路径</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>client-go/util/workqueue/queue.go
+</code></pre></div>
+<p>，主要就是其中 <code>Interface</code> 这个接口的声明：</p>
+<div class="highlight"><pre><span></span><code>type Interface interface {
+    Add(item interface{})  // 向队列中添加一个原生，interface{}类型，说明可以添加任何类型的元素
+    Len() int  // 队列长队，也就是元素个数
+    Get() (item interface{}, shutdown bool)  // 从队列中获取一个元素，第二个返回值告知队列是否已经关闭了
+    Done(item interface{})  // 从队列中获取某个元素是否已经处理完
+    ShutDown()  // 关闭队列
+    ShuttingDown() bool  // 查询队列是否正在关闭
+}
+</code></pre></div>
+<blockquote>
+<p>需要注意的是队列和 channel 不同的地方在于 Get() 获取元素后并不会从队列中移除，只有执行了 Done() 函数后才会执行移除操作，而 channel 的 <code>&lt;-</code> 调用就直接从 channel 的对象中删除了。</p>
+<p><code>Interface</code> 是一个接口的抽象定义，自然会有各种实现，这里我们就来对 client-go 中实现的通用队列进行说明，首先看几个重要的类型：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>// client-go/util/workqueue/queue.go
+// Type 是一个队列
+type Type struct {
+    queue []t       // 定义了我们的元素集合的顺序，队列中的每个元素都应该在脏数据集合中，而不是在处理集合中
+    dirty set       // 脏元素集合，定义了所有需要处理的元素集合
+    processing set  // 正在处理的元素集合，这些元素可能同时存在于脏数据集合中，当我们处理完某个元素并将其从这个集合中移除时，我们将检查它是否在脏数据集合中，如果在，则将其添加到队列中
+    cond *sync.Cond // 与pthread_cond_t相同，条件同步
+    shuttingDown bool   // 关闭标记
+    metrics queueMetrics    // 与prometheus中的metrics概念相同
+}
+</code></pre></div>
+<blockquote>
+<p>Cond</p>
+<p>Golang 的 sync 包中的 Cond 实现了一种条件变量，可以使用在多个Reader等待共享资源ready的场景（如果只有一读一写，一个锁或者channel就搞定了）。 Cond的汇合点：多个goroutines等待、1个goroutine通知事件发生。 每个Cond都会关联一个Lock（<em>sync.Mutex or</em> sync.RWMutex），当修改条件或者调用Wait方法时，必须加锁，保护condition。</p>
+<p>下面是上面这些类型的定义：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>type empty struct{}  // 空类型
+type t interface{}  // 空接口类型，实际上表示任何类型
+type set map[t]empty  // 用map实现的set，key才是真正的元素，任何类型都可以，所有的value是空数据就行了
+</code></pre></div>
+<blockquote>
+<p>首先看下 <code>Add()</code> 函数的实现：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>// 代码路径：client-go/util/workqueue/queue.go
+func (q *Type) Add(item interface{}) {
+    // 和pthread_cond_t不同的是golang的cond自带了互斥锁
+    q.cond.L.Lock()
+    defer q.cond.L.Unlock()
+    // 队列正在关闭，则直接返回
+    if q.shuttingDown {
+        return
+    }
+    // 已经标记为dirt的数据，也直接返回，因为存储在了脏数据的集合中
+    if q.dirty.has(item) {
+        return
+    }
+    // 告知metrics添加元素
+    q.metrics.add(item)
+    // 添加到脏数据集合中
+    q.dirty.insert(item)
+    // 元素如果正在被处理，那就直接返回
+    if q.processing.has(item) {
+        return
+    }
+    // 追加到元素数组的尾部
+    q.queue = append(q.queue, item)
+    // 通知有新元素到了，此时有协程阻塞就会被唤醒
+    q.cond.Signal()
+}
+</code></pre></div>
+<blockquote>
+<p>上面是向队列添加一个元素的方法实现，但是为啥在添加数据的同时要添加到 dirty 脏数据集合中呢，存储在 queue 中不就可以了么？我们来分析以下，队列添加元素有几种状态：</p>
+</blockquote>
+<ol>
+<li>队列关闭了，所以不接受任何数据；</li>
+<li>队列中没有该元素，那就直接存储在队列中；</li>
+<li>队列中已经有了该元素，这个改如何判断呢？set 类型肯定是最快的，数组需要遍历效率太低，这也是 dirty 存在的价值之一，上面的代码也通过 dirty 判断元素是否存在的；</li>
+<li>队列中曾经存储过该元素，但是已经被拿走还没有调用 <code>Done()</code> 方法时，也就是正在处理中的元素，此时再添加当前的元素应该是最新的，处理中的应该是过时的，也就是脏的。</li>
+</ol>
+<blockquote>
+<p>综合上面几种状态就比较好理解 dirty 的存在了，正常情况下元素只会在 processing 和 dirty 存一份，同时存在就说明该元素在被处理的同时又被添加了一次，那么先前的那次可以理解为脏的，后续添加的要再被处理。</p>
+<p>接下来再来看看 <code>Get()</code> 函数是如何实现的：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>// 代码路径：client-go/util/workqueue/queue.go
+// Get() 会阻塞直到它可以返回要处理的元素。如果 shutdown=true，则调用方应该结束其goroutine，处理完元素后，必须调用 Done() 方法。
+func (q *Type) Get() (item interface{}, shutdown bool) {
+    q.cond.L.Lock()
+    defer q.cond.L.Unlock()
+    // 如果当前队列中没有数据，并且没有要关闭的状态则阻塞协程
+    for len(q.queue) == 0 &amp;&amp; !q.shuttingDown {
+        q.cond.Wait()
+    }
+    // 协程被激活但还没有数据，说明队列被关闭了
+    if len(q.queue) == 0 {
+        // 必须返回关闭中的状态
+        return nil, true
+    }
+    // 从队列中弹出第一个元素
+    item, q.queue = q.queue[0], q.queue[1:]
+    // 通知metrics获取元素
+    q.metrics.get(item)
+    // 加入到处理队列中
+    q.processing.insert(item)
+    // 同时从dirty集合（需要处理的元素集合）中移除
+    q.dirty.delete(item)
+
+    return item, false
+}
+</code></pre></div>
+<blockquote>
+<p>然后来看下 <code>Done()</code> 函数：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>// 代码路径：client-go/util/workqueue/queue.go
+// Done 标记元素为处理中，当被处理时如果已经又被标记为 dirty，则会将其重新添加到队列中进行重新处理。
+func (q *Type) Done(item interface{}) {
+    q.cond.L.Lock()
+    defer q.cond.L.Unlock()
+
+    // 通知 metrics 元素处理完了
+    q.metrics.done(item)
+    // 从正在处理的集合中删除元素
+    q.processing.delete(item)
+    // 此处判断脏数据集合，如果在处理期间又被添加回去了，则又放到队列中重新处理。
+    if q.dirty.has(item) {
+        q.queue = append(q.queue, item)
+        q.cond.Signal()
+    }
+}
+</code></pre></div>
+<h3 id="_2">延时队列<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>client-go 中还定义了延时队列，如下所示：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>// client-go/util/workqueue/delaying_queue.go
+// DelayingInterface 是一个可以在一个时间后添加一个元素的 Interface。这使得在失败后重新排列元素更容易而不会在热循环中结束。
+type DelayingInterface interface {
+    Interface
+    // AddAfter 在指定的持续时间过后将元素添加到 workqueue 中
+    AddAfter(item interface{}, duration time.Duration)
+}
+</code></pre></div>
+<blockquote>
+<p>从上面的定义来看延时队列和之前的通用队列基本上一致，只是多了延迟添加的接口，所以相当于在之前的通用队列基础上会添加一些机制来实现延迟添加，如下类型定义所示：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>// client-go/util/workqueue/delaying_queue.go
+// delayingType 包装了 Interface 然后提供了延迟 re-enquing
+type delayingType struct {
+    Interface  // 通用队列的实现
+
+    clock clock.Clock  // 时钟，用于获取时间
+
+    stopCh chan struct{}  // 延时就需要异步，所以需要另外一个协程处理，所以需要退出信号（让我们向等待循环发出关闭信号）
+    stopOnce sync.Once  // 保证我们只发出一次退出信号
+
+    heartbeat clock.Ticker  // 定时器，在没有任何数据操作时可以定时的唤醒处理协程（确保在激活前不超过 maxWait 时间）
+
+    waitingForAddCh chan *waitFor // 所有延迟添加的元素封装成 waitFor 放到缓冲队列中
+
+    metrics           retryMetrics  // 记录重试的次数
+    deprecatedMetrics retryMetrics
+}
+
+// waitFor 保存要添加的数据和应该添加的时间
+type waitFor struct {
+    data    t          // 要添加的元素数据
+    readyAt time.Time  // 应该被添加的时间点
+    index int  // 优先队列（heap）中的索引
+}
+</code></pre></div>
+<blockquote>
+<p>上面是延时队列的类型定义，<code>waitFor</code>是保存延时的数据结构，在这个基础上还定义了一个 <code>waitForPriorityQueue</code>，用来实现 <code>waitFor</code> 元素的优先级队列，把需要延迟的元素形成了一个队列，按照元素的延时添加的时间（readyAt）从小到大排序。</p>
+<p>通过实现 heap.Interface 接口来实现的：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>// go/src/container/heap/heap.go
+type Interface interface {
+    sort.Interface
+    Push(x interface{}) // add x as element Len()
+    Pop() interface{}   // remove and return element Len() - 
+}
+
+// sort.Interface 定义如下所示：
+// go/src/sort/sort.go
+type Interface interface {
+    // Len is the number of elements in the collection.
+    Len() int
+    // Less reports whether the element with
+    // index i should sort before the element with index j.
+    Less(i, j int) bool
+    // Swap swaps the elements with indexes i and j.
+    Swap(i, j int)
+}
+</code></pre></div>
+<blockquote>
+<p>这里我们只需要知道 <code>waitForPriorityQueue</code> 是一个有序的 slice，排序方式是按照时间从小到大排序的，根据 <code>heap.Interface</code> 的定义，我们需要实现 <code>Len</code>、<code>Less</code>、<code>Swap</code>、<code>Push</code>、<code>Pop</code> 这几个方法：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>// client-go/util/workqueue/delaying_queue.go
+type waitForPriorityQueue []*waitFor
+
+// 实现 Len 方法，获取队列长度
+func (pq waitForPriorityQueue) Len() int {
+    return len(pq)
+}
+// 根据时间来比较排列顺序
+func (pq waitForPriorityQueue) Less(i, j int) bool {
+    return pq[i].readyAt.Before(pq[j].readyAt)
+}
+// 实现交换第i和第j个元素
+func (pq waitForPriorityQueue) Swap(i, j int) {
+    pq[i], pq[j] = pq[j], pq[i]
+    pq[i].index = i  // 由于heap中没有索引，所以需要自己记录，waitFor中就定义了index索引
+    pq[j].index = j
+}
+
+// 添加元素到队列中
+func (pq *waitForPriorityQueue) Push(x interface{}) {
+    n := len(*pq)
+    item := x.(*waitFor)
+    item.index = n  // 记录索引值
+    *pq = append(*pq, item)  // 放到slice尾部
+}
+
+// 从队列中弹出最后一个元素
+func (pq *waitForPriorityQueue) Pop() interface{} {
+    n := len(*pq)
+    item := (*pq)[n-1]
+    item.index = -1
+    *pq = (*pq)[0:(n - 1)]  // 去掉最后一个元素
+    return item
+}
+
+// 返回第一个元素，注意并没有移走
+func (pq waitForPriorityQueue) Peek() interface{} {
+    return pq[0]
+}
+</code></pre></div>
+<blockquote>
+<p>因为延时队列利用 <code>waitForPriorityQueue</code> 队列管理所有延时添加的元素，所有的元素在 <code>waitForPriorityQueue</code> 中按照时间从效到大排序，这样延时队列的处理就会方便很多了。</p>
+<p>下面我们来看下延时队列的实现，由于延时队列包装了通用队列，所以我们只需要查看新增的实现延时的函数即可：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>// client-go/util/workqueue/delaying_queue.go
+// AddAfter 在给定的延时时间后添加元素到 workqueue 队列上
+func (q *delayingType) AddAfter(item interface{}, duration time.Duration) {
+    // 如果已经关闭则直接返回
+    if q.ShuttingDown() {
+        return
+    }
+    // 记录 metrics
+    q.metrics.retry()
+    q.deprecatedMetrics.retry()
+
+    // 不需要延迟，那就直接添加
+    if duration &lt;= 0 {
+        q.Add(item)
+        return
+    }
+
+    // 把元素封装成 waitFor 传入 channel，由于 select 没有default，所以被阻塞
+    // 这里使用 stopCh，因为有阻塞的可能，所以用 stopChn 可以保证退出
+    select {
+    case &lt;-q.stopCh:
+        // 如果 ShutDown() 被调用，则退出
+    case q.waitingForAddCh &lt;- &amp;waitFor{data: item, readyAt: q.clock.Now().Add(duration)}:
+    }
+}
+</code></pre></div>
+<blockquote>
+<p><code>AddAfter()</code> 就是简单把元素送到 channel 中，所以核心实现是从 channel 中获取数据的部分，如下所示：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>// client-go/util/workqueue/delaying_queue.go
+// waitingLoop 一直运行直到 workqueue 关闭了并检查要添加的元素列表
+func (q *delayingType) waitingLoop() {
+    defer utilruntime.HandleCrash()
+
+    // 当没有元素需要延时添加的时候利用这个变量实现长时间等待
+    never := make(&lt;-chan time.Time)
+    // 初始化上面的有序队列
+    waitingForQueue := &amp;waitForPriorityQueue{}
+    heap.Init(waitingForQueue)
+    // 这个map用来避免重复添加，如果重复添加则只更新时间即可
+    waitingEntryByData := map[t]*waitFor{}
+    // 开始死循环
+    for {
+        // 队列关闭了则直接返回
+        if q.Interface.ShuttingDown() {
+            return
+        }
+        // 获取当前时间
+        now := q.clock.Now()
+
+        // 判断有序队列中是否有元素
+        for waitingForQueue.Len() &gt; 0 {
+            // 获得有序队列中的第一个元素
+            entry := waitingForQueue.Peek().(*waitFor)
+            // 元素指定的时间是否过了？没有的话就跳出循环
+            if entry.readyAt.After(now) {
+                break
+            }
+            // 如果时间已经过了，那就从有序队列中拿出来放入通用队列中
+            // heap.Pop()将第一元素和最后一个元素交换，然后重新调用down下沉函数，保证是一个最小堆，然后调用 waitingForQueue.Pop() 弹出最后一个元素(实际上是第一个元素)
+            // 从有序队列把元素弹出，同时要把元素从上面的避免重复的map中删除
+            entry = heap.Pop(waitingForQueue).(*waitFor)
+            q.Add(entry.data)
+            delete(waitingEntryByData, entry.data)
+        }
+
+        // 如果有序队列中没有元素，那就不用等待了，也就是永久等下去
+        // 如果有序队列中有元素，那就用第一个元素指定的时间减去当前时间作为等待时间
+        // 有序队列用时间排序，后面的元素需要等待的时间更长，所以先处理排序靠前的元素
+        nextReadyAt := never  
+        if waitingForQueue.Len() &gt; 0 {
+            entry := waitingForQueue.Peek().(*waitFor)
+            // 元素执行的时间
+            nextReadyAt = q.clock.After(entry.readyAt.Sub(now))
+        }
+        // 进入各种等待
+        select {
+        // 退出信号
+        case &lt;-q.stopCh:
+            return
+        // 定时器，ticker，每隔一段时间接收一个ticker，重新执行一次大循环，否则select就hang住了
+        case &lt;-q.heartbeat.C():  // 继续循环，将添加准备好的元素
+        // 这个就是有序队列里面需要等待时间的信号，时间到就会有信号
+        case &lt;-nextReadyAt:  // 继续循环，将添加准备好的元素
+        // 这里是从channel中获取元素，AddAfter()放入到channel中的元素
+        case waitEntry := &lt;-q.waitingForAddCh:
+            // 时间没有过就插入到有序队列中
+            if waitEntry.readyAt.After(q.clock.Now()) {
+                insert(waitingForQueue, waitingEntryByData, waitEntry)
+            } else {
+                // 如果时间已经过了就直接放入通用队列
+                q.Add(waitEntry.data)
+            }
+            // 由于队列中一次性可能会添加多个元素，在上面执行代码的期间可能 channel 数据积压了，如果全都从下一次循环来处理，需要消耗的时间太长了，所以这里再用一个循环来把当前 channel 中的数据全部取出来，不过需要注意这里用了 default，意味着 channel 中没有数据就会立刻停止
+            drained := false
+            for !drained {
+                select {
+                case waitEntry := &lt;-q.waitingForAddCh:
+                    if waitEntry.readyAt.After(q.clock.Now()) {
+                        insert(waitingForQueue, waitingEntryByData, waitEntry)
+                    } else {
+                        q.Add(waitEntry.data)
+                    }
+                default:
+                    drained = true
+                }
+            }
+        }
+    }
+}
+</code></pre></div>
+<blockquote>
+<p>其中插入元素到有序队列的实现如下所示：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>// client-go/util/workqueue/delaying_queue.go
+// insert 添加元素到优先级队列中，如果已经存在队列中了则更新 readyAt 时间
+func insert(q *waitForPriorityQueue, knownEntries map[t]*waitFor, entry *waitFor) {
+    // 如果元素已经存在，当时间会导致元素更快排队时则更新时间
+    existing, exists := knownEntries[entry.data]
+    if exists {
+        // 执行时间更早了则更新 readyAt 时间
+        if existing.readyAt.After(entry.readyAt) {
+            existing.readyAt = entry.readyAt
+            heap.Fix(q, existing.index)
+        }
+        return
+    }
+    // 把元素放入有序队列中，并记录在map里面,这个map就是上面用于判断对象是否重复添加的map
+    // 注意，这里面调用的是 heap.Push，不是 waitForPriorityQueue.Push
+    heap.Push(q, entry)
+    knownEntries[entry.data] = entry
+}
+</code></pre></div>
+<blockquote>
+<p>到这里就实现了延时队列的核心功能，最主要的还是使用 golang 中的 <code>heap</code>，用堆来实现了元素按时间先后进行排序，这样延时队列就可以一个一个的等待超时添加了。</p>
+</blockquote>
+<h3 id="_3">限速队列<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>限速队列应用得非常广泛，比如在我们做一些操作失败后希望重试几次，但是立刻重试很有可能还是会失败，这个时候我们可以延迟一段时间再重试，而且失败次数越多延迟时间越长，这个其实就是限速。首先我们需要来了解下<code>限速器</code>。</p>
+</blockquote>
+<h3 id="_4">限速器<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>限速器是 client-go 中的一种抽象，具体实现可以有很多种，比如比较极端的就是不限制任何速度，下面是限速器的接口抽象定义：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>// client-go/util/workqueue/default_rate_limiters.go
+type RateLimiter interface {
+    When(item interface{}) time.Duration // 获取item元素应该等待多长时间
+    Forget(item interface{})  // 表示元素已经完成了重试，不管是成功还是失败都会停止跟踪，也就是抛弃该元素
+    NumRequeues(item interface{}) int  // 返回元素失败的次数（也就是放入队列的次数）
+}
+</code></pre></div>
+<blockquote>
+<p>1.</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>ItemExponentialFailureRateLimiter
+</code></pre></div>
+<p>是比较常用的限速器，他会根据元素错误次数逐渐累加等待时间，定义如下所示：</p>
+<div class="highlight"><pre><span></span><code>// client-go/util/workqueue/default_rate_limiters.go
+// baseDelay*2^&lt;num-failures&gt; 
+type ItemExponentialFailureRateLimiter struct {
+    failuresLock sync.Mutex  // 互斥锁
+    failures     map[interface{}]int  // 记录每个元素错误次数，每调用一次When累加一次
+
+    baseDelay time.Duration  // 元素延迟基数
+    maxDelay  time.Duration  // 元素最大的延迟时间
+}
+
+// 用来判断该结构体是否实现了 RateLimiter 接口，用作类型断言，如果没有实现接口 RateLimiter 则编译错误。
+// 主要是为了触发 interface 编译器检查，看个人习惯，是否在这个地方进行检查
+var _ RateLimiter = &amp;ItemExponentialFailureRateLimiter{}
+</code></pre></div>
+<blockquote>
+<p>该限速器对应的限速器实现如下所示：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>// client-go/util/workqueue/default_rate_limiters.go
+func (r *ItemExponentialFailureRateLimiter) When(item interface{}) time.Duration {
+    r.failuresLock.Lock()
+    defer r.failuresLock.Unlock()
+    // 累加错误次数
+    exp := r.failures[item]
+    r.failures[item] = r.failures[item] + 1
+
+    // 通过错误次数计算延迟时间，公式是2^i * baseDelay，按指数递增
+    backoff := float64(r.baseDelay.Nanoseconds()) * math.Pow(2, float64(exp))
+    // backoff 是有上限的，这样&#39;calculated&#39; 值不会溢出
+    if backoff &gt; math.MaxInt64 {
+        return r.maxDelay
+    }
+    // 计算后的延迟值和最大延迟值二者取最小值
+    calculated := time.Duration(backoff)
+    if calculated &gt; r.maxDelay {
+        return r.maxDelay
+    }
+    return calculated
+}
+
+func (r *ItemExponentialFailureRateLimiter) NumRequeues(item interface{}) int {
+    r.failuresLock.Lock()
+    defer r.failuresLock.Unlock()
+
+    return r.failures[item]
+}
+
+func (r *ItemExponentialFailureRateLimiter) Forget(item interface{}) {
+    r.failuresLock.Lock()
+    defer r.failuresLock.Unlock()
+
+    delete(r.failures, item)
+}
+</code></pre></div>
+<blockquote>
+<p>使用 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>ItemExponentialFailureRateLimiter
+</code></pre></div>
+<p>限速器一般就是操作失败后又不断尝试，随着尝试次数的增加按照指数增加延迟时间。</p>
+<blockquote>
+<p>2.</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>ItemFastSlowRateLimiter
+</code></pre></div>
+<p>和上面的指数级限速器很像，都是用于错误尝试的，但是二者的限速策略不同，</p>
+<div class="highlight"><pre><span></span><code>ItemFastSlowRateLimiter
+</code></pre></div>
+<p>是尝试次数超过阈值后用长延迟，否则用短延迟，具体的实现如下所示：</p>
+<div class="highlight"><pre><span></span><code>// client-go/util/workqueue/default_rate_limiters.go
+// 以短延迟重试，达到阈值后开始用长延迟
+type ItemFastSlowRateLimiter struct {
+    failuresLock sync.Mutex  // 互斥锁
+    failures     map[interface{}]int  // 错误次数计数
+
+    maxFastAttempts int  // 错误尝试次数阈值
+    fastDelay       time.Duration  // 短延迟时间
+    slowDelay       time.Duration  // 长延迟时间
+}
+</code></pre></div>
+<blockquote>
+<p>该限速器对应的限速器实现如下所示：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>// client-go/util/workqueue/default_rate_limiters.go
+func (r *ItemFastSlowRateLimiter) When(item interface{}) time.Duration {
+    r.failuresLock.Lock()
+    defer r.failuresLock.Unlock()
+    // 错误次数+1
+    r.failures[item] = r.failures[item] + 1
+    // 错误次数未超阈值，用短延迟
+    if r.failures[item] &lt;= r.maxFastAttempts {
+        return r.fastDelay
+    }
+    // 错误次数超过阈值，用长延迟
+    return r.slowDelay
+}
+
+func (r *ItemFastSlowRateLimiter) NumRequeues(item interface{}) int {
+    r.failuresLock.Lock()
+    defer r.failuresLock.Unlock()
+
+    return r.failures[item]
+}
+
+func (r *ItemFastSlowRateLimiter) Forget(item interface{}) {
+    r.failuresLock.Lock()
+    defer r.failuresLock.Unlock()
+
+    delete(r.failures, item)
+}
+</code></pre></div>
+<blockquote>
+<p>3.<code>MaxOfRateLimiter</code> 限速器内部是一个限速器 slice，每次返回所有限速器里面延迟最大的一个限速器，具体的实现如下所示：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>// client-go/util/workqueue/default_rate_limiters.go
+type MaxOfRateLimiter struct {
+    limiters []RateLimiter  // 限速器slice
+}
+</code></pre></div>
+<blockquote>
+<p>该限速器对应的限速器实现如下所示：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>// client-go/util/workqueue/default_rate_limiters.go
+func (r *MaxOfRateLimiter) When(item interface{}) time.Duration {
+    ret := time.Duration(0)
+    // 获取所有限速器里面时间最大的
+    for _, limiter := range r.limiters {
+        curr := limiter.When(item)
+        if curr &gt; ret {
+            ret = curr
+        }
+    }
+    return ret
+}
+
+func (r *MaxOfRateLimiter) NumRequeues(item interface{}) int {
+    ret := 0
+    // 同样获取所有限速器里面最大的 Requeue 次数
+    for _, limiter := range r.limiters {
+        curr := limiter.NumRequeues(item)
+        if curr &gt; ret {
+            ret = curr
+        }
+    }
+    return ret
+}
+
+func (r *MaxOfRateLimiter) Forget(item interface{}) {
+    // 调用所有的限速器的 Forget 方法
+    for _, limiter := range r.limiters {
+        limiter.Forget(item)
+    }
+}
+</code></pre></div>
+<blockquote>
+<p>4.<code>BucketRateLimiter</code> 限速器是利用 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>golang.org/x/time/rate
+</code></pre></div>
+<p>包中的 <code>Limiter</code> 来实现稳定速率(<code>qps</code>)的限速器，对应的结构体如下所示：</p>
+<div class="highlight"><pre><span></span><code>// client-go/util/workqueue/default_rate_limiters.go
+// 根据 workqueue ratelimiter API 调整标准 bucket
+type BucketRateLimiter struct {
+    *rate.Limiter
+}
+</code></pre></div>
+<blockquote>
+<p>该限速器对应的限速器实现如下所示：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>// client-go/util/workqueue/default_rate_limiters.go
+
+func (r *BucketRateLimiter) When(item interface{}) time.Duration {
+    // 获取延迟时间，该延迟会是一个相对固定的周期
+    return r.Limiter.Reserve().Delay()
+}
+
+func (r *BucketRateLimiter) NumRequeues(item interface{}) int {
+    // 因为是固定频率的，所以就不存在重试了
+    return 0
+}
+
+func (r *BucketRateLimiter) Forget(item interface{}) {
+}
+</code></pre></div>
+<h3 id="_5">实现<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>上面我们介绍了默认实现的几种限速器，接下来我们来看看限速队列的实现，限速队列的接口定义如下所示：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>// client-go/util/workqueue/rate_limiting_queue.go
+// RateLimitingInterface 将限速的元素添加到队列中的一个接口
+type RateLimitingInterface interface {
+    DelayingInterface  // 继承了延时队列
+
+    AddRateLimited(item interface{})  // 按照限速方式添加元素
+
+    Forget(item interface{})  // 表示已经重试某元素，丢弃指定的元素，该操作只会清除`rateLimter`，仍然必须在队列上调用 Done
+
+    NumRequeues(item interface{}) int  // 元素放入队列的次数
+}
+
+// NewRateLimitingQueue 构造一个带有限速能力的工作队列，要记住调用 Forget！否则可能会一直跟踪失败下去。
+func NewRateLimitingQueue(rateLimiter RateLimiter) RateLimitingInterface {
+    return &amp;rateLimitingType{
+        DelayingInterface: NewDelayingQueue(),  // 构造一个延迟队列
+        rateLimiter:       rateLimiter,
+    }
+}
+</code></pre></div>
+<blockquote>
+<p>该限速器接口对应的实现如下所示：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>// client-go/util/workqueue/rate_limiting_queue.go
+// rateLimitingType wraps an Interface and provides rateLimited re-enquing
+type rateLimitingType struct {
+    DelayingInterface  // 继承延迟队列
+
+    rateLimiter RateLimiter  // 添加一个限速器
+}
+
+func (q *rateLimitingType) AddRateLimited(item interface{}) {
+    // 通过限速器获取元素延时时间，然后加入到延迟队列中去
+    q.DelayingInterface.AddAfter(item, q.rateLimiter.When(item))
+}
+
+func (q *rateLimitingType) NumRequeues(item interface{}) int {
+    // 获取限速器中元素加上队列的次数
+    return q.rateLimiter.NumRequeues(item)
+}
+
+func (q *rateLimitingType) Forget(item interface{}) {
+    // 已经重试某元素，丢弃指定的元素
+    q.rateLimiter.Forget(item)
+}
+</code></pre></div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      BurningMyself<a href='https://beian.miit.gov.cn/' target='_blank'>  蜀ICP备15033200号-1</a>
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/burningmyself" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://gitee.com/burningmyself" target="_blank" rel="noopener" title="gitee.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": [], "search": "../../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.2a6f1dda.min.js"></script>
+      
+        <script src="../../../js/extra.js"></script>
+      
+        <script src="../../../js/baidu-tongji.js"></script>
+      
+        <script src="https://www.googletagmanager.com/gtag/js?id=UA-155084439-1"></script>
+      
+        <script src="https://www.googletagmanager.com/gtag/js?id=UA-155132293-1"></script>
+      
+        <script src="../../../js/google.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+      
+    
+  </body>
+</html>

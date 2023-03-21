@@ -1,0 +1,3252 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content=".net,java,php,python,docker,web">
+      
+      
+        <meta name="author" content="BurningMyself">
+      
+      
+        <link rel="canonical" href="https://burningmyself.gitee.io/kubernetes_package/charts/">
+      
+      
+        <link rel="prev" href="../helm/">
+      
+      
+        <link rel="next" href="../templates/objects/">
+      
+      <link rel="icon" href="../../favicon.ico">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.15">
+    
+    
+      
+        <title>Charts - BurningMyself</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.113286f1.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.a0c5b2b5.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#charts" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="BurningMyself" class="md-header__button md-logo" aria-label="BurningMyself" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BurningMyself
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Charts
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/burningmyself/burningmyself.github.io" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    burningmyself.github.io
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="BurningMyself" class="md-nav__button md-logo" aria-label="BurningMyself" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    BurningMyself
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/burningmyself/burningmyself.github.io" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    burningmyself.github.io
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        云原生
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          Docker 基础
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Docker 基础
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/overview/" class="md-nav__link">
+        简介
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/install/" class="md-nav__link">
+        安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/basic/" class="md-nav__link">
+        基本操作
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/dockerfile_usage/" class="md-nav__link">
+        Dockerfile
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/dockerfile_practice/" class="md-nav__link">
+        Dockerfile实践
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          Kubernetes 基础
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 基础
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/overview/" class="md-nav__link">
+        简介
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/install/" class="md-nav__link">
+        安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/yaml/" class="md-nav__link">
+        资源清单
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/pod/" class="md-nav__link">
+        Pod原理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/pod_life/" class="md-nav__link">
+        Pod的生命周期
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/pod_deep/" class="md-nav__link">
+        Pod使用进阶
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          Kubernetes 控制器
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 控制器
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/replicaset/" class="md-nav__link">
+        ReplicaSet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/deployment/" class="md-nav__link">
+        Deployment
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/statefulset/" class="md-nav__link">
+        StatefulSet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/daemonset/" class="md-nav__link">
+        DaemonSet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/job/" class="md-nav__link">
+        Job
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/hpa/" class="md-nav__link">
+        HPA
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          Kubernetes 配置管理
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 配置管理
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_config/config_map/" class="md-nav__link">
+        ConfigMap
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_config/secret/" class="md-nav__link">
+        Secret
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_config/service_account/" class="md-nav__link">
+        ServiceAccount
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+          Kubernetes 安全
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 安全
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_security/rbac/" class="md-nav__link">
+        RBAC
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_security/security_context/" class="md-nav__link">
+        Security Context
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_security/admission/" class="md-nav__link">
+        准入控制器
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+          Kubernetes 网络
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 网络
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/flannel/" class="md-nav__link">
+        网络插件
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/policy/" class="md-nav__link">
+        网络策略
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/service/" class="md-nav__link">
+        Service 服务
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_4" id="__nav_7_4_label" tabindex="0">
+          Ingress
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_7_4">
+          <span class="md-nav__icon md-icon"></span>
+          Ingress
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/ingress/nginx/" class="md-nav__link">
+        NGINX Controller
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/ingress/traefik/" class="md-nav__link">
+        Traefik
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+          Kubernetes 调度器
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 调度器
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_scheduler/overview/" class="md-nav__link">
+        调度器介绍
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_scheduler/usage/" class="md-nav__link">
+        Pod 调度
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+          Kubernetes 存储
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 存储
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_stroage/local/" class="md-nav__link">
+        Local 本地存储
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_stroage/ceph/" class="md-nav__link">
+        Ceph 存储
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_stroage/csi/" class="md-nav__link">
+        存储原理
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+          Helm 包管理
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_10">
+          <span class="md-nav__icon md-icon"></span>
+          Helm 包管理
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../helm/" class="md-nav__link">
+        Helm
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Charts
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Charts
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#charts" class="md-nav__link">
+    Charts
+  </a>
+  
+    <nav class="md-nav" aria-label="Charts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    文件结构
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chartyaml" class="md-nav__link">
+    Chart.yaml 文件
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    版本
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apiversion" class="md-nav__link">
+    apiVersion 字段
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#appversion" class="md-nav__link">
+    appVersion 字段
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#charts_1" class="md-nav__link">
+    弃用 Charts
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chart" class="md-nav__link">
+    Chart 类型
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#license_readme_notes" class="md-nav__link">
+    LICENSE, README 和 NOTES
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    依赖
+  </a>
+  
+    <nav class="md-nav" aria-label="依赖">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dependencies" class="md-nav__link">
+    使用 dependencies 字段管理依赖
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alias" class="md-nav__link">
+    alias 字段
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#templates_values" class="md-nav__link">
+    TEMPLATES 和 VALUES
+  </a>
+  
+    <nav class="md-nav" aria-label="TEMPLATES 和 VALUES">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    模板文件
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#values" class="md-nav__link">
+    预定义 Values
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#values_1" class="md-nav__link">
+    Values 文件
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#values_2" class="md-nav__link">
+    作用范围、依赖和 Values
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#values_3" class="md-nav__link">
+    全局 Values
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#schema" class="md-nav__link">
+    Schema 文件
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    参考文档
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#crds" class="md-nav__link">
+    CRDS
+  </a>
+  
+    <nav class="md-nav" aria-label="CRDS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#crds_1" class="md-nav__link">
+    CRDs 的限制
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#helm_charts" class="md-nav__link">
+    使用 Helm 管理 Charts
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chart_1" class="md-nav__link">
+    Chart 仓库
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_10_3" id="__nav_10_3_label" tabindex="0">
+          模板开发
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_10_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_10_3">
+          <span class="md-nav__icon md-icon"></span>
+          模板开发
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../templates/objects/" class="md-nav__link">
+        内置对象
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../templates/values/" class="md-nav__link">
+        Values
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../templates/function/" class="md-nav__link">
+        函数和管道
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../templates/flow/" class="md-nav__link">
+        流程控制
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../templates/variables/" class="md-nav__link">
+        变量
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../templates/named_templates/" class="md-nav__link">
+        命名模板
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../templates/access_files/" class="md-nav__link">
+        访问文件
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../templates/notes_files/" class="md-nav__link">
+        NOTES.txt 文件
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../templates/subcharts_and_globals/" class="md-nav__link">
+        子chart与全局值
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../templates/debug/" class="md-nav__link">
+        模板调试
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chart_hooks/" class="md-nav__link">
+        Chart Hooks
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../example/" class="md-nav__link">
+        示例
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+          Kubernetes 监控
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 监控
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/prometheus/" class="md-nav__link">
+        Prometheus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/grafana/" class="md-nav__link">
+        Grafana
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/promql/" class="md-nav__link">
+        Promql
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/alertmanager/" class="md-nav__link">
+        Alertmanager
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/thanos/" class="md-nav__link">
+        Prometheus Thanos
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/adapter/" class="md-nav__link">
+        Prometheus Adpater
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_11_7" id="__nav_11_7_label" tabindex="0">
+          Prometheus Operator
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_7">
+          <span class="md-nav__icon md-icon"></span>
+          Prometheus Operator
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/operator/install/" class="md-nav__link">
+        安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/operator/custom/" class="md-nav__link">
+        自定义监控报警
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/operator/advance/" class="md-nav__link">
+        高级配置
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+          Kubernetes 日志
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_12">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 日志
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_logs/architec/" class="md-nav__link">
+        Grafana
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_logs/efk/" class="md-nav__link">
+        efk
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+          Kubernetes DevOps
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_13">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes DevOps
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_devops/jenkins/" class="md-nav__link">
+        Jenins
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_devops/gitlab/" class="md-nav__link">
+        Gitlab
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_devops/harbor/" class="md-nav__link">
+        Harbor
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_devops/jenkins_pipeline/" class="md-nav__link">
+        Jenkins Pipeline
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_devops/token/" class="md-nav__link">
+        Tekton
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="0">
+          Service Mesh 实践
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_14">
+          <span class="md-nav__icon md-icon"></span>
+          Service Mesh 实践
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_service_mesh/istio/" class="md-nav__link">
+        Istio
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_service_mesh/traffic/" class="md-nav__link">
+        流量管理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_service_mesh/observability/" class="md-nav__link">
+        可观测性
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_service_mesh/security/" class="md-nav__link">
+        安全管控
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_service_mesh/cert_manager/" class="md-nav__link">
+        CertManager
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="0">
+          Kubernetes 多租户
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_15">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 多租户
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_tenant/tenant/" class="md-nav__link">
+        多租户介绍
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_tenant/quota/" class="md-nav__link">
+        多租户介绍
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_tenant/psp/" class="md-nav__link">
+        多租户介绍
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_16" id="__nav_16_label" tabindex="0">
+          Operator
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_16_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_16">
+          <span class="md-nav__icon md-icon"></span>
+          Operator
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_operator/crd/" class="md-nav__link">
+        CRD
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_operator/operator/" class="md-nav__link">
+        Operator
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_17" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_17" id="__nav_17_label" tabindex="0">
+          实践技巧
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_17_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_17">
+          <span class="md-nav__icon md-icon"></span>
+          实践技巧
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_maintain/skill/" class="md-nav__link">
+        技巧
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_maintain/update/" class="md-nav__link">
+        技巧
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_maintain/update_cluster/" class="md-nav__link">
+        技巧
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_maintain/reserved/" class="md-nav__link">
+        技巧
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_18" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_18" id="__nav_18_label" tabindex="0">
+          源码
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_18_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_18">
+          <span class="md-nav__icon md-icon"></span>
+          源码
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_code/kubelet/" class="md-nav__link">
+        kubelet源码
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_18_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_18_2" id="__nav_18_2_label" tabindex="0">
+          client-go
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_18_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_18_2">
+          <span class="md-nav__icon md-icon"></span>
+          client-go
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_code/client_go/workqueue/" class="md-nav__link">
+        workqueue
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_code/client_go/indexer/" class="md-nav__link">
+        indexer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_code/client_go/deltafifo/" class="md-nav__link">
+        workqueue
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_19" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_19" id="__nav_19_label" tabindex="0">
+          应用示例
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_19_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_19">
+          <span class="md-nav__icon md-icon"></span>
+          应用示例
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_example/wordpress/" class="md-nav__link">
+        应用部署
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#charts" class="md-nav__link">
+    Charts
+  </a>
+  
+    <nav class="md-nav" aria-label="Charts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    文件结构
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chartyaml" class="md-nav__link">
+    Chart.yaml 文件
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    版本
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apiversion" class="md-nav__link">
+    apiVersion 字段
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#appversion" class="md-nav__link">
+    appVersion 字段
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#charts_1" class="md-nav__link">
+    弃用 Charts
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chart" class="md-nav__link">
+    Chart 类型
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#license_readme_notes" class="md-nav__link">
+    LICENSE, README 和 NOTES
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    依赖
+  </a>
+  
+    <nav class="md-nav" aria-label="依赖">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dependencies" class="md-nav__link">
+    使用 dependencies 字段管理依赖
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alias" class="md-nav__link">
+    alias 字段
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#templates_values" class="md-nav__link">
+    TEMPLATES 和 VALUES
+  </a>
+  
+    <nav class="md-nav" aria-label="TEMPLATES 和 VALUES">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    模板文件
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#values" class="md-nav__link">
+    预定义 Values
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#values_1" class="md-nav__link">
+    Values 文件
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#values_2" class="md-nav__link">
+    作用范围、依赖和 Values
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#values_3" class="md-nav__link">
+    全局 Values
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#schema" class="md-nav__link">
+    Schema 文件
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    参考文档
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#crds" class="md-nav__link">
+    CRDS
+  </a>
+  
+    <nav class="md-nav" aria-label="CRDS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#crds_1" class="md-nav__link">
+    CRDs 的限制
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#helm_charts" class="md-nav__link">
+    使用 Helm 管理 Charts
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chart_1" class="md-nav__link">
+    Chart 仓库
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+  <h1>Charts</h1>
+
+<h2 id="charts">Charts<a class="headerlink" href="#charts" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>Helm 使用一种名为 charts 的包格式，一个 chart 是描述一组相关的 Kubernetes 资源的文件集合，单个 chart 可能用于部署简单的应用，比如 memcached pod，或者复杂的应用，比如一个带有 HTTP 服务、数据库、缓存等等功能的完整 web 应用程序。</p>
+<p>Charts 是创建在特定目录下面的文件集合，然后可以将它们打包到一个版本化的存档中来部署。接下来我们就来看看使用 Helm 构建 charts 的一些基本方法。</p>
+</blockquote>
+<h3 id="_1">文件结构<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>chart 被组织为一个目录中的文件集合，目录名称就是 chart 的名称（不包含版本信息），下面是一个 WordPress 的 chart，会被存储在 <code>wordpress/</code> 目录下面，基本结构如下所示：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>wordpress/
+  Chart.yaml          # 包含当前 chart 信息的 YAML 文件
+  LICENSE             # 可选：包含 chart 的 license 的文本文件
+  README.md           # 可选：一个可读性高的 README 文件
+  values.yaml         # 当前 chart 的默认配置 values
+  values.schema.json  # 可选: 一个作用在 values.yaml 文件上的 JSON 模式
+  charts/             # 包含该 chart 依赖的所有 chart 的目录
+  crds/               # Custom Resource Definitions
+  templates/          # 模板目录，与 values 结合使用时，将渲染生成 Kubernetes 资源清单文件
+  templates/NOTES.txt # 可选: 包含简短使用使用的文本文件
+</code></pre></div>
+<blockquote>
+<p>另外 Helm 会保留 <code>charts/</code>、<code>crds/</code> 以及 <code>templates/</code> 目录以及上面列出的文件名的使用。</p>
+</blockquote>
+<h3 id="chartyaml">Chart.yaml 文件<a class="headerlink" href="#chartyaml" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>对于一个 chart 包来说 <code>Chart.yaml</code> 文件是必须的，它包含下面的这些字段：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: chart API 版本 (必须)
+name: chart 名 (必须)
+version: SemVer 2版本 (必须)
+kubeVersion: 兼容的 Kubernetes 版本 (可选)
+description: 一句话描述 (可选)
+type: chart 类型 (可选)
+keywords:
+  - 当前项目关键字集合 (可选)
+home: 当前项目的 URL (可选)
+sources:
+  - 当前项目源码 URL (可选)
+dependencies: # chart 依赖列表 (可选)
+  - name: chart 名称 (nginx)
+    version: chart 版本 (&quot;3&quot;)
+    repository: 仓库地址 (&quot;https://example.com/charts&quot;)
+maintainers: # (可选)
+  - name: 维护者名字 (对每个 maintainer 是必须的)
+    email: 维护者的 email (可选)
+    url: 维护者 URL (可选)
+icon: chart 的 SVG 或者 PNG 图标 URL (可选).
+appVersion: 包含的应用程序版本 (可选). 不需要 SemVer 版本
+deprecated: chart 是否已被弃用 (可选, boolean)
+</code></pre></div>
+<blockquote>
+<p>其他字段默认会被忽略。</p>
+</blockquote>
+<h3 id="_2">版本<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>每个 chart 都必须有一个版本号，版本必须遵循 <code>SemVer2</code> 标准，和 Helm Classic 不同，Kubernetes Helm 使用版本号作为 release 的标记，仓库中的软件包通过名称加上版本号来标识的。</p>
+<p>例如，将一个 nginx 的 chart 包 version 字段设置为：1.2.3，则 chart 最终名称为：</p>
+</blockquote>
+<p><code>nginx-1.2.3.tgz</code></p>
+<blockquote>
+<p>还支持更复杂的 <code>SemVer2</code> 名称，例如版本：<code>1.2.3-alpha.1+ef365</code>，但是需要注意的是系统明确禁止使用非 <code>SemVer</code> 的名称。</p>
+<p><code>Chart.yaml</code> 中的 <code>version</code> 字段被很多 Helm 工具使用，包括 CLI 工具，生成包的时候，命令 <code>helm package</code> 将使用该字段作为包名称中的标记，系统是默认 Chart 包中的版本号与 <code>chart.yaml</code> 中的版本号匹配的，所以如果不匹配的话就导致一系列错误。</p>
+</blockquote>
+<h3 id="apiversion"><code>apiVersion</code> 字段<a class="headerlink" href="#apiversion" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>对于 Helm 3 以上的版本 <code>apiVersion</code> 字段应该是 <code>v2</code>，之前版本的 Chart 应该设置为1，并且也可以有 Helm 3 进行安装。</p>
+</blockquote>
+<h3 id="appversion"><code>appVersion</code> 字段<a class="headerlink" href="#appversion" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>要注意 <code>appVersion</code> 字段与 version 字段无关，这是一种指定应用程序版本的方法，比如 drupal 的 Chart 包可能有一个 <code>appVersion: 8.2.1</code> 的字段，表示 Chart 中包含的 drupal 版本是 8.2.1，该字段仅供参考，对 Chart 版本的计算不会产生影响。</p>
+</blockquote>
+<h3 id="charts_1">弃用 Charts<a class="headerlink" href="#charts_1" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>当在 Chart 仓库中管理 charts 的时候，有时候需要弃用一个 chart，<code>Chart.yaml</code> 中的可选字段 <code>deprecated</code> 可以用来标记一个 chart 为弃用状态。如果将仓库中最新版本的 chart 标记为弃用，则整个 chart 都会被当做弃用状态了。以后可以通过发布一个未被标记为弃用状态的新版本来重新使用该 chart。弃用 charts 的工作流程如下所示：</p>
+</blockquote>
+<ul>
+<li>更新 chart 的 <code>Chart.yaml</code> 来标记 chart 为弃用状态</li>
+<li>发布该新版本到 Chart 仓库</li>
+<li>从源码仓库（比如 git）中删除 chart</li>
+</ul>
+<h3 id="chart">Chart 类型<a class="headerlink" href="#chart" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p><code>type</code> 字段定义 chart 的类型，可以定义两种类型：应用程序（application）和库（library）。应用程序是默认的类型，它是一个可以完整操作的标准 chart，库或者辅助类 chart 为 chart 提供了一些实用的功能，library 不同于应用程序 chart，因为它没有资源对象，所以无法安装。</p>
+<p>注意</p>
+<p>一个应用 chart 也可以当作库进行使用。通过将类型设置为 library，然后该 chart 就会渲染成一个库，可以在其中使用所有的实用性功能，chart 的所有资源对象都不会被渲染。</p>
+</blockquote>
+<h3 id="license_readme_notes">LICENSE, README 和 NOTES<a class="headerlink" href="#license_readme_notes" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>Chart 还可以包含用于描述 chart 的安装、配置、用法和许可证书的文件。</p>
+<p>LICENSE 是一个纯文本文件，其中包含 chart 的许可证书。chart 可以包含一个许可证书，因为它可能在模板中具有编程逻辑，所以不只是配置，如果需要，chart 还可以为应用程序提供单独的 license(s)。</p>
+<p>Chart 的 README 文件应该采用 Markdown（README.md）格式，并且通常应该包含如下的一些信息：</p>
+</blockquote>
+<ul>
+<li>chart 提供的应用程序的描述信息</li>
+<li>运行 chart 的任何先决条件或者要求</li>
+<li><code>values.yaml</code> 和默认值中的一些选项说明</li>
+<li>与 chart 的安装或配置有关的任何其他信息</li>
+</ul>
+<blockquote>
+<p>chart 还可以包含简短的纯文本模板或者 <code>NOTES.txt</code> 文件，该文件将在安装后以及查看 release 状态的时候打印出来。该文件会被当成模板文件，并且可以用于显示使用说明，后续步骤或与 release 有关的任何其他信息。例如，可以提供用于连接到数据或访问 Web UI 的指令。由于在运行 <code>helm install</code> 或者 <code>helm status</code> 的时候该文件会打印到 <code>STDOUT</code> 中，所以建议该文件内容保持内容简短然后可以指向 README 文件来获取更多详细信息。</p>
+</blockquote>
+<h3 id="_3">依赖<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>在 Helm 中，一个 chart 包可能会依赖许多其他的 chart。这些依赖关系可以使用 <code>Chart.yaml</code> 中的依赖关系字段动态链接，也可以引入到 <code>charts/</code> 目录手动进行管理。</p>
+</blockquote>
+<h4 id="dependencies">使用 <code>dependencies</code> 字段管理依赖<a class="headerlink" href="#dependencies" title="Permanent link">&para;</a></h4>
+<blockquote>
+<p>当前 chart 所需的依赖 chart 需要在 <code>dependencies</code> 字段中进行定义，如下所示：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>dependencies:
+  - name: apache
+    version: 3
+    repository: https://example.com/charts
+  - name: mysql
+    version: 1
+    repository: https://another.example.com/charts
+</code></pre></div>
+<ul>
+<li><code>name</code> 字段是所依赖的 chart 的名称</li>
+<li><code>version</code> 字段是依赖的 chart 版本</li>
+<li><code>repository</code> 字段是 chart 仓库的完整 URL，不过需要注意，必须使用 <code>helm repo add</code> 在本地添加该 repo</li>
+</ul>
+<blockquote>
+<p>定义了依赖项后，可以运行 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>helm dependency update
+</code></pre></div>
+<p>来更新依赖项，它将根据你的依赖项文件把你所有指定的 chart 包下载到 <code>charts/</code> 目录中：</p>
+<div class="highlight"><pre><span></span><code>$ helm dependency update foochart
+Hang tight while we grab the latest from your chart repositories...
+...Successfully got an update from the &quot;local&quot; chart repository
+...Successfully got an update from the &quot;stable&quot; chart repository
+...Successfully got an update from the &quot;example&quot; chart repository
+...Successfully got an update from the &quot;another&quot; chart repository
+Update Complete. Happy Helming!
+Saving 2 charts
+Downloading apache from repo https://example.com/charts
+Downloading mysql from repo https://another.example.com/charts
+</code></pre></div>
+<blockquote>
+<p>当执行 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>helm dependency update
+</code></pre></div>
+<p>命令的时候会解析 chart 的依赖项，会将他们作为 chart 包文件下载存放到 <code>charts/</code> 目录中，所以，对于上面的示例，我们可以在 charts 目录中看到如下的文件：</p>
+<div class="highlight"><pre><span></span><code>charts/
+  apache-tgz
+  mysql-tgz
+</code></pre></div>
+<h4 id="alias">alias 字段<a class="headerlink" href="#alias" title="Permanent link">&para;</a></h4>
+<blockquote>
+<p>除了上面的几个字段之外，每个依赖项还可以包含一个可选的 <code>alias</code> 别名字段。为依赖 chart 添加别名将使用别名作为依赖的名称。在需要访问其他名称的 chart 情况下，就可以使用别名，如下所示：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code># parentchart/Chart.yaml
+
+dependencies:
+  - name: subchart
+    repository: http://localhost:10191
+    version: 0
+    alias: new-subchart-1
+  - name: subchart
+    repository: http://localhost:10191
+    version: 0
+    alias: new-subchart-2
+  - name: subchart
+    repository: http://localhost:10191
+    version: 0
+</code></pre></div>
+<blockquote>
+<p>在上面示例中，我们将获得3个依赖项：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>subchart
+new-subchart-1
+new-subchart-2
+</code></pre></div>
+<blockquote>
+<p>当然其实我们也可以手动来实现，将同一个 chart 以不同的名称多次复制/粘贴到 <code>charts/</code> 目录中也是可以的。</p>
+</blockquote>
+<h3 id="templates_values">TEMPLATES 和 VALUES<a class="headerlink" href="#templates_values" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>Helm Chart 模板是用 Go template 语言 进行编写的，另外还额外增加了(【Sprig】](<a href="https://github.com/Masterminds/sprig)库中的50个左右的附加模板函数和一些其他专用函数">https://github.com/Masterminds/sprig)库中的50个左右的附加模板函数和一些其他专用函数</a>。</p>
+<p>所有模板文件都存储在 chart 的 <code>templates/</code> 目录下面，当 Helm 渲染 charts 的时候，它将通过模板引擎传递该目录中的每个文件。模板的 <code>Values</code> 可以通过两种方式提供：</p>
+</blockquote>
+<ul>
+<li>Chart 开发人员可以在 chart 内部提供一个名为 <code>values.yaml</code> 的文件，该文件可以包含默认的 values 值内容。</li>
+<li>Chart 用户可以提供包含 values 值的 YAML 文件，可以在命令行中通过 <code>helm install</code> 来指定该文件。</li>
+</ul>
+<blockquote>
+<p>当用户提供自定义 values 值的时候，这些值将覆盖 chart 中 <code>values.yaml</code> 文件中的相应的值。</p>
+</blockquote>
+<h4 id="_4">模板文件<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h4>
+<blockquote>
+<p>模板文件遵循编写 Go 模板的标准约定（可以查看 text/template 包文档查看详细信息），下面是一个模板文件示例：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: deis-database
+  namespace: deis
+  labels:
+    app.kubernetes.io/managed-by: deis
+spec:
+  replicas: 1
+  selector:
+    app.kubernetes.io/name: deis-database
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: deis-database
+    spec:
+      serviceAccount: deis-database
+      containers:
+        - name: deis-database
+          image: {{ .Values.imageRegistry }}/postgres:{{ .Values.dockerTag }}
+          imagePullPolicy: {{ .Values.pullPolicy }}
+          ports:
+            - containerPort: 5432
+          env:
+            - name: DATABASE_STORAGE
+              value: {{ default &quot;minio&quot; .Values.storage }}
+</code></pre></div>
+<blockquote>
+<p>上面这个示例是 Kubernetes replication 控制器的一个模板，它可以使用以下4个模板值（通常在 <code>values.yaml</code> 文件中定义的）：</p>
+</blockquote>
+<ul>
+<li><code>imageRegistry</code>：Docker 镜像仓库</li>
+<li><code>dockerTag</code>：Docker 镜像 tag</li>
+<li><code>pullPolicy</code>：镜像拉取策略</li>
+<li><code>storage</code>：存储后端，默认设置为 <code>"minio"</code></li>
+</ul>
+<blockquote>
+<p>这些所有的 values 值都是有模板作者来定义的，Helm 不会也不需要规定这些参数。可以可以查看 Kubernetes Charts 项目去了解更多的 charts 项目的详细内容。</p>
+</blockquote>
+<h4 id="values">预定义 Values<a class="headerlink" href="#values" title="Permanent link">&para;</a></h4>
+<blockquote>
+<p>在模板中用 <code>.Values</code> 可以获取到 <code>values.yaml</code> 文件（或者 <code>--set</code> 参数）提供的 values 值，此外，还可以在模板中访问其他预定义的数据。下面是一些预定义的、可用于每个模板、并且不能被覆盖的 values 值，与所有 values 值一样，名称都是区分大小写的：</p>
+</blockquote>
+<ul>
+<li><code>Release.Name</code>：release 的名称（不是 chart）</li>
+<li><code>Release.Namespace</code>：release 被安装到的命名空间</li>
+<li><code>Release.Service</code>：渲染当前模板的服务，在 Helm 上，实际上该值始终为 Helm</li>
+<li><code>Release.IsUpgrade</code>：如果当前操作是升级或回滚，则该值为 true</li>
+<li><code>Release.IsInstall</code>：如果当前操作是安装，则该值为 true</li>
+<li><code>Chart</code>：<code>Chart.yaml</code> 文件的内容，可以通过 <code>Chart.Version</code> 来获得 Chart 的版本，通过 <code>Chart.Maintainers</code> 可以获取维护者信息</li>
+<li>
+<p><code>Files</code>： 一个包含 chart 中所有非特殊文件的 map 对象，这不会给你访问模板的权限，但是会给你访问存在的其他文件的权限（除非使用 <code>.helmignore</code> 排除它们），可以使用 </p>
+<div class="highlight"><pre><span></span><code>{{ index .Files &quot;file.name&quot; }}
+</code></pre></div>
+<p>或者 </p>
+<div class="highlight"><pre><span></span><code>{{ .Files.Get name }}
+</code></pre></div>
+<p>或者 </p>
+<div class="highlight"><pre><span></span><code>{{ .Files.GetString name }}
+</code></pre></div>
+<p>函数来访问文件，你还可以使用 </p>
+<div class="highlight"><pre><span></span><code>{{ .Files.GetBytes }}
+</code></pre></div>
+<p>以 <code>[]byte</code> 的形式获取访问文件的内容
+*   <code>Capabilities</code>：也是一个类 map 的对象，其中包含有关 Kubernetes 版本（</p>
+<div class="highlight"><pre><span></span><code>{{ .Capabilities.KubeVersion }}
+</code></pre></div>
+<p>）和支持的 Kubernetes API 版本（</p>
+<div class="highlight"><pre><span></span><code>{{ .Capabilities.APIVersions.Has &quot;batch/v1&quot; }}
+</code></pre></div>
+<p>）信息。</p>
+</li>
+</ul>
+<blockquote>
+<p>注意</p>
+<p>任何未知的 <code>Chart.yaml</code> 字段都会被删除，在 Chart 对象内部无法访问他们，所以，<code>Chart.yaml</code> 不能用于将任意结构化的数据传递到模板中，但是可以使用 values 文件来传递。</p>
+</blockquote>
+<h4 id="values_1">Values 文件<a class="headerlink" href="#values_1" title="Permanent link">&para;</a></h4>
+<blockquote>
+<p>为模板提供一些必须的 values 值的 <code>values.yaml</code> 文件如下所示：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>imageRegistry: &quot;quay.io/deis&quot;
+dockerTag: &quot;latest&quot;
+pullPolicy: &quot;Always&quot;
+storage: &quot;s3&quot;
+</code></pre></div>
+<blockquote>
+<p>values 文件的格式是 YAML，一个 chart 包可能包含一个默认的 <code>values.yaml</code> 文件，<code>helm install</code> 命令允许用户通过提供其他的 YAML 值文件来覆盖默认的值：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ helm install --values=myvals.yaml wordpress
+</code></pre></div>
+<blockquote>
+<p>用这种方式来传递 values 值的时候，它们将合并到默认值文件中，比如有一个 <code>myvals.yaml</code> 文件如下所示：</p>
+</blockquote>
+<p><code>storage: "gcs"</code></p>
+<blockquote>
+<p>将其与 chart 的 <code>values.yaml</code> 文件合并后，得到的结果为：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>imageRegistry: &quot;quay.io/deis&quot;
+dockerTag: &quot;latest&quot;
+pullPolicy: &quot;Always&quot;
+storage: &quot;gcs&quot;
+</code></pre></div>
+<blockquote>
+<p>我们可以看到只有最后一个字段被覆盖了。</p>
+<p>注意</p>
+<p>chart 内包含的默认 values 文件必须命名为 <code>values.yaml</code>，但是在命令行上指定的文件可以任意命名。 如果在 <code>helm install</code> 或者 <code>helm upgrade</code> 的时候使用 <code>--set</code> 参数，则这些值将在客户端转换为 YAML 格式。 如果 values 文件存在任何必须的条目，则可以使用 <code>required</code> 函数在 chart 模板中将它们声明为必须选项。</p>
+<p>然后我们就可以使用 <code>.Values</code> 对象在模板中访问任意一个 values 值，类似于下面的模板文件：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: deis-database
+  namespace: deis
+  labels:
+    app.kubernetes.io/managed-by: deis
+spec:
+  replicas: 1
+  selector:
+    app.kubernetes.io/name: deis-database
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: deis-database
+    spec:
+      serviceAccount: deis-database
+      containers:
+        - name: deis-database
+          image: {{ .Values.imageRegistry }}/postgres:{{ .Values.dockerTag }}
+          imagePullPolicy: {{ .Values.pullPolicy }}
+          ports:
+            - containerPort: 5432
+          env:
+            - name: DATABASE_STORAGE
+              value: {{ default &quot;minio&quot; .Values.storage }}
+</code></pre></div>
+<h4 id="values_2">作用范围、依赖和 Values<a class="headerlink" href="#values_2" title="Permanent link">&para;</a></h4>
+<blockquote>
+<p>values 文件可以声明顶级的 chart 以及该 chart 的 <code>charts/</code> 目录中包含的任何 chart 的值。或者，换句话说，values 文件可以为 chart 以及他的任何依赖项提供 values 值。例如，上面提到了 WordPress 这个 chart 同时依赖 mysql 和 apache 这两个依赖项，values 文件可以为所有这些组件提供 values 值：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>title: &quot;My WordPress Site&quot; # 传递到 WordPress 模板
+
+mysql:
+  max_connections: 100 # 传递到 MySQL
+  password: &quot;secret&quot;
+
+apache:
+  port: 8080 # 传递到 Apache
+</code></pre></div>
+<blockquote>
+<p>较高级别的 Charts 可以访问下面定义的所有变量，所以，WordPress 这个 chart 可以通过 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>.Values.mysql.password
+</code></pre></div>
+<p>来访问 MySQL 的密码，但是较低级别的 chart 是无法访问父 chart 中的内容的，所有 MySQL 无法获取到 title 属性，当然同样也不能访问 <code>apache.port</code>。</p>
+<blockquote>
+<p>Values 是有命名空间的，但是会对其进行调整，比如对于 WordPress 这个 chart 来说，它可以通过 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>.Values.mysql.password
+</code></pre></div>
+<p>来进行访问，但是对于 MySQL 这个 chart 本身来说，values 的范围缩小了，命名空间前缀会被删除，所以它只需要通过 <code>.Values.password</code> 就可以访问到。</p>
+<h4 id="values_3">全局 Values<a class="headerlink" href="#values_3" title="Permanent link">&para;</a></h4>
+<blockquote>
+<p>从 <code>2.0.0-Alpha.2</code> 版本开始，Helm 开始支持特殊的 <code>global</code> 全局值，比如将上面的示例修改如下：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>title: &quot;My WordPress Site&quot; # 传递到 WordPress 模板
+
+global:
+  app: MyWordPress
+
+mysql:
+  max_connections: 100 # 传递到 MySQL
+  password: &quot;secret&quot;
+
+apache:
+  port: 8080 # 传递到 Apache
+</code></pre></div>
+<blockquote>
+<p>上面我们添加了一个全局范围的 value 值：<code>app: MyWordPress</code>，该值可以通过 <code>.Values.global.app</code> 提供给所有 chart 使用。</p>
+<p>例如，mysql 模板可以以 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>{{ .Values.global.app }}
+</code></pre></div>
+<p>来访问 app，apache chart 也可以，实际上，上面的 values 文件会这样重新生成：</p>
+<div class="highlight"><pre><span></span><code>title: &quot;My WordPress Site&quot; # 传递到 WordPress 模板
+
+global:
+  app: MyWordPress
+
+mysql:
+  global:
+    app: MyWordPress
+  max_connections: 100 # 传递到 MySQL
+  password: &quot;secret&quot;
+
+apache:
+  global:
+    app: MyWordPress
+  port: 8080 # 传递到 Apache
+</code></pre></div>
+<blockquote>
+<p>这种方式提供了一种与所有子 chart 共享一个顶级变量的方式，这对于设置 meta 数据这种属性是非常有用的。如果子 chart 声明了全局变量，则该全局变量将向下（传递到子 chart 的子 chart 中）传递，而不会向上传递到父 chart，子 chart 无法影响 父 chart的值。同样，父 chart 的全局遍历优先与子 chart 中的全局变量。</p>
+</blockquote>
+<h4 id="schema">Schema 文件<a class="headerlink" href="#schema" title="Permanent link">&para;</a></h4>
+<blockquote>
+<p>有时候，chart 开发者可能希望在其 values 值上面定义一个结构，这种情况下可以通过在 <code>values.schema.json</code> 文件中定义一个 schema 来完成，这里的 schema 就是一个 JSON Schema 文件结构规范，如下所示：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>{
+  &quot;$schema&quot;: &quot;https://json-schema.org/draft-07/schema#&quot;,
+  &quot;properties&quot;: {
+    &quot;image&quot;: {
+      &quot;description&quot;: &quot;Container Image&quot;,
+      &quot;properties&quot;: {
+        &quot;repo&quot;: {
+          &quot;type&quot;: &quot;string&quot;
+        },
+        &quot;tag&quot;: {
+          &quot;type&quot;: &quot;string&quot;
+        }
+      },
+      &quot;type&quot;: &quot;object&quot;
+    },
+    &quot;name&quot;: {
+      &quot;description&quot;: &quot;Service name&quot;,
+      &quot;type&quot;: &quot;string&quot;
+    },
+    &quot;port&quot;: {
+      &quot;description&quot;: &quot;Port&quot;,
+      &quot;minimum&quot;: 0,
+      &quot;type&quot;: &quot;integer&quot;
+    },
+    &quot;protocol&quot;: {
+      &quot;type&quot;: &quot;string&quot;
+    }
+  },
+  &quot;required&quot;: [
+    &quot;protocol&quot;,
+    &quot;port&quot;
+  ],
+  &quot;title&quot;: &quot;Values&quot;,
+  &quot;type&quot;: &quot;object&quot;
+}
+</code></pre></div>
+<blockquote>
+<p>该 schema 会对 values 值进行校验，调用以下任何命令时，都会进行验证：</p>
+</blockquote>
+<ul>
+<li>helm install</li>
+<li>helm upgrade</li>
+<li>helm lint</li>
+<li>helm template</li>
+</ul>
+<blockquote>
+<p>比如下面的示例文件就可以满足上面的 schema 要求：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>name: frontend
+protocol: https
+port: 443
+</code></pre></div>
+<blockquote>
+<p>需要注意的是该 schema 将应用于最终的 <code>.Values</code> 对象，而不仅仅是应用于 <code>values.yaml</code> 文件，所以下面的文件也是可以满足 schema 要求的：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>name: frontend
+protocol: https
+</code></pre></div>
+<blockquote>
+<p>因为在安装的时候我们通过 <code>--set</code> 选项传递了必须的 <code>port</code> 属性：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ helm install --set port=443
+</code></pre></div>
+<blockquote>
+<p>此外，还会根据所有的子 chart schemas 来检查最终的 <code>.Values</code> 对象，这意味着父 chart 无法规避对子 chart 的限制。同样的，如果子 chart 要求未满足子 chart 的 <code>values.yaml</code> 文件，则父 chart 必须满足这些限制才能生效。</p>
+</blockquote>
+<h4 id="_5">参考文档<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h4>
+<blockquote>
+<p>在编写模板、values、和 schema 文件的时候，下面这些文档可以提供一些帮助：</p>
+</blockquote>
+<ul>
+<li>Go Template</li>
+<li>额外的模板函数</li>
+<li>YAML 文件</li>
+<li>JSON Schema</li>
+</ul>
+<h3 id="crds">CRDS<a class="headerlink" href="#crds" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>Kubernetes 提供了一种声明新类型的 Kubernetes 对象的机制，使用 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>CustomResourceDefinitions（CRDS）
+</code></pre></div>
+<p>可以让 Kubernetes 开发人员声明自定义资源类型。</p>
+<blockquote>
+<p>在 Helm 3 中，CRD 被视为一种特殊的对象，它们在 chart 部分之前被安装，并且会受到一些限制。CRD YAML 文件应该放置 chart 内的 <code>crds/</code> 目录下面。多个 CRDs 可以放在同一个文件中，Helm 将尝试将 CRD 目录中的所有文件加载到 Kubernetes 中。</p>
+<p>需要注意的是 CRD 文件<code>不能模板化</code>，它们必须是纯的 YAML 文件。</p>
+<p>当 Helm 安装一个新的 chart 的时候，它将会安装 CRDs，然后会暂停直到 API Server 提供 CRD 为止，然后才开始启动模板引擎，渲染其余的 chart 模板，并将其安装到 Kubernetes 中。由于这个安装顺序，CRD 信息在 Helm 模板的 <code>.Capabilities</code> 对象中是可以获取到的，并且 Helm 模板可能会创建在 CRD 中声明的对象的新实例。</p>
+<p>比如，如果你的呃 chart 在 <code>crds</code> 目录下面有一个 CronTab 的 CRD，则可以在 <code>templates/</code> 目录下面创建 CronTab 类型的实例：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>crontabs/
+  Chart.yaml
+  crds/
+    crontab.yaml
+  templates/
+    mycrontab.yaml
+</code></pre></div>
+<blockquote>
+<p><code>crontab.yaml</code> 文件必须包含不带模板指定的 CRD：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>kind: CustomResourceDefinition
+metadata:
+  name: crontabs.stable.example.com
+spec:
+  group: stable.example.com
+  versions:
+    - name: v1
+      served: true
+      storage: true
+  scope: Namespaced
+  names:
+    plural: crontabs
+    singular: crontab
+    kind: CronTab
+</code></pre></div>
+<blockquote>
+<p>然后模板 <code>mycrontab.yaml</code> 可以创建一个新的 CronTab（和平时使用模板一样）：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: stable.example.com
+kind: CronTab
+metadata:
+  name: {{ .Values.name }}
+spec:
+   # ...
+</code></pre></div>
+<blockquote>
+<p>在继续安装 <code>templates/</code> 之前，Helm 会确保已经安装上了 CronTab 类型，并且可以从 Kubernetes API server 上获得该类型。</p>
+</blockquote>
+<h4 id="crds_1">CRDs 的限制<a class="headerlink" href="#crds_1" title="Permanent link">&para;</a></h4>
+<blockquote>
+<p>于 Kubernetes 中的大多数对象不同，CRDs 是全局安装的，所以 Helm 在管理 CRD 的时候比较谨慎，会有一些限制：</p>
+</blockquote>
+<ul>
+<li>CRDs 不会重新安装，如果 Helm 确定 <code>crds/</code> 目录中的 CRD 已经存在（无论版本如何），Helm 都不会重新安装或升级。</li>
+<li>CRDs 不会在升级或回滚的时候安装，只会在安装操作的时候创建 CRDs。</li>
+<li>CRDs 不会被删除，删除 CRD 会自动删除集群中所有 namespace 中的 CRDs 内容，所以 Helm 不会删除 CRD。</li>
+</ul>
+<blockquote>
+<p>Helm 希望想要升级或删除 CRDs 的操作人员可以手动来仔细地操作。</p>
+</blockquote>
+<h3 id="helm_charts">使用 Helm 管理 Charts<a class="headerlink" href="#helm_charts" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>helm 工具有几个用于操作 charts 的命令，如下所示。</p>
+<p>创建一个新的 chart 包：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ helm create mychart
+Created mychart/
+</code></pre></div>
+<blockquote>
+<p>一旦你已经编辑了一个 chart 包，Helm 可以将其打包到一个独立文件中：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ helm package mychart
+Archived mychart--.tgz
+</code></pre></div>
+<blockquote>
+<p>你还可以使用 helm 帮助你查找 chart 包的格式要求方面或其他问题：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ helm lint mychart
+No issues found
+</code></pre></div>
+<h3 id="chart_1">Chart 仓库<a class="headerlink" href="#chart_1" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>chart 仓库实际上就是一个 HTTP 服务器，其中包含一个或多个打包的 chart 包，虽然可以使用 helm 来管理本地 chart 目录，但是在共享 charts 的时候，最好的还是使用 chart 仓库。</p>
+<p>可以提供 <code>YAML</code> 文件和 <code>tar</code>文件并可以相应 GET 请求的任何 HTTP 服务器都可以作为 chart 仓库服务器。仓库的主要特征是存在一个名为 <code>index.yaml</code> 的特殊文件，该文件具有仓库中提供的所有软件包的列表以及允许检索和验证这些软件包的元数据。</p>
+<p>在客户端，可以使用 <code>helm repo</code> 命令来管理仓库，但是 Helm 不提供用于将 chart 上传到远程 chart 仓库的工具。</p>
+</blockquote>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      BurningMyself<a href='https://beian.miit.gov.cn/' target='_blank'>  蜀ICP备15033200号-1</a>
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/burningmyself" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://gitee.com/burningmyself" target="_blank" rel="noopener" title="gitee.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.2a6f1dda.min.js"></script>
+      
+        <script src="../../js/extra.js"></script>
+      
+        <script src="../../js/baidu-tongji.js"></script>
+      
+        <script src="https://www.googletagmanager.com/gtag/js?id=UA-155084439-1"></script>
+      
+        <script src="https://www.googletagmanager.com/gtag/js?id=UA-155132293-1"></script>
+      
+        <script src="../../js/google.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+      
+    
+  </body>
+</html>

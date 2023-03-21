@@ -1,0 +1,4027 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content=".net,java,php,python,docker,web">
+      
+      
+        <meta name="author" content="BurningMyself">
+      
+      
+        <link rel="canonical" href="https://burningmyself.gitee.io/kubernetes_service_mesh/traffic/">
+      
+      
+        <link rel="prev" href="../istio/">
+      
+      
+        <link rel="next" href="../observability/">
+      
+      <link rel="icon" href="../../favicon.ico">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.15">
+    
+    
+      
+        <title>流量管理 - BurningMyself</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.113286f1.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.a0c5b2b5.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="BurningMyself" class="md-header__button md-logo" aria-label="BurningMyself" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BurningMyself
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              流量管理
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/burningmyself/burningmyself.github.io" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    burningmyself.github.io
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="BurningMyself" class="md-nav__button md-logo" aria-label="BurningMyself" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    BurningMyself
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/burningmyself/burningmyself.github.io" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    burningmyself.github.io
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        云原生
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          Docker 基础
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Docker 基础
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/overview/" class="md-nav__link">
+        简介
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/install/" class="md-nav__link">
+        安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/basic/" class="md-nav__link">
+        基本操作
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/dockerfile_usage/" class="md-nav__link">
+        Dockerfile
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/dockerfile_practice/" class="md-nav__link">
+        Dockerfile实践
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          Kubernetes 基础
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 基础
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/overview/" class="md-nav__link">
+        简介
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/install/" class="md-nav__link">
+        安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/yaml/" class="md-nav__link">
+        资源清单
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/pod/" class="md-nav__link">
+        Pod原理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/pod_life/" class="md-nav__link">
+        Pod的生命周期
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/pod_deep/" class="md-nav__link">
+        Pod使用进阶
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          Kubernetes 控制器
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 控制器
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/replicaset/" class="md-nav__link">
+        ReplicaSet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/deployment/" class="md-nav__link">
+        Deployment
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/statefulset/" class="md-nav__link">
+        StatefulSet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/daemonset/" class="md-nav__link">
+        DaemonSet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/job/" class="md-nav__link">
+        Job
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/hpa/" class="md-nav__link">
+        HPA
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          Kubernetes 配置管理
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 配置管理
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_config/config_map/" class="md-nav__link">
+        ConfigMap
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_config/secret/" class="md-nav__link">
+        Secret
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_config/service_account/" class="md-nav__link">
+        ServiceAccount
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+          Kubernetes 安全
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 安全
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_security/rbac/" class="md-nav__link">
+        RBAC
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_security/security_context/" class="md-nav__link">
+        Security Context
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_security/admission/" class="md-nav__link">
+        准入控制器
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+          Kubernetes 网络
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 网络
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/flannel/" class="md-nav__link">
+        网络插件
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/policy/" class="md-nav__link">
+        网络策略
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/service/" class="md-nav__link">
+        Service 服务
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_4" id="__nav_7_4_label" tabindex="0">
+          Ingress
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_7_4">
+          <span class="md-nav__icon md-icon"></span>
+          Ingress
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/ingress/nginx/" class="md-nav__link">
+        NGINX Controller
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/ingress/traefik/" class="md-nav__link">
+        Traefik
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+          Kubernetes 调度器
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 调度器
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_scheduler/overview/" class="md-nav__link">
+        调度器介绍
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_scheduler/usage/" class="md-nav__link">
+        Pod 调度
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+          Kubernetes 存储
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 存储
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_stroage/local/" class="md-nav__link">
+        Local 本地存储
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_stroage/ceph/" class="md-nav__link">
+        Ceph 存储
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_stroage/csi/" class="md-nav__link">
+        存储原理
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+          Helm 包管理
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_10">
+          <span class="md-nav__icon md-icon"></span>
+          Helm 包管理
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/helm/" class="md-nav__link">
+        Helm
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/charts/" class="md-nav__link">
+        Charts
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_10_3" id="__nav_10_3_label" tabindex="0">
+          模板开发
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_10_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_10_3">
+          <span class="md-nav__icon md-icon"></span>
+          模板开发
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/objects/" class="md-nav__link">
+        内置对象
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/values/" class="md-nav__link">
+        Values
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/function/" class="md-nav__link">
+        函数和管道
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/flow/" class="md-nav__link">
+        流程控制
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/variables/" class="md-nav__link">
+        变量
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/named_templates/" class="md-nav__link">
+        命名模板
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/access_files/" class="md-nav__link">
+        访问文件
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/notes_files/" class="md-nav__link">
+        NOTES.txt 文件
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/subcharts_and_globals/" class="md-nav__link">
+        子chart与全局值
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/debug/" class="md-nav__link">
+        模板调试
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/chart_hooks/" class="md-nav__link">
+        Chart Hooks
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/example/" class="md-nav__link">
+        示例
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+          Kubernetes 监控
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 监控
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/prometheus/" class="md-nav__link">
+        Prometheus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/grafana/" class="md-nav__link">
+        Grafana
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/promql/" class="md-nav__link">
+        Promql
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/alertmanager/" class="md-nav__link">
+        Alertmanager
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/thanos/" class="md-nav__link">
+        Prometheus Thanos
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/adapter/" class="md-nav__link">
+        Prometheus Adpater
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_11_7" id="__nav_11_7_label" tabindex="0">
+          Prometheus Operator
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_7">
+          <span class="md-nav__icon md-icon"></span>
+          Prometheus Operator
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/operator/install/" class="md-nav__link">
+        安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/operator/custom/" class="md-nav__link">
+        自定义监控报警
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/operator/advance/" class="md-nav__link">
+        高级配置
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+          Kubernetes 日志
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_12">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 日志
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_logs/architec/" class="md-nav__link">
+        Grafana
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_logs/efk/" class="md-nav__link">
+        efk
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+          Kubernetes DevOps
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_13">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes DevOps
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_devops/jenkins/" class="md-nav__link">
+        Jenins
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_devops/gitlab/" class="md-nav__link">
+        Gitlab
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_devops/harbor/" class="md-nav__link">
+        Harbor
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_devops/jenkins_pipeline/" class="md-nav__link">
+        Jenkins Pipeline
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_devops/token/" class="md-nav__link">
+        Tekton
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="0">
+          Service Mesh 实践
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_14">
+          <span class="md-nav__icon md-icon"></span>
+          Service Mesh 实践
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../istio/" class="md-nav__link">
+        Istio
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          流量管理
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        流量管理
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    流量管理
+  </a>
+  
+    <nav class="md-nav" aria-label="流量管理">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    不同服务版本访问规则
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    基于权重的服务访问规则
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    基于请求内容的服务访问规则
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    延迟访问故障注入
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    中断访问故障注入
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    服务网格外的流量管理
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#egress_gateway_https" class="md-nav__link">
+    用 Egress Gateway 处理 HTTPS 请求
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tcp" class="md-nav__link">
+    TCP 流量转移
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    熔断
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    流量镜像
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../observability/" class="md-nav__link">
+        可观测性
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../security/" class="md-nav__link">
+        安全管控
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cert_manager/" class="md-nav__link">
+        CertManager
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="0">
+          Kubernetes 多租户
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_15">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 多租户
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_tenant/tenant/" class="md-nav__link">
+        多租户介绍
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_tenant/quota/" class="md-nav__link">
+        多租户介绍
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_tenant/psp/" class="md-nav__link">
+        多租户介绍
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_16" id="__nav_16_label" tabindex="0">
+          Operator
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_16_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_16">
+          <span class="md-nav__icon md-icon"></span>
+          Operator
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_operator/crd/" class="md-nav__link">
+        CRD
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_operator/operator/" class="md-nav__link">
+        Operator
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_17" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_17" id="__nav_17_label" tabindex="0">
+          实践技巧
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_17_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_17">
+          <span class="md-nav__icon md-icon"></span>
+          实践技巧
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_maintain/skill/" class="md-nav__link">
+        技巧
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_maintain/update/" class="md-nav__link">
+        技巧
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_maintain/update_cluster/" class="md-nav__link">
+        技巧
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_maintain/reserved/" class="md-nav__link">
+        技巧
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_18" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_18" id="__nav_18_label" tabindex="0">
+          源码
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_18_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_18">
+          <span class="md-nav__icon md-icon"></span>
+          源码
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_code/kubelet/" class="md-nav__link">
+        kubelet源码
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_18_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_18_2" id="__nav_18_2_label" tabindex="0">
+          client-go
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_18_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_18_2">
+          <span class="md-nav__icon md-icon"></span>
+          client-go
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_code/client_go/workqueue/" class="md-nav__link">
+        workqueue
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_code/client_go/indexer/" class="md-nav__link">
+        indexer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_code/client_go/deltafifo/" class="md-nav__link">
+        workqueue
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_19" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_19" id="__nav_19_label" tabindex="0">
+          应用示例
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_19_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_19">
+          <span class="md-nav__icon md-icon"></span>
+          应用示例
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_example/wordpress/" class="md-nav__link">
+        应用部署
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    流量管理
+  </a>
+  
+    <nav class="md-nav" aria-label="流量管理">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    不同服务版本访问规则
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    基于权重的服务访问规则
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    基于请求内容的服务访问规则
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    延迟访问故障注入
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    中断访问故障注入
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    服务网格外的流量管理
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#egress_gateway_https" class="md-nav__link">
+    用 Egress Gateway 处理 HTTPS 请求
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tcp" class="md-nav__link">
+    TCP 流量转移
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    熔断
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    流量镜像
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+  <h1>流量管理</h1>
+
+<h2 id="_1">流量管理<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>在前面我们成功搭建并部署了 Istio 及其其 Bookinfo 示例应用：</p>
+<p><img alt="bookinfo homepage" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200608195347.png" /></p>
+<p>目前搭建 Bookinfo 应用我们只用到了下面两个资源文件：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>samples/bookinfo/platform/kube/bookinfo.yaml
+samples/bookinfo/networking/bookinfo-gateway.yaml
+</code></pre></div>
+<blockquote>
+<p>前者就是通常的 Kubernetes 定义的 Deployment 和 Service 的资源清单文件，只是在部署时使用 <code>istioctl kube-inject</code> 对这个文件定义的 Pod 注入了 sidecar 代理，后者定义了这个应用的外部访问入口gateway，以及应用内部 productpage 服务的 <code>VirtualService</code> 规则，而其他内部服务的访问规则还没有被定义。</p>
+<p>现在访问应用界面并刷新，会看到 Reviews 有时不会显示评分，有时候会显示不同样式的评分，这是因为后面有3个不同的 Reviews 服务版本，而没有配置该服务的路由规则 <code>route rule</code> 的情况下，该服务的几个实例会被随机访问到，有的版本服务会进一步调用 Ratings 服务，有的不会。</p>
+<p>到这里我们已经接触到了 Istio 中两个非常重要的流量管理的资源对象了：</p>
+</blockquote>
+<ul>
+<li>VirtualService 是用来在 Istio 中定义路由规则，控制流量路由到服务上的各种行为。</li>
+<li>Gateway 我为 HTTP/TCP 流量配置负载均衡器的。</li>
+</ul>
+<blockquote>
+<p>接下来我们来对 Bookinfo 服务的访问规则进行修改。</p>
+</blockquote>
+<h3 id="_2">不同服务版本访问规则<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>对 Reviews 服务添加一条路由规则，启用 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>samples/bookinfo/networking/virtual-service-reviews-vyaml
+</code></pre></div>
+<p>定义的 VirtualService 规则，内容如下：</p>
+<div class="highlight"><pre><span></span><code>apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+  - reviews
+  http:
+  - route:
+    - destination:
+        host: reviews
+        subset: v3
+</code></pre></div>
+<blockquote>
+<p>这样，所有访问 reviews 服务的流量就会被引导到 reviews 服务对应的 subset 为 v3 的 Pod 中。启用这条规则：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl apply -f  samples/bookinfo/networking/virtual-service-reviews-vyaml
+virtualservice.networking.istio.io/reviews created
+</code></pre></div>
+<blockquote>
+<p>然后查看所有的路由规则：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl get virtualservices
+NAME       GATEWAYS             HOSTS       AGE
+bookinfo   [bookinfo-gateway]   [*]         158d
+reviews                         [reviews]   20s
+</code></pre></div>
+<blockquote>
+<p>我们可以看到 reviews 的 <code>VirtualService</code> 已经创建成功了，此时我们去刷新应用的页面，发现访问 Reviews 失败了：</p>
+<p><img alt="bookinfo reviews v3 failed" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200611163112.png" /></p>
+<p>这是因为我们还没有创建 DestinationRule 对象，DestinationRule 对象是 VirtualService 路由生效后，配置应用与请求的策略集，用来将 VirtualService 中指定的 subset 与对应的 Pod 关联起来。</p>
+<p>在 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>samples/bookinfo/networking/destination-rule-all.yaml
+</code></pre></div>
+<p>文件中有定义所有该应用中要用到的所有 DestinationRule 资源对象，其中有一段就是对 Reviews 相关的 DestinationRule 的定义:</p>
+<div class="highlight"><pre><span></span><code>---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: reviews
+spec:
+  host: reviews
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+  - name: v2
+    labels:
+      version: v2
+  - name: v3
+    labels:
+      version: v3
+</code></pre></div>
+<blockquote>
+<p>我们可以看到 DestinationRule 中定义了 <code>subsets</code> 集合，其中 labels 就和我们之前 Service 的 <code>labelselector</code> 一样是去匹配 Pod 的 labels 标签的，比如我们这里 subsets 中就包含一个名为 v3 的 subset，而这个 subset 匹配的就是具有 <code>version=v3</code> 这个 label 标签的 Pod 集合，再回到之前的 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>samples/bookinfo/platform/kube/bookinfo.yaml
+</code></pre></div>
+<p>文件中，我们可以发现 reviews 的 Deployment 确实有声明不同的 <code>labels-&gt;version</code>:</p>
+<div class="highlight"><pre><span></span><code>---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reviews-v3
+  labels:
+    app: reviews
+    version: v3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: reviews
+      version: v3  
+  template:
+    metadata:
+      labels:
+        app: reviews
+        version: v3 # 声明version=v3的标签
+    spec:
+      serviceAccountName: bookinfo-reviews
+      containers:
+      - name: reviews
+        image: docker.io/istio/examples-bookinfo-reviews-v3:1
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: LOG_DIR
+          value: &quot;/tmp/logs&quot;
+        ports:
+        - containerPort: 9080
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: wlp-output
+          mountPath: /opt/ibm/wlp/output
+      volumes:
+      - name: wlp-output
+        emptyDir: {}
+      - name: tmp
+        emptyDir: {}
+</code></pre></div>
+<blockquote>
+<p>这样我们就通过 DestinationRule 将 VirtualService 与 Service 不同的版本关联起来了。现在我们直接创建 DestinationRule 资源：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl apply -f samples/bookinfo/networking/destination-rule-all.yaml
+destinationrule.networking.istio.io/productpage created
+destinationrule.networking.istio.io/reviews created
+destinationrule.networking.istio.io/ratings created
+destinationrule.networking.istio.io/details created
+</code></pre></div>
+<blockquote>
+<p>创建完成后，我们就可以查看目前我们网格中的 DestinationRules:</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl get destinationrule
+NAME          HOST          AGE
+details       details       18s
+productpage   productpage   18s
+ratings       ratings       18s
+reviews       reviews       18s
+</code></pre></div>
+<blockquote>
+<p>此时再访问应用就成功了，多次刷新页面发现 Reviews 都展示的是 v3 版本带红色星的 Ratings，说明我们VirtualService 的配置成功了。</p>
+<p><img alt="reviews v3" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200611160907.png" /></p>
+</blockquote>
+<h3 id="_3">基于权重的服务访问规则<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>刚刚我们演示的基于不同服务版本的服务网格的控制，接下来我们来演示下基于权重的服务访问规则的使用。</p>
+<p>首先移除刚刚创建的 VirtualService 对象，排除对环境的影响：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl delete virtualservice reviews
+virtualservice.networking.istio.io &quot;reviews&quot; deleted
+$ kubectl get virtualservice
+NAME       GATEWAYS             HOSTS   AGE
+bookinfo   [bookinfo-gateway]   [*]     11m
+</code></pre></div>
+<blockquote>
+<p>现在我们再去访问 Bookinfo 应用又回到最初随机访问 Reviews 的情况了。现在我们查看文件 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>samples/bookinfo/networking/virtual-service-reviews-80-yaml
+</code></pre></div>
+<p>的定义：</p>
+<div class="highlight"><pre><span></span><code>apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+  - reviews
+  http:
+  - route:
+    - destination:
+        host: reviews
+        subset: v1
+      weight: 80
+    - destination:
+        host: reviews
+        subset: v2
+      weight: 20
+</code></pre></div>
+<blockquote>
+<p>这个规则定义了 80% 的对 Reviews 的流量会落入 v1 这个 subset，就是没有 Ratings 的这个服务，20% 会落入 v2 带黑色 Ratings 的这个服务，然后我们创建这个资源对象：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl apply -f samples/bookinfo/networking/virtual-service-reviews-80-yaml
+virtualservice.networking.istio.io/reviews created
+$ kubectl get virtualservice
+NAME       GATEWAYS             HOSTS       AGE
+bookinfo   [bookinfo-gateway]   [*]         12m
+reviews                         [reviews]   13s
+</code></pre></div>
+<blockquote>
+<p>我们查看当前网格中的 VirtualService 对象，可以看到已经有 reviews 了，证明已经创建成功了，由于上面我们已经将应用中所有的 DestinationRules 都已经创建过了，所以现在我们直接访问应用就可以了，我们多次刷新，可以发现没有出现 Ratings 的次数与出现黑色星 Ratings 的比例大概在<code>4:1</code>左右，并且没有红色星的 Ratings 的情况出现，说明我们配置的基于权重的 VirtualService 访问规则配置生效了。</p>
+</blockquote>
+<h3 id="_4">基于请求内容的服务访问规则<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>除了上面基于服务版本和服务权重的方式控制服务访问之外，我们还可以基于请求内容来进行访问控制。</p>
+<p>同样，将上面创建的 VirtualService 对象删除：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl delete virtualservice reviews
+virtualservice.networking.istio.io &quot;reviews&quot; deleted
+$ kubectl get virtualservice
+NAME       GATEWAYS             HOSTS   AGE
+bookinfo   [bookinfo-gateway]   [*]     14m
+</code></pre></div>
+<blockquote>
+<p>查看文件 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>samples/bookinfo/networking/virtual-service-reviews-jason-v2-vyaml
+</code></pre></div>
+<p>的定义：</p>
+<div class="highlight"><pre><span></span><code>apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+  - reviews
+  http:
+  - match:
+    - headers:
+        end-user:
+          exact: jason
+    route:
+    - destination:
+        host: reviews
+        subset: v2
+  - route:
+    - destination:
+        host: reviews
+        subset: v3
+</code></pre></div>
+<blockquote>
+<p>这个 VirtualService 对象定义了对 reviews 服务访问的 <code>match</code> 规则。意思是如果当前请求的 header 中包含 jason 这个用户信息，则只会访问到 v2 的 reviews 这个服务版本，即都带黑星的样式，如果不包含该用户信息，则都直接将流量转发给 v3 这个 reviews 的服务。</p>
+<p>我们先不启用这个 VirtualService，先去访问下 Bookinfo 这个应用： <img alt="bookinfo login" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200611164642.png" /></p>
+<p>右上角有登录按钮，在没有登录的情况下刷新页面，reviews 服务是被随机访问的，可以看到有带星不带星的样式，点击登录，在弹窗中 User Name 输入 jason，Password 为空，登录：</p>
+<p><img alt="bookinfo logined" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200611164935.png" /></p>
+<p>再刷新页面，可以看到跟未登录前的访问规则一样，也是随机的。</p>
+<p>现在我们来创建上面的 VirtualService 这个对象:</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl apply -f samples/bookinfo/networking/virtual-service-reviews-jason-v2-vyaml
+virtualservice.networking.istio.io/reviews created
+$ kubectl get virtualservice
+NAME       GATEWAYS             HOSTS       AGE
+bookinfo   [bookinfo-gateway]   [*]         22m
+reviews                         [reviews]   12s
+</code></pre></div>
+<blockquote>
+<p>此时再回去刷新页面，发现一直都是黑星的 Reviews 版本(v2)被访问到了。注销退出后再访问，此时又一直是红星的版本(v3)被访问了。</p>
+<p>说明我们基于 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>headers-&gt;end-user-&gt;exact:jason
+</code></pre></div>
+<p>的控制规则生效了。在 productpage 服务调用 reviews 服务时，登录的情况下会在 header 中带上用户信息，通过 <code>exact</code> 规则匹配到相关信息后，流量被引向了上面配置的 v2 版本中。</p>
+<blockquote>
+<p>这里要说明一下 match 的匹配规则：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>All conditions inside a single match block have AND semantics, while the list of match blocks have OR semantics. The rule is matched if any one of the match blocks succeed.
+</code></pre></div>
+<blockquote>
+<p>意思是一个 <code>match</code> 块里的条件是需要同时满足才算匹配成功的，如下面是 url 前缀和端口都必须都满足才算成功：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>- match:
+    - uri:
+        prefix: &quot;/wpcatalog&quot;
+      port: 443
+</code></pre></div>
+<blockquote>
+<p>多个 match 块之间是只要有一个 match 匹配成功了，就会被路由到它指定的服务版本去，而忽略其他的。我们的示例中在登录的条件下，满足第一个 match，所以服务一直会访问到 v2 版本。退出登录后，没有 match 规则满足匹配，所以就走最后一个 route 规则，即 v3 版本。</p>
+<p>到这里，我们就和大家一起学习了基于不同服务版本、权重以及请求内容来控制服务流量的配置。</p>
+</blockquote>
+<h3 id="_5">延迟访问故障注入<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>首先移除之前创建的 VirtualService:</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl delete virtualservice reviews
+virtualservice.networking.istio.io &quot;reviews&quot; deleted
+$ kubectl get virtualservice
+NAME       GATEWAYS             HOSTS   AGE
+bookinfo   [bookinfo-gateway]   [*]     16d
+</code></pre></div>
+<blockquote>
+<p>然后我们查看 istio 样例文件夹下面的文件 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>samples/bookinfo/networking/virtual-service-ratings-test-delay.yaml
+</code></pre></div>
+<p>内容：</p>
+<div class="highlight"><pre><span></span><code>apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: ratings
+spec:
+  hosts:
+  - ratings
+  http:
+  - match:
+    - headers:
+        end-user:
+          exact: jason
+    fault:
+      delay:
+        percentage:
+          value: 10
+        fixedDelay: 7s
+    route:
+    - destination:
+        host: ratings
+        subset: v1
+  - route:
+    - destination:
+        host: ratings
+        subset: v1
+</code></pre></div>
+<blockquote>
+<p>这个 VirtualService 定义了一个在 jason 登录的情况下，访问 ratings 服务的 100% 的 7s 访问延迟。前面我们知道，Bookinfo 这个示例 productpage 服务调用 reviews，reviews 的不同版本会对 ratings 进行不同的调用，其中 reviews-v1 不调用 ratings，reviews-v2 和 reviews-v3 会调用 ratings，并做不同样式的渲染。并且在 productpage 访问 reviews 时，代码中有硬编码 6s 中的访问超时限制，而 reviews 访问 ratings 编码了 10s 的访问超时限制。</p>
+<p>了解这一点后，我们现在来创建这个 VirtualService 资源对象：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl apply -f samples/bookinfo/networking/virtual-service-ratings-test-delay.yaml
+virtualservice.networking.istio.io/ratings created
+$ kubectl get virtualservice
+NAME       GATEWAYS             HOSTS       AGE
+bookinfo   [bookinfo-gateway]   [*]         16d
+ratings                         [ratings]   13s
+</code></pre></div>
+<blockquote>
+<p>创建完成后，前往 Bookinfo 应用，登录 jason，打开浏览器的 Network，刷新页面，发现请求加载很慢，大约 6s 后，出现如下界面：</p>
+<p><img alt="Ratings service unavailable" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200628154109.png" /></p>
+<p>可以看到 Ratings 服务出现了 <code>unavailable</code> 的提示信息，这是因为此时 reviews 请求 ratings 的访问超过了 6s 还没有响应，使得 productpage 中的硬编码的超时设置生效了。</p>
+<p>当然有的时候我们也能成功访问到 reviews-v1 版本，因为此时并没有进一步访问 ratings 服务，所以一切都是正常的，会显示不带星的界面：</p>
+<p><img alt="bookinfo reviews v1" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200628154404.png" /></p>
+<p>通过这种超时故障注入，可以帮助我们方便地发现服务间相互访问中存在的潜在问题。</p>
+</blockquote>
+<h3 id="_6">中断访问故障注入<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>首先移除之前创建的 VirtualService:</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl delete virtualservice ratings
+virtualservice.networking.istio.io &quot;ratings&quot; deleted
+$ kubectl get virtualservice
+NAME       GATEWAYS             HOSTS   AGE
+bookinfo   [bookinfo-gateway]   [*]     16d
+</code></pre></div>
+<blockquote>
+<p>然后我们查看 istio 样例文件夹下面的文件 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>samples/bookinfo/networking/virtual-service-ratings-test-abort.yaml
+</code></pre></div>
+<p>的内容:</p>
+<div class="highlight"><pre><span></span><code>apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: ratings
+spec:
+  hosts:
+  - ratings
+  http:
+  - match:
+    - headers:
+        end-user:
+          exact: jason
+    fault:
+      abort:
+        percentage:
+          value: 10
+        httpStatus: 500
+    route:
+    - destination:
+        host: ratings
+        subset: v1
+  - route:
+    - destination:
+        host: ratings
+        subset: v1
+</code></pre></div>
+<blockquote>
+<p>通过上面的这个 yaml 文件我们可以看出这个 VirtualService 资源对象配置了在 jason 登录时，reviews 对 ratings 访问时 100% 的返回一个500错误响应。</p>
+<p>然后同样创建这个资源对象：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl apply -f samples/bookinfo/networking/virtual-service-ratings-test-abort.yaml
+virtualservice.networking.istio.io/ratings created
+$ kubectl get virtualservice
+NAME       GATEWAYS             HOSTS       AGE
+bookinfo   [bookinfo-gateway]   [*]         16d
+ratings                         [ratings]   34s
+</code></pre></div>
+<blockquote>
+<p>现在我们回到 BookInfo 应用，登录 jason，刷新页面，有时候可以很快就看到 Rating 服务不可用的提示信息：</p>
+<p><img alt="bookinfo error" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200628155555.png" /></p>
+</blockquote>
+<h3 id="_7">服务网格外的流量管理<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>为了控制服务网格外的服务的流量访问，外部的服务必须首先使用一个 <code>ServiceEntry</code> 对象加入到 istio 的内部 <code>service registry</code> 中，服务网格才会知道如何导向这些外部服务的流量。</p>
+<p>为了测试这个功能，我们使用 istio 样例中的 sleep 应用来验证改功能，查看 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>samples/sleep/sleep.yaml
+</code></pre></div>
+<p>文件内容：</p>
+<div class="highlight"><pre><span></span><code>apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: sleep
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sleep
+  labels:
+    app: sleep
+spec:
+  ports:
+  - port: 80
+    name: http
+  selector:
+    app: sleep
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sleep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sleep
+  template:
+    metadata:
+      labels:
+        app: sleep
+    spec:
+      serviceAccountName: sleep
+      containers:
+      - name: sleep
+        image: governmentpaas/curl-ssl
+        command: [&quot;/bin/sleep&quot;, &quot;3650d&quot;]
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - mountPath: /etc/sleep/tls
+          name: secret-volume
+      volumes:
+      - name: secret-volume
+        secret:
+          secretName: sleep-secret
+          optional: true
+---
+</code></pre></div>
+<blockquote>
+<p>这其实就是一个简单的应用，通过 Deployment 进行控制，通过 Service 暴露服务，现在我们来部署该应用：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl apply -f &lt;(istioctl kube-inject -f samples/sleep/sleep.yaml)
+serviceaccount/sleep created
+service/sleep created
+deployment.apps/sleep created
+</code></pre></div>
+<blockquote>
+<p>Istio 有一个安装选项，</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>global.outboundTrafficPolicy.mode
+</code></pre></div>
+<p>，它配置 sidecar 对外部服务（那些没有在 Istio 的内部服务注册中定义的服务）的处理方式。如果这个选项设置为 <code>ALLOW_ANY</code>，Istio 代理允许调用未知的服务。如果这个选项设置为 <code>REGISTRY_ONLY</code>，那么 Istio 代理会阻止任何没有在网格中定义的 HTTP 服务或 <code>service entry</code> 的主机。<code>ALLOW_ANY</code> 是默认值，不控制对外部服务的访问。但是这种方式有一个缺点，即丢失了对外部服务流量的 Istio 监控和控制，比如，外部服务的调用没有记录到 Mixer 的日志中。</p>
+<blockquote>
+<p>这里为了测试 ServiceEntry 功能，我们将其更改为 <code>REGISTRY_ONLY</code> 模式：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl edit configmap istio -n istio-system 
+.......
+apiVersion: v1
+data:
+  mesh: |-
+    accessLogEncoding: TEXT
+    accessLogFile: /dev/stdout
+    accessLogFormat: &quot;&quot;
+    outboundTrafficPolicy:  # 修改为REGISTRY_ONLY模式
+      mode: REGISTRY_ONLY
+    defaultConfig:
+      concurrency: 2
+      configPath: ./etc/istio/proxy
+      connectTimeout: 10s
+......
+</code></pre></div>
+<blockquote>
+<p>ConfigMap 修改完成后我们就可以接管外部 URL 的流量了。现在我们进入上面创建的 sleep 应用容器内部执行一些测试操作：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ export SLEEP_POD=$(kubectl get pod -l app=sleep -o jsonpath={.items..metadata.name})
+$ kubectl exec -it $SLEEP_POD -c sleep -- curl -sL -o /dev/null -D - http://edition.cnn.com/politics
+HTTP/1 502 Bad Gateway
+date: Sun, 28 Jun 2020 08:46:26 GMT
+server: envoy
+content-length: 0
+</code></pre></div>
+<blockquote>
+<p>可以看到会返回 502 信息，因为该域名不在当前的服务网格中，因为现在我们不允许访问服务网格外部的 URL，服务网格中对未知的服务请求会丢弃。这就需要我们来创建一个 <code>ServiceEntry</code> 对象，将外部的访问服务引入到服务网格中来。</p>
+<p>例如下面的规则定义了一个访问 <code>edition.cnn.com</code> 的服务的 <code>ServiceEntry</code>:</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code># cnn-service-entry.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: cnn
+spec:
+  hosts:
+  - edition.cnn.com
+  ports:
+  - number: 80
+    name: http-port
+    protocol: HTTP
+  - number: 443
+    name: https
+    protocol: HTTPS
+  resolution: DNS
+</code></pre></div>
+<blockquote>
+<p>现在我们来部署上面的 ServiceEntry 资源：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl apply -f cnn-service-entry.yaml
+serviceentry.networking.istio.io/cnn created
+$ kubectl get serviceentry
+NAME   HOSTS               LOCATION   RESOLUTION   AGE
+cnn    [edition.cnn.com]              DNS          27s
+</code></pre></div>
+<blockquote>
+<p>现在我们再去上面的 sleep 容器中执行上面的测试请求：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl exec -it $SLEEP_POD -c sleep -- curl -sL -o /dev/null -D - http://edition.cnn.com/politics
+HTTP/1 301 Moved Permanently
+server: envoy
+retry-after: 0
+content-length: 0
+cache-control: public, max-age=600
+location: https://edition.cnn.com/politics
+......
+
+HTTP/2 200
+......
+vary: x-fastab-0, Accept-Encoding
+content-length: 1291663
+</code></pre></div>
+<blockquote>
+<p>现在我们发现可以正常返回内容了，返回200，证明请求成功了。</p>
+<p>说明</p>
+<p><code>-L</code> 参数让 curl 跟随连接进行重定向。这里服务器直接返回的 301 重定向响应，要求客户端再使用 HTTPS 的方式对 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>https://edition.cnn.com/politics
+</code></pre></div>
+<p>地址进行访问，第二次访问才返回了200的成功码。</p>
+<blockquote>
+<p>除此之外，我们还可以进一步配置<code>egress gateway</code>，使这些对外部的流量访问经由 <code>egress</code> 去到外部。</p>
+<p>现在为 <code>edition.cnn.com</code> 端口 80 创建 <code>egress Gateway</code>。并为指向 <code>egress gateway</code> 的流量创建一个 <code>destination rule</code>:</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code># cnn-egress-gateway.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: istio-egressgateway
+spec:
+  selector:
+    istio: egressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - edition.cnn.com
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: egressgateway-for-cnn
+spec:
+  host: istio-egressgateway.istio-system.svc.cluster.local
+  subsets:
+  - name: cnn
+</code></pre></div>
+<blockquote>
+<p>除了上面的 <code>engress gateway</code> 对象之外，我们还需要创建 VirtualService 资源对象，将流量从 sidecar 引导至 egress gateway，再从 egress gateway 引导至外部服务：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code># cnn-virtual.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: direct-cnn-through-egress-gateway
+spec:
+  hosts:
+  - edition.cnn.com
+  gateways:
+  - istio-egressgateway
+  - mesh  # mesh 表示网格中的所有 Sidecar，如果没有指定 gateways，则默认为 mesh
+  http:
+  - match:
+    - gateways:
+      - mesh
+      port: 80
+    route:
+    - destination:  # 将服务路由到什么地方去
+        host: istio-egressgateway.istio-system.svc.cluster.local
+        subset: cnn  # subset 配置流量目的地的子集
+        port:
+          number: 80
+      weight: 100
+  - match:
+    - gateways:
+      - istio-egressgateway
+      port: 80
+    route:
+    - destination:
+        host: edition.cnn.com
+        port:
+          number: 80
+      weight: 100
+</code></pre></div>
+<blockquote>
+<p>然后创建上面3个资源对象：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl apply -f cnn-virtual.yaml
+virtualservice.networking.istio.io/direct-cnn-through-egress-gateway created
+$ kubectl apply -f cnn-egress-gateway.yaml
+gateway.networking.istio.io/istio-egressgateway created
+destinationrule.networking.istio.io/egressgateway-for-cnn created
+</code></pre></div>
+<blockquote>
+<p>创建完成后，现在我们再去 sleep 容器执行下上面的请求：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl exec -it $SLEEP_POD -c sleep -- curl -sL -o /dev/null -D - http://edition.cnn.com/politics
+HTTP/1 301 Moved Permanently
+server: envoy
+retry-after: 0
+content-length: 0
+cache-control: public, max-age=600
+location: https://edition.cnn.com/politics
+......
+
+HTTP/2 200
+......
+vary: x-fastab-0, Accept-Encoding
+content-length: 1291663
+</code></pre></div>
+<blockquote>
+<p>正常输出结果和上面一次访问是一样的。这时我们去查看 egressgateway 的 Pod 中的容器日志：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl logs $(kubectl get pod -l istio=egressgateway -n istio-system -o jsonpath=&#39;{.items[0].metadata.name}&#39;) -n istio-system | tail
+......
+[2018-10-15T17:33:261Z] &quot;GET /politics HTTP/2&quot; 301 - 0 0 437 429 &quot;2206&quot; &quot;curl/0&quot; &quot;6d4f2ac3-0957-97a5-961a-241c7fd72536&quot; &quot;edition.cnn.com&quot; &quot;11167:80&quot;
+......
+</code></pre></div>
+<blockquote>
+<p>可以看到有一条上面的 <code>GET /politics</code> 的日志信息，说明访问经过了 egress gateway 出去了。不过需要注意的是我们这里只定义了 egress gateway 的 80 端口流量，如果我们通过访问 HTTPS 则会直接跳转到 <code>edition.cnn.com</code>。</p>
+</blockquote>
+<h3 id="egress_gateway_https">用 Egress Gateway 处理 HTTPS 请求<a class="headerlink" href="#egress_gateway_https" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>接下来尝试使用 Egress Gateway 发起 HTTPS 请求。我们需要在相应的 ServiceEntry、Egress Gateway 和 VirtualService 中指定 TLS 协议的端口 443。</p>
+<p>首先先清理前面定义的资源对象：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl delete gateway istio-egressgateway
+$ kubectl delete serviceentry cnn
+$ kubectl delete virtualservice direct-cnn-through-egress-gateway
+$ kubectl delete destinationrule egressgateway-for-cnn
+</code></pre></div>
+<blockquote>
+<p>这个时候如果我们去访问 https 的地址是不被允许的：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ export SLEEP_POD=$(kubectl get pod -l app=sleep -o jsonpath={.items..metadata.name})
+$ kubectl exec -it $SLEEP_POD -c sleep -- curl -sL -o /dev/null -D - https://edition.cnn.com/politics
+command terminated with exit code 35
+</code></pre></div>
+<blockquote>
+<p>因为还没有定义 ServiceEntry 对象，所以接下来需要创建一个 HTTPS 版本的 ServiceEntry 对象：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code># cnn-https-service-entry.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: cnn
+spec:
+  hosts:
+  - edition.cnn.com
+  ports:
+  - number: 443
+    name: tls
+    protocol: TLS
+  resolution: DNS
+</code></pre></div>
+<blockquote>
+<p>直接创建上面的资源对象：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl apply -f cnn-https-service-entry.yaml
+serviceentry.networking.istio.io/cnn created
+$ kubectl get serviceentry
+NAME        HOSTS               LOCATION   RESOLUTION   AGE
+cnn   [edition.cnn.com]              DNS          37s
+</code></pre></div>
+<blockquote>
+<p>然后同样使用上面创建的 sleep 容器来测试访问 https 地址：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl exec -it $SLEEP_POD -c sleep -- curl -sL -o /dev/null -D - https://edition.cnn.com/politics
+HTTP/2 200
+......
+content-length: 1291663
+</code></pre></div>
+<blockquote>
+<p>可以看到直接访问 https 地址可以得到正确的结果了。然后同样为 <code>edition.cnn.com</code> 创建一个 egress Gateway。除此之外还需要创建一个 destination rule 和一个 virtual service，用来引导流量通过 egress gateway，并通过 egress gateway 与外部服务通信。</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code># cnn-https-service-rule.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: istio-egressgateway
+spec:
+  selector:
+    istio: egressgateway
+  servers:
+  - port:
+      number: 443
+      name: tls
+      protocol: TLS
+    hosts:
+    - edition.cnn.com
+    tls:  # PASSTHROUGH 表示 gateway 按原样通过入口流量，而不终止 TLS
+      mode: PASSTHROUGH
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: egressgateway-for-cnn
+spec:
+  host: istio-egressgateway.istio-system.svc.cluster.local
+  subsets:
+  - name: cnn
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: direct-cnn-through-egress-gateway
+spec:
+  hosts:
+  - edition.cnn.com
+  gateways:
+  - mesh 
+  - istio-egressgateway
+  tls:
+  - match:
+    - gateways:
+      - mesh
+      port: 443
+      sniHosts:
+      - edition.cnn.com
+    route:
+    - destination:
+        host: istio-egressgateway.istio-system.svc.cluster.local
+        subset: cnn
+        port:
+          number: 443
+  - match:
+    - gateways:
+      - istio-egressgateway
+      port: 443
+      sniHosts:
+      - edition.cnn.com
+    route:
+    - destination:
+        host: edition.cnn.com
+        port:
+          number: 443
+      weight: 100
+</code></pre></div>
+<blockquote>
+<p>直接创建上面的3个对象即可：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl apply -f cnn-https-service-rule.yaml
+gateway.networking.istio.io/istio-egressgateway created
+destinationrule.networking.istio.io/egressgateway-for-cnn created
+virtualservice.networking.istio.io/direct-cnn-through-egress-gateway created
+</code></pre></div>
+<blockquote>
+<p>现在再使用上面创建的 sleep 容器来测试访问 https 地址：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl exec -it $SLEEP_POD -c sleep -- curl -sL -o /dev/null -D - https://edition.cnn.com/politics
+HTTP/2 200
+......
+content-length: 1291663
+</code></pre></div>
+<blockquote>
+<p>正常和上面返回的内容是一样的，但是这个时候这时我们去查看 egressgateway 的 Pod 中的容器日志：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl logs $(kubectl get pod -l istio=egressgateway -n istio-system -o jsonpath=&#39;{.items[0].metadata.name}&#39;) -n istio-system | tail
+......
+[2020-06-28T11:12:064Z] &quot;- - -&quot; 0 - &quot;-&quot; &quot;-&quot; 875 758858 76501 - &quot;-&quot; &quot;-&quot; &quot;-&quot; &quot;-&quot; &quot;1167:443&quot; outbound|443||edition.cnn.com 2175:50194 2175:8443 287:56520 edition.cnn.com -
+</code></pre></div>
+<blockquote>
+<p>就可以看到 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>https://edition.cnn.com
+</code></pre></div>
+<p>的请求日志了。不过需要注意，Istio 中定义的 Egress Gateway 本身并没有为其所在的节点提供任何特殊处理。集群管理员或云提供商可以在专用节点上部署 Egress gateway，并引入额外的安全措施，从而使这些节点比网格中的其他节点更安全。</p>
+<blockquote>
+<p>由于 Istio 无法强制让所有出站流量都经过 egress gateway，Istio 只是通过 <code>sidecar</code> 代理实现了这种流向。攻击者只要绕过 sidecar 代理，就可以不经 egress gateway 直接与网格外的服务进行通信，从而避开了 Istio 的控制和监控。出于安全考虑，集群管理员和云供应商必须确保网格所有的出站流量都要经过 egress gateway。这需要通过 Istio 之外的机制来满足这一要求。例如，集群管理员可以配置防火墙，拒绝 egress gateway 以外的所有流量。Kubernetes <code>网络策略</code>也能禁止所有不是从 egress gateway 发起的出站流量。此外，集群管理员和云供应商还可以对网络进行限制，让运行应用的节点只能通过 gateway 来访问外部网络。要实现这一限制，可以只给 gateway Pod 分配公网 IP，并且可以配置 NAT 设备，丢弃来自 egress gateway pod 之外的所有流量。</p>
+</blockquote>
+<h3 id="tcp">TCP 流量转移<a class="headerlink" href="#tcp" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>上面展示了多种流量管理的方式，该部分主要讲解在 Istio 中如何将 TCP 流量从一个版本迁移到另一个版本。在 Istio 中，我们可以通过配置规则来实现该功能，可以按指定的百分比将流量路由到不同的服务。和前面我们使用的 HTTP 服务非常类似。</p>
+<p>这里我们先将所有的 TCP 请求路由到 <code>tcp-echo:v1</code> 这个服务，然后在通过配置 Istio 的路由权重把 20% 的流量分配到 <code>tcp-echo:v2</code> 这个版本的服务上。</p>
+<p>首先，部署微服务 tcp-echo 的 v1 版本，同样直接使用示例 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>samples/tcp-echo/tcp-echo-services.yaml
+</code></pre></div>
+<p>：</p>
+<div class="highlight"><pre><span></span><code># samples/tcp-echo/tcp-echo-services.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: tcp-echo
+  labels:
+    app: tcp-echo
+spec:
+  ports:
+  - name: tcp
+    port: 9000
+  - name: tcp-other
+    port: 9001
+  # Port 9002 is omitted intentionally for testing the pass through filter chain.
+  selector:
+    app: tcp-echo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tcp-echo-v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tcp-echo
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: tcp-echo
+        version: v1
+    spec:
+      containers:
+      - name: tcp-echo
+        image: docker.io/istio/tcp-echo-server:2
+        imagePullPolicy: IfNotPresent
+        args: [ &quot;9000,9001,9002&quot;, &quot;one&quot; ]
+        ports:
+        - containerPort: 9000
+        - containerPort: 9001
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tcp-echo-v2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tcp-echo
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: tcp-echo
+        version: v2
+    spec:
+      containers:
+      - name: tcp-echo
+        image: docker.io/istio/tcp-echo-server:2
+        imagePullPolicy: IfNotPresent
+        args: [ &quot;9000,9001,9002&quot;, &quot;two&quot; ]
+        ports:
+        - containerPort: 9000
+        - containerPort: 9001
+</code></pre></div>
+<blockquote>
+<p>上面部署了两个版本的 tcp-echo 服务，要注意的是 Service 对象中的 Label Selector 是 <code>app=tcp-echo</code>，这样该对象就会匹配到上面的两个版本的对象。使用如下命令安装：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl apply -f &lt;(istioctl kube-inject -f samples/tcp-echo/tcp-echo-services.yaml) service/tcp-echo created
+deployment.apps/tcp-echo-v1 created
+deployment.apps/tcp-echo-v2 created
+$ kubectl get pods -l app=tcp-echo
+NAME                          READY   STATUS    RESTARTS   AGE
+tcp-echo-v1-fcfbd5dd5-p9tlw   2/2     Running   0          3m41s
+tcp-echo-v2-6c6d456db-mtdxp   2/2     Running   0          3m41s
+</code></pre></div>
+<blockquote>
+<p><code>istioctl kube-inject</code> 命令用于在创建 Deployments 之前注入 Istio 的 Sidecar 容器，同样我们也可以直接将当前的命名空间打上一个 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>istio-injection=enabled
+</code></pre></div>
+<p>的 Label 标签，这样该命名空间就开启了 Sidecar 容器自动注入功能。</p>
+<blockquote>
+<p>接下来, 将微服务 <code>tcp-echo</code> 的 TCP 流量全部路由到 v1 版本上，直接使用 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>samples/tcp-echo/tcp-echo-all-vyaml
+</code></pre></div>
+<p>这个示例文件中的对象，如下所示：</p>
+<div class="highlight"><pre><span></span><code># samples/tcp-echo/tcp-echo-all-vyaml
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: tcp-echo-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 31400
+      name: tcp
+      protocol: TCP
+    hosts:
+    - &quot;*&quot;
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: tcp-echo-destination
+spec:
+  host: tcp-echo
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+  - name: v2
+    labels:
+      version: v2
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: tcp-echo
+spec:
+  hosts:
+  - &quot;*&quot;
+  gateways:
+  - tcp-echo-gateway
+  tcp:
+  - match:
+    - port: 31400
+    route:
+    - destination:
+        host: tcp-echo
+        port:
+          number: 9000
+        subset: v1
+</code></pre></div>
+<blockquote>
+<p>这里创建了一个 <code>Gateway</code> 对象，用来路由 TCP 的请求，要注意这里匹配的是 <code>istio=ingressgateway</code> 这个 Service 对象的 <code>31400</code> 这个 TCP 端口：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl get svc -n istio-system -l istio=ingressgateway -o yaml
+......
+- name: tcp
+  nodePort: 31871
+  port: 31400
+  protocol: TCP
+  targetPort: 31400
+......
+</code></pre></div>
+<blockquote>
+<p>然后在 <code>DestinationRule</code> 对象中声明了 <code>v1</code> 和 <code>v2</code> 两个子集服务，在 <code>VirtualService</code> 对象中声明具体的路由规则，我们可以看到是直接全都路由到了 <code>v1</code> 这个子集中去，直接创建上面的资源对象：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl apply -f samples/tcp-echo/tcp-echo-all-vyaml
+gateway.networking.istio.io/tcp-echo-gateway created
+destinationrule.networking.istio.io/tcp-echo-destination created
+virtualservice.networking.istio.io/tcp-echo created
+</code></pre></div>
+<blockquote>
+<p>创建完成后我们就可以通过 istio-ingressgateway 去访问上面的 TCP 服务了，要在外部访问该服务，同样我们可以通过 <code>istio-ingressgateway</code> 的 NodePort 来访问，这里的 TCP 对应的 nodePort 端口是 31871，这里可以使用如下所示的命令来测试：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ export INGRESS_PORT=31871  # TCP 服务的 nodePort 端口
+$ export INGRESS_HOST=k8s.qikqiak.com  # 任意一个节点的 IP
+</code></pre></div>
+<blockquote>
+<p>然后向微服务 tcp-echo 发送一些 TCP 请求：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ for i in {.10}; do \\
+&gt; docker run -e INGRESS_HOST=$INGRESS_HOST -e INGRESS_PORT=$INGRESS_PORT -it --rm busybox sh -c &quot;(date; sleep 1) | nc $INGRESS_HOST $INGRESS_PORT&quot;; \\
+&gt; done
+one Thu Jul  2 07:20:20 UTC 2020
+one Thu Jul  2 07:20:24 UTC 2020
+one Thu Jul  2 07:20:27 UTC 2020
+one Thu Jul  2 07:20:31 UTC 2020
+one Thu Jul  2 07:20:34 UTC 2020
+one Thu Jul  2 07:20:37 UTC 2020
+one Thu Jul  2 07:20:41 UTC 2020
+one Thu Jul  2 07:20:44 UTC 2020
+one Thu Jul  2 07:20:47 UTC 2020
+one Thu Jul  2 07:20:50 UTC 2020
+</code></pre></div>
+<blockquote>
+<p>从上面的日志可以看出，所有时间戳的前缀都是 <code>one</code>，这意味着所有流量都被路由到了 <code>tcp-echo</code> 服务的 <code>v1</code> 版本中。</p>
+<p>然后使用新的路由规则将 20% 的流量从 tcp-echo:v1 转移到 tcp-echo:v2，对应的示例文件为 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>samples/tcp-echo/tcp-echo-20-vyaml
+</code></pre></div>
+<p>，内容如下所示：</p>
+<div class="highlight"><pre><span></span><code># samples/tcp-echo/tcp-echo-20-vyaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: tcp-echo
+spec:
+  hosts:
+  - &quot;*&quot;
+  gateways:
+  - tcp-echo-gateway
+  tcp:
+  - match:
+    - port: 31400
+    route:
+    - destination:
+        host: tcp-echo
+        port:
+          number: 9000
+        subset: v1
+      weight: 80
+    - destination:
+        host: tcp-echo
+        port:
+          number: 9000
+        subset: v2
+      weight: 20
+</code></pre></div>
+<blockquote>
+<p>上面的 <code>VirtualService</code> 对象也很简单，给 <code>v1</code> 子集服务加了 80% 的权重，另外有 20% 的权重被路由到了 <code>v2</code> 这个子集服务中去了，同样直接创建上面的资源对象更新路由规则：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl apply -f samples/tcp-echo/tcp-echo-20-vyaml
+virtualservice.networking.istio.io/tcp-echo configured
+</code></pre></div>
+<blockquote>
+<p>等待几秒钟，让新的路由规则生效。然后同样用上面的测试命令向 tcp-echo 服务发送 TCP 请求：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ $ for i in {.10}; do \\
+&gt; docker run -e INGRESS_HOST=$INGRESS_HOST -e INGRESS_PORT=$INGRESS_PORT -it --rm busybox sh -c &quot;(date; sleep 1) | nc $INGRESS_HOST $INGRESS_PORT&quot;; \\
+&gt; done
+two Thu Jul  2 07:27:03 UTC 2020
+one Thu Jul  2 07:27:09 UTC 2020
+one Thu Jul  2 07:27:13 UTC 2020
+one Thu Jul  2 07:27:16 UTC 2020
+one Thu Jul  2 07:27:21 UTC 2020
+two Thu Jul  2 07:27:24 UTC 2020
+one Thu Jul  2 07:27:27 UTC 2020
+one Thu Jul  2 07:27:32 UTC 2020
+two Thu Jul  2 07:27:36 UTC 2020
+one Thu Jul  2 07:27:39 UTC 2020
+</code></pre></div>
+<blockquote>
+<p>现在我们可以发现，有大约 20% 的流量时间戳前缀是 <code>two</code> ，这意味着有 80% 的 TCP 流量路由到了 tcp-echo 服务的 v1 版本，与此同时有 20% 流量路由到了 v2 版本。</p>
+<p>这样我们实现了对 TCP 流量的转移，和前面我们使用的 HTTP 服务非常类似。</p>
+</blockquote>
+<h3 id="_8">熔断<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p><code>熔断</code>是创建弹性微服务应用程序的重要模式，熔断能够使我们的应用程序具备应对来自故障、潜在峰值和其他未知网络因素影响的能力，熔断在微服务框架中也是必备的一个功能。</p>
+<p>同样在 Istio 中也是原生就支持熔断功能的，首先部署示例服务 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>samples/httpbin/httpbin.yaml
+</code></pre></div>
+<p>：</p>
+<div class="highlight"><pre><span></span><code># samples/httpbin/httpbin.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: httpbin
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: httpbin
+  labels:
+    app: httpbin
+spec:
+  ports:
+  - name: http
+    port: 8000
+    targetPort: 80
+  selector:
+    app: httpbin
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpbin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: httpbin
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: httpbin
+        version: v1
+    spec:
+      serviceAccountName: httpbin
+      containers:
+      - image: docker.io/kennethreitz/httpbin
+        imagePullPolicy: IfNotPresent
+        name: httpbin
+        ports:
+        - containerPort: 80
+</code></pre></div>
+<blockquote>
+<p>该应用也很简单，直接使用如下所示命令部署即可：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl apply -f &lt;(istioctl kube-inject -f samples/httpbin/httpbin.yaml)
+serviceaccount/httpbin created
+service/httpbin created
+deployment.apps/httpbin created
+$ kubectl get pods -l app=httpbin
+NAME                       READY   STATUS    RESTARTS   AGE
+httpbin-7b7585564c-bt9kp   2/2     Running   0          16m
+</code></pre></div>
+<blockquote>
+<p>应用部署完成后，接着创建一个目标规则，在调用 httpbin 服务时配置熔断设置。这里通过一个 <code>DestinationRule</code> 对象来创建一个如下所示的资源对象：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl apply -f - &lt;&lt;EOF
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: httpbin
+spec:
+  host: httpbin
+  trafficPolicy:  
+    connectionPool:
+      tcp:
+        maxConnections: 1  # 最大连接数为1
+      http:
+        http1MaxPendingRequests: 1  # 最大请求数为1
+        maxRequestsPerConnection: 1
+    outlierDetection:
+      consecutiveErrors: 1
+      interval: 1s
+      baseEjectionTime: 3m
+      maxEjectionPercent: 100
+EOF
+</code></pre></div>
+<blockquote>
+<p>目标规则创建完成后，接着我们来创建一个客户端应用来发送流量请求到 <code>httpbin</code> 服务，这里我们使用一个名为 Fortio 的测试客户端应用，该应用可以控制连接数、并发数及发送 HTTP 请求的延迟，通过 Fortio 能够有效的触发前面在 <code>DestinationRule</code> 中设置的熔断策略。</p>
+<p>客户端应用资源清单文件位于 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>samples/httpbin/sample-client/fortio-deploy.yaml
+</code></pre></div>
+<p>，内容如下所示：</p>
+<div class="highlight"><pre><span></span><code># samples/httpbin/sample-client/fortio-deploy.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: fortio
+  labels:
+    app: fortio
+spec:
+  ports:
+  - port: 8080
+    name: http
+  selector:
+    app: fortio
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fortio-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fortio
+  template:
+    metadata:
+      annotations:
+        # This annotation causes Envoy to serve cluster.outbound statistics via 15000/stats
+        # in addition to the stats normally served by Istio.  The Circuit Breaking example task
+        # gives an example of inspecting Envoy stats.
+        sidecar.istio.io/statsInclusionPrefixes: cluster.outbound,cluster_manager,listener_manager,http_mixer_filter,tcp_mixer_filter,server,cluster.xds-grpc
+      labels:
+        app: fortio
+    spec:
+      containers:
+      - name: fortio
+        image: fortio/fortio:latest_release
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: http-fortio
+        - containerPort: 8079
+          name: grpc-ping
+</code></pre></div>
+<blockquote>
+<p>直接部署上面的客户端应用，记得注入 Istio Sidecar 代理，以便 Istio 对其网络交互进行管理：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl apply -f &lt;(istioctl kube-inject -f samples/httpbin/sample-client/fortio-deploy.yaml)
+service/fortio created
+deployment.apps/fortio-deploy created
+$ kubectl get pods -l app=fortio
+NAME                             READY   STATUS    RESTARTS   AGE
+fortio-deploy-5cddbb9586-wrm6f   2/2     Running   0          6m23s
+</code></pre></div>
+<blockquote>
+<p>部署完成后我们可以进入到客户端应用中使用 <code>Fortio</code> 工具调用 <code>httpbin</code> 服务。<code>-curl</code> 参数表明发送一次调用：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ FORTIO_POD=$(kubectl get pod | grep fortio | awk &#39;{ print $1 }&#39;)
+$ kubectl exec -it $FORTIO_POD  -c fortio -- /usr/bin/fortio load -curl  http://httpbin:8000/get
+HTTP/1 200 OK
+server: envoy
+date: Thu, 02 Jul 2020 07:58:53 GMT
+content-type: application/json
+content-length: 621
+access-control-allow-origin: *
+access-control-allow-credentials: true
+x-envoy-upstream-service-time: 49
+
+{
+  &quot;args&quot;: {},
+  &quot;headers&quot;: {
+    &quot;Content-Length&quot;: &quot;0&quot;,
+    &quot;Host&quot;: &quot;httpbin:8000&quot;,
+    &quot;User-Agent&quot;: &quot;fortio.org/fortio-1&quot;,
+    &quot;X-B3-Parentspanid&quot;: &quot;4b6b58f3e7f6fbef&quot;,
+    &quot;X-B3-Sampled&quot;: &quot;1&quot;,
+    &quot;X-B3-Spanid&quot;: &quot;65503dee233ed2e8&quot;,
+    &quot;X-B3-Traceid&quot;: &quot;ae79fbcbcc1d58244b6b58f3e7f6fbef&quot;,
+    &quot;X-Envoy-Attempt-Count&quot;: &quot;1&quot;,
+    &quot;X-Forwarded-Client-Cert&quot;: &quot;By=spiffe://cluster.local/ns/default/sa/httpbin;Hash=9df7ef19dd6325879dcaa5cef793f936931624bded10a063dd7a927afb77adb5;Subject=\\&quot;\\&quot;;URI=spiffe://cluster.local/ns/default/sa/default&quot;
+  },
+  &quot;origin&quot;: &quot;11&quot;,
+  &quot;url&quot;: &quot;http://httpbin:8000/get&quot;
+}
+</code></pre></div>
+<blockquote>
+<p>可以看到调用后端服务的请求是成功的，然后我们来测试下熔断。在 <code>DestinationRule</code> 配置中，我们定义了 <code>maxConnections: 1</code> 和 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>http1MaxPendingRequests: 1
+</code></pre></div>
+<p>，表示如果并发的连接和请求数超过一个，则在 <code>istio-proxy</code> 进行进一步的请求和连接时，后续的请求或连接将被阻止。</p>
+<blockquote>
+<p>比如这里我们发送并发数为 2 的连接（-c 2），请求 20 次（-n 20）来观察下现象：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl exec -it $FORTIO_POD  -c fortio /usr/bin/fortio -- load -c 2 -qps 0 -n 20 -loglevel Warning http://httpbin:8000/get
+15:59:27 I logger.go:97&gt; Log level is now 3 Warning (was 2 Info)
+Fortio 1 running at 0 queries per second, 4-&gt;4 procs, for 20 calls: http://httpbin:8000/get
+Starting at max qps with 2 thread(s) [gomax 4] for exactly 20 calls (10 per thread + 0)
+15:59:27 W http_client.go:679&gt; Parsed non ok code 503 (HTTP/1 503)
+15:59:27 W http_client.go:679&gt; Parsed non ok code 503 (HTTP/1 503)
+15:59:27 W http_client.go:679&gt; Parsed non ok code 503 (HTTP/1 503)
+15:59:27 W http_client.go:679&gt; Parsed non ok code 503 (HTTP/1 503)
+15:59:27 W http_client.go:679&gt; Parsed non ok code 503 (HTTP/1 503)
+Ended after 1547078ms : 20 calls. qps=155
+Aggregated Function Time : count 20 avg 01428141 +/- 0143 min 000651885 max 061146337 sum 285628198
+# range, mid point, percentile, count
+&gt;= 000651885 &lt;= 001 , 000825943 , 00, 1
+&gt; 002 &lt;= 003 , 0025 , 00, 1
+&gt; 003 &lt;= 004 , 0035 , 00, 1
+&gt; 005 &lt;= 006 , 0055 , 00, 3
+&gt; 006 &lt;= 007 , 0065 , 00, 4
+&gt; 008 &lt;= 009 , 0085 , 00, 1
+&gt; 011 &lt;= 012 , 0115 , 00, 1
+&gt; 012 &lt;= 014 , 013 , 00, 2
+&gt; 016 &lt;= 018 , 017 , 00, 1
+&gt; 018 &lt;= 02 , 019 , 00, 1
+&gt; 025 &lt;= 03 , 0275 , 00, 2
+&gt; 035 &lt;= 04 , 0375 , 00, 1
+&gt; 06 &lt;= 0611463 , 0605732 , 100, 1
+# target 50% 007
+# target 75% 018
+# target 90% 03
+# target 99% 0609171
+# target 9% 0611234
+Sockets used: 7 (for perfect keepalive, would be 2)
+Code 200 : 15 (0 %)
+Code 503 : 5 (0 %)
+Response Header Sizes : count 20 avg 185 +/- 8 min 0 max 231 sum 3457
+Response Body/Total Sizes : count 20 avg 685 +/- 23 min 241 max 852 sum 13977
+All done 20 calls (plus 0 warmup) 281 ms avg, 15 qps
+</code></pre></div>
+<blockquote>
+<p>可以看到大部分请求还是都完成了，但是并不是一半的请求失败，这是因为 <code>istio-proxy</code> 并不是100%准确的：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>Code 200 : 15 (0 %)
+Code 503 : 5 (0 %)
+</code></pre></div>
+<blockquote>
+<p>然后我们将并发连接数提高到 3 个：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl exec -it $FORTIO_POD  -c fortio /usr/bin/fortio -- load -c 3 -qps 0 -n 30 -loglevel Warning http://httpbin:8000/get
+16:04:52 I logger.go:97&gt; Log level is now 3 Warning (was 2 Info)
+Fortio 1 running at 0 queries per second, 4-&gt;4 procs, for 30 calls: http://httpbin:8000/get
+Starting at max qps with 3 thread(s) [gomax 4] for exactly 30 calls (10 per thread + 0)
+16:04:52 W http_client.go:679&gt; Parsed non ok code 503 (HTTP/1 503)
+16:04:52 W http_client.go:679&gt; Parsed non ok code 503 (HTTP/1 503)
+16:04:52 W http_client.go:679&gt; Parsed non ok code 503 (HTTP/1 503)
+16:04:52 W http_client.go:679&gt; Parsed non ok code 503 (HTTP/1 503)
+16:04:52 W http_client.go:679&gt; Parsed non ok code 503 (HTTP/1 503)
+16:04:52 W http_client.go:679&gt; Parsed non ok code 503 (HTTP/1 503)
+16:04:52 W http_client.go:679&gt; Parsed non ok code 503 (HTTP/1 503)
+16:04:52 W http_client.go:679&gt; Parsed non ok code 503 (HTTP/1 503)
+16:04:52 W http_client.go:679&gt; Parsed non ok code 503 (HTTP/1 503)
+16:04:52 W http_client.go:679&gt; Parsed non ok code 503 (HTTP/1 503)
+16:04:52 W http_client.go:679&gt; Parsed non ok code 503 (HTTP/1 503)
+16:04:53 W http_client.go:679&gt; Parsed non ok code 503 (HTTP/1 503)
+Ended after 1870596ms : 30 calls. qps=238
+Aggregated Function Time : count 30 avg 007441411 +/- 006978 min 001160642 max 036414088 sum 223242331
+# range, mid point, percentile, count
+&gt;= 00116064 &lt;= 002 , 00158032 , 33, 7
+&gt; 002 &lt;= 003 , 0025 , 00, 5
+&gt; 007 &lt;= 008 , 0075 , 67, 5
+&gt; 008 &lt;= 009 , 0085 , 00, 4
+&gt; 009 &lt;= 01 , 0095 , 00, 3
+&gt; 01 &lt;= 011 , 0105 , 33, 1
+&gt; 011 &lt;= 012 , 0115 , 00, 2
+&gt; 012 &lt;= 014 , 013 , 33, 1
+&gt; 018 &lt;= 02 , 019 , 67, 1
+&gt; 035 &lt;= 0364141 , 035707 , 100, 1
+# target 50% 0076
+# target 75% 0095
+# target 90% 012
+# target 99% 0359899
+# target 9% 0363717
+Sockets used: 14 (for perfect keepalive, would be 3)
+Code 200 : 18 (0 %)
+Code 503 : 12 (0 %)
+Response Header Sizes : count 30 avg 106667 +/- 17 min 0 max 231 sum 4142
+Response Body/Total Sizes : count 30 avg 606667 +/- 29 min 241 max 852 sum 18212
+All done 30 calls (plus 0 warmup) 441 ms avg, 24 qps
+</code></pre></div>
+<blockquote>
+<p>我们可以看到大部分的请求都被熔断器拦截：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>Code 200 : 18 (0 %)
+Code 503 : 12 (0 %)
+</code></pre></div>
+<blockquote>
+<p>我们可以通过 <code>istio-proxy</code> 状态来了解更多关于熔断的详情，使用如下命令进行查看：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl exec $FORTIO_POD -c istio-proxy -- pilot-agent request GET stats | grep httpbin | grep pending
+cluster.outbound|8000||httpbin.default.svc.cluster.local.circuit_breakers.default.rq_pending_open: 0
+cluster.outbound|8000||httpbin.default.svc.cluster.local.circuit_breakers.high.rq_pending_open: 0
+cluster.outbound|8000||httpbin.default.svc.cluster.local.upstream_rq_pending_active: 0
+cluster.outbound|8000||httpbin.default.svc.cluster.local.upstream_rq_pending_failure_eject: 0
+cluster.outbound|8000||httpbin.default.svc.cluster.local.upstream_rq_pending_overflow: 17
+cluster.outbound|8000||httpbin.default.svc.cluster.local.upstream_rq_pending_total: 37
+</code></pre></div>
+<blockquote>
+<p>其中 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>upstream_rq_pending_overflow
+</code></pre></div>
+<p>值为17，这表示目前为止已有17个调用被标记为熔断了。</p>
+<h3 id="_9">流量镜像<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p><code>流量镜像</code>也称为影子流量，是一个以尽可能低的风险为生产带来变化的强大的功能，镜像会将实时流量的副本发送到镜像服务。前面我们在学习 Traefik 的时候就测试过类似的功能。</p>
+<p>这里我们先把流量全部路由到 v1 版本的测试服务中，然后添加路由规则将一部分流量镜像到 v2 版本中去，来测试流量镜像功能。</p>
+<p>首先部署 <code>v1</code> 版本的 httpbin 服务：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ cat &lt;&lt;EOF | istioctl kube-inject -f - | kubectl apply -f -
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpbin-v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: httpbin
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: httpbin
+        version: v1
+    spec:
+      containers:
+      - image: docker.io/kennethreitz/httpbin
+        imagePullPolicy: IfNotPresent
+        name: httpbin
+        command: [&quot;gunicorn&quot;, &quot;--access-logfile&quot;, &quot;-&quot;, &quot;-b&quot;, &quot;0:80&quot;, &quot;httpbin:app&quot;]
+        ports:
+        - containerPort: 80
+EOF
+</code></pre></div>
+<blockquote>
+<p>然后部署 <code>v2</code> 版本的 httpbin 服务：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ cat &lt;&lt;EOF | istioctl kube-inject -f - | kubectl apply -f -
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpbin-v2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: httpbin
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: httpbin
+        version: v2
+    spec:
+      containers:
+      - image: docker.io/kennethreitz/httpbin
+        imagePullPolicy: IfNotPresent
+        name: httpbin
+        command: [&quot;gunicorn&quot;, &quot;--access-logfile&quot;, &quot;-&quot;, &quot;-b&quot;, &quot;0:80&quot;, &quot;httpbin:app&quot;]
+        ports:
+        - containerPort: 80
+EOF
+</code></pre></div>
+<blockquote>
+<p>然后创建一个 httpbin 的 Service 对象，关联上面的两个版本服务：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl apply -f - &lt;&lt;EOF
+apiVersion: v1
+kind: Service
+metadata:
+  name: httpbin
+  labels:
+    app: httpbin
+spec:
+  ports:
+  - name: http
+    port: 8000
+    targetPort: 80
+  selector:
+    app: httpbin
+EOF
+</code></pre></div>
+<blockquote>
+<p>然后在不是一个 sleep 服务，这样就可以使用 <code>curl</code> 来提供负载了：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ cat &lt;&lt;EOF | istioctl kube-inject -f - | kubectl create -f -
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sleep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sleep
+  template:
+    metadata:
+      labels:
+        app: sleep
+    spec:
+      containers:
+      - name: sleep
+        image: tutum/curl
+        command: [&quot;/bin/sleep&quot;,&quot;infinity&quot;]
+        imagePullPolicy: IfNotPresent
+EOF
+</code></pre></div>
+<blockquote>
+<p>默认情况下，Kubernetes 在 httpbin 服务的两个版本之间进行负载均衡。这里我们首先创建一个默认路由规则，将所有流量路由到服务的 <code>v1</code> 版本中去：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl apply -f - &lt;&lt;EOF
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: httpbin
+spec:
+  hosts:
+  - httpbin
+  http:
+  - route:
+    - destination:
+        host: httpbin
+        subset: v1
+      weight: 100
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: httpbin
+spec:
+  host: httpbin
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+  - name: v2
+    labels:
+      version: v2
+EOF
+</code></pre></div>
+<blockquote>
+<p>上面对象创建完成后，所有流量都会转到 <code>httpbin:v1</code> 服务下面去，使用如下所示的命令来测试以下：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ export SLEEP_POD=$(kubectl get pod -l app=sleep -o jsonpath={.items..metadata.name})
+$ kubectl exec -it $SLEEP_POD -c sleep -- sh -c &#39;curl  http://httpbin:8000/headers&#39; | python -m json.tool
+{
+    &quot;headers&quot;: {
+        &quot;Accept&quot;: &quot;*/*&quot;,
+        &quot;Content-Length&quot;: &quot;0&quot;,
+        &quot;Host&quot;: &quot;httpbin:8000&quot;,
+        &quot;User-Agent&quot;: &quot;curl/0&quot;,
+        &quot;X-B3-Parentspanid&quot;: &quot;2f5164f4206f2958&quot;,
+        &quot;X-B3-Sampled&quot;: &quot;1&quot;,
+        &quot;X-B3-Spanid&quot;: &quot;233ea866989fc458&quot;,
+        &quot;X-B3-Traceid&quot;: &quot;336d07e6e360544d2f5164f4206f2958&quot;,
+        &quot;X-Envoy-Attempt-Count&quot;: &quot;1&quot;,
+        &quot;X-Forwarded-Client-Cert&quot;: &quot;By=spiffe://cluster.local/ns/default/sa/default;Hash=af8a4f153a257b346fcf8e88418d21781f145305c8ad98943ef43134ed147b57;Subject=\\&quot;\\&quot;;URI=spiffe://cluster.local/ns/default/sa/default&quot;
+    }
+}
+</code></pre></div>
+<blockquote>
+<p>然后可以分别查看 httpbin 服务 <code>v1</code> 和 <code>v2</code> 两个 Pods 的日志，正常情况下只会看到 <code>v1</code> 会产生日志，<code>v1</code> 中没有：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ export V1_POD=$(kubectl get pod -l app=httpbin,version=v1 -o jsonpath={.items..metadata.name})
+$ kubectl logs -f $V1_POD -c httpbin
+11 - - [02/Jul/2020:16:27:47 +0800] &quot;GET /headers HTTP/1&quot; 200 553 &quot;-&quot; &quot;curl/0&quot;
+$ export V2_POD=$(kubectl get pod -l app=httpbin,version=v2 -o jsonpath={.items..metadata.name})
+$ kubectl logs -f $V2_POD -c httpbin
+</code></pre></div>
+<blockquote>
+<p>这是因为上面我们创建的路由规则是将所有的请求都路由到了 <code>v1</code> 这个版本的服务中去。接下来我们更改下流量规则，将流量镜像到 <code>v2</code> 版本的服务中去：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl apply -f - &lt;&lt;EOF
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: httpbin
+spec:
+  hosts:
+  - httpbin
+  http:
+  - route:
+    - destination:
+        host: httpbin
+        subset: v1
+      weight: 100
+    mirror:
+      host: httpbin
+      subset: v2
+    mirror_percent: 100
+EOF
+</code></pre></div>
+<blockquote>
+<p>这个路由规则会发送 100% 流量到 <code>v1</code> 这个子集服务，然后通过 <code>mirror</code> 属性配置了将流量也 100% 镜像到了 <code>httpbin:v2</code> 服务。当流量被镜像时，请求将发送到镜像服务中，并在 headers 中的 <code>Host/Authority</code> 属性值上追加 <code>-shadow</code>。</p>
+<p>需要注意的是这些被镜像的流量是<code>『 即发即弃』</code>的，也就是说镜像请求的响应会被丢弃。</p>
+<p>现在我们在用上面的命令来测试发送一次请求：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl exec -it $SLEEP_POD -c sleep -- sh -c &#39;curl  http://httpbin:8000/headers&#39; | python -m json.tool
+</code></pre></div>
+<blockquote>
+<p>现在就可以看到 <code>v1</code> 和 <code>v2</code> 中都有了访问日志，<code>v2</code> 中的访问日志就是由镜像流量产生的，这些请求的实际目标是 <code>v1</code>。</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl logs -f $V1_POD -c httpbin
+11 - - [02/Jul/2020:16:27:47 +0800] &quot;GET /headers HTTP/1&quot; 200 553 &quot;-&quot; &quot;curl/0&quot;
+11 - - [02/Jul/2020:16:32:06 +0800] &quot;GET /headers HTTP/1&quot; 200 553 &quot;-&quot; &quot;curl/0&quot;
+$ kubectl logs -f $V2_POD -c httpbin
+11 - - [02/Jul/2020:16:32:06 +0800] &quot;GET /headers HTTP/1&quot; 200 593 &quot;-&quot; &quot;curl/0&quot;
+</code></pre></div>
+<blockquote>
+<p>到这里我们就实现了流量镜像的功能。</p>
+</blockquote>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      BurningMyself<a href='https://beian.miit.gov.cn/' target='_blank'>  蜀ICP备15033200号-1</a>
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/burningmyself" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://gitee.com/burningmyself" target="_blank" rel="noopener" title="gitee.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.2a6f1dda.min.js"></script>
+      
+        <script src="../../js/extra.js"></script>
+      
+        <script src="../../js/baidu-tongji.js"></script>
+      
+        <script src="https://www.googletagmanager.com/gtag/js?id=UA-155084439-1"></script>
+      
+        <script src="https://www.googletagmanager.com/gtag/js?id=UA-155132293-1"></script>
+      
+        <script src="../../js/google.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+      
+    
+  </body>
+</html>

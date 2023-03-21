@@ -1,0 +1,3389 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content=".net,java,php,python,docker,web">
+      
+      
+        <meta name="author" content="BurningMyself">
+      
+      
+        <link rel="canonical" href="https://burningmyself.gitee.io/kubernetes_monitor/thanos/">
+      
+      
+        <link rel="prev" href="../alertmanager/">
+      
+      
+        <link rel="next" href="../adapter/">
+      
+      <link rel="icon" href="../../favicon.ico">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.15">
+    
+    
+      
+        <title>Prometheus Thanos - BurningMyself</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.113286f1.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.a0c5b2b5.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#prometheus" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="BurningMyself" class="md-header__button md-logo" aria-label="BurningMyself" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BurningMyself
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Prometheus Thanos
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/burningmyself/burningmyself.github.io" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    burningmyself.github.io
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="BurningMyself" class="md-nav__button md-logo" aria-label="BurningMyself" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    BurningMyself
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/burningmyself/burningmyself.github.io" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    burningmyself.github.io
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        云原生
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          Docker 基础
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Docker 基础
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/overview/" class="md-nav__link">
+        简介
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/install/" class="md-nav__link">
+        安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/basic/" class="md-nav__link">
+        基本操作
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/dockerfile_usage/" class="md-nav__link">
+        Dockerfile
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/dockerfile_practice/" class="md-nav__link">
+        Dockerfile实践
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          Kubernetes 基础
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 基础
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/overview/" class="md-nav__link">
+        简介
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/install/" class="md-nav__link">
+        安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/yaml/" class="md-nav__link">
+        资源清单
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/pod/" class="md-nav__link">
+        Pod原理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/pod_life/" class="md-nav__link">
+        Pod的生命周期
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/pod_deep/" class="md-nav__link">
+        Pod使用进阶
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          Kubernetes 控制器
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 控制器
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/replicaset/" class="md-nav__link">
+        ReplicaSet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/deployment/" class="md-nav__link">
+        Deployment
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/statefulset/" class="md-nav__link">
+        StatefulSet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/daemonset/" class="md-nav__link">
+        DaemonSet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/job/" class="md-nav__link">
+        Job
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/hpa/" class="md-nav__link">
+        HPA
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          Kubernetes 配置管理
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 配置管理
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_config/config_map/" class="md-nav__link">
+        ConfigMap
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_config/secret/" class="md-nav__link">
+        Secret
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_config/service_account/" class="md-nav__link">
+        ServiceAccount
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+          Kubernetes 安全
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 安全
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_security/rbac/" class="md-nav__link">
+        RBAC
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_security/security_context/" class="md-nav__link">
+        Security Context
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_security/admission/" class="md-nav__link">
+        准入控制器
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+          Kubernetes 网络
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 网络
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/flannel/" class="md-nav__link">
+        网络插件
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/policy/" class="md-nav__link">
+        网络策略
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/service/" class="md-nav__link">
+        Service 服务
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_4" id="__nav_7_4_label" tabindex="0">
+          Ingress
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_7_4">
+          <span class="md-nav__icon md-icon"></span>
+          Ingress
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/ingress/nginx/" class="md-nav__link">
+        NGINX Controller
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/ingress/traefik/" class="md-nav__link">
+        Traefik
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+          Kubernetes 调度器
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 调度器
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_scheduler/overview/" class="md-nav__link">
+        调度器介绍
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_scheduler/usage/" class="md-nav__link">
+        Pod 调度
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+          Kubernetes 存储
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 存储
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_stroage/local/" class="md-nav__link">
+        Local 本地存储
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_stroage/ceph/" class="md-nav__link">
+        Ceph 存储
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_stroage/csi/" class="md-nav__link">
+        存储原理
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+          Helm 包管理
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_10">
+          <span class="md-nav__icon md-icon"></span>
+          Helm 包管理
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/helm/" class="md-nav__link">
+        Helm
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/charts/" class="md-nav__link">
+        Charts
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_10_3" id="__nav_10_3_label" tabindex="0">
+          模板开发
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_10_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_10_3">
+          <span class="md-nav__icon md-icon"></span>
+          模板开发
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/objects/" class="md-nav__link">
+        内置对象
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/values/" class="md-nav__link">
+        Values
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/function/" class="md-nav__link">
+        函数和管道
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/flow/" class="md-nav__link">
+        流程控制
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/variables/" class="md-nav__link">
+        变量
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/named_templates/" class="md-nav__link">
+        命名模板
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/access_files/" class="md-nav__link">
+        访问文件
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/notes_files/" class="md-nav__link">
+        NOTES.txt 文件
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/subcharts_and_globals/" class="md-nav__link">
+        子chart与全局值
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/debug/" class="md-nav__link">
+        模板调试
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/chart_hooks/" class="md-nav__link">
+        Chart Hooks
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/example/" class="md-nav__link">
+        示例
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+          Kubernetes 监控
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_11">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 监控
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../prometheus/" class="md-nav__link">
+        Prometheus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../grafana/" class="md-nav__link">
+        Grafana
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../promql/" class="md-nav__link">
+        Promql
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../alertmanager/" class="md-nav__link">
+        Alertmanager
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Prometheus Thanos
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Prometheus Thanos
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prometheus" class="md-nav__link">
+    Prometheus 高可用
+  </a>
+  
+    <nav class="md-nav" aria-label="Prometheus 高可用">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    可用性
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    数据持久化
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#leader" class="md-nav__link">
+    通过锁获取 Leader
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    联邦集群
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#thanos" class="md-nav__link">
+    Thanos
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    工作流程
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    特性
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sidecar" class="md-nav__link">
+    Sidecar 组件
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#querier" class="md-nav__link">
+    Querier 组件
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ruler" class="md-nav__link">
+    Ruler 组件
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#store" class="md-nav__link">
+    Store 组件
+  </a>
+  
+    <nav class="md-nav" aria-label="Store 组件">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#minio" class="md-nav__link">
+    安装 Minio
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#thanos_store" class="md-nav__link">
+    安装 Thanos Store
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compactor" class="md-nav__link">
+    Compactor 组件
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adapter/" class="md-nav__link">
+        Prometheus Adpater
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_11_7" id="__nav_11_7_label" tabindex="0">
+          Prometheus Operator
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_7">
+          <span class="md-nav__icon md-icon"></span>
+          Prometheus Operator
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../operator/install/" class="md-nav__link">
+        安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../operator/custom/" class="md-nav__link">
+        自定义监控报警
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../operator/advance/" class="md-nav__link">
+        高级配置
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+          Kubernetes 日志
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_12">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 日志
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_logs/architec/" class="md-nav__link">
+        Grafana
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_logs/efk/" class="md-nav__link">
+        efk
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+          Kubernetes DevOps
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_13">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes DevOps
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_devops/jenkins/" class="md-nav__link">
+        Jenins
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_devops/gitlab/" class="md-nav__link">
+        Gitlab
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_devops/harbor/" class="md-nav__link">
+        Harbor
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_devops/jenkins_pipeline/" class="md-nav__link">
+        Jenkins Pipeline
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_devops/token/" class="md-nav__link">
+        Tekton
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="0">
+          Service Mesh 实践
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_14">
+          <span class="md-nav__icon md-icon"></span>
+          Service Mesh 实践
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_service_mesh/istio/" class="md-nav__link">
+        Istio
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_service_mesh/traffic/" class="md-nav__link">
+        流量管理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_service_mesh/observability/" class="md-nav__link">
+        可观测性
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_service_mesh/security/" class="md-nav__link">
+        安全管控
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_service_mesh/cert_manager/" class="md-nav__link">
+        CertManager
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="0">
+          Kubernetes 多租户
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_15">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 多租户
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_tenant/tenant/" class="md-nav__link">
+        多租户介绍
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_tenant/quota/" class="md-nav__link">
+        多租户介绍
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_tenant/psp/" class="md-nav__link">
+        多租户介绍
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_16" id="__nav_16_label" tabindex="0">
+          Operator
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_16_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_16">
+          <span class="md-nav__icon md-icon"></span>
+          Operator
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_operator/crd/" class="md-nav__link">
+        CRD
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_operator/operator/" class="md-nav__link">
+        Operator
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_17" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_17" id="__nav_17_label" tabindex="0">
+          实践技巧
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_17_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_17">
+          <span class="md-nav__icon md-icon"></span>
+          实践技巧
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_maintain/skill/" class="md-nav__link">
+        技巧
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_maintain/update/" class="md-nav__link">
+        技巧
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_maintain/update_cluster/" class="md-nav__link">
+        技巧
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_maintain/reserved/" class="md-nav__link">
+        技巧
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_18" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_18" id="__nav_18_label" tabindex="0">
+          源码
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_18_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_18">
+          <span class="md-nav__icon md-icon"></span>
+          源码
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_code/kubelet/" class="md-nav__link">
+        kubelet源码
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_18_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_18_2" id="__nav_18_2_label" tabindex="0">
+          client-go
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_18_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_18_2">
+          <span class="md-nav__icon md-icon"></span>
+          client-go
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_code/client_go/workqueue/" class="md-nav__link">
+        workqueue
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_code/client_go/indexer/" class="md-nav__link">
+        indexer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_code/client_go/deltafifo/" class="md-nav__link">
+        workqueue
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_19" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_19" id="__nav_19_label" tabindex="0">
+          应用示例
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_19_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_19">
+          <span class="md-nav__icon md-icon"></span>
+          应用示例
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_example/wordpress/" class="md-nav__link">
+        应用部署
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prometheus" class="md-nav__link">
+    Prometheus 高可用
+  </a>
+  
+    <nav class="md-nav" aria-label="Prometheus 高可用">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    可用性
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    数据持久化
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#leader" class="md-nav__link">
+    通过锁获取 Leader
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    联邦集群
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#thanos" class="md-nav__link">
+    Thanos
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    工作流程
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    特性
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sidecar" class="md-nav__link">
+    Sidecar 组件
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#querier" class="md-nav__link">
+    Querier 组件
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ruler" class="md-nav__link">
+    Ruler 组件
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#store" class="md-nav__link">
+    Store 组件
+  </a>
+  
+    <nav class="md-nav" aria-label="Store 组件">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#minio" class="md-nav__link">
+    安装 Minio
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#thanos_store" class="md-nav__link">
+    安装 Thanos Store
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compactor" class="md-nav__link">
+    Compactor 组件
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+  <h1>Prometheus Thanos</h1>
+
+<h2 id="prometheus">Prometheus 高可用<a class="headerlink" href="#prometheus" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>前面我们已经学习了 Prometheus 的使用，了解了基本的 PromQL 语句以及结合 Grafana 来进行监控图表展示，通过 AlertManager 来进行报警，这些工具结合起来已经可以帮助我们搭建一套比较完整的监控报警系统了，但是也仅仅局限于测试环境，对于生产环境来说则还有许多需要改进的地方，其中一个非常重要的就是 Prometheus 的高可用。</p>
+<p>单台的 Prometheus 存在单点故障的风险，随着监控规模的扩大，Prometheus 产生的数据量也会非常大，性能和存储都会面临问题。毋庸置疑，我们需要一套高可用的 Prometheus 集群。</p>
+</blockquote>
+<h3 id="_1">可用性<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>我们知道 Prometheus 是采用的 Pull 机制获取监控数据，即使使用 <code>Push Gateway</code> 对于 Prometheus 也是 Pull，为了确保 Prometheus 服务的可用性，我们只需要部署多个 Prometheus 实例，然后采集相同的 metrics 数据即可，如下图所示：</p>
+<p><img alt="prometheus ha1" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/prometheus-ha1.png" /></p>
+<p>这个方式来满足服务的可用性应该是平时我们使用得最多的一种方式，当一个实例挂掉后从 LB 里面自动剔除掉，而且还有负载均衡的作用，可以降低一个 Prometheus 的压力，但这种模式缺点也是非常明显的，就是不满足数据一致性以及持久化问题，因为 Prometheus 是 Pull 的方式，即使多个实例抓取的是相同的监控指标，也不能保证抓取过来的值就是一致的，更何况在实际的使用过程中还会遇到一些网络延迟问题，所以会造成数据不一致的问题，不过对于监控报警这个场景来说，一般也不会要求数据强一致性，所以这种方式从业务上来说是可以接受的，因为这种数据不一致性影响基本上没什么影响。这种场景适合监控规模不大，只需要保存短周期监控数据的场景。</p>
+</blockquote>
+<h3 id="_2">数据持久化<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>使用上面的基本 HA 的模式基本上是可以满足监控这个场景，但是还有一个数据持久化的问题，如果其中一个实例数据丢了就没办法呢恢复回来了，这个时候我们就可以为 Prometheus 添加远程存储来保证数据持久化。</p>
+<p><img alt="prometheus ha2" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/prometheus-ha2.png" /></p>
+<p>在给 Prometheus 配置上远程存储过后，我们就不用担心数据丢失的问题了，即使当一个 Prometheus 实例宕机或者数据丢失过后，也可以通过远程存储的数据进行恢复。</p>
+</blockquote>
+<h3 id="leader">通过锁获取 Leader<a class="headerlink" href="#leader" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>其实上面的基本 HA 加上远程存储的方式基本上可以满足 Prometheus 的高可用了，这种方式的多个 Prometheus 实例都会去定时拉取监控指标数据，然后将热数据存储在本地，然后冷数据同步到远程存储中去，对于大型集群来说频繁的去拉取指标数据势必会对网络造成更大的压力。所以我们也通过服务注册的方式来实现 Prometheus 的高可用性，集群启动的时候每个节点都尝试去获取锁，获取成功的节点成为 Leader 执行任务，若主节点宕机，从节点获取锁成为 Leader 并接管服务。</p>
+<p><img alt="prometheus ha3" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/prometheus-ha3.png" /></p>
+<p>不过这种方案需要我们通过去写代码进行改造，如果在 Kubernetes 中我们完全可以使用自带的 Lease 对象来获取分布式锁🔒，这不是很困难，只是以后要更新版本稍微麻烦点。</p>
+<p>上面的几种方案基本上都可以满足基本的 Prometheus 高可用，但是对于大型集群来说，一个 Prometheus 实例的压力始终非常大。</p>
+</blockquote>
+<h3 id="_3">联邦集群<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>当单个 Promthues 实例 无法处理大量的采集任务时，这个时候我们就可以使用基于 Prometheus 联邦集群的方式来将监控任务划分到不同的 Prometheus 实例中去。</p>
+<p><img alt="prometheus ha4" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/prometheus-ha4.png" /></p>
+<p>我们可以将不同类型的采集任务划分到不同的 Prometheus 实例中去执行，进行功能分片，比如一个 Prometheus 负责采集节点的指标数据，另外一个 Prometheus 负责采集应用业务相关的监控指标数据，最后在上层通过一个 Prometheus 对数据进行汇总。</p>
+<p>具体的采集任务如何去进行分区也没有固定的标准，需要结合实际的业务进行考虑，除了上面的方式之外，还有一种情况就是单个的采集数据量就非常非常大，比如我们要采集上万个节点的监控指标数据，这种情况即使我们已经进行了分区，但是对于单个 Prometheus 来说压力也是非常大的，这个时候我们就需要按照任务的不同实例进行划分，我们通过 Prometheus 的 <code>relabel</code> 功能，通过 hash 取模的方式可以确保当前 Prometheus 只采集当前任务的一部分实例的监控指标。</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code># 省略其他配置......
+relabel_configs:
+- source_labels: [__address__]
+  modulus: 4   # 将节点分片成 4 个组
+  target_label: __tmp_hash
+  action: hashmod
+- source_labels: [__tmp_hash]
+  regex: ^1$  # 只抓第2个组中节点的数据(序号0为第1个组)
+  action: keep
+</code></pre></div>
+<blockquote>
+<p>到这里我们基本上就完成了 Prometheus 高可用的改造。对于小规模集群和大规模集群可以采用不同的方案，但是其中有一个非常重要的部分就是远程存储，我们需要保证数据的持久化就必须使用远程存储。所以下面我们将重点介绍下远程存储的时候，这里我们主要讲解目前比较流行的方案：Thanos，它完全兼容 Prometheus API，提供统一查询聚合分布式部署 Prometheus 数据的能力，同时也支持数据长期存储到各种对象存储（比如 S3、阿里云 OSS 邓）以及降低采样率来加速大时间范围的数据查询。</p>
+</blockquote>
+<h3 id="thanos">Thanos<a class="headerlink" href="#thanos" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>Thanos 是一个基于 Prometheus 实现的监控方案，其主要设计目的是解决原生 Prometheus 上的痛点，并且做进一步的提升，主要的特性有：<code>全局查询，高可用，动态拓展，长期存储</code>。下图是 Thanos 官方的架构图：</p>
+<p><img alt="Thanos 架构图" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200330182511.png" /></p>
+<p>Thanos 主要由如下几个特定功能的组件组成：</p>
+</blockquote>
+<ul>
+<li>边车组件（Sidecar）：连接 Prometheus，并把 Prometheus 暴露给查询网关（Querier/Query），以供实时查询，并且可以上传 Prometheus 数据给云存储，以供长期保存</li>
+<li>查询网关（Querier/Query）：实现了 Prometheus API，与汇集底层组件（如边车组件 Sidecar，或是存储网关 Store Gateway）的数据</li>
+<li>存储网关（Store Gateway）：将云存储中的数据内容暴露出来</li>
+<li>压缩器（Compactor）：将云存储中的数据进行压缩和下采样</li>
+<li>接收器（Receiver）：从 Prometheus 的 remote-write WAL（Prometheus 远程预写式日志）获取数据，暴露出去或者上传到云存储</li>
+<li>规则组件（Ruler）：针对监控数据进行评估和报警</li>
+<li>Bucket：主要用于展示对象存储中历史数据的存储情况，查看每个指标源中数据块的压缩级别，解析度，存储时段和时间长度等信息。</li>
+</ul>
+<h3 id="_4">工作流程<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>Thanos 是同时支持 Prometheus 读和写的远程存储方案，首先我们先看下指标写入的整个流程：</p>
+</blockquote>
+<ul>
+<li>首先 Prometheus 从所采集服务的 metrics 接口抓取指标数据，同时根据自身所配置的 <code>recording rules</code> 定期对抓取到的指标数据进行评估，将结果以 TSDB 格式分块存储到本地，每个数据块的存储时长为2小时，且默认禁用了压缩功能。</li>
+<li>然后 <code>sidecar</code> 嗅探到 Prometheus 的数据存储目录生成了新的只读数据块时，会将该数据块上传到对象存储桶中做为长期历史数据保存，在上传时会将数据块中的 <code>meta.json</code> 进行修改添加 thanos 相关的字段，如 <code>external_labels</code>。</li>
+<li><code>rule</code> 根据所配置的 <code>recording rules</code> 定期地向 <code>query</code> 发起查询获取评估所需的指标值，并将结果以 TSDB格式分块存储到本地。每个数据块的存储时长为2小时，且默认禁用了压缩功能，每个数据块的 <code>meta.json</code> 也附带了 thanos 拓展的 <code>external_lables</code> 字段。当本地生成了新的只读数据块时，其自身会将该数据块上传到远端对象存储桶中做为长期历史数据保存。</li>
+<li><code>compact</code> 定期将对象存储中地数据块进行压缩和降准采样，进行压缩时数据块中的 truck 会进行合并，对应的 <code>meta.json</code> 中的 level 也会一同增长，每次压缩累加1，初始值为1。在进行降准采样时会创建新的数据块，根据采样步长从原有的数据块中抽取值存储到新的数据块中，在 <code>meta.json</code> 中记录 <code>resolution</code> 为采样步长。</li>
+</ul>
+<blockquote>
+<p>读取指标的流程为：</p>
+</blockquote>
+<ul>
+<li>首先客户端通过 <code>query API</code> 向 <code>query</code> 发起查询，<code>query</code> 将请求转换成 <code>StoreAPI</code> 发送到其他的 <code>query</code>、<code>sidecar</code>、<code>rule</code> 和 <code>store</code> 上。</li>
+<li><code>sidecar</code> 接收到来自于 <code>query</code> 发起的查询请求后将其转换成 <code>query API</code> 请求，发送给其绑定的 Prometheus，由Prometheus 从本地读取数据并响应，返回短期的本地采集和评估数据。</li>
+<li><code>rule</code> 接收到来自于 <code>query</code> 发起的查询请求后直接从本地读取数据并响应，返回短期的本地评估数据。</li>
+<li><code>store</code> 接收到来自于 <code>query</code> 发起的查询请求后首先从对象存储桶中遍历数据块的 <code>meta.json</code>，根据其中记录的时间范围和标签先进行一次过滤。接下来从对象存储桶中读取数据块的 <code>index</code> 和 <code>chunks</code> 进行查询，部分查询频率较高的<code>index</code> 会被缓存下来，下次查询使用到时可以直接读取。最终返回长期的历史采集和评估指标。</li>
+</ul>
+<blockquote>
+<p>对于发送报警的流程如下所示：</p>
+</blockquote>
+<ul>
+<li>Prometheus 根据自身配置的 <code>alerting</code> 规则定期地对自身采集的指标进行评估，当告警条件满足的情况下发起告警到 Alertmanager 上。</li>
+<li><code>rule</code> 根据自身配置的 <code>alerting</code> 规则定期的向 <code>query</code> 发起查询请求获取评估所需的指标，当告警条件满足的情况下发起告警到 Alertmanager 上。</li>
+<li>Alertmanager 接收到来自于 Prometheus 和 <code>rule</code> 的告警消息后进行分组合并后发出告警通知。</li>
+</ul>
+<h3 id="_5">特性<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>Thanos 相比起原生的 Prometheus 具有以下的一些优势：</p>
+</blockquote>
+<ul>
+<li>统一查询入口——以 <code>Querier</code> 作为统一的查询入口，其自身实现了 Prometheus 的查询接口和 <code>StoreAPI</code>，可为其他的 <code>Querier</code> 提供查询服务，在查询时会从每个 Prometheus 实例的 <code>Sidecar</code> 和 <code>Store Gateway</code> 获取到指标数据。</li>
+<li>查询去重——每个数据块都会带有特定的集群标签， <code>Querier</code> 在做查询时会去除集群标签，将指标名称和标签一致的序列根据时间排序合并。虽然指标数据来自不同的采集源，但是只会响应一份结果而不是多份重复的结果。</li>
+<li>高空间利用率——每个 Prometheus 本身不存储长时间的数据，<code>Sidecar</code> 会将 Prometheus 已经持久化的数据块上传到对象存储中。<code>Compactor</code> 会定时将远端对象存储中的长期数据进行压缩，并且根据采样时长做清理，节约存储空间。</li>
+<li>高可用——<code>Querier</code> 是无状态服务，天生支持水平拓展和高可用。<code>Store</code>、<code>Rule</code> 和 <code>Sidecar</code> 是有状态服务，在多副本部署的情况下也支持高可用，不过会产生数据冗余，需要牺牲存储空间。</li>
+<li>存储长期数据——Prometheus 实例的 <code>Sidecar</code> 会将本地数据上传到远端对象存储中作为长期数据</li>
+<li>横向拓展——当 Prometheus 的指标采集压力过大时，可以创建新的 Prometheus 实例，将 <code>scrape job</code> 拆分给多个 Prometheus，<code>Querier</code> 从多个 Prometheus 查询汇聚结果，降低单个 Prometheus 的压力</li>
+<li>跨集群查询——需要合并多个集群的查询结果时，仅需要在每个集群的 <code>Querier</code> 之上再添加一层 <code>Querier</code> 即可，这样的层层嵌套，可以使得集群规模无限制拓展。</li>
+</ul>
+<h3 id="sidecar">Sidecar 组件<a class="headerlink" href="#sidecar" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>首先将前面章节中的 Prometheus 相关的资源对象全部删除，然后我们需要在 Prometheus 中去自动发现集群的一些资源对象，所以依然需要对应的 RBAC 权限声明：(rbac.yaml)</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: prometheus
+  namespace: kube-mon
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: prometheus
+rules:
+- apiGroups:
+  - &quot;&quot;
+  resources:
+  - nodes
+  - services
+  - endpoints
+  - pods
+  - nodes/proxy
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - &quot;extensions&quot;
+  resources:
+    - ingresses
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - &quot;&quot;
+  resources:
+  - configmaps
+  - nodes/metrics
+  verbs:
+  - get
+- nonResourceURLs:
+  - /metrics
+  verbs:
+  - get
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: prometheus
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: prometheus
+subjects:
+- kind: ServiceAccount
+  name: prometheus
+  namespace: kube-mon
+</code></pre></div>
+<blockquote>
+<p>然后需要部署 Prometheus 的配置文件，下面的资源对象是创建 Prometheus 配置文件的模板，该模板将由 Thanos sidecar 组件进行读取，最终会通过该模板生成实际的配置文件，在同一个 Pod 中的 Prometheus 容器将读取最终的配置文件，在配置文件中添加 <code>external_labels</code> 标签是非常重要的，以便让 <code>Queirer</code> 可以基于这些标签对数据进行去重处理：（configmap.yaml）</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: kube-mon
+data:
+  prometheus.yaml.tmpl: |  # 注意这里的名称是 prometheus.yaml.tmpl 
+    global:
+      scrape_interval: 15s
+      scrape_timeout: 15s
+      external_labels:
+        cluster: ydzs-test
+        replica: $(POD_NAME)  # 每个 Prometheus 有一个唯一的标签
+
+    rule_files:  # 报警规则文件配置
+    - /etc/prometheus/rules/*rules.yaml
+
+    alerting:
+      alert_relabel_configs:  # 我们希望告警从不同的副本中也是去重的
+      - regex: replica
+        action: labeldrop
+      alertmanagers:
+      - scheme: http
+        path_prefix: /
+        static_configs:
+        - targets: [&#39;alertmanager:9093&#39;]
+
+    scrape_configs:
+    ......  # 其他抓取任务配置和前面章节中的配置保持一致即可
+</code></pre></div>
+<blockquote>
+<p>上面配置了报警规则文件，由于这里配置文件太大了，所以为了更加清晰，我们将报警规则文件拆分到另外的 ConfigMap 对象中来，下面我们配置了两个报警规则：（rules-configmap.yaml）</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-rules
+  namespace: kube-mon
+data:
+  alert-rules.yaml: |-
+    groups:
+      - name: Deployment
+        rules:
+        - alert: Deployment at 0 Replicas
+          annotations:
+            summary: Deployment {{$labels.deployment}} in {{$labels.namespace}} is currently having no pods running
+          expr: |
+            sum(kube_deployment_status_replicas) by (deployment,namespace)  &lt; 1
+          for: 1m
+          labels:
+            team: node
+      - name: Pods
+        rules:
+        - alert: Container restarted
+          annotations:
+            summary: Container named {{$labels.container}} in {{$labels.pod}} in {{$labels.namespace}} was restarted
+          expr: |
+            sum(increase(kube_pod_container_status_restarts_total[1m])) by (pod,namespace,container) &gt; 0
+          for: 0m
+          labels:
+            team: node
+</code></pre></div>
+<blockquote>
+<p>Thanos 通过 Sidecar 和现有的 Prometheus 进行集成，将 Prometheus 的数据备份到对象存储中，所以首先我们需要将 Prometheus 和 Sidecar 部署在同一个 Pod 中，另外 Prometheus 中一定要开启下面两个参数：</p>
+</blockquote>
+<ul>
+<li>
+<p><code>--web.enable-admin-api</code></p>
+<p>允许 Thanos 的 Sidecar 从 Prometheus 获取元数据。
+*   <code>--web.enable-lifecycle</code></p>
+<p>允许 Thanos 的 Sidecar 重新加载 Promehtues 的配置和规则文件。</p>
+</li>
+</ul>
+<blockquote>
+<p>由于 Prometheus 默认每2h生成一个 TSDB 数据块，所以仍然并不意味着 Prometheus 可以是完全无状态的，因为如果它崩溃并重新启动，我们将丢失〜2个小时的指标，因此强烈建议依然对 Prometheus 做数据持久化，所以我们这里使用了 <code>StatefulSet</code> 来管理这个应用，添加 <code>volumeClaimTemplates</code> 来声明了数据持久化的 PVC 模板：(sidecar.yaml)</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: prometheus
+  namespace: kube-mon
+  labels:
+    app: prometheus
+spec:
+  serviceName: &quot;prometheus&quot;
+  replicas: 2
+  selector:
+    matchLabels:
+      app: prometheus
+      thanos-store-api: &quot;true&quot;
+  template:
+    metadata:
+      labels: 
+        app: prometheus
+        thanos-store-api: &quot;true&quot;
+    spec:
+      serviceAccountName: prometheus
+      volumes:
+      - name: prometheus-config
+        configMap:
+          name: prometheus-config
+      - name: prometheus-rules
+        configMap:
+          name: prometheus-rules
+      - name: prometheus-config-shared
+        emptyDir: {}
+      containers:
+      - name: prometheus
+        image: prom/prometheus:v0
+        imagePullPolicy: IfNotPresent
+        args:
+        - &quot;--config.file=/etc/prometheus-shared/prometheus.yaml&quot;
+        - &quot;--storage.tsdb.path=/prometheus&quot;
+        - &quot;--storage.tsdb.retention.time=6h&quot;
+        - &quot;--storage.tsdb.no-lockfile&quot;
+        - &quot;--storage.tsdb.min-block-duration=2h&quot;  # Thanos处理数据压缩
+        - &quot;--storage.tsdb.max-block-duration=2h&quot;
+        - &quot;--web.enable-admin-api&quot;  # 通过一些命令去管理数据
+        - &quot;--web.enable-lifecycle&quot;  # 支持热更新  localhost:9090/-/reload 加载
+        ports:
+        - name: http
+          containerPort: 9090
+        resources:
+          requests:
+            memory: &quot;2Gi&quot;
+            cpu: &quot;1&quot;
+          limits:
+            memory: &quot;2Gi&quot;
+            cpu: &quot;1&quot;
+        volumeMounts:
+        - name: prometheus-config-shared
+          mountPath: /etc/prometheus-shared/
+        - name: prometheus-rules
+          mountPath: /etc/prometheus/rules
+        - name: data
+          mountPath: &quot;/prometheus&quot;
+      - name: thanos
+        image: thanosio/thanos:v0
+        imagePullPolicy: IfNotPresent
+        args:
+        - sidecar
+        - --log.level=debug
+        - --tsdb.path=/prometheus
+        - --prometheus.url=http://localhost:9090
+        - --reloader.config-file=/etc/prometheus/prometheus.yaml.tmpl
+        - --reloader.config-envsubst-file=/etc/prometheus-shared/prometheus.yaml
+        - --reloader.rule-dir=/etc/prometheus/rules/
+        ports:
+        - name: http-sidecar
+          containerPort: 10902
+        - name: grpc
+          containerPort: 10901
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        resources:
+          requests:
+            memory: &quot;2Gi&quot;
+            cpu: &quot;1&quot;
+          limits:
+            memory: &quot;2Gi&quot;
+            cpu: &quot;1&quot;
+        volumeMounts:
+        - name: prometheus-config-shared
+          mountPath: /etc/prometheus-shared/
+        - name: prometheus-config
+          mountPath: /etc/prometheus
+        - name: prometheus-rules
+          mountPath: /etc/prometheus/rules
+        - name: data
+          mountPath: &quot;/prometheus&quot;
+  volumeClaimTemplates:  # 由于prometheus每2h生成一个TSDB数据块，所以还是需要保存本地的数据
+  - metadata:
+      name: data
+      labels:
+        app: prometheus
+    spec:
+      storageClassName: rook-ceph-block
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 2Gi
+</code></pre></div>
+<blockquote>
+<p>由于 Prometheus 和 Thanos 的 Sidecar 在同一个 Pod 中了，所以我们完全可以用 <code>localhost</code> 就可以访问到了，然后将数据目录做了声明挂载，所以同样可以在两个容器中共享数据目录了，一定要注意几个配置文件的挂载方式。此外在上面的配置文件中我们通过 <code>POD_NAME</code> 这个环境变量作为 <code>external</code> 标签附加到了 Prometheus 实例上，这里我们通过 <code>Downward API</code> 去设置该环境变量。</p>
+<p>由于现在使用的是 <code>StatefulSet</code> 控制器，所以需要创建一个 Headless Service，而且后面的 Thanos Query 还将使用该无头服务来查询所有 Prometheus 实例中的数据，当然我们也可以为每一个 Prometheus 实例去创建一个 Service 对象便于调试，当然这个不是必须的：（headless.yaml）</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code># 该服务为查 querier 创建 srv 记录，以便查找 store-api 的信息
+apiVersion: v1
+kind: Service
+metadata:
+  name: thanos-store-gateway
+  namespace: kube-mon
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+  - name: grpc
+    port: 10901
+    targetPort: grpc
+  selector:
+    thanos-store-api: &quot;true&quot;
+</code></pre></div>
+<blockquote>
+<p>然后我们就可以使用上面的这些资源对象来创建带有 Thanos Sidecar 容器的高可用 Prometheus 应用了：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl apply -f rbac.yaml
+$ kubectl apply -f configmap.yaml
+$ kubectl apply -f rules-configmap.yaml
+$ kubectl apply -f headless.yaml
+$ kubectl apply -f sidecar.yaml
+$ kubectl get pods -n kube-mon -l app=prometheus
+NAME           READY   STATUS    RESTARTS   AGE
+prometheus-0   2/2     Running   0          86s
+prometheus-1   2/2     Running   0          74s
+</code></pre></div>
+<h3 id="querier">Querier 组件<a class="headerlink" href="#querier" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>现在我们就创建成功了两个 Prometheus 实例，但是我们真正去使用的时候并不是像上面提到的在前面加一个负载均衡器去查询监控数据，而是使用 Thanos 的 <code>Querier</code> 组件来提供一个全局的统一查询入口。对于 <code>Quierier</code> 最重要的就是要配置上 Thanos 的 Sidecar 地址，我们这里完全可以直接使用 Headless Service 去自动发现：(querier.yaml)</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: thanos-querier
+  namespace: kube-mon
+  labels:
+    app: thanos-querier
+spec:
+  selector:
+    matchLabels:
+      app: thanos-querier
+  template:
+    metadata:
+      labels:
+        app: thanos-querier
+    spec:
+      containers:
+      - name: thanos
+        image: thanosio/thanos:v0
+        args:
+        - query
+        - --log.level=debug
+        - --query.replica-label=replica
+        # Discover local store APIs using DNS SRV.
+        - --store=dnssrv+thanos-store-gateway:10901
+        ports:
+        - name: http
+          containerPort: 10902
+        - name: grpc
+          containerPort: 10901
+        resources:
+          requests:
+            memory: &quot;2Gi&quot;
+            cpu: &quot;1&quot;
+          limits:
+            memory: &quot;2Gi&quot;
+            cpu: &quot;1&quot;
+        livenessProbe:
+          httpGet:
+            path: /-/healthy
+            port: http
+          initialDelaySeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /-/healthy
+            port: http
+          initialDelaySeconds: 15
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: thanos-querier
+  namespace: kube-mon
+  labels:
+    app: thanos-querier
+spec:
+  ports:
+  - port: 9090
+    protocol: TCP
+    targetPort: http
+    name: http
+  selector:
+    app: thanos-querier
+  type: NodePort
+</code></pre></div>
+<blockquote>
+<p>容器中的参数 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>--store=dnssrv+thanos-store-gateway:10901
+</code></pre></div>
+<p>可以帮助自动发现可以查询指标数据的所有组件；然后创建一个 <code>thanos-querier</code> 的 Serivce 对象可以来提供一个运行 <code>PromQL</code> 的 web 页面，也提供了一个是否对不同集群数据进行去重的入口。直接创建上面的对象：</p>
+<div class="highlight"><pre><span></span><code>$ kubectl apply -f querier.yaml
+$ kubectl get pods -n kube-mon -l app=thanos-querier
+NAME                             READY   STATUS    RESTARTS   AGE
+thanos-querier-cf566866b-r4jcj   1/1     Running   0          3m26s
+$ kubectl get svc -n kube-mon -l app=thanos-querier
+NAME             TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+thanos-querier   NodePort   1111   &lt;none&gt;        9090:31854/TCP   3m30s
+</code></pre></div>
+<blockquote>
+<p>部署完成后我们就可以通过 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>http://&lt;任意节点IP&gt;:31854
+</code></pre></div>
+<p>去访问 <code>Querier</code> 了，在 <code>Stores</code> 页面下面就会显示通过服务发现获取到的 Sidecar 信息：</p>
+<blockquote>
+<p><img alt="Thano Querier" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200331212240.png" /></p>
+<p>在 <code>Graph</code> 页面下同样可以去使用 <code>PromQL</code> 语句来查询监控信息，这个页面和 Prometheus 原生的页面几乎是一致的，比如我们查询 master 节点的节点信息：</p>
+<p><img alt="Thanos Queirer" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200331212652.png" /></p>
+<p>这里我没有勾上 <code>deduplication</code>，所以 Thanos 不会帮我合并数据，所以能够看到 <code>prometheus-0</code> 和 <code>prometheus-1</code> 两条数据，因为我们有两个副本去抓取监控数据。</p>
+<p>如果将 <code>deduplication</code> 选中，结果会根据 <code>replica</code> 这个标签进行合并，如果两个副本都有对应的数据，<code>Querier</code> 会取 timestamp 更小的结果：</p>
+<p><img alt="Thanos Queirer" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200331213022.png" /></p>
+<p>当然这个时候我们在前面章节中 Grafana 里面配置的 Prometheus 的数据源也就失效了，因为现在监控数据的来源是 <code>Thanos Querier</code>，所以我们需要重新配置 Prometheus 的数据源地址为 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>http://thanos-querier:9090
+</code></pre></div>
+<p>：</p>
+<blockquote>
+<p><img alt="change grafana ds" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200331213718.png" /></p>
+<p>之前的监控图表也可以正常显示了：</p>
+<p><img alt="node exporter grafana dashboard" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200331214049.png" /></p>
+</blockquote>
+<h3 id="ruler">Ruler 组件<a class="headerlink" href="#ruler" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>现在我们可以测试下 Prometheus 里面配置的监控报警规则是否生效，比如对于 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>Deployment at 0 Replicas
+</code></pre></div>
+<p>这个报警规则，当集群中有 Deployment 的副本数变成0过后就会触发报警：</p>
+<div class="highlight"><pre><span></span><code>$ kubectl get deploy
+NAME                     READY   UP-TO-DATE   AVAILABLE   AGE
+vault-demo               1/1     1            1           41d
+</code></pre></div>
+<blockquote>
+<p>我们可以手动将某个 Deployment 的副本数缩减为0：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl scale --replicas=0 deployment/vault-demo
+deployment.apps/vault-demo scaled
+$ kubectl get deploy                              
+NAME                     READY   UP-TO-DATE   AVAILABLE   AGE
+vault-demo               0/0     0            0           41d
+</code></pre></div>
+<blockquote>
+<p>这个时候 Alertmanager 同样也会根据外部的 replica 标签对告警进行去重，上面的报警规则中我们添加了 <code>team=node</code> 这样的标签，所以会通过前面章节中的 webhook 接收器发送给钉钉进行告警：</p>
+<p><img alt="thano rule" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200401095715.png" /></p>
+<p>当然除了直接使用 Prometheus 做报警和记录规则之外，同样我们也可以使用 Thanos 的 Ruler 组件，该组件本身不会抓取 metrics 接口数据，而是通过 <code>query API</code> 从 query 组件定期地获取指标数据，如果配置了多个 query 地址，则会采用轮询方式获取。</p>
+<p>Ruler 组件获取评估数据的路径为 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>rule --&gt; query --&gt; sidecar --&gt; prometheus
+</code></pre></div>
+<p>需要经过一整个查询链条，这也提升了发生故障的风险，且评估原本就可以在 Prometheus 中进行，所以非必要的情况下还是更加推荐使用 Prometheus 来直接做 alerting 和 recording 评估，对于 Ruler 组件的具体使用方式感兴趣的也可以直接查看官方文档 <a href="https://thanos.io/components/rule.md/">https://thanos.io/components/rule.md/</a> 了解更多细节。</p>
+<h3 id="store">Store 组件<a class="headerlink" href="#store" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>上面我们安装了 Thanos 的 Sidecar 和 Querier 组件，已经可以做到 Prometheus 的高可用，通过 Querier 提供一个统一的入口来查询监控数据，而且还可以对监控数据自动去重，但是还有一个非常重要的地方是还没有配置对象存储，如果想要查看历史监控数据就不行了，这个时候我们就需要去配置 Thanos Store 组件，将历史监控指标存储在对象存储中去。</p>
+<p>目前 Thanos 支持的对象存储有：</p>
+<p><img alt="Thanos Store Object Store" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200401105052.png" /></p>
+<p>要在生产环境使用最好使用 <code>Stable</code> 状态的，比如 S3 或者兼容 S3 的服务，比如 Ceph、Minio 等等。</p>
+<p>对于国内用户当然最方便的还是直接使用阿里云 OSS 或者腾讯云 COS 这样的服务，很多时候可能我们的服务并不是跑在公有云上面的，所以这里我们用 Minio 来部署一个兼容 S3 协议的对象存储服务。</p>
+</blockquote>
+<h4 id="minio">安装 Minio<a class="headerlink" href="#minio" title="Permanent link">&para;</a></h4>
+<blockquote>
+<p>MinIO 是一个基于 Apache License v2.0 开源协议的对象存储服务。它兼容亚马逊 S3 云存储服务接口，非常适合于存储大容量非结构化的数据，例如图片、视频、日志文件、备份数据和容器/虚拟机镜像等，而一个对象文件可以是任意大小，从几 kb 到最大 5T 不等。</p>
+<p>要安装 Minio 非常容易的，同样我们这里将 Minio 安装到 Kubernetes 集群中，可以直接参考官方文档 使用Kubernetes部署MinIO，在 Kubernetes 集群下面可以部署独立、分布式或共享几种模式，可以根据实际情况部署，我们这里为了简单直接部署独立模式。</p>
+<p>为了方便管理，将所有的资源对象都部署在一个名为 minio 的命名空间中，如果没有的话需要手动创建。直接使用 Deployment 来管理 Minio 的服务：（minio-deploy.yaml）</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minio
+  namespace: minio
+spec:
+  selector:
+    matchLabels:
+      app: minio 
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: minio
+    spec:
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: minio-pvc
+      containers:
+      - name: minio
+        volumeMounts:
+        - name: data 
+          mountPath: &quot;/data&quot;
+        image: minio/minio:RELEASE.2020-03-25T07-03-04Z
+        args:
+        - server
+        - /data
+        env:
+        - name: MINIO_ACCESS_KEY
+          value: &quot;minio&quot;
+        - name: MINIO_SECRET_KEY
+          value: &quot;minio123&quot;
+        ports:
+        - containerPort: 9000
+        readinessProbe:
+          httpGet:
+            path: /minio/health/ready
+            port: 9000
+          initialDelaySeconds: 90
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /minio/health/live
+            port: 9000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+</code></pre></div>
+<blockquote>
+<p>通过一个名为 <code>minio-pvc</code> 的 PVC 对象将数据持久化，当然我们可以使用静态的 PV 来提供存储，这里我们直接使用前面的 Ceph RBD 来提供存储服务，使用 <code>rook-ceph-block</code> 这个 StorageClass 对象来提供动态 PV，对于这里不熟悉的可以查看前面我们讲解的存储章节内容：（minio-pvc.yaml）</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: minio-pvc
+  namespace: minio
+spec:
+  storageClassName: rook-ceph-block
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi
+</code></pre></div>
+<blockquote>
+<p>最后我们可以通过 Service 和 Ingress 对象将 Minio 暴露给外部用户使用：（minio-ingress.yaml）</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: v1
+kind: Service
+metadata:
+  name: minio
+  namespace: minio
+spec:
+  ports:
+  - port: 9000
+    targetPort: 9000
+    protocol: TCP
+  selector:
+    app: minio
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: redirect-https
+  namespace: minio
+spec:
+  redirectScheme:
+    scheme: https
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: minio
+  namespace: minio
+spec:
+  entryPoints:
+  - web   
+  routes:
+  - kind: Rule
+    match: Host(`minio.qikqiak.com`)
+    services:
+    - kind: Service
+      name: minio
+      port: 9000
+    middlewares: 
+    - name: redirect-https
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: minio-https
+  namespace: minio
+spec:
+  entryPoints:
+  - websecure    
+  routes:
+  - kind: Rule
+    match: Host(`minio.qikqiak.com`)
+    services:
+    - kind: Service
+      name: minio
+      port: 9000
+  tls:
+    certResolver: ali
+    domains:
+    - main: &quot;*.qikqiak.com&quot;
+</code></pre></div>
+<blockquote>
+<p>这里我们使用的是 Traefik2.X 版本的 Ingress 控制器，使用 IngressRoute 这个资源对象来定义 Ingress 信息，对于这部分内容不熟悉的可以查看前面的网络章节部分的内容。然后直接创建上面的资源对象即可：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl create ns minio
+$ kubectl apply -f minio-deploy.yaml
+$ kubectl apply -f minio-pvc.yaml
+$ kubectl apply -f minio-ingress.yaml
+</code></pre></div>
+<blockquote>
+<p>部署成功后，将域名 <code>minio.qikqiak.com</code> 解析到 Ingress 控制器所在的节点即可通过浏览器访问到 MinIO 服务了，通过上面定义的 <code>MINIO_ACCESS_KEY</code> 和 <code>MINIO_SECRET_KEY</code> 即可登录：</p>
+<p><img alt="MinIO" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200401113002.png" /></p>
+</blockquote>
+<h4 id="thanos_store">安装 Thanos Store<a class="headerlink" href="#thanos_store" title="Permanent link">&para;</a></h4>
+<blockquote>
+<p>现在对象存储准备好了，我们就可以来不是 Store 组件了，该组件会从对象存储到给 Querier 提供 metrics 数据。</p>
+<p>首先登录 MinIO 创建一个 thanos 的 bucket。然后创建一个对象存储配置文件：（thanos-storage-minio.yaml）</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>type: s3
+config:
+  bucket: thanos
+  endpoint: minio.minio.svc.cluster.local:9000
+  access_key: minio
+  secret_key: minio123
+  insecure: true
+  signature_version2: false
+</code></pre></div>
+<blockquote>
+<p>使用上面的配置文件来创建一个 Secret 对象：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl create secret generic thanos-objectstorage --from-file=thanos.yaml=thanos-storage-minio.yaml -n kube-mon
+secret/thanos-objectstorage created
+</code></pre></div>
+<blockquote>
+<p>然后创建 Store 组件的资源清单文件，这里有一个需要注意的地方是需要添加一个 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>thanos-store-api: &quot;true&quot;
+</code></pre></div>
+<p>的标签，这样前面我们创建的 <code>thanos-store-gateway</code> 这个 Headless Service 就可以自动发现到这个服务，Querier 组件查询数据的时候除了可以通过 Sidecar 去获取数据也可以通过这个 Store 组件去对象存储里面获取数据了。将上面的 Secret 对象通过 Volume 形式挂载到容器中的 <code>/etc/secret</code> 目录下，通过 <code>objstore.config-file</code> 参数指定即可：（store.yaml）</p>
+<div class="highlight"><pre><span></span><code>apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: thanos-store-gateway
+  namespace: kube-mon
+  labels:
+    app: thanos-store-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: thanos-store-gateway
+  serviceName: thanos-store-gateway
+  template:
+    metadata:
+      labels:
+        app: thanos-store-gateway
+        thanos-store-api: &quot;true&quot;
+    spec:
+      containers:
+        - name: thanos
+          image: thanosio/thanos:v0
+          args:
+          - &quot;store&quot;
+          - &quot;--log.level=debug&quot;
+          - &quot;--data-dir=/data&quot;
+          - &quot;--objstore.config-file=/etc/secret/thanos.yaml&quot;
+          - &quot;--index-cache-size=500MB&quot;
+          - &quot;--chunk-pool-size=500MB&quot;
+          ports:
+          - name: http
+            containerPort: 10902
+          - name: grpc
+            containerPort: 10901
+          livenessProbe:
+            httpGet:
+              port: 10902
+              path: /-/healthy
+          readinessProbe:
+            httpGet:
+              port: 10902
+              path: /-/ready
+          volumeMounts:
+            - name: object-storage-config
+              mountPath: /etc/secret
+              readOnly: false
+      volumes:
+        - name: object-storage-config
+          secret:
+            secretName: thanos-objectstorage
+</code></pre></div>
+<blockquote>
+<p>直接创建上面的资源对象即可：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl apply -f store.yaml
+$ kubectl get pods -n kube-mon -l thanos-store-api=true   
+NAME                     READY   STATUS    RESTARTS   AGE
+prometheus-0             2/2     Running   0          15h
+prometheus-1             2/2     Running   0          15h
+thanos-store-gateway-0   1/1     Running   0          100s
+</code></pre></div>
+<blockquote>
+<p>部署成功后这个时候去 Thano 的 Querier 页面上查看 Store 信息就可以发现这里我们配置的 Store 组件了：</p>
+<p><img alt="Thano Store" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200401124301.png" /></p>
+<p>到这里证明我们的 Thanos 组件也配置成功了。但是还有一个明显的问题是这里我们只是配置去对象存储中查询数据的组件，那什么地方往对象存储中写入数据呢？当然还是在 Sidecar 组件里面了。所以同样我们需要把 <code>objstore.config-file</code> 参数和 Secret 对象也要配置到 Sidecar 组件中去：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>......
+volumes:
+- name: object-storage-config
+  secret:
+    secretName: thanos-objectstorage
+......
+args:
+- sidecar
+- --log.level=debug
+- --tsdb.path=/prometheus
+- --prometheus.url=http://localhost:9090
+- --reloader.config-file=/etc/prometheus/prometheus.yaml.tmpl
+- --reloader.config-envsubst-file=/etc/prometheus-shared/prometheus.yaml
+- --reloader.rule-dir=/etc/prometheus/rules/
+- --objstore.config-file=/etc/secret/thanos.yaml
+......
+volumeMounts:
+- name: object-storage-config
+  mountPath: /etc/secret
+  readOnly: false
+......
+</code></pre></div>
+<blockquote>
+<p>配置完成后重新更新 Sidecar 组件即可。配置生效过后正常的话就会有数据传入到 MinIO 里面去了，我们可以去 MinIO 的页面上查看验证：</p>
+<p><img alt="MinIO" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200401130226.png" /></p>
+</blockquote>
+<h3 id="compactor">Compactor 组件<a class="headerlink" href="#compactor" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>现在历史监控数据已经上传到对象存储中去了，但是由于监控数据量非常庞大，所以一般情况下我们会去安装一个 Thanos 的 Compactor 组件，用来将对象存储中的数据进行压缩和下采样。Compactor 组件的部署和 Store 非常类似，指定对象存储的配置文件即可，如下所示的资源清单文件：（compactor.yaml）</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: thanos-compactor
+  namespace: kube-mon
+  labels:
+    app: thanos-compactor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: thanos-compactor
+  serviceName: thanos-compactor
+  template:
+    metadata:
+      labels:
+        app: thanos-compactor
+    spec:
+      containers:
+      - name: thanos
+        image: thanosio/thanos:v0
+        args:
+        - &quot;compact&quot;
+        - &quot;--log.level=debug&quot;
+        - &quot;--data-dir=/data&quot;
+        - &quot;--objstore.config-file=/etc/secret/thanos.yaml&quot;
+        - &quot;--wait&quot;
+        ports:
+        - name: http
+          containerPort: 10902
+        livenessProbe:
+          httpGet:
+            port: 10902
+            path: /-/healthy
+          initialDelaySeconds: 10
+        readinessProbe:
+          httpGet:
+            port: 10902
+            path: /-/ready
+          initialDelaySeconds: 15
+        volumeMounts:
+        - name: object-storage-config
+          mountPath: /etc/secret
+          readOnly: false
+      volumes:
+      - name: object-storage-config
+        secret:
+          secretName: thanos-objectstorage
+</code></pre></div>
+<blockquote>
+<p>最重要的还是提供对象存储的配置文件，然后直接创建上面的资源清单文件：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl apply -f compactor.yaml
+$ kubectl get pods -n kube-mon -l app=thanos-compactor
+NAME                 READY   STATUS    RESTARTS   AGE
+thanos-compactor-0   1/1     Running   0          68s
+</code></pre></div>
+<blockquote>
+<p>到这里我们就完成了使用 Thanos 来部署高可用的 Prometheus 集群，当然 Thanos 还有其他的一些组件，比如 Check、Bucket、Receiver 等，对于这些组件的使用感兴趣的可以查看官方文档 <a href="https://thanos.io/">https://thanos.io/</a>。</p>
+<p>将 Thanos 与 Prometheus 集成可让我们对 Prometheus 进行水平伸缩。由于 <code>Thanos Querier</code> 可以从其他查询器实例中提取指标，因此我们也可以跨集群提取指标并在 Grafana 中可视化它们，Thanos 使我们可以将度量标准数据归档到对象存储中，该对象存储为我们的监控系统提供了无限的存储空间，而且它还可以从对象存储中提供指标，如果我们对这些对象存储设置一些适当的保留策略，还可以将费用降到更低。</p>
+</blockquote>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      BurningMyself<a href='https://beian.miit.gov.cn/' target='_blank'>  蜀ICP备15033200号-1</a>
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/burningmyself" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://gitee.com/burningmyself" target="_blank" rel="noopener" title="gitee.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.2a6f1dda.min.js"></script>
+      
+        <script src="../../js/extra.js"></script>
+      
+        <script src="../../js/baidu-tongji.js"></script>
+      
+        <script src="https://www.googletagmanager.com/gtag/js?id=UA-155084439-1"></script>
+      
+        <script src="https://www.googletagmanager.com/gtag/js?id=UA-155132293-1"></script>
+      
+        <script src="../../js/google.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+      
+    
+  </body>
+</html>

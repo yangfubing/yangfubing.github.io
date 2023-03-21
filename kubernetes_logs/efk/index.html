@@ -1,0 +1,3730 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content=".net,java,php,python,docker,web">
+      
+      
+        <meta name="author" content="BurningMyself">
+      
+      
+        <link rel="canonical" href="https://burningmyself.gitee.io/kubernetes_logs/efk/">
+      
+      
+        <link rel="prev" href="../architec/">
+      
+      
+        <link rel="next" href="../../kubernetes_devops/jenkins/">
+      
+      <link rel="icon" href="../../favicon.ico">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.15">
+    
+    
+      
+        <title>efk - BurningMyself</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.113286f1.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.a0c5b2b5.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#efk" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="BurningMyself" class="md-header__button md-logo" aria-label="BurningMyself" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BurningMyself
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              efk
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/burningmyself/burningmyself.github.io" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    burningmyself.github.io
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="BurningMyself" class="md-nav__button md-logo" aria-label="BurningMyself" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    BurningMyself
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/burningmyself/burningmyself.github.io" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    burningmyself.github.io
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        云原生
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          Docker 基础
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Docker 基础
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/overview/" class="md-nav__link">
+        简介
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/install/" class="md-nav__link">
+        安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/basic/" class="md-nav__link">
+        基本操作
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/dockerfile_usage/" class="md-nav__link">
+        Dockerfile
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/dockerfile_practice/" class="md-nav__link">
+        Dockerfile实践
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          Kubernetes 基础
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 基础
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/overview/" class="md-nav__link">
+        简介
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/install/" class="md-nav__link">
+        安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/yaml/" class="md-nav__link">
+        资源清单
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/pod/" class="md-nav__link">
+        Pod原理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/pod_life/" class="md-nav__link">
+        Pod的生命周期
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/pod_deep/" class="md-nav__link">
+        Pod使用进阶
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          Kubernetes 控制器
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 控制器
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/replicaset/" class="md-nav__link">
+        ReplicaSet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/deployment/" class="md-nav__link">
+        Deployment
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/statefulset/" class="md-nav__link">
+        StatefulSet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/daemonset/" class="md-nav__link">
+        DaemonSet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/job/" class="md-nav__link">
+        Job
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/hpa/" class="md-nav__link">
+        HPA
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          Kubernetes 配置管理
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 配置管理
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_config/config_map/" class="md-nav__link">
+        ConfigMap
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_config/secret/" class="md-nav__link">
+        Secret
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_config/service_account/" class="md-nav__link">
+        ServiceAccount
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+          Kubernetes 安全
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 安全
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_security/rbac/" class="md-nav__link">
+        RBAC
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_security/security_context/" class="md-nav__link">
+        Security Context
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_security/admission/" class="md-nav__link">
+        准入控制器
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+          Kubernetes 网络
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 网络
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/flannel/" class="md-nav__link">
+        网络插件
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/policy/" class="md-nav__link">
+        网络策略
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/service/" class="md-nav__link">
+        Service 服务
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_4" id="__nav_7_4_label" tabindex="0">
+          Ingress
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_7_4">
+          <span class="md-nav__icon md-icon"></span>
+          Ingress
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/ingress/nginx/" class="md-nav__link">
+        NGINX Controller
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/ingress/traefik/" class="md-nav__link">
+        Traefik
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+          Kubernetes 调度器
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 调度器
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_scheduler/overview/" class="md-nav__link">
+        调度器介绍
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_scheduler/usage/" class="md-nav__link">
+        Pod 调度
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+          Kubernetes 存储
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 存储
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_stroage/local/" class="md-nav__link">
+        Local 本地存储
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_stroage/ceph/" class="md-nav__link">
+        Ceph 存储
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_stroage/csi/" class="md-nav__link">
+        存储原理
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+          Helm 包管理
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_10">
+          <span class="md-nav__icon md-icon"></span>
+          Helm 包管理
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/helm/" class="md-nav__link">
+        Helm
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/charts/" class="md-nav__link">
+        Charts
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_10_3" id="__nav_10_3_label" tabindex="0">
+          模板开发
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_10_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_10_3">
+          <span class="md-nav__icon md-icon"></span>
+          模板开发
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/objects/" class="md-nav__link">
+        内置对象
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/values/" class="md-nav__link">
+        Values
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/function/" class="md-nav__link">
+        函数和管道
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/flow/" class="md-nav__link">
+        流程控制
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/variables/" class="md-nav__link">
+        变量
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/named_templates/" class="md-nav__link">
+        命名模板
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/access_files/" class="md-nav__link">
+        访问文件
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/notes_files/" class="md-nav__link">
+        NOTES.txt 文件
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/subcharts_and_globals/" class="md-nav__link">
+        子chart与全局值
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/debug/" class="md-nav__link">
+        模板调试
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/chart_hooks/" class="md-nav__link">
+        Chart Hooks
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/example/" class="md-nav__link">
+        示例
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+          Kubernetes 监控
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 监控
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/prometheus/" class="md-nav__link">
+        Prometheus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/grafana/" class="md-nav__link">
+        Grafana
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/promql/" class="md-nav__link">
+        Promql
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/alertmanager/" class="md-nav__link">
+        Alertmanager
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/thanos/" class="md-nav__link">
+        Prometheus Thanos
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/adapter/" class="md-nav__link">
+        Prometheus Adpater
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_11_7" id="__nav_11_7_label" tabindex="0">
+          Prometheus Operator
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_7">
+          <span class="md-nav__icon md-icon"></span>
+          Prometheus Operator
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/operator/install/" class="md-nav__link">
+        安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/operator/custom/" class="md-nav__link">
+        自定义监控报警
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/operator/advance/" class="md-nav__link">
+        高级配置
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+          Kubernetes 日志
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_12">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 日志
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architec/" class="md-nav__link">
+        Grafana
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          efk
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        efk
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#efk" class="md-nav__link">
+    搭建 EFK 日志系统
+  </a>
+  
+    <nav class="md-nav" aria-label="搭建 EFK 日志系统">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#elasticsearch" class="md-nav__link">
+    创建 Elasticsearch 集群
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kibana" class="md-nav__link">
+    创建 Kibana 服务
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fluentd" class="md-nav__link">
+    部署 Fluentd
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    工作原理
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    配置
+  </a>
+  
+    <nav class="md-nav" aria-label="配置">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    日志源配置
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    路由配置
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    过滤
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    安装
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    日志分析
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    基于日志的报警
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+          Kubernetes DevOps
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_13">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes DevOps
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_devops/jenkins/" class="md-nav__link">
+        Jenins
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_devops/gitlab/" class="md-nav__link">
+        Gitlab
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_devops/harbor/" class="md-nav__link">
+        Harbor
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_devops/jenkins_pipeline/" class="md-nav__link">
+        Jenkins Pipeline
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_devops/token/" class="md-nav__link">
+        Tekton
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="0">
+          Service Mesh 实践
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_14">
+          <span class="md-nav__icon md-icon"></span>
+          Service Mesh 实践
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_service_mesh/istio/" class="md-nav__link">
+        Istio
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_service_mesh/traffic/" class="md-nav__link">
+        流量管理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_service_mesh/observability/" class="md-nav__link">
+        可观测性
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_service_mesh/security/" class="md-nav__link">
+        安全管控
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_service_mesh/cert_manager/" class="md-nav__link">
+        CertManager
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="0">
+          Kubernetes 多租户
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_15">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 多租户
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_tenant/tenant/" class="md-nav__link">
+        多租户介绍
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_tenant/quota/" class="md-nav__link">
+        多租户介绍
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_tenant/psp/" class="md-nav__link">
+        多租户介绍
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_16" id="__nav_16_label" tabindex="0">
+          Operator
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_16_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_16">
+          <span class="md-nav__icon md-icon"></span>
+          Operator
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_operator/crd/" class="md-nav__link">
+        CRD
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_operator/operator/" class="md-nav__link">
+        Operator
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_17" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_17" id="__nav_17_label" tabindex="0">
+          实践技巧
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_17_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_17">
+          <span class="md-nav__icon md-icon"></span>
+          实践技巧
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_maintain/skill/" class="md-nav__link">
+        技巧
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_maintain/update/" class="md-nav__link">
+        技巧
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_maintain/update_cluster/" class="md-nav__link">
+        技巧
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_maintain/reserved/" class="md-nav__link">
+        技巧
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_18" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_18" id="__nav_18_label" tabindex="0">
+          源码
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_18_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_18">
+          <span class="md-nav__icon md-icon"></span>
+          源码
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_code/kubelet/" class="md-nav__link">
+        kubelet源码
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_18_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_18_2" id="__nav_18_2_label" tabindex="0">
+          client-go
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_18_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_18_2">
+          <span class="md-nav__icon md-icon"></span>
+          client-go
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_code/client_go/workqueue/" class="md-nav__link">
+        workqueue
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_code/client_go/indexer/" class="md-nav__link">
+        indexer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_code/client_go/deltafifo/" class="md-nav__link">
+        workqueue
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_19" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_19" id="__nav_19_label" tabindex="0">
+          应用示例
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_19_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_19">
+          <span class="md-nav__icon md-icon"></span>
+          应用示例
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_example/wordpress/" class="md-nav__link">
+        应用部署
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#efk" class="md-nav__link">
+    搭建 EFK 日志系统
+  </a>
+  
+    <nav class="md-nav" aria-label="搭建 EFK 日志系统">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#elasticsearch" class="md-nav__link">
+    创建 Elasticsearch 集群
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kibana" class="md-nav__link">
+    创建 Kibana 服务
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fluentd" class="md-nav__link">
+    部署 Fluentd
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    工作原理
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    配置
+  </a>
+  
+    <nav class="md-nav" aria-label="配置">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    日志源配置
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    路由配置
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    过滤
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    安装
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    日志分析
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    基于日志的报警
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+  <h1>efk</h1>
+
+<h2 id="efk">搭建 EFK 日志系统<a class="headerlink" href="#efk" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>前面大家介绍了 Kubernetes 集群中的几种日志收集方案，Kubernetes 中比较流行的日志收集解决方案是 Elasticsearch、Fluentd 和 Kibana（EFK）技术栈，也是官方现在比较推荐的一种方案。</p>
+<p><code>Elasticsearch</code> 是一个实时的、分布式的可扩展的搜索引擎，允许进行全文、结构化搜索，它通常用于索引和搜索大量日志数据，也可用于搜索许多不同类型的文档。</p>
+<p>Elasticsearch 通常与 <code>Kibana</code> 一起部署，Kibana 是 Elasticsearch 的一个功能强大的数据可视化 Dashboard，Kibana 允许你通过 web 界面来浏览 Elasticsearch 日志数据。</p>
+<p><code>Fluentd</code>是一个流行的开源数据收集器，我们将在 Kubernetes 集群节点上安装 Fluentd，通过获取容器日志文件、过滤和转换日志数据，然后将数据传递到 Elasticsearch 集群，在该集群中对其进行索引和存储。</p>
+<p>我们先来配置启动一个可扩展的 Elasticsearch 集群，然后在 Kubernetes 集群中创建一个 Kibana 应用，最后通过 DaemonSet 来运行 Fluentd，以便它在每个 Kubernetes 工作节点上都可以运行一个 Pod。</p>
+<p>提示</p>
+<p>如果你了解 EFK 的基本原理，只是为了测试可以直接使用 Kubernetes 官方提供的 addon 插件的资源清单，地址：<a href="https://github.com/kubernetes/kubernetes/blob/master/cluster/addons/fluentd-elasticsearch/">https://github.com/kubernetes/kubernetes/blob/master/cluster/addons/fluentd-elasticsearch/</a>，直接安装即可。</p>
+</blockquote>
+<h3 id="elasticsearch">创建 Elasticsearch 集群<a class="headerlink" href="#elasticsearch" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>在创建 Elasticsearch 集群之前，我们先创建一个命名空间，我们将在其中安装所有日志相关的资源对象。</p>
+<p>新建一个 kube-logging.yaml 文件：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: v1
+kind: Namespace
+metadata:
+  name: logging
+</code></pre></div>
+<blockquote>
+<p>然后通过 kubectl 创建该资源清单，创建一个名为 logging 的 namespace：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl create -f kube-logging.yaml
+namespace/logging created
+$ kubectl get ns
+NAME           STATUS    AGE
+default        Active    244d
+istio-system   Active    100d
+kube-ops       Active    179d
+kube-public    Active    244d
+kube-system    Active    244d
+logging        Active    4h
+monitoring     Active    35d
+</code></pre></div>
+<blockquote>
+<p>现在创建了一个命名空间来存放我们的日志相关资源，接下来可以部署 EFK 相关组件，首先开始部署一个3节点的 Elasticsearch 集群。</p>
+<p>这里我们使用3个 Elasticsearch Pod 来避免高可用下多节点集群中出现的脑裂问题，当一个或多个节点无法与其他节点通信时会产生脑裂，可能会出现几个主节点。</p>
+<blockquote>
+<p>了解更多 Elasticsearch 集群脑裂问题，可以查看文档https://<a href="http://www.elastic.co/guide/en/elasticsearch/reference/current/modules-node.html#split-brain">www.elastic.co/guide/en/elasticsearch/reference/current/modules-node.html#split-brain</a></p>
+</blockquote>
+<p>一个关键点是您应该设置参数</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>discover.zen.minimum_master_nodes=N/2+1
+</code></pre></div>
+<p>，其中<code>N</code>是 Elasticsearch 集群中符合主节点的节点数，比如我们这里3个节点，意味着<code>N</code>应该设置为2。这样，如果一个节点暂时与集群断开连接，则另外两个节点可以选择一个新的主节点，并且集群可以在最后一个节点尝试重新加入时继续运行，在扩展 Elasticsearch 集群时，一定要记住这个参数。</p>
+<blockquote>
+<p>首先创建一个名为 elasticsearch 的无头服务，新建文件 elasticsearch-svc.yaml，文件内容如下：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>kind: Service
+apiVersion: v1
+metadata:
+  name: elasticsearch
+  namespace: logging
+  labels:
+    app: elasticsearch
+spec:
+  selector:
+    app: elasticsearch
+  clusterIP: None
+  ports:
+    - port: 9200
+      name: rest
+    - port: 9300
+      name: inter-node
+</code></pre></div>
+<blockquote>
+<p>定义了一个名为 elasticsearch 的 Service，指定标签 <code>app=elasticsearch</code>，当我们将 Elasticsearch StatefulSet 与此服务关联时，服务将返回带有标签 <code>app=elasticsearch</code>的 Elasticsearch Pods 的 DNS A 记录，然后设置 <code>clusterIP=None</code>，将该服务设置成无头服务。最后，我们分别定义端口9200、9300，分别用于与 REST API 交互，以及用于节点间通信。</p>
+<p>使用 kubectl 直接创建上面的服务资源对象：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl create -f elasticsearch-svc.yaml
+service/elasticsearch created
+$ kubectl get services --namespace=logging
+Output
+NAME            TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)             AGE
+elasticsearch   ClusterIP   None         &lt;none&gt;        9200/TCP,9300/TCP   26s
+</code></pre></div>
+<blockquote>
+<p>现在我们已经为 Pod 设置了无头服务和一个稳定的域名</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>.elasticsearch.logging.svc.cluster.local
+</code></pre></div>
+<p>，接下来我们通过 StatefulSet 来创建具体的 Elasticsearch 的 Pod 应用。</p>
+<blockquote>
+<p>Kubernetes StatefulSet 允许我们为 Pod 分配一个稳定的标识和持久化存储，Elasticsearch 需要稳定的存储来保证 Pod 在重新调度或者重启后的数据依然不变，所以需要使用 StatefulSet 来管理 Pod。</p>
+<blockquote>
+<p>要了解更多关于 StaefulSet 的信息，可以查看官网关于 StatefulSet 的相关文档：<a href="https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/">https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/</a>。</p>
+</blockquote>
+<p>新建名为 elasticsearch-statefulset.yaml 的资源清单文件，首先粘贴下面内容：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: es
+  namespace: logging
+spec:
+  serviceName: elasticsearch
+  replicas: 3
+  selector:
+    matchLabels:
+      app: elasticsearch
+  template:
+    metadata:
+      labels:
+        app: elasticsearch
+</code></pre></div>
+<blockquote>
+<p>该内容中，我们定义了一个名为 es 的 StatefulSet 对象，然后定义</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>serviceName=elasticsearch
+</code></pre></div>
+<p>和前面创建的 Service 相关联，这可以确保使用以下 DNS 地址访问 StatefulSet 中的每一个 Pod：</p>
+<div class="highlight"><pre><span></span><code>es-[0,1,2].elasticsearch.logging.svc.cluster.local
+</code></pre></div>
+<p>，其中[0,1,2]对应于已分配的 Pod 序号。</p>
+<blockquote>
+<p>然后指定3个副本，将 matchLabels 设置为<code>app=elasticsearch</code>，所以 Pod 的模板部分</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>.spec.template.metadata.lables
+</code></pre></div>
+<p>也必须包含<code>app=elasticsearch</code>标签。</p>
+<blockquote>
+<p>然后定义 Pod 模板部分内容：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>...
+  spec:
+    containers:
+    - name: elasticsearch
+      image: docker.elastic.co/elasticsearch/elasticsearch:2
+      resources:
+        limits:
+          cpu: 1000m
+        requests:
+          cpu: 100m
+      ports:
+      - containerPort: 9200
+        name: rest
+        protocol: TCP
+      - containerPort: 9300
+        name: inter-node
+        protocol: TCP
+      volumeMounts:
+      - name: data
+        mountPath: /usr/share/elasticsearch/data
+      env:
+        - name: cluster.name
+          value: k8s-logs
+        - name: node.name
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: cluster.initial_master_nodes
+          value: &quot;es-0,es-1,es-2&quot;
+        - name: discovery.zen.minimum_master_nodes
+          value: &quot;2&quot;
+        - name: discovery.seed_hosts
+          value: &quot;elasticsearch&quot;
+        - name: ES_JAVA_OPTS
+          value: &quot;-Xms512m -Xmx512m&quot;
+        - name: network.host
+          value: &quot;0&quot;
+</code></pre></div>
+<blockquote>
+<p>该部分是定义 StatefulSet 中的 Pod，暴露了9200和9300两个端口，注意名称要和上面定义的 Service 保持一致。然后通过 volumeMount 声明了数据持久化目录，下面我们再来定义 VolumeClaims。最后就是我们在容器中设置的一些环境变量了：</p>
+</blockquote>
+<ul>
+<li>cluster.name：Elasticsearch 集群的名称，我们这里命名成 k8s-logs。</li>
+<li>node.name：节点的名称，通过 <code>metadata.name</code> 来获取。这将解析为 es-[0,1,2]，取决于节点的指定顺序。</li>
+<li>
+<p>discovery.seed_hosts：此字段用于设置在 Elasticsearch 集群中节点相互连接的发现方法。由于我们之前配置的无头服务，我们的 Pod 具有唯一的 DNS 域</p>
+<div class="highlight"><pre><span></span><code>es-[0,1,2].elasticsearch.logging.svc.cluster.local
+</code></pre></div>
+<p>，因此我们相应地设置此变量。要了解有关 Elasticsearch 发现的更多信息，请参阅 Elasticsearch 官方文档：<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-discovery.html">https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-discovery.html</a>。
+*   discovery.zen.minimum_master_nodes：我们将其设置为<code>(N/2) + 1</code>，<code>N</code>是我们的群集中符合主节点的节点的数量。我们有3个 Elasticsearch 节点，因此我们将此值设置为2（向下舍入到最接近的整数）。要了解有关此参数的更多信息，请参阅官方 Elasticsearch 文档：<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-node.html#split-brain">https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-node.html#split-brain</a>。
+*   ES_JAVA_OPTS：这里我们设置为<code>-Xms512m -Xmx512m</code>，告诉<code>JVM</code>使用<code>512 MB</code>的最小和最大堆。您应该根据群集的资源可用性和需求调整这些参数。要了解更多信息，请参阅设置堆大小的相关文档：<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/heap-size.html">https://www.elastic.co/guide/en/elasticsearch/reference/current/heap-size.html</a>。</p>
+</li>
+</ul>
+<blockquote>
+<p>接下来添加关于 initContainer 的内容：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>...
+    initContainers:
+    - name: increase-vm-max-map
+      image: busybox
+      command: [&quot;sysctl&quot;, &quot;-w&quot;, &quot;vm.max_map_count=262144&quot;]
+      securityContext:
+        privileged: true
+    - name: increase-fd-ulimit
+      image: busybox
+      command: [&quot;sh&quot;, &quot;-c&quot;, &quot;ulimit -n 65536&quot;]
+      securityContext:
+        privileged: true
+</code></pre></div>
+<blockquote>
+<p>这里我们定义了几个在主应用程序之前运行的 Init 容器，这些初始容器按照定义的顺序依次执行，执行完成后才会启动主应用容器。</p>
+<p>第一个名为 increase-vm-max-map 的容器用来增加操作系统对<code>mmap</code>计数的限制，默认情况下该值可能太低，导致内存不足的错误，要了解更多关于该设置的信息，可以查看 Elasticsearch 官方文档说明：<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html">https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html</a>。</p>
+<p>最后一个初始化容器是用来执行<code>ulimit</code>命令增加打开文件描述符的最大数量的。</p>
+<blockquote>
+<p>此外 Elastisearch Notes for Production Use 文档还提到了由于性能原因最好禁用 swap，当然对于 Kubernetes 集群而言，最好也是禁用 swap 分区的。</p>
+</blockquote>
+<p>现在我们已经定义了主应用容器和它之前运行的 Init Containers 来调整一些必要的系统参数，接下来我们可以添加数据目录的持久化相关的配置，在 StatefulSet 中，使用 volumeClaimTemplates 来定义 volume 模板即可：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>...
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+      labels:
+        app: elasticsearch
+    spec:
+      accessModes: [ &quot;ReadWriteOnce&quot; ]
+      storageClassName: rook-ceph-block
+      resources:
+        requests:
+          storage: 50Gi
+</code></pre></div>
+<blockquote>
+<p>我们这里使用 volumeClaimTemplates 来定义持久化模板，Kubernetes 会使用它为 Pod 创建 PersistentVolume，设置访问模式为<code>ReadWriteOnce</code>，这意味着它只能被 mount 到单个节点上进行读写，然后最重要的是使用了一个 StorageClass 对象，这里我们就直接使用前面创建的 Ceph RBD 类型的名为 <code>rook-ceph-block</code> 的 StorageClass 对象即可。最后，我们指定了每个 PersistentVolume 的大小为 50GB，我们可以根据自己的实际需要进行调整该值。</p>
+<p>完整的 Elasticsearch StatefulSet 资源清单文件内容如下：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: es
+  namespace: logging
+spec:
+  serviceName: elasticsearch
+  replicas: 3
+  selector:
+    matchLabels:
+      app: elasticsearch
+  template:
+    metadata:
+      labels: 
+        app: elasticsearch
+    spec:
+      nodeSelector:
+        es: log
+      initContainers:
+      - name: increase-vm-max-map
+        image: busybox
+        command: [&quot;sysctl&quot;, &quot;-w&quot;, &quot;vm.max_map_count=262144&quot;]
+        securityContext:
+          privileged: true
+      - name: increase-fd-ulimit
+        image: busybox
+        command: [&quot;sh&quot;, &quot;-c&quot;, &quot;ulimit -n 65536&quot;]
+        securityContext:
+          privileged: true
+      containers:
+      - name: elasticsearch
+        image: docker.elastic.co/elasticsearch/elasticsearch:2
+        ports:
+        - name: rest
+          containerPort: 9200
+        - name: inter
+          containerPort: 9300
+        resources:
+          limits:
+            cpu: 1000m
+          requests:
+            cpu: 1000m
+        volumeMounts:
+        - name: data
+          mountPath: /usr/share/elasticsearch/data
+        env:
+        - name: cluster.name
+          value: k8s-logs
+        - name: node.name
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: cluster.initial_master_nodes
+          value: &quot;es-0,es-1,es-2&quot;
+        - name: discovery.zen.minimum_master_nodes
+          value: &quot;2&quot;
+        - name: discovery.seed_hosts
+          value: &quot;elasticsearch&quot;
+        - name: ES_JAVA_OPTS
+          value: &quot;-Xms512m -Xmx512m&quot;
+        - name: network.host
+          value: &quot;0&quot;
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+      labels:
+        app: elasticsearch
+    spec:
+      accessModes: [ &quot;ReadWriteOnce&quot; ]
+      storageClassName: rook-ceph-block
+      resources:
+        requests:
+          storage: 50Gi
+</code></pre></div>
+<blockquote>
+<p>现在直接使用 kubectl 工具部署即可：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl create -f elasticsearch-statefulset.yaml
+statefulset.apps/es created
+</code></pre></div>
+<blockquote>
+<p>添加成功后，可以看到 logging 命名空间下面的所有的资源对象：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl get sts -n logging
+NAME   READY   AGE
+es     3/3     83m
+$ kubectl get pods -n logging
+NAME                      READY   STATUS    RESTARTS   AGE
+es-0                      1/1     Running   0          83m
+es-1                      1/1     Running   0          82m
+es-2                      1/1     Running   0          81m
+$ kubectl get svc -n logging
+NAME            TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)             AGE
+elasticsearch   ClusterIP   None             &lt;none&gt;        9200/TCP,9300/TCP   20h
+</code></pre></div>
+<blockquote>
+<p>Pods 部署完成后，我们可以通过请求一个 REST API 来检查 Elasticsearch 集群是否正常运行。使用下面的命令将本地端口9200 转发到 Elasticsearch 节点（如es-0）对应的端口：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl port-forward es-0 9200:9200 --namespace=logging
+Forwarding from 11:9200 -&gt; 9200
+Forwarding from [::1]:9200 -&gt; 9200
+</code></pre></div>
+<blockquote>
+<p>然后，在另外的终端窗口中，执行如下请求：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ curl http://localhost:9200/_cluster/state?pretty
+</code></pre></div>
+<blockquote>
+<p>正常来说，应该会看到类似于如下的信息：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>{
+  &quot;cluster_name&quot; : &quot;k8s-logs&quot;,
+  &quot;compressed_size_in_bytes&quot; : 348,
+  &quot;cluster_uuid&quot; : &quot;QD06dK7CQgids-GQZooNVw&quot;,
+  &quot;version&quot; : 3,
+  &quot;state_uuid&quot; : &quot;mjNIWXAzQVuxNNOQ7xR-qg&quot;,
+  &quot;master_node&quot; : &quot;IdM5B7cUQWqFgIHXBp0JDg&quot;,
+  &quot;blocks&quot; : { },
+  &quot;nodes&quot; : {
+    &quot;u7DoTpMmSCixOoictzHItA&quot; : {
+      &quot;name&quot; : &quot;es-1&quot;,
+      &quot;ephemeral_id&quot; : &quot;ZlBflnXKRMC4RvEACHIVdg&quot;,
+      &quot;transport_address&quot; : &quot;2191:9300&quot;,
+      &quot;attributes&quot; : { }
+    },
+    &quot;IdM5B7cUQWqFgIHXBp0JDg&quot; : {
+      &quot;name&quot; : &quot;es-0&quot;,
+      &quot;ephemeral_id&quot; : &quot;JTk1FDdFQuWbSFAtBxdxAQ&quot;,
+      &quot;transport_address&quot; : &quot;2215:9300&quot;,
+      &quot;attributes&quot; : { }
+    },
+    &quot;R8E7xcSUSbGbgrhAdyAKmQ&quot; : {
+      &quot;name&quot; : &quot;es-2&quot;,
+      &quot;ephemeral_id&quot; : &quot;9wv6ke71Qqy9vk2LgJTqaA&quot;,
+      &quot;transport_address&quot; : &quot;24:9300&quot;,
+      &quot;attributes&quot; : { }
+    }
+  },
+...
+</code></pre></div>
+<blockquote>
+<p>看到上面的信息就表明我们名为 k8s-logs 的 Elasticsearch 集群成功创建了3个节点：es-0，es-1，和es-2，当前主节点是 es-0。</p>
+</blockquote>
+<h3 id="kibana">创建 Kibana 服务<a class="headerlink" href="#kibana" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>Elasticsearch 集群启动成功了，接下来我们可以来部署 Kibana 服务，新建一个名为 kibana.yaml 的文件，对应的文件内容如下：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: v1
+kind: Service
+metadata:
+  name: kibana
+  namespace: logging
+  labels:
+    app: kibana
+spec:
+  ports:
+  - port: 5601
+  type: NodePort
+  selector:
+    app: kibana
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kibana
+  namespace: logging
+  labels:
+    app: kibana
+spec:
+  selector:
+    matchLabels:
+      app: kibana
+  template:
+    metadata:
+      labels:
+        app: kibana
+    spec:
+      nodeSelector:
+        es: log
+      containers:
+      - name: kibana
+        image: docker.elastic.co/kibana/kibana:2
+        resources:
+          limits:
+            cpu: 1000m
+          requests:
+            cpu: 1000m
+        env:
+        - name: ELASTICSEARCH_HOSTS
+          value: http://elasticsearch:9200
+        ports:
+        - containerPort: 5601
+</code></pre></div>
+<blockquote>
+<p>上面我们定义了两个资源对象，一个 Service 和 Deployment，为了测试方便，我们将 Service 设置为了 NodePort 类型，Kibana Pod 中配置都比较简单，唯一需要注意的是我们使用 <code>ELASTICSEARCH_HOSTS</code> 这个环境变量来设置Elasticsearch 集群的端点和端口，直接使用 Kubernetes DNS 即可，此端点对应服务名称为 elasticsearch，由于是一个 headless service，所以该域将解析为3个 Elasticsearch Pod 的 IP 地址列表。</p>
+<p>配置完成后，直接使用 kubectl 工具创建：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl create -f kibana.yaml
+service/kibana created
+deployment.apps/kibana created
+</code></pre></div>
+<blockquote>
+<p>创建完成后，可以查看 Kibana Pod 的运行状态：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl get pods --namespace=logging
+NAME                      READY   STATUS    RESTARTS   AGE
+es-0                      1/1     Running   0          85m
+es-1                      1/1     Running   0          84m
+es-2                      1/1     Running   0          83m
+kibana-5c565c47dd-xj4bd   1/1     Running   0          80m
+$ kubectl get svc -n logging
+NAME            TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)             AGE
+elasticsearch   ClusterIP   None            &lt;none&gt;        9200/TCP,9300/TCP   3h22m
+kibana          NodePort    1299   &lt;none&gt;        5601:31139/TCP      3h20m
+</code></pre></div>
+<blockquote>
+<p>如果 Pod 已经是 Running 状态了，证明应用已经部署成功了，然后可以通过 NodePort 来访问 Kibana 这个服务，在浏览器中打开</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>http://&lt;任意节点IP&gt;:31139
+</code></pre></div>
+<p>即可，如果看到如下欢迎界面证明 Kibana 已经成功部署到了 Kubernetes集群之中。</p>
+<blockquote>
+<p><img alt="kibana welcome" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200427174820.png" /></p>
+</blockquote>
+<h3 id="fluentd">部署 Fluentd<a class="headerlink" href="#fluentd" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p><code>Fluentd</code> 是一个高效的日志聚合器，是用 Ruby 编写的，并且可以很好地扩展。对于大部分企业来说，Fluentd 足够高效并且消耗的资源相对较少，另外一个工具<code>Fluent-bit</code>更轻量级，占用资源更少，但是插件相对 Fluentd 来说不够丰富，所以整体来说，Fluentd 更加成熟，使用更加广泛，所以我们这里也同样使用 Fluentd 来作为日志收集工具。</p>
+</blockquote>
+<h3 id="_1">工作原理<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>Fluentd 通过一组给定的数据源抓取日志数据，处理后（转换成结构化的数据格式）将它们转发给其他服务，比如 Elasticsearch、对象存储等等。Fluentd 支持超过300个日志存储和分析服务，所以在这方面是非常灵活的。主要运行步骤如下：</p>
+</blockquote>
+<ul>
+<li>首先 Fluentd 从多个日志源获取数据</li>
+<li>结构化并且标记这些数据</li>
+<li>然后根据匹配的标签将数据发送到多个目标服务去</li>
+</ul>
+<blockquote>
+<p><img alt="fluentd 架构" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/7moPNc.jpg" /></p>
+</blockquote>
+<h3 id="_2">配置<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>一般来说我们是通过一个配置文件来告诉 Fluentd 如何采集、处理数据的，下面简单和大家介绍下 Fluentd 的配置方法。</p>
+</blockquote>
+<h4 id="_3">日志源配置<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h4>
+<blockquote>
+<p>比如我们这里为了收集 Kubernetes 节点上的所有容器日志，就需要做如下的日志源配置：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>&lt;source&gt;
+  @id fluentd-containers.log
+  @type tail                             # Fluentd 内置的输入方式，其原理是不停地从源文件中获取新的日志。
+  path /var/log/containers/*.log         # 挂载的服务器Docker容器日志地址
+  pos_file /var/log/es-containers.log.pos
+  tag raw.kubernetes.*                   # 设置日志标签
+  read_from_head true
+  &lt;parse&gt;                                # 多行格式化成JSON
+    @type multi_format                   # 使用 multi-format-parser 解析器插件
+    &lt;pattern&gt;
+      format json                        # JSON 解析器
+      time_key time                      # 指定事件时间的时间字段
+      time_format %Y-%m-%dT%H:%M:%S.%NZ  # 时间格式
+    &lt;/pattern&gt;
+    &lt;pattern&gt;
+      format /^(?&lt;time&gt;.+) (?&lt;stream&gt;stdout|stderr) [^ ]* (?&lt;log&gt;.*)$/
+      time_format %Y-%m-%dT%H:%M:%S.%N%:z
+    &lt;/pattern&gt;
+  &lt;/parse&gt;
+&lt;/source&gt;
+</code></pre></div>
+<blockquote>
+<p>上面配置部分参数说明如下：</p>
+</blockquote>
+<ul>
+<li>id：表示引用该日志源的唯一标识符，该标识可用于进一步过滤和路由结构化日志数据</li>
+<li>type：Fluentd 内置的指令，<code>tail</code> 表示 Fluentd 从上次读取的位置通过 tail 不断获取数据，另外一个是 <code>http</code> 表示通过一个 GET 请求来收集数据。</li>
+<li>path：<code>tail</code> 类型下的特定参数，告诉 Fluentd 采集 <code>/var/log/containers</code> 目录下的所有日志，这是 docker 在 Kubernetes 节点上用来存储运行容器 stdout 输出日志数据的目录。</li>
+<li>pos_file：检查点，如果 Fluentd 程序重新启动了，它将使用此文件中的位置来恢复日志数据收集。</li>
+<li>tag：用来将日志源与目标或者过滤器匹配的自定义字符串，Fluentd 匹配源/目标标签来路由日志数据。</li>
+</ul>
+<h4 id="_4">路由配置<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h4>
+<blockquote>
+<p>上面是日志源的配置，接下来看看如何将日志数据发送到 Elasticsearch：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>&lt;match **&gt;
+
+@id elasticsearch
+
+@type elasticsearch
+
+@log_level info
+
+include_tag_key true
+
+type_name fluentd
+
+host &quot;#{ENV[&#39;OUTPUT_HOST&#39;]}&quot;
+
+port &quot;#{ENV[&#39;OUTPUT_PORT&#39;]}&quot;
+
+logstash_format true
+
+&lt;buffer&gt;
+
+@type file
+
+path /var/log/fluentd-buffers/kubernetes.system.buffer
+
+flush_mode interval
+
+retry_type exponential_backoff
+
+flush_thread_count 2
+
+flush_interval 5s
+
+retry_forever
+
+retry_max_interval 30
+
+chunk_limit_size &quot;#{ENV[&#39;OUTPUT_BUFFER_CHUNK_LIMIT&#39;]}&quot;
+
+queue_limit_length &quot;#{ENV[&#39;OUTPUT_BUFFER_QUEUE_LIMIT&#39;]}&quot;
+
+overflow_action block
+
+&lt;/buffer&gt;
+</code></pre></div>
+<ul>
+<li>match：标识一个目标标签，后面是一个匹配日志源的正则表达式，我们这里想要捕获所有的日志并将它们发送给 Elasticsearch，所以需要配置成<code>**</code>。</li>
+<li>id：目标的一个唯一标识符。</li>
+<li>type：支持的输出插件标识符，我们这里要输出到 Elasticsearch，所以配置成 elasticsearch，这是 Fluentd 的一个内置插件。</li>
+<li>log_level：指定要捕获的日志级别，我们这里配置成 <code>info</code>，表示任何该级别或者该级别以上（INFO、WARNING、ERROR）的日志都将被路由到 Elsasticsearch。</li>
+<li>host/port：定义 Elasticsearch 的地址，也可以配置认证信息，我们的 Elasticsearch 不需要认证，所以这里直接指定 host 和 port 即可。</li>
+<li>logstash_format：Elasticsearch 服务对日志数据构建反向索引进行搜索，将 logstash_format 设置为 <code>true</code>，Fluentd 将会以 logstash 格式来转发结构化的日志数据。</li>
+<li>Buffer： Fluentd 允许在目标不可用时进行缓存，比如，如果网络出现故障或者 Elasticsearch 不可用的时候。缓冲区配置也有助于降低磁盘的 IO。</li>
+</ul>
+<h4 id="_5">过滤<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h4>
+<blockquote>
+<p>由于 Kubernetes 集群中应用太多，也还有很多历史数据，所以我们可以只将某些应用的日志进行收集，比如我们只采集具有 <code>logging=true</code> 这个 Label 标签的 Pod 日志，这个时候就需要使用 filter，如下所示：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code># 删除无用的属性
+&lt;filter kubernetes.**&gt;
+  @type record_transformer
+  remove_keys $.docker.container_id,$.kubernetes.container_image_id,$.kubernetes.pod_id,$.kubernetes.namespace_id,$.kubernetes.master_url,$.kubernetes.labels.pod-template-hash
+&lt;/filter&gt;
+# 只保留具有logging=true标签的Pod日志
+&lt;filter kubernetes.**&gt;
+  @id filter_log
+  @type grep
+  &lt;regexp&gt;
+    key $.kubernetes.labels.logging
+    pattern ^true$
+  &lt;/regexp&gt;
+&lt;/filter&gt;
+</code></pre></div>
+<h3 id="_6">安装<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>要收集 Kubernetes 集群的日志，直接用 DasemonSet 控制器来部署 Fluentd 应用，这样，它就可以从 Kubernetes 节点上采集日志，确保在集群中的每个节点上始终运行一个 Fluentd 容器。当然可以直接使用 Helm 来进行一键安装，为了能够了解更多实现细节，我们这里还是采用手动方法来进行安装。</p>
+<p>首先，我们通过 ConfigMap 对象来指定 Fluentd 配置文件，新建 fluentd-configmap.yaml 文件，文件内容如下：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: fluentd-config
+  namespace: logging
+data:
+  system.conf: |-
+    &lt;system&gt;
+      root_dir /tmp/fluentd-buffers/
+    &lt;/system&gt;
+  containers.input.conf: |-
+    &lt;source&gt;
+      @id fluentd-containers.log
+      @type tail                              # Fluentd 内置的输入方式，其原理是不停地从源文件中获取新的日志。
+      path /var/log/containers/*.log          # 挂载的服务器Docker容器日志地址
+      pos_file /var/log/es-containers.log.pos
+      tag raw.kubernetes.*                    # 设置日志标签
+      read_from_head true
+      &lt;parse&gt;                                 # 多行格式化成JSON
+        @type multi_format                    # 使用 multi-format-parser 解析器插件
+        &lt;pattern&gt;
+          format json                         # JSON解析器
+          time_key time                       # 指定事件时间的时间字段
+          time_format %Y-%m-%dT%H:%M:%S.%NZ   # 时间格式
+        &lt;/pattern&gt;
+        &lt;pattern&gt;
+          format /^(?&lt;time&gt;.+) (?&lt;stream&gt;stdout|stderr) [^ ]* (?&lt;log&gt;.*)$/
+          time_format %Y-%m-%dT%H:%M:%S.%N%:z
+        &lt;/pattern&gt;
+      &lt;/parse&gt;
+    &lt;/source&gt;
+    # 在日志输出中检测异常，并将其作为一条日志转发 
+    # https://github.com/GoogleCloudPlatform/fluent-plugin-detect-exceptions
+    &lt;match raw.kubernetes.**&gt;           # 匹配tag为raw.kubernetes.**日志信息
+      @id raw.kubernetes
+      @type detect_exceptions           # 使用detect-exceptions插件处理异常栈信息
+      remove_tag_prefix raw             # 移除 raw 前缀
+      message log                       
+      stream stream                     
+      multiline_flush_interval 5
+      max_bytes 500000
+      max_lines 1000
+    &lt;/match&gt;
+
+    &lt;filter **&gt;  # 拼接日志
+      @id filter_concat
+      @type concat                # Fluentd Filter 插件，用于连接多个事件中分隔的多行日志。
+      key message
+      multiline_end_regexp /\\n$/  # 以换行符“\\n”拼接
+      separator &quot;&quot;
+    &lt;/filter&gt; 
+
+    # 添加 Kubernetes metadata 数据
+    &lt;filter kubernetes.**&gt;
+      @id filter_kubernetes_metadata
+      @type kubernetes_metadata
+    &lt;/filter&gt;
+
+    # 修复 ES 中的 JSON 字段
+    # 插件地址：https://github.com/repeatedly/fluent-plugin-multi-format-parser
+    &lt;filter kubernetes.**&gt;
+      @id filter_parser
+      @type parser                # multi-format-parser多格式解析器插件
+      key_name log                # 在要解析的记录中指定字段名称。
+      reserve_data true           # 在解析结果中保留原始键值对。
+      remove_key_name_field true  # key_name 解析成功后删除字段。
+      &lt;parse&gt;
+        @type multi_format
+        &lt;pattern&gt;
+          format json
+        &lt;/pattern&gt;
+        &lt;pattern&gt;
+          format none
+        &lt;/pattern&gt;
+      &lt;/parse&gt;
+    &lt;/filter&gt;
+
+    # 删除一些多余的属性
+    &lt;filter kubernetes.**&gt;
+      @type record_transformer
+      remove_keys $.docker.container_id,$.kubernetes.container_image_id,$.kubernetes.pod_id,$.kubernetes.namespace_id,$.kubernetes.master_url,$.kubernetes.labels.pod-template-hash
+    &lt;/filter&gt;
+
+    # 只保留具有logging=true标签的Pod日志
+    &lt;filter kubernetes.**&gt;
+      @id filter_log
+      @type grep
+      &lt;regexp&gt;
+        key $.kubernetes.labels.logging
+        pattern ^true$
+      &lt;/regexp&gt;
+    &lt;/filter&gt;
+
+  ###### 监听配置，一般用于日志聚合用 ######
+  forward.input.conf: |-
+    # 监听通过TCP发送的消息
+    &lt;source&gt;
+      @id forward
+      @type forward
+    &lt;/source&gt;
+
+  output.conf: |-
+    &lt;match **&gt;
+      @id elasticsearch
+      @type elasticsearch
+      @log_level info
+      include_tag_key true
+      host elasticsearch
+      port 9200
+      logstash_format true
+      logstash_prefix k8s  # 设置 index 前缀为 k8s
+      request_timeout    30s
+      &lt;buffer&gt;
+        @type file
+        path /var/log/fluentd-buffers/kubernetes.system.buffer
+        flush_mode interval
+        retry_type exponential_backoff
+        flush_thread_count 2
+        flush_interval 5s
+        retry_forever
+        retry_max_interval 30
+        chunk_limit_size 2M
+        queue_limit_length 8
+        overflow_action block
+      &lt;/buffer&gt;
+    &lt;/match&gt;
+</code></pre></div>
+<blockquote>
+<p>上面配置文件中我们只配置了 docker 容器日志目录，收集到数据经过处理后发送到 <code>elasticsearch:9200</code> 服务。</p>
+<p>然后新建一个 fluentd-daemonset.yaml 的文件，文件内容如下：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: fluentd-es
+  namespace: logging
+  labels:
+    k8s-app: fluentd-es
+    kubernetes.io/cluster-service: &quot;true&quot;
+    addonmanager.kubernetes.io/mode: Reconcile
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: fluentd-es
+  labels:
+    k8s-app: fluentd-es
+    kubernetes.io/cluster-service: &quot;true&quot;
+    addonmanager.kubernetes.io/mode: Reconcile
+rules:
+- apiGroups:
+  - &quot;&quot;
+  resources:
+  - &quot;namespaces&quot;
+  - &quot;pods&quot;
+  verbs:
+  - &quot;get&quot;
+  - &quot;watch&quot;
+  - &quot;list&quot;
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: fluentd-es
+  labels:
+    k8s-app: fluentd-es
+    kubernetes.io/cluster-service: &quot;true&quot;
+    addonmanager.kubernetes.io/mode: Reconcile
+subjects:
+- kind: ServiceAccount
+  name: fluentd-es
+  namespace: logging
+  apiGroup: &quot;&quot;
+roleRef:
+  kind: ClusterRole
+  name: fluentd-es
+  apiGroup: &quot;&quot;
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: fluentd-es
+  namespace: logging
+  labels:
+    k8s-app: fluentd-es
+    kubernetes.io/cluster-service: &quot;true&quot;
+    addonmanager.kubernetes.io/mode: Reconcile
+spec:
+  selector:
+    matchLabels:
+      k8s-app: fluentd-es
+  template:
+    metadata:
+      labels:
+        k8s-app: fluentd-es
+        kubernetes.io/cluster-service: &quot;true&quot;
+      # 此注释确保如果节点被驱逐，fluentd不会被驱逐，支持关键的基于 pod 注释的优先级方案。
+      annotations:
+        scheduler.alpha.kubernetes.io/critical-pod: &#39;&#39;
+    spec:
+      serviceAccountName: fluentd-es
+      containers:
+      - name: fluentd-es
+        image: quay.io/fluentd_elasticsearch/fluentd:v1
+        env:
+        - name: FLUENTD_ARGS
+          value: --no-supervisor -q
+        resources:
+          limits:
+            memory: 500Mi
+          requests:
+            cpu: 100m
+            memory: 200Mi
+        volumeMounts:
+        - name: varlog
+          mountPath: /var/log
+        - name: varlibdockercontainers
+          mountPath: /data/docker/containers
+          readOnly: true
+        - name: config-volume
+          mountPath: /etc/fluent/config.d
+      nodeSelector:
+        beta.kubernetes.io/fluentd-ds-ready: &quot;true&quot;
+      tolerations:
+      - operator: Exists
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: varlog
+        hostPath:
+          path: /var/log
+      - name: varlibdockercontainers
+        hostPath:
+          path: /data/docker/containers
+      - name: config-volume
+        configMap:
+          name: fluentd-config
+</code></pre></div>
+<blockquote>
+<p>我们将上面创建的 fluentd-config 这个 ConfigMap 对象通过 volumes 挂载到了 Fluentd 容器中，另外为了能够灵活控制哪些节点的日志可以被收集，所以我们这里还添加了一个 nodSelector 属性：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>nodeSelector:
+  beta.kubernetes.io/fluentd-ds-ready: &quot;true&quot;
+</code></pre></div>
+<blockquote>
+<p>意思就是要想采集节点的日志，那么我们就需要给节点打上上面的标签，比如我们这里只给节点4和节点6打上了该标签：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl get nodes --show-labels
+NAME          STATUS   ROLES    AGE    VERSION   LABELS
+ydzs-master   Ready    master   170d   v2   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,kubernetes.io/arch=amd64,kubernetes.io/hostname=ydzs-master,kubernetes.io/os=linux,node-role.kubernetes.io/master=
+ydzs-node1    Ready    &lt;none&gt;   170d   v2   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,es=log,kubernetes.io/arch=amd64,kubernetes.io/hostname=ydzs-node1,kubernetes.io/os=linux
+ydzs-node2    Ready    &lt;none&gt;   170d   v2   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,com=youdianzhishi,es=log,kubernetes.io/arch=amd64,kubernetes.io/hostname=ydzs-node2,kubernetes.io/os=linux
+ydzs-node3    Ready    &lt;none&gt;   169d   v2   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,es=log,kubernetes.io/arch=amd64,kubernetes.io/hostname=ydzs-node3,kubernetes.io/os=linux,monitor=prometheus
+ydzs-node4    Ready    &lt;none&gt;   169d   v2   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/fluentd-ds-ready=true,beta.kubernetes.io/os=linux,kubernetes.io/arch=amd64,kubernetes.io/hostname=ydzs-node4,kubernetes.io/os=linux
+ydzs-node5    Ready    &lt;none&gt;   96d    v2   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,kubernetes.io/arch=amd64,kubernetes.io/hostname=ydzs-node5,kubernetes.io/os=linux
+ydzs-node6    Ready    &lt;none&gt;   96d    v2   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/fluentd-ds-ready=true,beta.kubernetes.io/os=linux,kubernetes.io/arch=amd64,kubernetes.io/hostname=ydzs-node6,kubernetes.io/os=linux
+</code></pre></div>
+<blockquote>
+<p>提示</p>
+<p>如果你需要在其他节点上采集日志，则需要给对应节点打上标签，使用如下命令：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>kubectl label nodes node名 beta.kubernetes.io/fluentd-ds-ready=true
+</code></pre></div>
+<p>。</p>
+<blockquote>
+<p>另外由于我们的集群使用的是 kubeadm 搭建的，默认情况下 master 节点有污点，所以如果要想也收集 master 节点的日志，则需要添加上容忍：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>tolerations:
+- operator: Exists
+</code></pre></div>
+<blockquote>
+<p>另外需要注意的地方是，我这里的测试环境更改了 docker 的根目录：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ docker info
+...
+Docker Root Dir: /data/docker
+...
+</code></pre></div>
+<blockquote>
+<p>所以上面要获取 docker 的容器目录需要更改成</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>/data/docker/containers
+</code></pre></div>
+<p>，这个地方非常重要，当然如果你没有更改 docker 根目录则使用默认的</p>
+<div class="highlight"><pre><span></span><code>/var/lib/docker/containers
+</code></pre></div>
+<p>目录即可。</p>
+<blockquote>
+<p>分别创建上面的 ConfigMap 对象和 DaemonSet：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl create -f fluentd-configmap.yaml
+configmap &quot;fluentd-config&quot; created
+$ kubectl create -f fluentd-daemonset.yaml
+serviceaccount &quot;fluentd-es&quot; created
+clusterrole.rbac.authorization.k8s.io &quot;fluentd-es&quot; created
+clusterrolebinding.rbac.authorization.k8s.io &quot;fluentd-es&quot; created
+daemonset.apps &quot;fluentd-es&quot; created
+</code></pre></div>
+<blockquote>
+<p>创建完成后，查看对应的 Pods 列表，检查是否部署成功：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl get pods -n logging
+NAME                      READY   STATUS    RESTARTS   AGE
+es-0                      1/1     Running   0          108m
+es-1                      1/1     Running   0          107m
+es-2                      1/1     Running   0          106m
+fluentd-es-h4jl2          1/1     Running   0          100m
+fluentd-es-vngmd          1/1     Running   0          100m
+kibana-5c565c47dd-xj4bd   1/1     Running   0          103m
+</code></pre></div>
+<blockquote>
+<p>Fluentd 启动成功后，这个时候就可以发送日志到 ES 了，但是我们这里是过滤了只采集具有 <code>logging=true</code> 标签的 Pod 日志，所以现在还没有任何数据会被采集。</p>
+<p>下面我们部署一个简单的测试应用， 新建 counter.yaml 文件，文件内容如下：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: counter
+  labels:
+    logging: &quot;true&quot;  # 一定要具有该标签才会被采集
+spec:
+  containers:
+  - name: count
+    image: busybox
+    args: [/bin/sh, -c,
+            &#39;i=0; while true; do echo &quot;$i: $(date)&quot;; i=$((i+1)); sleep 1; done&#39;]
+</code></pre></div>
+<blockquote>
+<p>该 Pod 只是简单将日志信息打印到 <code>stdout</code>，所以正常来说 Fluentd 会收集到这个日志数据，在 Kibana 中也就可以找到对应的日志数据了，使用 kubectl 工具创建该 Pod：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl create -f counter.yaml
+$ kubectl get pods
+NAME                             READY   STATUS    RESTARTS   AGE
+counter                          1/1     Running   0          9h
+</code></pre></div>
+<blockquote>
+<p>Pod 创建并运行后，回到 Kibana Dashboard 页面，点击左侧最下面的 <code>management</code> 图标，然后点击 Kibana 下面的 <code>Index Patterns</code> 开始导入索引数据：</p>
+<p><img alt="create index" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200427175019.png" /></p>
+<p>在这里可以配置我们需要的 Elasticsearch 索引，前面 Fluentd 配置文件中我们采集的日志使用的是 logstash 格式，定义了一个 <code>k8s</code> 的前缀，所以这里只需要在文本框中输入<code>k8s-*</code>即可匹配到 Elasticsearch 集群中采集的 Kubernetes 集群日志数据，然后点击下一步，进入以下页面：</p>
+<p><img alt="index config" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200427175255.png" /></p>
+<p>在该页面中配置使用哪个字段按时间过滤日志数据，在下拉列表中，选择<code>@timestamp</code>字段，然后点击<code>Create index pattern</code>，创建完成后，点击左侧导航菜单中的<code>Discover</code>，然后就可以看到一些直方图和最近采集到的日志数据了：</p>
+<p><img alt="log data" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200427175432.png" /></p>
+<p>现在的数据就是上面 Counter 应用的日志，如果还有其他的应用，我们也可以筛选过滤：</p>
+<p><img alt="counter log data" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200427193356.png" /></p>
+<p>我们也可以通过其他元数据来过滤日志数据，比如您可以单击任何日志条目以查看其他元数据，如容器名称，Kubernetes 节点，命名空间等。</p>
+</blockquote>
+<h3 id="_7">日志分析<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>上面我们已经可以将应用日志收集起来了，下面我们来使用一个应用演示如何分析采集的日志。示例应用会输出如下所示的 JSON 格式的日志信息：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>{&quot;LOGLEVEL&quot;:&quot;WARNING&quot;,&quot;serviceName&quot;:&quot;msg-processor&quot;,&quot;serviceEnvironment&quot;:&quot;staging&quot;,&quot;message&quot;:&quot;WARNING client connection terminated unexpectedly.&quot;}
+{&quot;LOGLEVEL&quot;:&quot;INFO&quot;,&quot;serviceName&quot;:&quot;msg-processor&quot;,&quot;serviceEnvironment&quot;:&quot;staging&quot;,&quot;message&quot;:&quot;&quot;,&quot;eventsNumber&quot;:5}
+{&quot;LOGLEVEL&quot;:&quot;INFO&quot;,&quot;serviceName&quot;:&quot;msg-receiver-api&quot;:&quot;msg-receiver-api&quot;,&quot;serviceEnvironment&quot;:&quot;staging&quot;,&quot;volume&quot;:14,&quot;message&quot;:&quot;API received messages&quot;}
+{&quot;LOGLEVEL&quot;:&quot;ERROR&quot;,&quot;serviceName&quot;:&quot;msg-receiver-api&quot;,&quot;serviceEnvironment&quot;:&quot;staging&quot;,&quot;message&quot;:&quot;ERROR Unable to upload files for processing&quot;}
+</code></pre></div>
+<blockquote>
+<p>因为 JSON 格式的日志解析非常容易，当我们将日志结构化传输到 ES 过后，我们可以根据特定的字段值而不是文本搜索日志数据，当然纯文本格式的日志我们也可以进行结构化，但是这样每个应用的日志格式不统一，都需要单独进行结构化，非常麻烦，所以建议将日志格式统一成 JSON 格式输出。</p>
+<p>我们这里的示例应用会定期输出不同类型的日志消息，包含不同日志级别（INFO/WARN/ERROR）的日志，一行 JSON 日志就是我们收集的一条日志消息，该消息通过 fluentd 进行采集发送到 Elasticsearch。这里我们会使用到 fluentd 里面的自动 JSON 解析插件，默认情况下，fluentd 会将每个日志文件的一行作为名为 <code>log</code> 的字段进行发送，并自动添加其他字段，比如 <code>tag</code> 标识容器，<code>stream</code> 标识 stdout 或者 stderr。</p>
+<p>由于在 fluentd 配置中我们添加了如下所示的过滤器：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>&lt;filter kubernetes.**&gt;
+  @id filter_parser
+  @type parser                # multi-format-parser多格式解析器插件
+  key_name log                # 在要解析的记录中指定字段名称
+  reserve_data true           # 在解析结果中保留原始键值对
+  remove_key_name_field true  # key_name 解析成功后删除字段。
+  &lt;parse&gt;
+    @type multi_format
+    &lt;pattern&gt;
+      format json
+    &lt;/pattern&gt;
+    &lt;pattern&gt;
+      format none
+    &lt;/pattern&gt;
+  &lt;/parse&gt;
+&lt;/filter&gt;
+</code></pre></div>
+<blockquote>
+<p>该过滤器使用 <code>json</code> 和 <code>none</code> 两个插件将 JSON 数据进行结构化，这样就会把 JSON 日志里面的属性解析成一个一个的字段，解析生效过后记得刷新 Kibana 的索引字段，否则会识别不了这些字段，通过 <code>管理</code> -&gt; <code>Index Pattern</code> 点击刷新字段列表即可。</p>
+<p>下面我们将示例应用部署到 Kubernetes 集群中：(dummylogs.yaml)</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dummylogs
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: dummylogs
+  template:
+    metadata:
+      labels:
+        app: dummylogs
+        logging: &quot;true&quot;  # 要采集日志需要加上该标签
+    spec:
+      containers:
+      - name: dummy
+        image: cnych/dummylogs:latest
+        args:
+        - msg-processor
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dummylogs2
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: dummylogs2
+  template:
+    metadata:
+      labels:
+        app: dummylogs2
+        logging: &quot;true&quot;  # 要采集日志需要加上该标签
+    spec:
+      containers:
+      - name: dummy
+        image: cnych/dummylogs:latest
+        args:
+        - msg-receiver-api
+</code></pre></div>
+<blockquote>
+<p>直接部署上面的应用即可：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl apply -f dummylogs.yaml
+$ kubectl get pods -l logging=true
+NAME                         READY   STATUS    RESTARTS   AGE
+counter                      1/1     Running   0          22h
+dummylogs-6f7b56579d-7js8n   1/1     Running   5          15h
+dummylogs-6f7b56579d-wdnc6   1/1     Running   5          15h
+dummylogs-6f7b56579d-x4twn   1/1     Running   5          15h
+dummylogs2-d9b978d9b-bchks   1/1     Running   5          15h
+dummylogs2-d9b978d9b-wv7rj   1/1     Running   5          15h
+dummylogs2-d9b978d9b-z2r26   1/1     Running   5          15h
+</code></pre></div>
+<blockquote>
+<p>部署完成后 dummylogs 和 dummylogs2 两个应用就会开始输出不同级别的日志信息了，记得要给应用所在的节点打上 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>beta.kubernetes.io/fluentd-ds-ready=true
+</code></pre></div>
+<p>的标签，否则 fluentd 不会在对应的节点上运行也就不会收集日志了。正常情况下日志就已经可以被采集到 Elasticsearch 当中了，我们可以前往 Kibana 的 Dashboard 页面查看:</p>
+<blockquote>
+<p><img alt="" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200428092342.png" /></p>
+<p>我们可以看到可用的字段中已经包含我们应用中的一些字段了。找到 <code>serviceName</code> 字段点击我们可以查看已经采集了哪些服务的消息：</p>
+<p><img alt="" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200428092559.png" /></p>
+<p>可以看到我们收到了来自 <code>msg-processor</code> 和 <code>msg-receiver-api</code> 的日志信息，在最近15分钟之内，<code>api</code> 服务产生的日志更多，点击后面的加号就可以只过滤该服务的日志数据：</p>
+<p><img alt="" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200428092903.png" /></p>
+<p>我们可以看到展示的日志数据的属性比较多，有时候可能不利于我们查看日志，此时我们可以筛选想要展示的字段:</p>
+<p><img alt="" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200428093202.png" /></p>
+<p>我们可以根据自己的需求选择要显示的字段，现在查看消息的时候就根据清楚了：</p>
+<p><img alt="" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200428093343.png" /></p>
+<p>比如为了能够更加清晰的展示我们采集的日志数据，还可以将 <code>eventsNumber</code> 和 <code>serviceName</code> 字段选中添加：</p>
+<p><img alt="" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200428093646.png" /></p>
+<p>然后同样我们可以根据自己的需求来筛选需要查看的日志数据：</p>
+<p><img alt="" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200428093815.png" /></p>
+<p>如果你的 Elasticsearch 的查询语句比较熟悉的话，使用查询语句能实现的筛选功能更加强大，比如我们要查询 <code>mgs-processor</code> 和 <code>msg-receiver-api</code> 两个服务的日志，则可以使用如下所示的查询语句：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>serviceName:msg-processor OR serviceName:msg-receiver-api
+</code></pre></div>
+<blockquote>
+<p>直接搜索框中输入上面的查询语句进行查询即可：</p>
+<p><img alt="" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200428094158.png" /></p>
+<p>接下来我们来创建一个图表来展示已经处理了多少 <code>msg-processor</code> 服务的日志信息。在 Kibana 中切换到 <code>Visualize</code> 页面，点击 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>Create new visualization
+</code></pre></div>
+<p>按钮选择 <code>Area</code>，选择 <code>k8s-*</code> 的索引，首先配置 Y 轴的数据，这里我们使用 <code>eventsNumber</code> 字段的 <code>Sum</code> 函数进行聚合：</p>
+<blockquote>
+<p><img alt="" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200428095222.png" /></p>
+<p>然后配置 X 轴数据使用 <code>Date Histogram</code> 类型的 <code>@timestamp</code> 字段：</p>
+<p><img alt="" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200428095344.png" /></p>
+<p>配置完成后点击右上角的 <code>Apply Changes</code> 按钮则就会在右侧展示出对应的图表信息：</p>
+<p><img alt="" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200428095631.png" /></p>
+<p>这个图表展示的就是最近15分钟内被处理的事件总数，当然我们也可以自己选择时间范围。我们还可以将 <code>msg-receiver-api</code> 事件的数量和已处理的消息总数进行关联，在该图表上添加另外一层数据，在 Y 轴上添加一个新指标，选择 <code>Add metrics</code> 和 <code>Y-axis</code>，然后同样选择 <code>sum</code> 聚合器，使用 <code>volume</code> 字段：</p>
+<p><img alt="" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200428100341.png" /></p>
+<p>点击 <code>Apply Changes</code> 按钮就可以同时显示两个服务事件的数据了。最后点击顶部的 <code>save</code> 来保存该图表，并为其添加一个名称。</p>
+<p>在实际的应用中，我们可能对应用的错误日志更加关心，需要了解应用的运行情况，所以对于错误或者警告级别的日志进行统计也是非常有必要的。现在我们回到 <code>Discover</code> 页面，输入 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>LOGLEVEL:ERROR OR LOGLEVEL:WARNING
+</code></pre></div>
+<p>查询语句来过滤所有的错误和告警日志：</p>
+<blockquote>
+<p><img alt="" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200428101527.png" /></p>
+<p>错误日志相对较少，实际上我们这里的示例应用会每 15-20 分钟左右就会抛出4个错误信息，其余都是警告信息。同样现在我们还是用可视化的图表来展示下错误日志的情况。</p>
+<p>同样切换到 <code>Visualize</code> 页面，点击 <code>Create visualization</code>，选择 <code>Vertical Bar</code>，然后选中 <code>k8s-*</code> 的 Index Pattern。</p>
+<p><img alt="" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200428102104.png" /></p>
+<p>现在我们忽略 Y 轴，使用默认的 <code>Count</code> 设置来显示消息数量。首先点击 <code>Buckets</code> 下面的 <code>X-axis</code>，然后同样选择 <code>Date histogram</code>，然后点击下方的 <code>Add</code>，添加 <code>Sub-Bueckt</code>，选择 <code>Split series</code>:</p>
+<p><img alt="" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200428102530.png" /></p>
+<p>然后我们可以通过指定的字段来分割条形图，选择 <code>Terms</code> 作为子聚合方式，然后选择 <code>serviceName.keyword</code> 字段，最后点击 <code>apply</code> 生成图表：</p>
+<p><img alt="" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200428102913.png" /></p>
+<p>现在上面的图表以不同的颜色来显示每个服务消息，接下来我们在搜索框中输入要查找的内容，因为现在的图表是每个服务的所有消息计数，包括正常和错误的日志，我们要过滤告警和错误的日志，同样输入 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>LOGLEVEL:ERROR OR LOGLEVEL:WARNING
+</code></pre></div>
+<p>查询语句进行搜索即可：</p>
+<blockquote>
+<p><img alt="" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200428103237.png" /></p>
+<p>从图表上可以看出来 <code>msg-processor</code> 服务问题较多，只有少量的是 <code>msg-receiver-api</code> 服务的，当然我们也可以只查看 <code>ERROR</code> 级别的日志统计信息：</p>
+<p><img alt="" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200428103446.png" /></p>
+<p>从图表上可以看出来基本上出现错误日志的情况下两个服务都会出现，所以这个时候我们就可以猜测两个服务的错误是非常相关的了，这对于我们去排查错误非常有帮助。最后也将该图表进行保存。</p>
+<p>最后我们也可以将上面的两个图表添加到 <code>dashboard</code> 中，这样我们就可以在一个页面上组合各种可视化图表。切换到 <code>dashboard</code> 页面，然后点击 <code>Create New Dashboard</code> 按钮：</p>
+<p><img alt="" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200428104152.png" /></p>
+<p>选择 <code>Add an existing</code> 链接：</p>
+<p><img alt="" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200428104225.png" /></p>
+<p>然后选择上面我们创建的两个图表，添加完成后同样保存该 <code>dashboard</code> 即可：</p>
+<p><img alt="" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200428104516.png" /></p>
+<p>到这里我们就完成了通过 Fluentd 收集日志到 Elasticsearch，并通过 Kibana 对日志进行了分析可视化操作。</p>
+</blockquote>
+<h3 id="_8">基于日志的报警<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>在生产环境中我们往往都会使用 Promethus 对应用的各项指标进行监控，但是往往应用的日志中也会产生一些错误日志，这些信息并不是都能够通过 metrics 提供数据的，所以为了避免出现太多的错误，我们还需要对错误日志进行监控报警。在 Elasticsearch 中，我们可以通过使用 <code>elastalert</code> 组件来完成这个工作。</p>
+<p>elastalert 是 yelp 使用 python 开发的 elasticsearch 告警工具。<code>elastalert</code> 依照一定频率查询 ES，将查询结果对比告警阈值，超过阈值即进行告警。告警方式包括但不局限于邮箱、微信、钉钉等。</p>
+<p>我们这里将 <code>elastalert</code> 部署到 Kubernetes 集群中，对应的资源清单文件如下所示：(elastalert.yaml)</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: elastalert-config
+  namespace: logging
+  labels:
+    app: elastalert
+data:
+  elastalert_config: |-
+    ---
+    rules_folder: /opt/rules       # 指定规则的目录
+    scan_subdirectories: false
+    run_every:                     # 多久从 ES 中查询一次
+      minutes: 1
+    buffer_time:
+      minutes: 15
+    es_host: elasticsearch
+    es_port: 9200
+    writeback_index: elastalert
+    use_ssl: False
+    verify_certs: True
+    alert_time_limit:             # 失败重试限制
+      minutes: 2880
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: elastalert-rules
+  namespace: logging
+  labels:
+    app: elastalert
+data:
+  rule_config.yaml: |-
+    name: dummylogs error     # 规则名字，唯一值
+    es_host: elasticsearch
+    es_port: 9200
+
+    type: any                 # 报警类型
+    index: k8s-*              # es索引
+
+    filter:                   # 过滤
+    - query:
+        query_string:
+          query: &quot;LOGLEVEL:ERROR&quot;  # 报警条件
+
+    alert:                    # 报警类型
+    - &quot;email&quot;
+    smtp_host: smtp.qq.com
+    smtp_port: 587
+    smtp_auth_file: /opt/auth/smtp_auth_file.yaml
+    email_reply_to: 517554016@qq.com
+    from_addr: 517554016@qq.com
+    email:                  # 接受邮箱
+    - &quot;ych_1024@1com&quot;
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elastalert
+  namespace: logging
+  labels:
+    app: elastalert
+spec:
+  selector:
+    matchLabels:
+      app: elastalert
+  template:
+    metadata:
+      labels:
+        app: elastalert
+    spec:
+      containers:
+      - name: elastalert
+        image: jertel/elastalert-docker:4
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - name: config
+          mountPath: /opt/config
+        - name: rules
+          mountPath: /opt/rules
+        - name: auth
+          mountPath: /opt/auth
+        resources:
+          limits:
+            cpu: 50m
+            memory: 256Mi
+          requests:
+            cpu: 50m
+            memory: 256Mi
+      volumes:
+      - name: auth
+        secret:
+          secretName: smtp-auth
+      - name: rules
+        configMap:
+          name: elastalert-rules
+      - name: config
+        configMap:
+          name: elastalert-config
+          items:
+          - key: elastalert_config
+            path: elastalert_config.yaml
+</code></pre></div>
+<blockquote>
+<p>使用邮件进行报警的时候，需要指定一个 <code>smtp_auth_file</code> 的文件，文件中包含用户名和密码：(smtp_auth_file.yaml)</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>user: &quot;xxxxx@qq.com&quot;       # 发送的邮箱地址
+password: &quot;ewwghfhdvjwnbjea&quot;   # 不是qq邮箱的登录密码，是授权码
+</code></pre></div>
+<blockquote>
+<p>然后使用上面的文件创建一个对应的 Secret 资源对象：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl create secret generic smtp-auth --from-file=smtp_auth_file.yaml -n logging
+</code></pre></div>
+<blockquote>
+<p>然后直接创建上面的 elastalert 应用：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl apply -f elastalert.yaml
+$ kubectl get pods -n logging -l app=elastalert
+NAME                          READY   STATUS    RESTARTS   AGE
+elastalert-64ccfbffcf-gd6xz   1/1     Running   0          102s
+$ kubectl logs -f elastalert-64ccfbffcf-gd6xz -n logging
+Elastic Version: 2
+Reading Elastic 6 index mappings:
+Reading index mapping &#39;es_mappings/6/silence.json&#39;
+Reading index mapping &#39;es_mappings/6/elastalert_status.json&#39;
+Reading index mapping &#39;es_mappings/6/elastalert.json&#39;
+Reading index mapping &#39;es_mappings/6/past_elastalert.json&#39;
+Reading index mapping &#39;es_mappings/6/elastalert_error.json&#39;
+Deleting index elastalert_status.
+New index elastalert created
+Done!
+</code></pre></div>
+<blockquote>
+<p>看到上面的日志信息就证明 elastalert 应用部署成功了。在 Elasticsearch 中也可以看到几个相关的 Index ：</p>
+<p><img alt="" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200428121319.png" /></p>
+<p>由于我们的示例应用会隔一段时间就产生 ERROR 级别的错误日志，所以正常情况下我们就可以收到如下所示的邮件信息了：</p>
+<p><img alt="" src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200428121055.png" /></p>
+<p>除此之外我们也可以配置将报警信息发往 企业微信 或者 钉钉，还可以安装一个 elastalert 的 Kibana 插件，用于在 Kibana 页面上进行可视化操作。</p>
+<p>关于 elastalert 更多的操作和使用说明，大家可以查看官方文档了解更多：<a href="https://elastalert.readthedocs.io/en/latest/">https://elastalert.readthedocs.io/en/latest/</a>。</p>
+</blockquote>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      BurningMyself<a href='https://beian.miit.gov.cn/' target='_blank'>  蜀ICP备15033200号-1</a>
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/burningmyself" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://gitee.com/burningmyself" target="_blank" rel="noopener" title="gitee.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.2a6f1dda.min.js"></script>
+      
+        <script src="../../js/extra.js"></script>
+      
+        <script src="../../js/baidu-tongji.js"></script>
+      
+        <script src="https://www.googletagmanager.com/gtag/js?id=UA-155084439-1"></script>
+      
+        <script src="https://www.googletagmanager.com/gtag/js?id=UA-155132293-1"></script>
+      
+        <script src="../../js/google.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+      
+    
+  </body>
+</html>

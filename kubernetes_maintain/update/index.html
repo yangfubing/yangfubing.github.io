@@ -1,0 +1,3097 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content=".net,java,php,python,docker,web">
+      
+      
+        <meta name="author" content="BurningMyself">
+      
+      
+        <link rel="canonical" href="https://burningmyself.gitee.io/kubernetes_maintain/update/">
+      
+      
+        <link rel="prev" href="../skill/">
+      
+      
+        <link rel="next" href="../update_cluster/">
+      
+      <link rel="icon" href="../../favicon.ico">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.15">
+    
+    
+      
+        <title>技巧 - BurningMyself</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.113286f1.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.a0c5b2b5.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="BurningMyself" class="md-header__button md-logo" aria-label="BurningMyself" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BurningMyself
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              技巧
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/burningmyself/burningmyself.github.io" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    burningmyself.github.io
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="BurningMyself" class="md-nav__button md-logo" aria-label="BurningMyself" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    BurningMyself
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/burningmyself/burningmyself.github.io" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    burningmyself.github.io
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        云原生
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          Docker 基础
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Docker 基础
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/overview/" class="md-nav__link">
+        简介
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/install/" class="md-nav__link">
+        安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/basic/" class="md-nav__link">
+        基本操作
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/dockerfile_usage/" class="md-nav__link">
+        Dockerfile
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/dockerfile_practice/" class="md-nav__link">
+        Dockerfile实践
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          Kubernetes 基础
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 基础
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/overview/" class="md-nav__link">
+        简介
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/install/" class="md-nav__link">
+        安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/yaml/" class="md-nav__link">
+        资源清单
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/pod/" class="md-nav__link">
+        Pod原理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/pod_life/" class="md-nav__link">
+        Pod的生命周期
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_basic/pod_deep/" class="md-nav__link">
+        Pod使用进阶
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          Kubernetes 控制器
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 控制器
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/replicaset/" class="md-nav__link">
+        ReplicaSet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/deployment/" class="md-nav__link">
+        Deployment
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/statefulset/" class="md-nav__link">
+        StatefulSet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/daemonset/" class="md-nav__link">
+        DaemonSet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/job/" class="md-nav__link">
+        Job
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_controller/hpa/" class="md-nav__link">
+        HPA
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          Kubernetes 配置管理
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 配置管理
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_config/config_map/" class="md-nav__link">
+        ConfigMap
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_config/secret/" class="md-nav__link">
+        Secret
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_config/service_account/" class="md-nav__link">
+        ServiceAccount
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+          Kubernetes 安全
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 安全
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_security/rbac/" class="md-nav__link">
+        RBAC
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_security/security_context/" class="md-nav__link">
+        Security Context
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_security/admission/" class="md-nav__link">
+        准入控制器
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+          Kubernetes 网络
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 网络
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/flannel/" class="md-nav__link">
+        网络插件
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/policy/" class="md-nav__link">
+        网络策略
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/service/" class="md-nav__link">
+        Service 服务
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_4" id="__nav_7_4_label" tabindex="0">
+          Ingress
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_7_4">
+          <span class="md-nav__icon md-icon"></span>
+          Ingress
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/ingress/nginx/" class="md-nav__link">
+        NGINX Controller
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_network/ingress/traefik/" class="md-nav__link">
+        Traefik
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+          Kubernetes 调度器
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 调度器
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_scheduler/overview/" class="md-nav__link">
+        调度器介绍
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_scheduler/usage/" class="md-nav__link">
+        Pod 调度
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+          Kubernetes 存储
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 存储
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_stroage/local/" class="md-nav__link">
+        Local 本地存储
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_stroage/ceph/" class="md-nav__link">
+        Ceph 存储
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_stroage/csi/" class="md-nav__link">
+        存储原理
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+          Helm 包管理
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_10">
+          <span class="md-nav__icon md-icon"></span>
+          Helm 包管理
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/helm/" class="md-nav__link">
+        Helm
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/charts/" class="md-nav__link">
+        Charts
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_10_3" id="__nav_10_3_label" tabindex="0">
+          模板开发
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_10_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_10_3">
+          <span class="md-nav__icon md-icon"></span>
+          模板开发
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/objects/" class="md-nav__link">
+        内置对象
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/values/" class="md-nav__link">
+        Values
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/function/" class="md-nav__link">
+        函数和管道
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/flow/" class="md-nav__link">
+        流程控制
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/variables/" class="md-nav__link">
+        变量
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/named_templates/" class="md-nav__link">
+        命名模板
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/access_files/" class="md-nav__link">
+        访问文件
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/notes_files/" class="md-nav__link">
+        NOTES.txt 文件
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/subcharts_and_globals/" class="md-nav__link">
+        子chart与全局值
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/templates/debug/" class="md-nav__link">
+        模板调试
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/chart_hooks/" class="md-nav__link">
+        Chart Hooks
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_package/example/" class="md-nav__link">
+        示例
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+          Kubernetes 监控
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 监控
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/prometheus/" class="md-nav__link">
+        Prometheus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/grafana/" class="md-nav__link">
+        Grafana
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/promql/" class="md-nav__link">
+        Promql
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/alertmanager/" class="md-nav__link">
+        Alertmanager
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/thanos/" class="md-nav__link">
+        Prometheus Thanos
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/adapter/" class="md-nav__link">
+        Prometheus Adpater
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_11_7" id="__nav_11_7_label" tabindex="0">
+          Prometheus Operator
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_11_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_11_7">
+          <span class="md-nav__icon md-icon"></span>
+          Prometheus Operator
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/operator/install/" class="md-nav__link">
+        安装
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/operator/custom/" class="md-nav__link">
+        自定义监控报警
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_monitor/operator/advance/" class="md-nav__link">
+        高级配置
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+          Kubernetes 日志
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_12">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 日志
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_logs/architec/" class="md-nav__link">
+        Grafana
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_logs/efk/" class="md-nav__link">
+        efk
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+          Kubernetes DevOps
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_13">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes DevOps
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_devops/jenkins/" class="md-nav__link">
+        Jenins
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_devops/gitlab/" class="md-nav__link">
+        Gitlab
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_devops/harbor/" class="md-nav__link">
+        Harbor
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_devops/jenkins_pipeline/" class="md-nav__link">
+        Jenkins Pipeline
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_devops/token/" class="md-nav__link">
+        Tekton
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="0">
+          Service Mesh 实践
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_14">
+          <span class="md-nav__icon md-icon"></span>
+          Service Mesh 实践
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_service_mesh/istio/" class="md-nav__link">
+        Istio
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_service_mesh/traffic/" class="md-nav__link">
+        流量管理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_service_mesh/observability/" class="md-nav__link">
+        可观测性
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_service_mesh/security/" class="md-nav__link">
+        安全管控
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_service_mesh/cert_manager/" class="md-nav__link">
+        CertManager
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="0">
+          Kubernetes 多租户
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_15">
+          <span class="md-nav__icon md-icon"></span>
+          Kubernetes 多租户
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_tenant/tenant/" class="md-nav__link">
+        多租户介绍
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_tenant/quota/" class="md-nav__link">
+        多租户介绍
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_tenant/psp/" class="md-nav__link">
+        多租户介绍
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_16" id="__nav_16_label" tabindex="0">
+          Operator
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_16_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_16">
+          <span class="md-nav__icon md-icon"></span>
+          Operator
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_operator/crd/" class="md-nav__link">
+        CRD
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_operator/operator/" class="md-nav__link">
+        Operator
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_17" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_17" id="__nav_17_label" tabindex="0">
+          实践技巧
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_17_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_17">
+          <span class="md-nav__icon md-icon"></span>
+          实践技巧
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../skill/" class="md-nav__link">
+        技巧
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          技巧
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        技巧
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    集群升级
+  </a>
+  
+    <nav class="md-nav" aria-label="集群升级">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    更新证书
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    手动更新证书
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kubernetes_api" class="md-nav__link">
+    用 Kubernetes 证书 API 更新证书(不推荐)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    集群升级
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../update_cluster/" class="md-nav__link">
+        技巧
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reserved/" class="md-nav__link">
+        技巧
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_18" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_18" id="__nav_18_label" tabindex="0">
+          源码
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_18_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_18">
+          <span class="md-nav__icon md-icon"></span>
+          源码
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_code/kubelet/" class="md-nav__link">
+        kubelet源码
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_18_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_18_2" id="__nav_18_2_label" tabindex="0">
+          client-go
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_18_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_18_2">
+          <span class="md-nav__icon md-icon"></span>
+          client-go
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_code/client_go/workqueue/" class="md-nav__link">
+        workqueue
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_code/client_go/indexer/" class="md-nav__link">
+        indexer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_code/client_go/deltafifo/" class="md-nav__link">
+        workqueue
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_19" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_19" id="__nav_19_label" tabindex="0">
+          应用示例
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_19_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_19">
+          <span class="md-nav__icon md-icon"></span>
+          应用示例
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubernetes_example/wordpress/" class="md-nav__link">
+        应用部署
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    集群升级
+  </a>
+  
+    <nav class="md-nav" aria-label="集群升级">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    更新证书
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    手动更新证书
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kubernetes_api" class="md-nav__link">
+    用 Kubernetes 证书 API 更新证书(不推荐)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    集群升级
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+  <h1>技巧</h1>
+
+<p>K8S训练营</p>
+<p>GitHub</p>
+<ul class="task-list">
+<li>1000 Stars</li>
+<li>
+<p>303 Forks</p>
+</li>
+<li>
+<p>介绍</p>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" disabled/> Docker 基础</p>
+<p>Docker 基础</p>
+<ul>
+<li>简介</li>
+<li>安装</li>
+<li>基本操作</li>
+<li>Dockerfile</li>
+<li>Dockerfile最佳实践</li>
+</ul>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" disabled/> Kubernetes 基础</p>
+<p>Kubernetes 基础</p>
+<ul>
+<li>简介</li>
+<li>安装</li>
+<li>资源清单</li>
+<li>Pod 原理</li>
+<li>Pod 生命周期</li>
+<li>Pod 使用进阶</li>
+</ul>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" disabled/> Kubernetes 控制器</p>
+<p>Kubernetes 控制器</p>
+<ul>
+<li>ReplicaSet</li>
+<li>Deployment</li>
+<li>StatefulSet</li>
+<li>DaemonSet</li>
+<li>Job</li>
+<li>HPA</li>
+</ul>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" disabled/> Kubernetes 配置管理</p>
+<p>Kubernetes 配置管理</p>
+<ul>
+<li>ConfigMap</li>
+<li>Secret</li>
+<li>ServiceAccount</li>
+</ul>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" disabled/> Kubernetes 安全</p>
+<p>Kubernetes 安全</p>
+<ul>
+<li>RBAC</li>
+<li>Security Context</li>
+<li>准入控制器</li>
+</ul>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" disabled/> Kubernetes 网络</p>
+<p>Kubernetes 网络</p>
+<ul class="task-list">
+<li>网络插件</li>
+<li>网络策略</li>
+<li>Service 服务</li>
+<li class="task-list-item">
+<p><input type="checkbox" disabled/> Ingress</p>
+<p>Ingress</p>
+<ul>
+<li>NGINX Controller</li>
+<li>Traefik</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" disabled/> Kubernetes 调度器</p>
+<p>Kubernetes 调度器</p>
+<ul>
+<li>调度器介绍</li>
+<li>Pod 调度</li>
+</ul>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" disabled/> Kubernetes 存储</p>
+<p>Kubernetes 存储</p>
+<ul>
+<li>Local 本地存储</li>
+<li>Ceph 存储</li>
+<li>存储原理</li>
+</ul>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" disabled/> 应用示例</p>
+<p>应用示例</p>
+<ul>
+<li>应用部署</li>
+</ul>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" disabled/> Helm 包管理</p>
+<p>Helm 包管理</p>
+<ul class="task-list">
+<li>Helm</li>
+<li>Charts</li>
+<li class="task-list-item">
+<p><input type="checkbox" disabled/> 模板开发</p>
+<p>模板开发</p>
+<ul>
+<li>内置对象</li>
+<li>Values</li>
+<li>函数与管道</li>
+<li>流程控制</li>
+<li>变量</li>
+<li>命名模板</li>
+<li>访问文件</li>
+<li>NOTES.txt</li>
+<li>子chart与全局值</li>
+<li>模板调试</li>
+</ul>
+</li>
+<li>
+<p>Chart Hooks</p>
+</li>
+<li>示例</li>
+</ul>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" disabled/> Kubernetes 监控</p>
+<p>Kubernetes 监控</p>
+<ul class="task-list">
+<li>Prometheus</li>
+<li>Grafana</li>
+<li>PromQL</li>
+<li>AlertManager</li>
+<li>Thanos</li>
+<li>Prometheus Adpater</li>
+<li class="task-list-item">
+<p><input type="checkbox" disabled/> Prometheus Operator</p>
+<p>Prometheus Operator</p>
+<ul>
+<li>安装</li>
+<li>自定义监控报警</li>
+<li>高级配置</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" disabled/> Kubernetes 日志</p>
+<p>Kubernetes 日志</p>
+<ul>
+<li>日志收集架构</li>
+<li>EFK</li>
+</ul>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" disabled/> Kubernetes DevOps</p>
+<p>Kubernetes DevOps</p>
+<ul>
+<li>Jenkins</li>
+<li>GitLab</li>
+<li>Harbor</li>
+<li>Jenkins 流水线</li>
+<li>Tekton</li>
+</ul>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" disabled/> Service Mesh 实践</p>
+<p>Service Mesh 实践</p>
+<ul>
+<li>Istio 简介</li>
+<li>流量管理</li>
+<li>可观测性</li>
+<li>安全管控</li>
+<li>Certmanager</li>
+</ul>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" disabled/> Kubernetes 多租户</p>
+<p>Kubernetes 多租户</p>
+<ul>
+<li>多租户介绍</li>
+<li>资源配额</li>
+<li>Pod 安全策略</li>
+</ul>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" disabled/> Operator</p>
+<p>Operator</p>
+<ul>
+<li>CRD</li>
+<li>Operator</li>
+</ul>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" disabled checked/> 实践技巧</p>
+<p>实践技巧</p>
+<ul class="task-list">
+<li>技巧</li>
+<li class="task-list-item">
+<p><input type="checkbox" disabled/> 集群升级 集群升级</p>
+<p>目录</p>
+<ul>
+<li>
+<p>更新证书</p>
+<ul>
+<li>手动更新证书</li>
+<li>用 Kubernetes 证书 API 更新证书(不推荐)</li>
+</ul>
+</li>
+<li>
+<p>集群升级</p>
+</li>
+</ul>
+</li>
+<li>
+<p>升级为集群</p>
+</li>
+<li>资源预留</li>
+</ul>
+</li>
+<li class="task-list-item">
+<p><input type="checkbox" disabled/> 源码</p>
+<p>源码</p>
+<ul class="task-list">
+<li>kubelet 源码</li>
+<li class="task-list-item">
+<p><input type="checkbox" disabled/> client-go</p>
+<p>client-go</p>
+<ul>
+<li>workqueue</li>
+<li>Indexer</li>
+<li>DeltaFIFO</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>目录</p>
+<ul>
+<li>
+<p>更新证书</p>
+<ul>
+<li>手动更新证书</li>
+<li>用 Kubernetes 证书 API 更新证书(不推荐)</li>
+</ul>
+</li>
+<li>
+<p>集群升级</p>
+</li>
+</ul>
+<h2 id="_1">集群升级<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<h3 id="_2">更新证书<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>使用 kubeadm 安装 kubernetes 集群非常方便，但是也有一个比较烦人的问题就是默认的证书有效期只有一年时间，所以需要考虑证书升级的问题，本文的演示集群版本为 v1.16.2 版本，不保证下面的操作对其他版本也适用，<code>在操作之前一定要先对证书目录进行备份，防止操作错误进行回滚</code>。本文主要介绍两种方式来更新集群证书。</p>
+</blockquote>
+<h3 id="_3">手动更新证书<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>由 kubeadm 生成的客户端证书默认只有一年有效期，我们可以通过 <code>check-expiration</code> 命令来检查证书是否过期：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubeadm alpha certs check-expiration
+CERTIFICATE                EXPIRES                  RESIDUAL TIME   EXTERNALLY MANAGED
+admin.conf                 Nov 07, 2020 11:59 UTC   73d             no
+apiserver                  Nov 07, 2020 11:59 UTC   73d             no
+apiserver-etcd-client      Nov 07, 2020 11:59 UTC   73d             no
+apiserver-kubelet-client   Nov 07, 2020 11:59 UTC   73d             no
+controller-manager.conf    Nov 07, 2020 11:59 UTC   73d             no
+etcd-healthcheck-client    Nov 07, 2020 11:59 UTC   73d             no
+etcd-peer                  Nov 07, 2020 11:59 UTC   73d             no
+etcd-server                Nov 07, 2020 11:59 UTC   73d             no
+front-proxy-client         Nov 07, 2020 11:59 UTC   73d             no
+scheduler.conf             Nov 07, 2020 11:59 UTC   73d             no
+</code></pre></div>
+<blockquote>
+<p>该命令显示 <code>/etc/kubernetes/pki</code> 文件夹中的客户端证书以及 kubeadm 使用的 <code>KUBECONFIG</code> 文件中嵌入的客户端证书的到期时间/剩余时间。</p>
+<p>注意</p>
+<p><code>kubeadm</code> 不能管理由外部 CA 签名的证书，如果是外部得证书，需要自己手动去管理证书的更新。</p>
+<p>另外需要说明的是上面的列表中没有包含 <code>kubelet.conf</code>，因为 kubeadm 将 kubelet 配置为自动更新证书。</p>
+<p>另外 kubeadm 会在控制面板升级的时候自动更新所有证书，所以使用 kubeadm 搭建得集群最佳的做法是经常升级集群，这样可以确保你的集群保持最新状态并保持合理的安全性。但是对于实际的生产环境我们可能并不会去频繁得升级集群，所以这个时候我们就需要去手动更新证书。</p>
+<p>要手动更新证书也非常方便，我们只需要通过 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>kubeadm alpha certs renew
+</code></pre></div>
+<p>命令即可更新你的证书，这个命令用 CA（或者 front-proxy-CA ）证书和存储在 <code>/etc/kubernetes/pki</code> 中的密钥执行更新。</p>
+<blockquote>
+<p>注意</p>
+<p>如果你运行了一个高可用的集群，这个命令需要在所有控制面板节点上执行。</p>
+<p>接下来我们来更新我们的集群证书，下面的操作都是在 master 节点上进行，首先备份原有证书：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ mkdir /etc/kubernetes.bak
+$ cp -r /etc/kubernetes/pki/ /etc/kubernetes.bak
+$ cp /etc/kubernetes/*.conf /etc/kubernetes.bak
+</code></pre></div>
+<blockquote>
+<p>然后备份 etcd 数据目录：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ cp -r /var/lib/etcd /var/lib/etcd.bak
+</code></pre></div>
+<blockquote>
+<p>接下来执行更新证书的命令：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubeadm alpha certs renew all --config=kubeadm.yaml
+kubeadm alpha certs renew all --config=kubeadm.yaml
+certificate embedded in the kubeconfig file for the admin to use and for kubeadm itself renewed
+certificate for serving the Kubernetes API renewed
+certificate the apiserver uses to access etcd renewed
+certificate for the API server to connect to kubelet renewed
+certificate embedded in the kubeconfig file for the controller manager to use renewed
+certificate for liveness probes to healthcheck etcd renewed
+certificate for etcd nodes to communicate with each other renewed
+certificate for serving etcd renewed
+certificate for the front proxy client renewed
+certificate embedded in the kubeconfig file for the scheduler manager to use renewed
+</code></pre></div>
+<blockquote>
+<p>通过上面的命令证书就一键更新完成了，这个时候查看上面的证书可以看到过期时间已经是一年后的时间了：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubeadm alpha certs check-expiration
+CERTIFICATE                EXPIRES                  RESIDUAL TIME   EXTERNALLY MANAGED
+admin.conf                 Aug 26, 2021 03:47 UTC   364d            no
+apiserver                  Aug 26, 2021 03:47 UTC   364d            no
+apiserver-etcd-client      Aug 26, 2021 03:47 UTC   364d            no
+apiserver-kubelet-client   Aug 26, 2021 03:47 UTC   364d            no
+controller-manager.conf    Aug 26, 2021 03:47 UTC   364d            no
+etcd-healthcheck-client    Aug 26, 2021 03:47 UTC   364d            no
+etcd-peer                  Aug 26, 2021 03:47 UTC   364d            no
+etcd-server                Aug 26, 2021 03:47 UTC   364d            no
+front-proxy-client         Aug 26, 2021 03:47 UTC   364d            no
+scheduler.conf             Aug 26, 2021 03:47 UTC   364d            no
+</code></pre></div>
+<blockquote>
+<p>然后记得更新下 kubeconfig 文件：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubeadm init phase kubeconfig all --config kubeadm.yaml
+[kubeconfig] Using kubeconfig folder &quot;/etc/kubernetes&quot;
+[kubeconfig] Using existing kubeconfig file: &quot;/etc/kubernetes/admin.conf&quot;
+[kubeconfig] Using existing kubeconfig file: &quot;/etc/kubernetes/kubelet.conf&quot;
+[kubeconfig] Using existing kubeconfig file: &quot;/etc/kubernetes/controller-manager.conf&quot;
+[kubeconfig] Using existing kubeconfig file: &quot;/etc/kubernetes/scheduler.conf&quot;
+</code></pre></div>
+<blockquote>
+<p>将新生成的 admin 配置文件覆盖掉原本的 admin 文件:</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ mv $HOME/.kube/config $HOME/.kube/config.old
+$ cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+$ chown $(id -u):$(id -g) $HOME/.kube/config
+</code></pre></div>
+<blockquote>
+<p>完成后重启 kube-apiserver、kube-controller、kube-scheduler、etcd 这4个容器即可，我们可以查看 apiserver 的证书的有效期来验证是否更新成功：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ docker restart `docker ps | grep etcd  | awk &#39;{ print $1 }&#39;`
+$ docker restart `docker ps | grep kube-apiserver  | awk &#39;{ print $1 }&#39;`
+$ docker restart `docker ps | grep kube-scheduler  | awk &#39;{ print $1 }&#39;`
+$ docker restart `docker ps | grep kube-controller  | awk &#39;{ print $1 }&#39;`
+systemctl restart kubelet
+$ echo | openssl s_client -showcerts -connect 11:6443 -servername api 2&gt;/dev/null | openssl x509 -noout -enddate
+notAfter=Aug 26 03:47:23 2021 GMT
+</code></pre></div>
+<blockquote>
+<p>可以看到现在的有效期是一年过后的，证明已经更新成功了。</p>
+</blockquote>
+<h3 id="kubernetes_api">用 Kubernetes 证书 API 更新证书(不推荐)<a class="headerlink" href="#kubernetes_api" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>除了上述的一键手动更新证书之外，还可以使用 Kubernetes 证书 API 执行手动证书更新。对于线上环境我们可能并不会去冒险经常更新集群或者去更新证书，这些毕竟是有风险的，所以我们希望生成的证书有效期足够长，虽然从安全性角度来说不推荐这样做，但是对于某些场景下一个足够长的证书有效期也是非常有必要的。有很多管理员就是去手动更改 kubeadm 的源码为10年，然后重新编译来创建集群，这种方式虽然可以达到目的，但是不推荐使用这种方式，特别是当你想要更新集群的时候，还得用新版本进行更新。其实 Kubernetes 提供了一种 API 的方式可以来帮助我们生成一个足够长证书有效期。</p>
+<p>要使用内置的 API 方式来签名，首先我们需要配置 kube-controller-manager 组件的 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>--experimental-cluster-signing-duration
+</code></pre></div>
+<p>参数，将其调整为10年，我们这里是 kubeadm 安装的集群，所以直接修改静态 Pod 的 yaml 文件即可:</p>
+<div class="highlight"><pre><span></span><code>$ vi /etc/kubernetes/manifests/kube-controller-manager.yaml
+......
+spec:
+  containers:
+  - command:
+    - kube-controller-manager
+    # 设置证书有效期为 10 年
+    - --experimental-cluster-signing-duration=87600h 
+    - --client-ca-file=/etc/kubernetes/pki/ca.crt
+......
+</code></pre></div>
+<blockquote>
+<p>修改完成后 kube-controller-manager 会自动重启生效。然后我们需要使用下面的命令为 Kubernetes 证书 API 创建一个证书签名请求。如果您设置例如 <code>cert-manager</code> 等外部签名者，则会自动批准证书签名请求（CSRs）。否者，您必须使用 <code>kubectl certificate</code> 命令手动批准证书。以下 kubeadm 命令输出要批准的证书名称，然后等待批准发生：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubeadm alpha certs renew all --use-api --config kubeadm.yaml &amp;
+</code></pre></div>
+<blockquote>
+<p>输出类似于以下内容：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>[1] 2890
+[certs] Certificate request &quot;kubeadm-cert-kubernetes-admin-pn99f&quot; created
+</code></pre></div>
+<blockquote>
+<p>然后接下来我们需要去手动批准证书：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl get csr
+NAME                                  AGE   REQUESTOR          CONDITION
+kubeadm-cert-kubernetes-admin-pn99f   64s   kubernetes-admin   Pending
+# 手动批准证书
+$ kubectl certificate approve kubeadm-cert-kubernetes-admin-pn99f
+certificatesigningrequest.certificates.k8s.io/kubeadm-cert-kubernetes-admin-pn99f approved
+</code></pre></div>
+<blockquote>
+<p>用同样的方式为处于 Pending 状态的 csr 执行批准操作，直到所有的 csr 都批准完成为止。最后所有的 csr 列表状态如下所示：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl get csr
+NAME                                                AGE     REQUESTOR          CONDITION
+kubeadm-cert-front-proxy-client-llhrj               30s     kubernetes-admin   Approved,Issued
+kubeadm-cert-kube-apiserver-2s6kf                   2m43s   kubernetes-admin   Approved,Issued
+kubeadm-cert-kube-apiserver-etcd-client-t9pkx       2m7s    kubernetes-admin   Approved,Issued
+kubeadm-cert-kube-apiserver-kubelet-client-pjbjm    108s    kubernetes-admin   Approved,Issued
+kubeadm-cert-kube-etcd-healthcheck-client-8dcn8     64s     kubernetes-admin   Approved,Issued
+kubeadm-cert-kubernetes-admin-pn99f                 4m29s   kubernetes-admin   Approved,Issued
+kubeadm-cert-system:kube-controller-manager-mr86h   79s     kubernetes-admin   Approved,Issued
+kubeadm-cert-system:kube-scheduler-t8lnw            17s     kubernetes-admin   Approved,Issued
+kubeadm-cert-ydzs-master-cqh4s                      52s     kubernetes-admin   Approved,Issued
+kubeadm-cert-ydzs-master-lvbr5                      41s     kubernetes-admin   Approved,Issued
+</code></pre></div>
+<blockquote>
+<p>批准完成后检查证书的有效期：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubeadm alpha certs check-expiration
+CERTIFICATE                EXPIRES                  RESIDUAL TIME   EXTERNALLY MANAGED
+admin.conf                 Nov 05, 2029 11:53 UTC   9y              no
+apiserver                  Nov 05, 2029 11:54 UTC   9y              no
+apiserver-etcd-client      Nov 05, 2029 11:53 UTC   9y              no
+apiserver-kubelet-client   Nov 05, 2029 11:54 UTC   9y              no
+controller-manager.conf    Nov 05, 2029 11:54 UTC   9y              no
+etcd-healthcheck-client    Nov 05, 2029 11:53 UTC   9y              no
+etcd-peer                  Nov 05, 2029 11:53 UTC   9y              no
+etcd-server                Nov 05, 2029 11:54 UTC   9y              no
+front-proxy-client         Nov 05, 2029 11:54 UTC   9y              no
+scheduler.conf             Nov 05, 2029 11:53 UTC   9y              no
+</code></pre></div>
+<blockquote>
+<p>我们可以看到已经延长小10年了，这是因为 ca 证书的有效期只有10年。</p>
+<p>但是现在我们还不能直接重启控制面板的几个组件，这是因为使用 kubeadm 安装的集群对应的 etcd 默认是使用的 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>/etc/kubernetes/pki/etcd/ca.crt
+</code></pre></div>
+<p>这个证书进行前面的，而上面我们用命令 </p>
+<div class="highlight"><pre><span></span><code>kubectl certificate approve
+</code></pre></div>
+<p>批准过后的证书是使用的默认的 </p>
+<div class="highlight"><pre><span></span><code>/etc/kubernetes/pki/ca.crt
+</code></pre></div>
+<p>证书进行签发的，所以我们需要替换 etcd 中的 ca 机构证书:</p>
+<div class="highlight"><pre><span></span><code># 先拷贝静态 Pod 资源清单
+$ cp -r /etc/kubernetes/manifests/ /etc/kubernetes/manifests.bak
+$ cp /etc/kubernetes/pki/ca.crt /etc/kubernetes/pki/etcd/ca.crt
+$ cp /etc/kubernetes/pki/ca.key /etc/kubernetes/pki/etcd/ca.key
+</code></pre></div>
+<blockquote>
+<p>除此之外还需要替换 </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>requestheader-client-ca-file
+</code></pre></div>
+<p>文件，默认是 </p>
+<div class="highlight"><pre><span></span><code>/etc/kubernetes/pki/front-proxy-ca.crt
+</code></pre></div>
+<p>文件，现在也需要替换成默认的 CA 文件，否则使用聚合 API，比如安装了 metrics-server 后执行 <code>kubectl top</code> 命令就会报错：</p>
+<div class="highlight"><pre><span></span><code>$ cp /etc/kubernetes/pki/ca.crt /etc/kubernetes/pki/front-proxy-ca.crt
+$ cp /etc/kubernetes/pki/ca.key /etc/kubernetes/pki/front-proxy-ca.key
+</code></pre></div>
+<blockquote>
+<p>由于是静态 Pod，修改完成后上面的组件都会自动重启生效。由于我们当前版本的 kubelet 默认开启了证书自动轮转，所以 kubelet 的证书也不用再去管理了，这样我就将证书更新成10有效期了。<code>在操作之前一定要先对证书目录进行备份，防止操作错误进行回滚</code>。</p>
+</blockquote>
+<h3 id="_4">集群升级<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>最新的 Kubernetes 版本是 v1.19.0，我们这里的环境是 v1.16.2，由于我们这里版本跨度太大，不能直接从 1.16.x 更新到 1.19.x，kubeadm 的更新是不支持跨多个主版本的，所以我们可以一个版本一个版本的升级，不过版本更新的方式方法基本上都是一样的，所以后面要更新的话也挺简单了，下面我们就先将集群更新到 v1.16.14 版本。</p>
+<p>首先查看当前集群版本：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl version
+Client Version: version.Info{Major:&quot;1&quot;, Minor:&quot;16&quot;, GitVersion:&quot;v2&quot;, GitCommit:&quot;c97fe5036ef3df2967d086711e6c0c405941e14b&quot;, GitTreeState:&quot;clean&quot;, BuildDate:&quot;2019-10-15T19:18:23Z&quot;, GoVersion:&quot;go10&quot;, Compiler:&quot;gc&quot;, Platform:&quot;linux/amd64&quot;}
+Server Version: version.Info{Major:&quot;1&quot;, Minor:&quot;16&quot;, GitVersion:&quot;v2&quot;, GitCommit:&quot;c97fe5036ef3df2967d086711e6c0c405941e14b&quot;, GitTreeState:&quot;clean&quot;, BuildDate:&quot;2019-10-15T19:09:08Z&quot;, GoVersion:&quot;go10&quot;, Compiler:&quot;gc&quot;, Platform:&quot;linux/amd64&quot;}
+</code></pre></div>
+<blockquote>
+<p>首先我们保留 kubeadm config 文件：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubeadm config view &gt; kubeadm-config.yaml
+apiServer:
+  extraArgs:
+    authorization-mode: Node,RBAC
+  timeoutForControlPlane: 4m0s
+apiVersion: kubeadm.k8s.io/v1beta2
+certificatesDir: /etc/kubernetes/pki
+clusterName: kubernetes
+controllerManager: {}
+dns:
+  type: CoreDNS
+etcd:
+  local:
+    dataDir: /var/lib/etcd
+imageRepository: registry.aliyuncs.com/k8sxio  # 修改成阿里云镜像源
+kind: ClusterConfiguration
+kubernetesVersion: v14
+networking:
+  dnsDomain: cluster.local
+  podSubnet: 20/16
+  serviceSubnet: 0/12
+scheduler: {}
+</code></pre></div>
+<blockquote>
+<p>将上面的 <code>imageRepository</code> 值更改为：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>registry.aliyuncs.com/k8sxio
+</code></pre></div>
+<p>，然后保存内容到文件 kubeadm-config.yaml 中（当然如果你的集群可以获取到 grc.io 的镜像可以不用更改）。</p>
+<blockquote>
+<p>然后更新 kubeadm:</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ yum makecache fast &amp;&amp; yum install -y kubeadm-14-0 kubectl-14-0
+$ kubeadm version
+kubeadm version: &amp;version.Info{Major:&quot;1&quot;, Minor:&quot;16&quot;, GitVersion:&quot;v14&quot;, GitCommit:&quot;d2a081c8e14e21e28fe5bdfa38a817ef9c0bb8e3&quot;, GitTreeState:&quot;clean&quot;, BuildDate:&quot;2020-08-13T12:31:14Z&quot;, GoVersion:&quot;go15&quot;, Compiler:&quot;gc&quot;, Platform:&quot;linux/amd64&quot;}
+</code></pre></div>
+<blockquote>
+<p>因为 <code>kubeadm upgrade plan</code> 命令执行过程中会去 <code>dl.k8s.io</code> 获取版本信息，这个地址是需要科学方法才能访问的，所以我们可以先将 kubeadm 更新到目标版本，然后就可以查看到目标版本升级的一些信息了。</p>
+<p>执行 <code>upgrade plan</code> 命令查看是否可以升级：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubeadm upgrade plan
+[upgrade/config] Making sure the configuration is correct:
+[upgrade/config] Reading configuration from the cluster...
+[upgrade/config] FYI: You can look at this config file with &#39;kubectl -n kube-system get cm kubeadm-config -oyaml&#39;
+[preflight] Running pre-flight checks.
+[upgrade] Making sure the cluster is healthy:
+[upgrade] Fetching available versions to upgrade to
+[upgrade/versions] Cluster version: v2
+[upgrade/versions] kubeadm version: v14
+I0827 15:46:805052   11355 version.go:251] remote version is much newer: v0; falling back to: stable-16
+[upgrade/versions] Latest stable version: v14
+[upgrade/versions] Latest version in the v16 series: v14
+
+Components that must be upgraded manually after you have upgraded the control plane with &#39;kubeadm upgrade apply&#39;:
+COMPONENT   CURRENT       AVAILABLE
+Kubelet     7 x v2   v14
+
+Upgrade to the latest version in the v16 series:
+
+COMPONENT            CURRENT   AVAILABLE
+API Server           v2   v14
+Controller Manager   v2   v14
+Scheduler            v2   v14
+Kube Proxy           v2   v14
+CoreDNS              2     2
+Etcd                 15    15-0
+
+You can now apply the upgrade by executing the following command:
+
+    kubeadm upgrade apply v14
+
+_____________________________________________________________________
+</code></pre></div>
+<blockquote>
+<p>我们可以先使用 <code>dry-run</code> 命令查看升级信息：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubeadm upgrade apply v14 --config kubeadm-config.yaml --dry-run
+</code></pre></div>
+<blockquote>
+<p>注意要通过 <code>--config</code> 指定上面保存的配置文件，该配置文件信息包含了上一个版本的集群信息以及修改过后的镜像地址。</p>
+<p>查看了上面的升级信息确认无误后就可以执行升级操作了，我们可以先提前下载所需镜像：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubeadm config images pull --config kubeadm-config.yaml
+[config/images] Pulled registry.aliyuncs.com/k8sxio/kube-apiserver:v14
+[config/images] Pulled registry.aliyuncs.com/k8sxio/kube-controller-manager:v14
+[config/images] Pulled registry.aliyuncs.com/k8sxio/kube-scheduler:v14
+[config/images] Pulled registry.aliyuncs.com/k8sxio/kube-proxy:v14
+[config/images] Pulled registry.aliyuncs.com/k8sxio/pause:1
+[config/images] Pulled registry.aliyuncs.com/k8sxio/etcd:15-0
+[config/images] Pulled registry.aliyuncs.com/k8sxio/coredns:2
+</code></pre></div>
+<blockquote>
+<p>然后就可以执行真正的升级命令：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubeadm upgrade apply v14 --config kubeadm-config.yaml
+kubeadm upgrade apply v14 --config kubeadm-config.yaml
+[upgrade/config] Making sure the configuration is correct:
+[preflight] Running pre-flight checks.
+[upgrade] Making sure the cluster is healthy:
+[upgrade/version] You have chosen to change the cluster version to &quot;v14&quot;
+[upgrade/versions] Cluster version: v2
+[upgrade/versions] kubeadm version: v14
+[upgrade/confirm] Are you sure you want to proceed with the upgrade? [y/N]:y
+......
+</code></pre></div>
+<blockquote>
+<p>隔一段时间看到如下信息就证明集群升级成功了：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>......
+[addons]: Migrating CoreDNS Corefile
+[addons] Applied essential addon: CoreDNS
+[addons] Applied essential addon: kube-proxy
+
+[upgrade/successful] SUCCESS! Your cluster was upgraded to &quot;v14&quot;. Enjoy!
+
+[upgrade/kubelet] Now that your control plane is upgraded, please proceed with upgrading your kubelets if you haven&#39;t already done so.
+</code></pre></div>
+<blockquote>
+<p>由于上面我们已经更新过 kubectl 了，现在我们用 kubectl 来查看下版本信息：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl version
+Client Version: version.Info{Major:&quot;1&quot;, Minor:&quot;16&quot;, GitVersion:&quot;v14&quot;, GitCommit:&quot;d2a081c8e14e21e28fe5bdfa38a817ef9c0bb8e3&quot;, GitTreeState:&quot;clean&quot;, BuildDate:&quot;2020-08-13T12:33:34Z&quot;, GoVersion:&quot;go15&quot;, Compiler:&quot;gc&quot;, Platform:&quot;linux/amd64&quot;}
+Server Version: version.Info{Major:&quot;1&quot;, Minor:&quot;16&quot;, GitVersion:&quot;v14&quot;, GitCommit:&quot;d2a081c8e14e21e28fe5bdfa38a817ef9c0bb8e3&quot;, GitTreeState:&quot;clean&quot;, BuildDate:&quot;2020-08-13T12:24:51Z&quot;, GoVersion:&quot;go15&quot;, Compiler:&quot;gc&quot;, Platform:&quot;linux/amd64&quot;}
+$ kubectl get nodes
+NAME          STATUS   ROLES    AGE    VERSION
+ydzs-master   Ready    master   292d   v2
+ydzs-node1    Ready    &lt;none&gt;   292d   v2
+ydzs-node2    Ready    &lt;none&gt;   292d   v2
+ydzs-node3    Ready    &lt;none&gt;   290d   v2
+ydzs-node4    Ready    &lt;none&gt;   290d   v2
+ydzs-node5    Ready    &lt;none&gt;   218d   v2
+ydzs-node6    Ready    &lt;none&gt;   218d   v2
+</code></pre></div>
+<blockquote>
+<p>可以看到版本并没有更新，这是因为节点上的 kubelet 还没有更新的，我们可以通过 kubelet 查看下版本：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubelet --version
+Kubernetes v2
+</code></pre></div>
+<blockquote>
+<p>这个时候我们去手动更新下 kubelet：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ yum install -y kubelet-14-0
+# 安装完成后查看下版本
+$ kubelet --version
+Kubernetes v14
+# 然后重启 kubelet 服务
+$ systemctl daemon-reload
+$ systemctl restart kubelet
+$ kubectl get nodes
+NAME          STATUS   ROLES    AGE    VERSION
+ydzs-master   Ready    master   292d   v14
+ydzs-node1    Ready    &lt;none&gt;   292d   v2
+ydzs-node2    Ready    &lt;none&gt;   292d   v2
+ydzs-node3    Ready    &lt;none&gt;   290d   v2
+ydzs-node4    Ready    &lt;none&gt;   290d   v2
+ydzs-node5    Ready    &lt;none&gt;   218d   v2
+ydzs-node6    Ready    &lt;none&gt;   218d   v2
+</code></pre></div>
+<blockquote>
+<p>可以看到 master 节点已经更新到 v1.16.14 版本了，然后就可以去升级节点了，升级节点的时候最好先驱逐节点，然后逐个升级：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl drain ydzs-node1 --ignore-daemonsets
+node/ydzs-node1 cordoned
+error: unable to drain node &quot;ydzs-node1&quot;, aborting command...
+
+There are pending nodes to be drained:
+ ydzs-node1
+error: cannot delete Pods with local storage (use --delete-local-data to override): rook-ceph/csi-cephfsplugin-provisioner-56c8b7ddf4-n96kk, rook-ceph/csi-rbdplugin-provisioner-6ff4dd4b94-2bl82
+$ kubectl get nodes
+NAME          STATUS                     ROLES    AGE    VERSION
+ydzs-master   Ready                      master   292d   v14
+ydzs-node1    Ready,SchedulingDisabled   &lt;none&gt;   292d   v2
+ydzs-node2    Ready                      &lt;none&gt;   292d   v2
+ydzs-node3    Ready                      &lt;none&gt;   290d   v2
+ydzs-node4    Ready                      &lt;none&gt;   290d   v2
+ydzs-node5    Ready                      &lt;none&gt;   218d   v2
+ydzs-node6    Ready                      &lt;none&gt;   218d   v2
+</code></pre></div>
+<blockquote>
+<p>然后在 ydzs-node1 节点上执行更新命令：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubeadm upgrade node
+[upgrade] Reading configuration from the cluster...
+[upgrade] FYI: You can look at this config file with &#39;kubectl -n kube-system get cm kubeadm-config -oyaml&#39;
+[upgrade] Skipping phase. Not a control plane node[kubelet-start] Downloading configuration for the kubelet from the &quot;kubelet-config-16&quot; ConfigMap in the kube-system namespace
+[kubelet-start] Writing kubelet configuration to file &quot;/var/lib/kubelet/config.yaml&quot;
+[upgrade] The configuration for this node was successfully updated!
+[upgrade] Now you should go ahead and upgrade the kubelet package using your package manager.
+# 更新软件包
+$ yum install -y kubeadm-14-0 kubectl-14-0 kubelet-14-0
+# 安装完成后重启 kubelet
+$ systemctl daemon-reload
+$ systemctl restart kubelet
+</code></pre></div>
+<blockquote>
+<p>更新完成后，确认节点升级成功：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl get nodes
+NAME          STATUS                     ROLES    AGE    VERSION
+ydzs-master   Ready                      master   292d   v14
+ydzs-node1    Ready,SchedulingDisabled   &lt;none&gt;   292d   v14
+ydzs-node2    Ready                      &lt;none&gt;   292d   v2
+ydzs-node3    Ready                      &lt;none&gt;   290d   v2
+ydzs-node4    Ready                      &lt;none&gt;   290d   v2
+ydzs-node5    Ready                      &lt;none&gt;   218d   v2
+ydzs-node6    Ready                      &lt;none&gt;   218d   v2
+</code></pre></div>
+<blockquote>
+<p>然后解除禁止调度：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl uncordon ydzs-node1
+node/ydzs-node1 uncordoned
+</code></pre></div>
+<blockquote>
+<p>用同样的方式升级其他节点即可升级成功：</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ kubectl get nodes
+NAME          STATUS   ROLES    AGE    VERSION
+ydzs-master   Ready    master   292d   v14
+ydzs-node1    Ready    &lt;none&gt;   292d   v14
+ydzs-node2    Ready    &lt;none&gt;   292d   v14
+ydzs-node3    Ready    &lt;none&gt;   290d   v14
+ydzs-node4    Ready    &lt;none&gt;   290d   v14
+ydzs-node5    Ready    &lt;none&gt;   218d   v14
+ydzs-node6    Ready    &lt;none&gt;   218d   v14
+</code></pre></div>
+<p>Copyright © 2019-2020 优点知识</p>
+<p>powered by MkDocs and Material for MkDocs</p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      BurningMyself<a href='https://beian.miit.gov.cn/' target='_blank'>  蜀ICP备15033200号-1</a>
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/burningmyself" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://gitee.com/burningmyself" target="_blank" rel="noopener" title="gitee.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.2a6f1dda.min.js"></script>
+      
+        <script src="../../js/extra.js"></script>
+      
+        <script src="../../js/baidu-tongji.js"></script>
+      
+        <script src="https://www.googletagmanager.com/gtag/js?id=UA-155084439-1"></script>
+      
+        <script src="https://www.googletagmanager.com/gtag/js?id=UA-155132293-1"></script>
+      
+        <script src="../../js/google.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+      
+    
+  </body>
+</html>
