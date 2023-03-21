@@ -22,7 +22,7 @@
 如果你觉得这写文章能帮助到了你，你可以帮作者买一杯果汁表示鼓励
 ![pay](docs/assets/pay.png)
 
-[Paypal Me](https]//paypal.me/yangfubing)
+[Paypal Me](https://paypal.me/yangfubing)
 
 ## 目录
 
