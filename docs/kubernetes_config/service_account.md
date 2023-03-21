@@ -1,4 +1,4 @@
-
+
 ## ServiceAccount 
 
 > `ServiceAccount` 主要是用于解决 Pod 在集群中的身份认证问题的。认证使用的授权信息其实就是利用前面我们讲到的一个类型为 

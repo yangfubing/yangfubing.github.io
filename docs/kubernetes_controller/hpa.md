@@ -1,7 +1,7 @@
 <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/cnych/qikqiak.com/edit/master/docs/controller/hpa.md" title="编辑此页" class="md-icon md-content__icon"></a>
+                  <a href="https://github.com/cnych/qikqiak.com/edit/master/docs/controller/hpa.md" title="编辑此页" class="md-icon md-content__icon"></a>
                 
                 
                 <h1 id="hpa">HPA 控制器<a class="headerlink" href="#hpa" title="Permanent link"> </a></h1>

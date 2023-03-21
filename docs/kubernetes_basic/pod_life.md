@@ -1,4 +1,4 @@
-
+
 ## Pod 的生命周期 
 
 > ![pod loap](../assets/img/kubernetes_basci/pod-loap.jpg)

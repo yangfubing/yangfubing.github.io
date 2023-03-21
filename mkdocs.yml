@@ -68,6 +68,68 @@ nav:
     - Local 本地存储: kubernetes_stroage/local.md
     - Ceph 存储: kubernetes_stroage/ceph.md
     - 存储原理: kubernetes_stroage/csi.md
+- Helm 包管理:
+    - Helm: kubernetes_package/helm.md   
+    - Charts: kubernetes_package/charts.md 
+    - 模板开发:
+        - 内置对象: kubernetes_package/templates/objects.md
+        - Values: kubernetes_package/templates/values.md
+        - 函数和管道: kubernetes_package/templates/function.md
+        - 流程控制: kubernetes_package/templates/flow.md
+        - 变量: kubernetes_package/templates/variables.md
+        - 命名模板: kubernetes_package/templates/named_templates.md
+        - 访问文件: kubernetes_package/templates/access_files.md
+        - NOTES.txt 文件: kubernetes_package/templates/notes_files.md
+        - 子chart与全局值: kubernetes_package/templates/subcharts_and_globals.md
+        - 模板调试: kubernetes_package/templates/debug.md
+    - Chart Hooks: kubernetes_package/chart_hooks.md 
+    - 示例: kubernetes_package/example.md   
+- Kubernetes 监控:
+    - Prometheus: kubernetes_monitor/prometheus.md   
+    - Grafana: kubernetes_monitor/grafana.md
+    - Promql: kubernetes_monitor/promql.md 
+    - Alertmanager: kubernetes_monitor/alertmanager.md 
+    - Prometheus Thanos: kubernetes_monitor/thanos.md 
+    - Prometheus Adpater: kubernetes_monitor/adapter.md 
+    - Prometheus Operator:
+        - 安装: kubernetes_monitor/operator/install.md 
+        - 自定义监控报警: kubernetes_monitor/operator/custom.md 
+        - 高级配置: kubernetes_monitor/operator/advance.md  
+- Kubernetes 日志:
+    - Grafana: kubernetes_logs/architec.md
+    - efk: kubernetes_logs/efk.md
+- Kubernetes DevOps:
+    - Jenins: kubernetes_devops/jenkins.md
+    - Gitlab: kubernetes_devops/gitlab.md
+    - Harbor: kubernetes_devops/harbor.md
+    - Jenkins Pipeline: kubernetes_devops/jenkins_pipeline.md
+    - Tekton: kubernetes_devops/token.md
+- Service Mesh 实践:
+    - Istio:  kubernetes_service_mesh/istio.md
+    - 流量管理: kubernetes_service_mesh/traffic.md
+    - 可观测性: kubernetes_service_mesh/observability.md
+    - 安全管控: kubernetes_service_mesh/security.md
+    - CertManager: kubernetes_service_mesh/cert_manager.md
+- Kubernetes 多租户:
+    - 多租户介绍: kubernetes_tenant/tenant.md   
+    - 多租户介绍: kubernetes_tenant/quota.md
+    - 多租户介绍: kubernetes_tenant/psp.md
+- Operator:
+    - CRD: kubernetes_operator/crd.md
+    - Operator: kubernetes_operator/operator.md
+- 实践技巧:
+    - 技巧: kubernetes_maintain/skill.md  
+    - 技巧: kubernetes_maintain/update.md 
+    - 技巧: kubernetes_maintain/update_cluster.md 
+    - 技巧: kubernetes_maintain/reserved.md
+- 源码:
+    - kubelet源码: kubernetes_code/kubelet.md
+    - client-go:
+        - workqueue: kubernetes_code/client_go/workqueue.md
+        - indexer: kubernetes_code/client_go/indexer.md
+        - workqueue: kubernetes_code/client_go/deltafifo.md
+- 应用示例:               
+    - 应用部署: kubernetes_example/wordpress.md
 markdown_extensions:
   - admonition
   - codehilite:

@@ -1,4 +1,4 @@
-
+
 ## NetworkPolicy 
 
 > 在 Kubernetes 中要实现容器之间网络的隔离，是通过一个专门的 API 对象 `NetworkPolicy`（网络策略）来实现的，要让网络策略生效，就需要特定的网络插件支持，目前已经实现了 `NetworkPolicy` 的网络插件包括 Calico、Weave 和 kube-router 等项目，但是并不包括 Flannel 项目。所以说，如果想要在使用 Flannel 的同时还使用 NetworkPolicy 的话，你就需要再额外安装一个网络插件，比如 Calico 项目，来负责执行 NetworkPolicy。由于我们这里使用的是 Flannel 网络插件，所以首先需要安装 Calico 来负责网络策略。

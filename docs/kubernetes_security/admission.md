@@ -1,4 +1,4 @@
-
+
 ## 准入控制器 
 
 > Kubernetes 提供了需要扩展其内置功能的方法，最常用的可能是自定义资源类型和自定义控制器了，除此之外，Kubernetes 还有一些其他非常有趣的功能，比如 `admission webhooks` 就可以用于扩展 API，用于修改某些 Kubernetes 资源的基本行为。
