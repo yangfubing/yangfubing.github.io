@@ -2,19 +2,19 @@
 
 > Kubernetes 集群环境安装
 
-> 为了根据最新的集群特性，我们这里安装目前最新的版本 v1.16.2，如果你是在生产环境使用，建议使用上一个版本中最大的修正版本，比如 v1.15.5，由于 v1.16 版本和之前的版本有很大变化，主要体现在 APIVersion 移除了之前的一些版本，所以我们这里采用最新的 v1.16.2 的版本。由于我们这里主要目的也是学习 Kubernetes 的一些知识点，所以采用的是 Kubeadm 来快速搭建单 Master 的集群，在后面如有需要我们可以在学习了这些知识点后来搭建适合生产环境使用的集群。
+> 为了根据最新的集群特性，我们这里安装目前最新的版本 v1.26.2，如果你是在生产环境使用，建议使用上一个版本中最大的修正版本，比如 v1.25.5，由于 v1.26 版本和之前的版本有很大变化，主要体现在 APIVersion 移除了之前的一些版本，所以我们这里采用最新的 v1.26.2 的版本。由于我们这里主要目的也是学习 Kubernetes 的一些知识点，所以采用的是 Kubeadm 来快速搭建单 Master 的集群，在后面如有需要我们可以在学习了这些知识点后来搭建适合生产环境使用的集群。
 
 > ![kubernetes install on centos](../assets/img/kubernetes_basci/install-k8s.png)
 
 ### 环境准备 
 
-> 3个节点，都是 Centos 7.6 系统，内核版本：3.10.0-957.12.2.el7.x86_64，在每个节点上添加 hosts 信息：
+> 3个节点，都是 Centos 7.6 系统，内核版本：6.2.5-1.el7.elrepo.x86_64，在每个节点上添加 hosts 信息：
 
 ```
 $ cat /etc/hosts
-111 ydzs-master
-122 ydzs-node1
-123 ydzs-node2
+192.168.3.21 k8s-master1
+192.168.3.22 k8s-worker1
+192.168.3.23 k8s-worker2
 ```
 
 > hostname
@@ -22,7 +22,9 @@ $ cat /etc/hosts
 > 节点的 hostname 必须使用标准的 DNS 命名，另外千万不用什么默认的 `localhost` 的 hostname，会导致各种错误出现的。在 Kubernetes 项目里，机器的名字以及一切存储在 Etcd 中的 API 对象，都必须使用标准的 DNS 命名（RFC 1123）。可以使用命令 
 
 ```
-hostnamectl set-hostname ydzs-node1
+hostnamectl set-hostname k8s-master1
+hostnamectl set-hostname k8s-worker1
+hostnamectl set-hostname k8s-worker2
 ```
 
  来修改 hostname。
@@ -167,26 +169,10 @@ sysctl -p /etc/sysctl.d/k8s.conf
 $ yum install -y yum-utils \\
   device-mapper-persistent-data \\
   lvm2
-# 如果下面命令执行超时，可以使用阿里云的源代替：http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
-$ yum-config-manager \\
-    --add-repo \\
-    https://download.docker.com/linux/centos/docker-ce.repo
-$ yum list docker-ce --showduplicates | sort -r
- * updates: mirrors.tuna.tsinghua.edu.cn
-Loading mirror speeds from cached hostfile
-Loaded plugins: fastestmirror, langpacks
-Installed Packages
- * extras: mirrors.tuna.tsinghua.edu.cn
- * epel: mirrors.yun-idc.com
-docker-ce.x86_64            3:1-el7                     docker-ce-stable
-docker-ce.x86_64            3:0-el7                     docker-ce-stable
-docker-ce.x86_64            3:8-el7                     docker-ce-stable
-......
-docker-ce.x86_64            ce-elcentos             docker-ce-stable
-docker-ce.x86_64            ce-elcentos             docker-ce-stable
-......
- * base: mirror.lzu.edu.cn
-Available Packages
+#使用阿里云开源软件镜像站。  
+wget https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo -O /etc/yum.repos.d/docker-ce.repo
+#Docker安装
+yum -y install docker-ce
 ```
 
 > 可以选择安装一个版本，比如我们这里安装最新版本：
@@ -259,7 +245,7 @@ $ kubeadm version
 kubeadm version: &version.Info{Major:"1", Minor:"16", GitVersion:"v2", GitCommit:"c97fe5036ef3df2967d086711e6c0c405941e14b", GitTreeState:"clean", BuildDate:"2019-10-15T19:15:39Z", GoVersion:"go10", Compiler:"gc", Platform:"linux/amd64"}
 ```
 
-> 可以看到我们这里安装的是 v1.16.2 版本，然后将 kubelet 设置成开机启动：
+> 可以看到我们这里安装的是 v1.26.2 版本，然后将 kubelet 设置成开机启动：
 
 ```
 $ systemctl enable --now kubelet
@@ -514,7 +500,7 @@ ydzs-node1    Ready    <none>   18m   v2
 
 ### Dashboard 
 
-> v1.16.2 版本的集群需要安装最新的 2.0+ 版本的 Dashboard：
+> v1.26.2 版本的集群需要安装最新的 2.0+ 版本的 Dashboard：
 
 ```
 # 推荐使用下面这种方式
@@ -608,7 +594,7 @@ $ kubectl get secret admin-token-lwmmx -o jsonpath={.data.token} -n kubernetes-d
 
 > ![k8s dashboard](../assets/img/kubernetes_basci/dashboard-dark-mode.png)
 
-> 最终我们就完成了使用 kubeadm 搭建 v1.16.2 版本的 kubernetes 集群、coredns、ipvs、flannel。
+> 最终我们就完成了使用 kubeadm 搭建 v1.26.2 版本的 kubernetes 集群、coredns、ipvs、flannel。
 
 ### 清理 
 
