@@ -113,16 +113,16 @@
   * [CertManager](docs/kubernetes_service_mesh/cert_manager.md)
 * [Kubernetes多租户]
   * [多租户介绍](docs/kubernetes_tenant/tenant.md)
-  * [多租户介绍](docs/kubernetes_tenant/quota.md)
-  * [多租户介绍](docs/kubernetes_tenant/psp.md)
+  * [资源配额](docs/kubernetes_tenant/quota.md)
+  * [Pod 安全策略](docs/kubernetes_tenant/psp.md)
 * [Operator]
   * [CRD](docs/kubernetes_operator/crd.md)
   * [Operator](docs/kubernetes_operator/operator.md)
 * [实践技巧]
   * [技巧](docs/kubernetes_maintain/skill.md)  
-  * [技巧](docs/kubernetes_maintain/update.md)
-  * [技巧](docs/kubernetes_maintain/update_cluster.md)
-  * [技巧](docs/kubernetes_maintain/reserved.md)
+  * [集群升级](docs/kubernetes_maintain/update.md)
+  * [升级为集群](docs/kubernetes_maintain/update_cluster.md)
+  * [资源预留](docs/kubernetes_maintain/reserved.md)
 * [源码]
   * [kubelet源码](docs/kubernetes_code/kubelet.md)
   * [client-go]
