@@ -65,7 +65,7 @@
 * [Kubernetes调度器]
   * [调度器介绍](docs/kubernetes_scheduler/overview.md)
   * [Pod 调度](docs/kubernetes_scheduler/usage.md)
-* [Kubernetes存储]  g
+* [Kubernetes存储]
   * [Local 本地存储](docs/kubernetes_stroage/local.md)
   * [Ceph 存储](docs/kubernetes_stroage/ceph.md)
   * [存储原理](docs/kubernetes_stroage/csi.md)
