@@ -2,7 +2,7 @@
 
 > Kubernetes 集群环境安装
 
-> 为了根据最新的集群特性，我们这里安装目前最新的版本 v1.16.2，如果你是在生产环境使用，建议使用上一个版本中最大的修正版本，比如 v1.15.5，由于 v1.16 版本和之前的版本有很大变化，主要体现在 APIVersion 移除了之前的一些版本，所以我们这里采用最新的 v1.16.2 的版本。由于我们这里主要目的也是学习 Kubernetes 的一些知识点，所以采用的是 Kubeadm 来快速搭建单 Master 的集群，在后面如有需要我们可以在学习了这些知识点后来搭建适合生产环境使用的集群。
+> 为了根据最新的集群特性，我们这里安装目前最新的版本 v1.26.2，如果你是在生产环境使用，建议使用上一个版本中最大的修正版本，比如 v1.15.5，由于 v1.16 版本和之前的版本有很大变化，主要体现在 APIVersion 移除了之前的一些版本，所以我们这里采用最新的 v1.26.2 的版本。由于我们这里主要目的也是学习 Kubernetes 的一些知识点，所以采用的是 Kubeadm 来快速搭建单 Master 的集群，在后面如有需要我们可以在学习了这些知识点后来搭建适合生产环境使用的集群。
 
 > ![kubernetes install on centos](../assets/img/kubernetes_basci/install-k8s.png)
 
@@ -259,7 +259,7 @@ $ kubeadm version
 kubeadm version: &version.Info{Major:"1", Minor:"16", GitVersion:"v2", GitCommit:"c97fe5036ef3df2967d086711e6c0c405941e14b", GitTreeState:"clean", BuildDate:"2019-10-15T19:15:39Z", GoVersion:"go10", Compiler:"gc", Platform:"linux/amd64"}
 ```
 
-> 可以看到我们这里安装的是 v1.16.2 版本，然后将 kubelet 设置成开机启动：
+> 可以看到我们这里安装的是 v1.26.2 版本，然后将 kubelet 设置成开机启动：
 
 ```
 $ systemctl enable --now kubelet
@@ -514,7 +514,7 @@ ydzs-node1    Ready    <none>   18m   v2
 
 ### Dashboard 
 
-> v1.16.2 版本的集群需要安装最新的 2.0+ 版本的 Dashboard：
+> v1.26.2 版本的集群需要安装最新的 2.0+ 版本的 Dashboard：
 
 ```
 # 推荐使用下面这种方式
@@ -608,7 +608,7 @@ $ kubectl get secret admin-token-lwmmx -o jsonpath={.data.token} -n kubernetes-d
 
 > ![k8s dashboard](../assets/img/kubernetes_basci/dashboard-dark-mode.png)
 
-> 最终我们就完成了使用 kubeadm 搭建 v1.16.2 版本的 kubernetes 集群、coredns、ipvs、flannel。
+> 最终我们就完成了使用 kubeadm 搭建 v1.26.2 版本的 kubernetes 集群、coredns、ipvs、flannel。
 
 ### 清理 
 
