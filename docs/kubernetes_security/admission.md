@@ -108,7 +108,7 @@ MutatingAdmissionWebhook
 ValidatingAdmissionWebhook
 ```
 
- 两个准入控制插件，如果没有的（当前 v1.16.2 版本默认已经开启），需要添加上这两个参数，然后重启 apiserver。
+ 两个准入控制插件，如果没有的（当前 v1.26.2 版本默认已经开启），需要添加上这两个参数，然后重启 apiserver。
 
 > 然后通过运行下面的命令检查集群中是否启用了准入注册 API：
 

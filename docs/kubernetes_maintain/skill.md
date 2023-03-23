@@ -9,7 +9,7 @@
 
 ### kubectl 配置
 
-> 首先，下载 Windows 版本的 kubectl 二进制文件，地址：https://dl.k8s.io/v1.16.2/kubernetes-client-windows-amd64.tar.gz。
+> 首先，下载 Windows 版本的 kubectl 二进制文件，地址：https://dl.k8s.io/v1.26.2/kubernetes-client-windows-amd64.tar.gz。
 
 > 下载链接
 

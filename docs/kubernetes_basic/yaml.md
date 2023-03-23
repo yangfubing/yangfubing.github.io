@@ -342,7 +342,7 @@ spec:
 
 > 一些简单的资源对象我们可能可以凭借记忆写出对应的资源清单，但是 Kubernetes 发展也非常快，版本迭代也很快，每个版本中资源对象可能又有很多变化，那么有没有一种办法可以让我们做到有的放矢呢？
 
-> 实际上是有的，最简单的方法就是查找 Kubernetes API 文档，比如我们现在使用的是 v1.26.2 版本的集群，可以通过地址 https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.16/ 查找到对应的 API 文档，在这个文档中我们可以找到所有资源对象的一些字段。
+> 实际上是有的，最简单的方法就是查找 Kubernetes API 文档，比如我们现在使用的是 v1.26.2 版本的集群，可以通过地址 https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/ 查找到对应的 API 文档，在这个文档中我们可以找到所有资源对象的一些字段。
 
 > 比如我们要了解创建一个 Deployment 资源对象需要哪些字段，我们可以打开上面的 API 文档页面，在左侧侧边栏找到 `Deployment v1 apps`，点击下面的 `Write Operations`，然后点击 `Create`，然后我们查找到创建 Deployment 需要提交的 Body 参数
 
