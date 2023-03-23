@@ -2555,7 +2555,7 @@
 <h2 id="_1">集群升级<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <h3 id="_2">更新证书<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
 <blockquote>
-<p>使用 kubeadm 安装 kubernetes 集群非常方便，但是也有一个比较烦人的问题就是默认的证书有效期只有一年时间，所以需要考虑证书升级的问题，本文的演示集群版本为 v1.16.2 版本，不保证下面的操作对其他版本也适用，<code>在操作之前一定要先对证书目录进行备份，防止操作错误进行回滚</code>。本文主要介绍两种方式来更新集群证书。</p>
+<p>使用 kubeadm 安装 kubernetes 集群非常方便，但是也有一个比较烦人的问题就是默认的证书有效期只有一年时间，所以需要考虑证书升级的问题，本文的演示集群版本为 v1.26.2 版本，不保证下面的操作对其他版本也适用，<code>在操作之前一定要先对证书目录进行备份，防止操作错误进行回滚</code>。本文主要介绍两种方式来更新集群证书。</p>
 </blockquote>
 <h3 id="_3">手动更新证书<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
 <blockquote>
@@ -2769,7 +2769,7 @@ $ cp /etc/kubernetes/pki/ca.key /etc/kubernetes/pki/front-proxy-ca.key
 </blockquote>
 <h3 id="_4">集群升级<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
 <blockquote>
-<p>最新的 Kubernetes 版本是 v1.19.0，我们这里的环境是 v1.16.2，由于我们这里版本跨度太大，不能直接从 1.16.x 更新到 1.19.x，kubeadm 的更新是不支持跨多个主版本的，所以我们可以一个版本一个版本的升级，不过版本更新的方式方法基本上都是一样的，所以后面要更新的话也挺简单了，下面我们就先将集群更新到 v1.16.14 版本。</p>
+<p>最新的 Kubernetes 版本是 v1.19.0，我们这里的环境是 v1.26.2，由于我们这里版本跨度太大，不能直接从 1.16.x 更新到 1.19.x，kubeadm 的更新是不支持跨多个主版本的，所以我们可以一个版本一个版本的升级，不过版本更新的方式方法基本上都是一样的，所以后面要更新的话也挺简单了，下面我们就先将集群更新到 v1.26.14 版本。</p>
 <p>首先查看当前集群版本：</p>
 </blockquote>
 <div class="highlight"><pre><span></span><code>$ kubectl version
@@ -2939,7 +2939,7 @@ ydzs-node5    Ready    &lt;none&gt;   218d   v2
 ydzs-node6    Ready    &lt;none&gt;   218d   v2
 </code></pre></div>
 <blockquote>
-<p>可以看到 master 节点已经更新到 v1.16.14 版本了，然后就可以去升级节点了，升级节点的时候最好先驱逐节点，然后逐个升级：</p>
+<p>可以看到 master 节点已经更新到 v1.26.14 版本了，然后就可以去升级节点了，升级节点的时候最好先驱逐节点，然后逐个升级：</p>
 </blockquote>
 <div class="highlight"><pre><span></span><code>$ kubectl drain ydzs-node1 --ignore-daemonsets
 node/ydzs-node1 cordoned

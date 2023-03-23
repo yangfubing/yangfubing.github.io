@@ -2498,7 +2498,7 @@ percentageOfNodesToScore
 
 *   &gt; 第三种方法是调度器扩展程序，这个方案目前是一个可行的方案，可以和上游调度程序兼容，所谓的调度器扩展程序其实就是一个可配置的 Webhook 而已，里面包含 `过滤器` 和 `优先级` 两个端点，分别对应调度周期中的两个主要阶段（过滤和打分）。
 
-*   &gt; 第四种方法是通过调度框架（Scheduling Framework），Kubernetes v1.15 版本中引入了可插拔架构的调度框架，使得定制调度器这个任务变得更加的容易。调库框架向现有的调度器中添加了一组插件化的 API，该 API 在保持调度程序核心简单且易于维护的同时，使得大部分的调度功能以插件的形式存在，而且在我们现在的 v1.16 版本中上面的 `调度器扩展程序` 也已经被废弃了，所以以后调度框架才是自定义调度器的核心方式。
+*   &gt; 第四种方法是通过调度框架（Scheduling Framework），Kubernetes v1.15 版本中引入了可插拔架构的调度框架，使得定制调度器这个任务变得更加的容易。调库框架向现有的调度器中添加了一组插件化的 API，该 API 在保持调度程序核心简单且易于维护的同时，使得大部分的调度功能以插件的形式存在，而且在我们现在的 v1.26 版本中上面的 `调度器扩展程序` 也已经被废弃了，所以以后调度框架才是自定义调度器的核心方式。
 
 &gt; 这里我们可以简单介绍下后面两种方式的实现。
 
@@ -2539,7 +2539,7 @@ algorithmSource.policy
 &gt; 该策略文件 
 </code></pre></div>
 /etc/kubernetes/scheduler-extender-policy.yaml
-<div class="highlight"><pre><span></span><code> 应该遵循 kubernetes/pkg/scheduler/apis/config/legacy_types.go#L28 的要求，在我们这里的 v1.16.2 版本中已经支持 JSON 和 YAML 两种格式的策略文件，下面是我们定义的一个简单的示例，可以查看 Extender 描述了解策略文件的定义规范：
+<div class="highlight"><pre><span></span><code> 应该遵循 kubernetes/pkg/scheduler/apis/config/legacy_types.go#L28 的要求，在我们这里的 v1.26.2 版本中已经支持 JSON 和 YAML 两种格式的策略文件，下面是我们定义的一个简单的示例，可以查看 Extender 描述了解策略文件的定义规范：
 </code></pre></div>
 apiVersion: v1
 kind: Policy
