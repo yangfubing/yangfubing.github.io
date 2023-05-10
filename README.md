@@ -1,4 +1,4 @@
-# [yangfubing.github.io](https://yangfubing.github.io)
+# [kubernetes_blog](https://yangfubing.github.io/kubernetes_blog)
 
 ## 云原生
 
@@ -7,20 +7,16 @@
 
 如果大家觉得那里写的不合适的可以给我提 Issue
 
-[Github](https://github.com/burningmyself)
-
-[Gitee](https://gitee.com/burningmyself)
-
-![GitHub issues](https://img.shields.io/github/issues/burningmyself/burningmyself.github.io)
-![GitHub forks](https://img.shields.io/github/forks/burningmyself/burningmyself.github.io)
-![GitHub stars](https://img.shields.io/github/stars/burningmyself/burningmyself.github.io)
-![GitHub license](https://img.shields.io/github/license/burningmyself/burningmyself.github.io)
-![Twitter](https://img.shields.io/twitter/url?url=https%3A%2F%2Fgithub.com%2Fburningmyself%2Fburningmyself.github.io)
+![GitHub issues](https://img.shields.io/github/issues/burningmyself/kubernetes_blog)
+![GitHub forks](https://img.shields.io/github/forks/burningmyself/kubernetes_blog)
+![GitHub stars](https://img.shields.io/github/stars/burningmyself/kubernetes_blog)
+![GitHub license](https://img.shields.io/github/license/burningmyself/kubernetes_blog)
+![Twitter](https://img.shields.io/twitter/url?url=https%3A%2F%2Fgithub.com%2Fburningmyself%2Fkubernetes_blog)
 
 ## 捐赠
 
 如果你觉得这写文章能帮助到了你，你可以帮作者买一杯果汁表示鼓励
-![pay](docs/assets/pay.png)
+![pay](https://burningmyself.gitee.io/img/pay.png)
 
 [Paypal Me](https://paypal.me/yangfubing)
 
@@ -69,7 +65,7 @@
   * [Local 本地存储](docs/kubernetes_stroage/local.md)
   * [Ceph 存储](docs/kubernetes_stroage/ceph.md)
   * [存储原理](docs/kubernetes_stroage/csi.md)
-* [Helm 包管理]
+* [Helm包管理]
   * [Helm](docs/kubernetes_package/helm.md)
   * [Charts](docs/kubernetes_package/charts.md)
   * [模板开发]
@@ -85,7 +81,7 @@
     * [模板调试](docs/kubernetes_package/templates/debug.md)
   * [Chart Hooks](docs/kubernetes_package/chart_hooks.md)
   * [示例](docs/kubernetes_package/example.md)
-* [Kubernetes 监控]
+* [Kubernetes监控]
   * [Prometheus](docs/kubernetes_monitor/prometheus.md)
   * [Grafana](docs/kubernetes_monitor/grafana.md)
   * [Promql](docs/kubernetes_monitor/promql.md)
@@ -96,10 +92,10 @@
   * [安装](docs/kubernetes_monitor/operator/install.md)
   * [自定义监控报警](docs/kubernetes_monitor/operator/custom.md)
   * [高级配置](docs/kubernetes_monitor/operator/advance.md)  
-* [Kubernetes 日志]
+* [Kubernetes日志]
   * [Grafana](docs/kubernetes_logs/architec.md)
   * [efk](docs/kubernetes_logs/efk.md)
-* [Kubernetes DevOps]
+* [KubernetesDevOps]
   * [Jenins](docs/kubernetes_devops/jenkins.md)
   * [Gitlab](docs/kubernetes_devops/gitlab.md)
   * [Harbor](docs/kubernetes_devops/harbor.md)
