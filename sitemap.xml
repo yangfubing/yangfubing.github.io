@@ -1,417 +1,417 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://burningmyself.gitee.io/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/docker/basic/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/docker/basic/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/docker/dockerfile_practice/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/docker/dockerfile_practice/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/docker/dockerfile_usage/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/docker/dockerfile_usage/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/docker/install/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/docker/install/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/docker/overview/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/docker/overview/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_basic/install/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_basic/install/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_basic/overview/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_basic/overview/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_basic/pod/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_basic/pod/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_basic/pod_deep/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_basic/pod_deep/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_basic/pod_life/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_basic/pod_life/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_basic/yaml/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_basic/yaml/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_code/kubelet/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_code/kubelet/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_code/client_go/deltafifo/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_code/client_go/deltafifo/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_code/client_go/indexer/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_code/client_go/indexer/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_code/client_go/workqueue/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_code/client_go/workqueue/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_config/config_map/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_config/config_map/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_config/secret/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_config/secret/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_config/service_account/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_config/service_account/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_controller/daemonset/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_controller/daemonset/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_controller/deployment/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_controller/deployment/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_controller/hpa/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_controller/hpa/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_controller/job/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_controller/job/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_controller/replicaset/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_controller/replicaset/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_controller/statefulset/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_controller/statefulset/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_devops/gitlab/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_devops/gitlab/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_devops/harbor/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_devops/harbor/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_devops/jenkins/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_devops/jenkins/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_devops/jenkins_pipeline/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_devops/jenkins_pipeline/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_devops/token/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_devops/token/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_example/wordpress/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_example/wordpress/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_logs/architec/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_logs/architec/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_logs/efk/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_logs/efk/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_maintain/reserved/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_maintain/reserved/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_maintain/skill/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_maintain/skill/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_maintain/update/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_maintain/update/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_maintain/update_cluster/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_maintain/update_cluster/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_monitor/adapter/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_monitor/adapter/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_monitor/alertmanager/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_monitor/alertmanager/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_monitor/grafana/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_monitor/grafana/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_monitor/prometheus/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_monitor/prometheus/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_monitor/promql/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_monitor/promql/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_monitor/thanos/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_monitor/thanos/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_monitor/operator/advance/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_monitor/operator/advance/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_monitor/operator/custom/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_monitor/operator/custom/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_monitor/operator/install/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_monitor/operator/install/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_network/flannel/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_network/flannel/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_network/policy/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_network/policy/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_network/service/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_network/service/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_network/ingress/nginx/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_network/ingress/nginx/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_network/ingress/traefik/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_network/ingress/traefik/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_operator/crd/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_operator/crd/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_operator/operator/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_operator/operator/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_package/chart_hooks/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_package/chart_hooks/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_package/charts/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_package/charts/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_package/example/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_package/example/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_package/helm/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_package/helm/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_package/templates/access_files/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_package/templates/access_files/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_package/templates/debug/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_package/templates/debug/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_package/templates/flow/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_package/templates/flow/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_package/templates/function/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_package/templates/function/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_package/templates/named_templates/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_package/templates/named_templates/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_package/templates/notes_files/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_package/templates/notes_files/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_package/templates/objects/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_package/templates/objects/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_package/templates/subcharts_and_globals/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_package/templates/subcharts_and_globals/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_package/templates/values/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_package/templates/values/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_package/templates/variables/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_package/templates/variables/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_scheduler/overview/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_scheduler/overview/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_scheduler/usage/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_scheduler/usage/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_security/admission/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_security/admission/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_security/rbac/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_security/rbac/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_security/security_context/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_security/security_context/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_service_mesh/cert_manager/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_service_mesh/cert_manager/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_service_mesh/istio/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_service_mesh/istio/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_service_mesh/observability/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_service_mesh/observability/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_service_mesh/security/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_service_mesh/security/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_service_mesh/traffic/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_service_mesh/traffic/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_stroage/ceph/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_stroage/ceph/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_stroage/csi/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_stroage/csi/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_stroage/local/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_stroage/local/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_tenant/psp/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_tenant/psp/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_tenant/quota/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_tenant/quota/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://burningmyself.gitee.io/kubernetes_tenant/tenant/</loc>
+         <loc>https://burningmyself.gitee.io/kubernetes_blog/kubernetes_tenant/tenant/</loc>
          <lastmod>2023-05-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
